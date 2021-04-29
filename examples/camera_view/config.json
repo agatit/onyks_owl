@@ -1,0 +1,15 @@
+{
+    "module_source_dshow" : {   
+        "output_queue" : "stage1",     
+        "params": {
+            "device": 1
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : "stage1",    
+        "params": {
+            "window_name": "camera_view"
+        }        
+    }
+}

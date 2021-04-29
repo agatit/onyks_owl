@@ -1,0 +1,15 @@
+{
+    "module_source_dir" : {   
+        "output_queue" : "stage1",    
+        "params": {
+            "path": "../../samples/youtube"
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : "stage1",
+        "params": {
+            "window_name": "camera_view"
+        }        
+    }
+}

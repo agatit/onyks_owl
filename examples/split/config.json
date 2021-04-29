@@ -1,0 +1,41 @@
+{
+    "module_source_dshow" : {   
+        "output_queue" : "stage1",    
+        "params": {
+            "device": 1
+        }
+    },
+
+    "module_split" : {    
+        "input_queue" : "stage1",    
+        "output_queues" : ["stage2.1","stage2.2"],  
+        "params": {
+            "stream_mapping": [
+                {
+                    "input": "color",
+                    "output": "color",
+                    "type": "video_stream"
+                },
+                {
+                    "input": "metric",
+                    "output": "metric",
+                    "type": "data_stream"
+                }                
+            ]
+        }
+    },
+
+    "module_sink_win_1" : {  
+        "input_queue" : "stage2.1",
+        "params": {
+            "window_name": "camera_view"
+        }        
+    },
+
+    "module_sink_win_2" : {   
+        "input_queue" : "stage2.2",
+        "params": {
+            "window_name": "camera_view"
+        }        
+    }    
+}

@@ -1,0 +1,25 @@
+{
+    "module_source_dshow" : {   
+        "output_queues" : [
+            "stage1"
+        ],    
+        "output_streams" : {
+            "color" : "stream_video",
+            "metrics" : "stream_data"
+        },
+        "params": {
+            "device": "../../samples/youtube/out_2_21.mp4"
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : "stage1",    
+        "input_streams" : {
+            "color" : "stream_video",
+            "metrics" : "stream_data"
+        },
+        "params": {
+            "window_name": "camera_view"
+        }        
+    }
+}

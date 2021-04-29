@@ -1,0 +1,18 @@
+{
+    "module_source_dshow" : {   
+        "output_queue" : "stage1",    
+        "params": {
+            "expire_time" : 600,
+            "device" : "../../samples/youtube/out_2_21.mp4"
+        }
+    },
+
+    "module_sink_file" : {   
+        "input_queue" : "stage1",    
+        "params": {
+            "filename": "out/test_%Y%m%d_%H%M%S_%f.avi",
+            "framerate": 25,
+            "fourcc": "XVID"
+        }        
+    }
+}
