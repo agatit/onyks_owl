@@ -1,0 +1,3 @@
+2021-05-25 12:40:43 INFO module_source_dshow started.
+2021-05-25 12:40:43 INFO config file: E:\AgatIT\Python-Pociag\onyks_owl\examples\camera_view/config.json section module_source_dshow
+2021-05-25 12:40:54 INFO task emited: {'stream_names': {'color': 'stage1:ef3d150629994dd788b01af4753dbcfd:color', 'metrics': 'stage1:ef3d150629994dd788b01af4753dbcfd:metrics'}, 'task_data': {}}

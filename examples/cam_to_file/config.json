@@ -1,0 +1,15 @@
+{
+    "ak_module_source_cam" : {   
+        "output_queue" : "stage1",
+        "params": {
+            "device": "lalala321"
+        }
+    },
+
+    "ak_module_sink_cam" : {   
+        "input_queue" : "stage1",    
+        "params": {
+            "window_name": "podglad"
+        }        
+    }
+}

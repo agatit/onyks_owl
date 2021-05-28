@@ -1,0 +1,96 @@
+2021-05-25 14:06:05,019 INFO process group added: 'sink'
+2021-05-25 14:06:05,020 INFO process group added: 'source'
+2021-05-25 14:06:05,044 INFO RPC interface 'supervisor' initialized
+2021-05-25 14:06:05,044 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-05-25 14:06:05,045 INFO supervisord started with pid 19948
+2021-05-25 14:06:05,559 INFO Spawned: 'ak_view_0' with pid 20808
+2021-05-25 14:06:05,570 INFO Spawned: 'ak_view_1' with pid 18820
+2021-05-25 14:06:05,581 INFO Spawned: 'ak_source_0' with pid 15748
+2021-05-25 14:06:06,596 INFO success: ak_view_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-25 14:06:06,597 INFO success: ak_view_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-25 14:06:06,598 INFO success: ak_source_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-25 14:06:09,681 WARN received SIGINT indicating exit request
+2021-05-25 14:06:10,187 INFO waiting for ak_view_0, ak_view_1, ak_source_0 to die
+2021-05-25 14:06:10,691 INFO stopped: ak_source_0 (exit status 1)
+2021-05-25 14:06:10,694 WARN received SIGINT indicating exit request
+2021-05-25 14:06:11,708 INFO stopped: ak_view_0 (exit status 1)
+2021-05-25 14:06:11,709 INFO stopped: ak_view_1 (exit status 1)
+2021-05-25 14:06:11,709 WARN received SIGINT indicating exit request
+2021-05-25 14:06:12,225 INFO exit now...
+2021-05-25 14:06:23,922 INFO process group added: 'sink'
+2021-05-25 14:06:23,922 INFO process group added: 'source'
+2021-05-25 14:06:23,941 INFO RPC interface 'supervisor' initialized
+2021-05-25 14:06:23,941 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-05-25 14:06:23,943 INFO supervisord started with pid 20488
+2021-05-25 14:06:24,475 INFO Spawned: 'ak_view_0' with pid 5024
+2021-05-25 14:06:24,500 INFO Spawned: 'ak_view_1' with pid 17788
+2021-05-25 14:06:24,524 INFO Spawned: 'ak_source_0' with pid 20240
+2021-05-25 14:06:25,547 INFO success: ak_view_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-25 14:06:25,547 INFO success: ak_view_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-25 14:06:25,548 INFO success: ak_source_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-25 14:08:31,201 INFO process group added: 'sink'
+2021-05-25 14:08:31,201 INFO process group added: 'source'
+2021-05-25 14:08:31,219 INFO RPC interface 'supervisor' initialized
+2021-05-25 14:08:31,219 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-05-25 14:08:31,221 INFO supervisord started with pid 3116
+2021-05-25 14:08:31,747 INFO Spawned: 'ak_view_0' with pid 13544
+2021-05-25 14:08:31,771 INFO Spawned: 'ak_view_1' with pid 15788
+2021-05-25 14:08:31,810 INFO Spawned: 'ak_source_0' with pid 1560
+2021-05-25 14:08:32,825 INFO success: ak_view_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-25 14:08:32,825 INFO success: ak_view_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-25 14:08:32,826 INFO success: ak_source_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:22:22,160 INFO process group added: 'sink'
+2021-05-28 08:22:22,170 INFO process group added: 'source'
+2021-05-28 08:22:22,263 INFO RPC interface 'supervisor' initialized
+2021-05-28 08:22:22,263 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-05-28 08:22:22,266 INFO supervisord started with pid 24204
+2021-05-28 08:22:22,786 INFO Spawned: 'ak_view_0' with pid 2072
+2021-05-28 08:22:22,798 INFO Spawned: 'ak_view_1' with pid 19400
+2021-05-28 08:22:22,808 INFO Spawned: 'ak_source_0' with pid 15932
+2021-05-28 08:22:23,826 INFO success: ak_view_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:22:23,826 INFO success: ak_view_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:22:23,827 INFO success: ak_source_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:23:00,516 INFO process group added: 'sink'
+2021-05-28 08:23:00,517 INFO process group added: 'source'
+2021-05-28 08:23:00,535 INFO RPC interface 'supervisor' initialized
+2021-05-28 08:23:00,536 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-05-28 08:23:00,537 INFO supervisord started with pid 17372
+2021-05-28 08:23:01,048 INFO Spawned: 'ak_view_0' with pid 1816
+2021-05-28 08:23:01,119 INFO Spawned: 'ak_view_1' with pid 21296
+2021-05-28 08:23:01,130 INFO Spawned: 'ak_source_0' with pid 5560
+2021-05-28 08:23:02,147 INFO success: ak_view_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:23:02,147 INFO success: ak_view_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:23:02,147 INFO success: ak_source_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:25:27,748 INFO process group added: 'sink'
+2021-05-28 08:25:27,749 INFO process group added: 'source'
+2021-05-28 08:25:27,768 INFO RPC interface 'supervisor' initialized
+2021-05-28 08:25:27,768 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-05-28 08:25:27,769 INFO supervisord started with pid 19680
+2021-05-28 08:25:28,282 INFO Spawned: 'ak_view_0' with pid 6004
+2021-05-28 08:25:28,293 INFO Spawned: 'ak_view_1' with pid 19180
+2021-05-28 08:25:28,304 INFO Spawned: 'ak_source_0' with pid 10136
+2021-05-28 08:25:29,317 INFO success: ak_view_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:25:29,317 INFO success: ak_view_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:25:29,318 INFO success: ak_source_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:26:39,551 INFO process group added: 'sink'
+2021-05-28 08:26:39,552 INFO process group added: 'source'
+2021-05-28 08:26:39,571 INFO RPC interface 'supervisor' initialized
+2021-05-28 08:26:39,571 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-05-28 08:26:39,572 INFO supervisord started with pid 15408
+2021-05-28 08:26:40,083 INFO Spawned: 'ak_view_0' with pid 22576
+2021-05-28 08:26:40,094 INFO Spawned: 'ak_view_1' with pid 19688
+2021-05-28 08:26:40,105 INFO Spawned: 'ak_source_0' with pid 19164
+2021-05-28 08:26:41,111 INFO success: ak_view_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:26:41,111 INFO success: ak_view_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:26:41,111 INFO success: ak_source_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:33:09,532 INFO process group added: 'sink'
+2021-05-28 08:33:09,533 INFO process group added: 'source'
+2021-05-28 08:33:09,551 INFO RPC interface 'supervisor' initialized
+2021-05-28 08:33:09,551 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-05-28 08:33:09,553 INFO supervisord started with pid 21172
+2021-05-28 08:33:10,076 INFO Spawned: 'ak_view_0' with pid 18532
+2021-05-28 08:33:10,086 INFO Spawned: 'ak_view_1' with pid 13716
+2021-05-28 08:33:10,097 INFO Spawned: 'ak_source_0' with pid 20580
+2021-05-28 08:33:11,122 INFO success: ak_view_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:33:11,122 INFO success: ak_view_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-05-28 08:33:11,123 INFO success: ak_source_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

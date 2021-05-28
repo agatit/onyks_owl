@@ -5,14 +5,14 @@
 """Moduł obsługujący strunieni video"""
 import cv2 as cv
 import numpy as np
-		
+
 
 class Producer():
 
     def __init__(self, redis, stream_queue, expire_time=30):
         self.redis = redis
         self.stream_queue = stream_queue
-        self.expire_time = expire_time     
+        self.expire_time = expire_time
         self.refresh = 1
 
     def __enter__(self):
@@ -22,7 +22,7 @@ class Producer():
         self.end()
 
     def emit(self, image):
-        _,img_np = cv.imencode(".BMP", image)
+        _, img_np = cv.imencode(".BMP", image)
         img_bytes = img_np.tobytes()
         self.redis.rpush(f"owl:stream_queue:{self.stream_queue}", img_bytes)
         self.redis.expire(f"owl:stream_queue:{self.stream_queue}", self.expire_time)
@@ -43,7 +43,7 @@ class Consumer():
     def __iter__(self):
         return self
 
-    def __next__(self):       
+    def __next__(self):
         resp = self.redis.blpop(f"owl:stream_queue:{self.stream_queue}", self.timeout)
         if resp is None:
             raise StopIteration
@@ -55,5 +55,3 @@ class Consumer():
             return cv.imdecode(img_np, cv.IMREAD_COLOR)
         else:
             raise StopIteration
-
-

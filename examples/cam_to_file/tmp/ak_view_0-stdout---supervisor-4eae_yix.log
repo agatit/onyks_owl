@@ -1,0 +1,22 @@
+2021-05-28 08:33:10 INFO ak_module_sink_cam started.
+2021-05-28 08:33:10 INFO config file: E:\AgatIT\Python-Pociag\onyks_owl\examples\cam_to_file/config.json section ak_module_sink_cam
+2021-05-28 08:33:10 INFO task received: {'stream_names': {'dane': 'stage1:f43a12bc48274057b7df433b2def180b:dane'}, 'task_data': {}}
+2021-05-28 08:33:15 INFO task received: {'stream_names': {'dane': 'stage1:f658a2d0509b4cc88b8a188afc4f9eb1:dane'}, 'task_data': {}}
+2021-05-28 08:33:20 INFO task received: {'stream_names': {'dane': 'stage1:f171c377aa854afdb2562af5b37135d4:dane'}, 'task_data': {}}
+2021-05-28 08:33:25 INFO task received: {'stream_names': {'dane': 'stage1:35cc933b7937452f83f4e7167755d6de:dane'}, 'task_data': {}}
+2021-05-28 08:33:30 INFO task received: {'stream_names': {'dane': 'stage1:1b0a3c355db54c4ab531d3b0b8cb532e:dane'}, 'task_data': {}}
+2021-05-28 08:33:35 INFO task received: {'stream_names': {'dane': 'stage1:cf25c13fb1734a75afc0c35ea6d41d8a:dane'}, 'task_data': {}}
+2021-05-28 08:33:40 INFO task received: {'stream_names': {'dane': 'stage1:7ae0c66e3bd44569aad7de0d14079311:dane'}, 'task_data': {}}
+2021-05-28 08:33:45 INFO task received: {'stream_names': {'dane': 'stage1:507d24ac9c1e44a293fb50c24a4f4019:dane'}, 'task_data': {}}
+2021-05-28 08:33:50 INFO task received: {'stream_names': {'dane': 'stage1:54107915ea3a4ddf88364fe8406d6cad:dane'}, 'task_data': {}}
+2021-05-28 08:33:55 INFO task received: {'stream_names': {'dane': 'stage1:4176c42cf4ab46e6af57a7a054658ac7:dane'}, 'task_data': {}}
+2021-05-28 08:34:00 INFO task received: {'stream_names': {'dane': 'stage1:1aa132b930b345a3976c373d4ac30aff:dane'}, 'task_data': {}}
+2021-05-28 08:34:05 INFO task received: {'stream_names': {'dane': 'stage1:53514765e73847b59d5273f8bdd82376:dane'}, 'task_data': {}}
+2021-05-28 08:34:10 INFO task received: {'stream_names': {'dane': 'stage1:3c7616c042d847d0b0f339f59ea5a023:dane'}, 'task_data': {}}
+2021-05-28 08:34:15 INFO task received: {'stream_names': {'dane': 'stage1:b61fbdaafd2e468da696852b08d1fd52:dane'}, 'task_data': {}}
+2021-05-28 08:34:20 INFO task received: {'stream_names': {'dane': 'stage1:f3f15f57a2f34e6cbb6a8fb78b5c89d1:dane'}, 'task_data': {}}
+2021-05-28 08:34:25 INFO task received: {'stream_names': {'dane': 'stage1:bda7f4510ec344cb801188bb98754f60:dane'}, 'task_data': {}}
+2021-05-28 08:34:31 INFO task received: {'stream_names': {'dane': 'stage1:2a8263e21daa4bafacd7bc3ef73e1e3c:dane'}, 'task_data': {}}
+2021-05-28 08:34:36 INFO task received: {'stream_names': {'dane': 'stage1:70ec65446bad48af9c68ef6a63f81296:dane'}, 'task_data': {}}
+2021-05-28 08:34:41 INFO task received: {'stream_names': {'dane': 'stage1:3f77665d06124c38aa2305c4b7fe6bd2:dane'}, 'task_data': {}}
+2021-05-28 08:34:46 INFO task received: {'stream_names': {'dane': 'stage1:15474b4b0c8342589c5790d1f481f6b6:dane'}, 'task_data': {}}
