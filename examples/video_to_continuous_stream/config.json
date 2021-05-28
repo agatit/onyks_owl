@@ -2,7 +2,7 @@
     "module_continuous_stream_source" : {   
         "output_queue" : "continuous_stream_source",
         "params": {
-            "file_source": "E:\AgatIT\Python-Pociag\Pociag-2.m4v"
+            "file_source": "E:/AgatIT/Python-Pociag/Pociag-2.m4v"
         }
     },
 

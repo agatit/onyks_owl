@@ -11,6 +11,7 @@ import json
 import sys
 import redis
 import task
+import traceback
 
 class Module:
     def __init__(self, argv):
@@ -59,7 +60,7 @@ class Module:
             self.task_producer = task.Producer(self.redis, self.config.get('output_queue',""), producers, self.expire_time)  
 
         except Exception as e:
-            logging.error(f"{self.module_name} init error: {str(e)}") 
+            logging.error(f"{self.module_name} init error: {str(e)}\n{traceback.print_tb(e.__traceback__)}")             
         
 
     def task_process(self, input_task_data, input_stream ):                   
@@ -83,7 +84,7 @@ class Module:
                     else:
                         logging.info("Nothing in task queue")
         except Exception as e:
-            logging.error(f"{self.module_name} runOnce error: {str(e)}")
+            logging.error(f"{self.module_name} runOnce error: {str(e)}\n{traceback.print_tb(e.__traceback__)}")
 
 
     def run(self):
