@@ -1,0 +1,168 @@
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\module_base.py", line 81, in runOnce
+    for task_data, input_stream in self.task_consumer:
+  File "C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\owl\task.py", line 74, in __next__
+    task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 1900, in blpop
+    return self.execute_command('BLPOP', *keys)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "c:\users\marcin\appdata\local\programs\python\python39\lib\site-packages\redis\connection.py", line 756, in read_response
+    raise response

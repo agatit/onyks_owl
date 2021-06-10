@@ -1,0 +1,321 @@
+2021-06-10 11:55:47,642 INFO process group added: 'sink'
+2021-06-10 11:55:47,642 INFO process group added: 'source'
+2021-06-10 11:55:47,682 INFO RPC interface 'supervisor' initialized
+2021-06-10 11:55:47,690 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 11:55:47,690 INFO supervisord started with pid 16660
+2021-06-10 11:55:48,202 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:48,202 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:48,202 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:50,238 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:50,238 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:50,238 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:53,278 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:53,278 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:53,278 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:57,358 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:57,358 INFO gave up: win_0 entered FATAL state, too many start retries too quickly
+2021-06-10 11:55:57,358 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:57,358 INFO gave up: win_1 entered FATAL state, too many start retries too quickly
+2021-06-10 11:55:57,358 INFO spawnerr: can't find command 'c:/Python38/python.exe'
+2021-06-10 11:55:57,358 INFO gave up: dshow_0 entered FATAL state, too many start retries too quickly
+2021-06-10 11:56:42,041 WARN received SIGINT indicating exit request
+2021-06-10 11:56:42,542 INFO exit now...
+2021-06-10 11:58:20,487 INFO process group added: 'sink'
+2021-06-10 11:58:20,496 INFO process group added: 'source'
+2021-06-10 11:58:20,540 INFO RPC interface 'supervisor' initialized
+2021-06-10 11:58:20,541 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 11:58:20,544 INFO supervisord started with pid 6764
+2021-06-10 11:58:21,096 INFO Spawned: 'win_0' with pid 19808
+2021-06-10 11:58:21,109 INFO Spawned: 'win_1' with pid 10276
+2021-06-10 11:58:21,125 INFO Spawned: 'dshow_0' with pid 22776
+2021-06-10 11:58:22,143 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:22,143 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:22,143 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:24,181 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:24,181 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:24,181 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:25,213 INFO Spawned: 'win_0' with pid 16932
+2021-06-10 11:58:25,234 INFO Spawned: 'win_1' with pid 18300
+2021-06-10 11:58:25,250 INFO Spawned: 'dshow_0' with pid 1508
+2021-06-10 11:58:26,275 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:26,275 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:26,275 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:26,278 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:26,278 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:26,278 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:27,306 INFO Spawned: 'win_0' with pid 22572
+2021-06-10 11:58:27,322 INFO Spawned: 'win_1' with pid 1256
+2021-06-10 11:58:27,346 INFO Spawned: 'dshow_0' with pid 14552
+2021-06-10 11:58:28,361 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:28,361 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:28,361 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:28,369 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:28,369 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:28,373 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:29,396 INFO Spawned: 'win_0' with pid 2876
+2021-06-10 11:58:29,420 INFO Spawned: 'win_1' with pid 10112
+2021-06-10 11:58:29,436 INFO Spawned: 'dshow_0' with pid 3692
+2021-06-10 11:58:30,455 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:30,455 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:30,455 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:30,455 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:30,462 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:30,462 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:31,487 INFO Spawned: 'win_0' with pid 18068
+2021-06-10 11:58:31,511 INFO Spawned: 'win_1' with pid 276
+2021-06-10 11:58:31,529 INFO Spawned: 'dshow_0' with pid 20832
+2021-06-10 11:58:32,549 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:32,549 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:32,549 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:32,549 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:32,549 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:32,557 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:33,582 INFO Spawned: 'win_0' with pid 10960
+2021-06-10 11:58:33,602 INFO Spawned: 'win_1' with pid 3180
+2021-06-10 11:58:33,617 INFO Spawned: 'dshow_0' with pid 16732
+2021-06-10 11:58:34,651 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:34,651 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:34,651 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:34,651 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:34,658 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:34,658 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:35,689 INFO Spawned: 'win_0' with pid 4828
+2021-06-10 11:58:35,705 INFO Spawned: 'win_1' with pid 22900
+2021-06-10 11:58:35,721 INFO Spawned: 'dshow_0' with pid 23248
+2021-06-10 11:58:36,746 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:36,747 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:36,747 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:36,752 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:36,752 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:36,752 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:37,784 INFO Spawned: 'win_0' with pid 19376
+2021-06-10 11:58:37,808 INFO Spawned: 'win_1' with pid 23052
+2021-06-10 11:58:37,824 INFO Spawned: 'dshow_0' with pid 23920
+2021-06-10 11:58:38,832 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:38,832 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:38,833 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:38,833 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:38,833 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:38,842 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:39,865 INFO Spawned: 'win_0' with pid 10488
+2021-06-10 11:58:39,889 INFO Spawned: 'win_1' with pid 23824
+2021-06-10 11:58:39,906 INFO Spawned: 'dshow_0' with pid 12032
+2021-06-10 11:58:40,927 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:40,927 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:40,927 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:40,927 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:40,935 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:40,935 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:41,962 INFO Spawned: 'win_0' with pid 1968
+2021-06-10 11:58:41,986 INFO Spawned: 'win_1' with pid 624
+2021-06-10 11:58:42,002 INFO Spawned: 'dshow_0' with pid 17784
+2021-06-10 11:58:43,024 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:43,025 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:43,028 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:43,028 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:43,036 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:43,036 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:58:44,059 INFO Spawned: 'win_0' with pid 620
+2021-06-10 11:58:44,083 INFO Spawned: 'win_1' with pid 5292
+2021-06-10 11:58:44,099 INFO Spawned: 'dshow_0' with pid 23616
+2021-06-10 11:58:45,122 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:45,123 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:45,123 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:58:45,123 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:58:45,123 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:58:45,132 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:59:29,239 INFO process group added: 'sink'
+2021-06-10 11:59:29,247 INFO process group added: 'source'
+2021-06-10 11:59:29,299 INFO RPC interface 'supervisor' initialized
+2021-06-10 11:59:29,299 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 11:59:29,308 INFO supervisord started with pid 6260
+2021-06-10 11:59:29,819 INFO Spawned: 'win_0' with pid 10848
+2021-06-10 11:59:29,835 INFO Spawned: 'win_1' with pid 12348
+2021-06-10 11:59:29,859 INFO Spawned: 'dshow_0' with pid 16560
+2021-06-10 11:59:30,876 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:30,876 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:30,876 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:31,898 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:59:31,898 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:59:31,898 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:59:32,941 INFO Spawned: 'win_0' with pid 18148
+2021-06-10 11:59:32,950 INFO Spawned: 'win_1' with pid 11732
+2021-06-10 11:59:32,966 INFO Spawned: 'dshow_0' with pid 10284
+2021-06-10 11:59:33,990 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:33,990 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:33,990 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:33,990 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:59:33,990 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:59:33,990 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:59:35,022 INFO Spawned: 'win_0' with pid 13356
+2021-06-10 11:59:35,046 INFO Spawned: 'win_1' with pid 21564
+2021-06-10 11:59:35,062 INFO Spawned: 'dshow_0' with pid 8512
+2021-06-10 11:59:36,087 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:36,087 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:36,087 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:36,096 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:59:36,096 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:59:36,096 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 11:59:37,127 INFO Spawned: 'win_0' with pid 4116
+2021-06-10 11:59:37,143 INFO Spawned: 'win_1' with pid 13608
+2021-06-10 11:59:37,167 INFO Spawned: 'dshow_0' with pid 16408
+2021-06-10 11:59:38,176 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:38,176 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:38,176 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 11:59:38,176 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 11:59:38,184 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 11:59:38,184 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 12:00:15,993 INFO process group added: 'sink'
+2021-06-10 12:00:16,001 INFO process group added: 'source'
+2021-06-10 12:00:16,041 INFO RPC interface 'supervisor' initialized
+2021-06-10 12:00:16,041 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 12:00:16,041 INFO supervisord started with pid 23636
+2021-06-10 12:00:16,558 INFO Spawned: 'win_0' with pid 21084
+2021-06-10 12:00:16,574 INFO Spawned: 'win_1' with pid 22268
+2021-06-10 12:00:16,590 INFO Spawned: 'dshow_0' with pid 24280
+2021-06-10 12:00:17,618 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:17,618 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:17,618 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:18,627 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 12:00:18,627 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 12:00:18,627 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 12:00:19,647 INFO Spawned: 'win_0' with pid 13208
+2021-06-10 12:00:19,671 INFO Spawned: 'win_1' with pid 14632
+2021-06-10 12:00:19,687 INFO Spawned: 'dshow_0' with pid 19608
+2021-06-10 12:00:20,711 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:20,711 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:20,711 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:20,711 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 12:00:20,711 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 12:00:20,711 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 12:00:21,732 INFO Spawned: 'win_0' with pid 19376
+2021-06-10 12:00:21,758 INFO Spawned: 'win_1' with pid 23920
+2021-06-10 12:00:21,777 INFO Spawned: 'dshow_0' with pid 23824
+2021-06-10 12:00:22,791 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:22,792 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:22,793 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:00:22,793 INFO exited: win_0 (exit status 1; not expected)
+2021-06-10 12:00:22,793 INFO exited: win_1 (exit status 1; not expected)
+2021-06-10 12:00:22,793 INFO exited: dshow_0 (exit status 1; not expected)
+2021-06-10 12:00:23,832 INFO Spawned: 'win_0' with pid 19552
+2021-06-10 12:00:23,850 INFO Spawned: 'win_1' with pid 10460
+2021-06-10 12:00:23,874 INFO Spawned: 'dshow_0' with pid 20484
+2021-06-10 12:04:51,360 INFO process group added: 'sink'
+2021-06-10 12:04:51,360 INFO process group added: 'source'
+2021-06-10 12:04:51,405 INFO RPC interface 'supervisor' initialized
+2021-06-10 12:04:51,413 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 12:04:51,413 INFO supervisord started with pid 22648
+2021-06-10 12:04:51,939 INFO Spawned: 'win_0' with pid 9992
+2021-06-10 12:04:51,955 INFO Spawned: 'win_1' with pid 1320
+2021-06-10 12:04:51,971 INFO Spawned: 'dshow_0' with pid 22724
+2021-06-10 12:04:52,987 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:04:52,987 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:04:52,987 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:05:15,644 WARN Failed to clean up ''./tmp\\dshow_0-stderr---supervisor-0e7bbhlq.log''
+2021-06-10 12:05:15,646 WARN Failed to clean up ''./tmp\\dshow_0-stdout---supervisor-mvn8596x.log''
+2021-06-10 12:05:15,647 WARN Failed to clean up ''./tmp\\win_0-stderr---supervisor-h3ifz_na.log''
+2021-06-10 12:05:15,648 WARN Failed to clean up ''./tmp\\win_0-stdout---supervisor-cpit7q0w.log''
+2021-06-10 12:05:15,649 WARN Failed to clean up ''./tmp\\win_1-stderr---supervisor-t73d3hzv.log''
+2021-06-10 12:05:15,650 WARN Failed to clean up ''./tmp\\win_1-stdout---supervisor-32taki33.log''
+2021-06-10 12:05:15,674 INFO process group added: 'sink'
+2021-06-10 12:05:15,678 INFO process group added: 'source'
+2021-06-10 12:05:15,720 INFO RPC interface 'supervisor' initialized
+2021-06-10 12:05:15,721 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 12:05:15,723 INFO supervisord started with pid 2624
+2021-06-10 12:05:16,249 INFO Spawned: 'win_0' with pid 2228
+2021-06-10 12:05:16,265 INFO Spawned: 'win_1' with pid 15404
+2021-06-10 12:05:16,285 INFO Spawned: 'dshow_0' with pid 15224
+2021-06-10 12:05:17,305 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:05:17,306 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:05:17,307 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:05:40,661 WARN Failed to clean up ''./tmp\\dshow_0-stderr---supervisor-0e7bbhlq.log''
+2021-06-10 12:05:40,662 WARN Failed to clean up ''./tmp\\dshow_0-stderr---supervisor-k5jxhcsf.log''
+2021-06-10 12:05:40,663 WARN Failed to clean up ''./tmp\\dshow_0-stdout---supervisor-5_vk5hm3.log''
+2021-06-10 12:05:40,664 WARN Failed to clean up ''./tmp\\dshow_0-stdout---supervisor-mvn8596x.log''
+2021-06-10 12:05:40,665 WARN Failed to clean up ''./tmp\\win_0-stderr---supervisor-h3ifz_na.log''
+2021-06-10 12:05:40,666 WARN Failed to clean up ''./tmp\\win_0-stderr---supervisor-k3aif03c.log''
+2021-06-10 12:05:40,668 WARN Failed to clean up ''./tmp\\win_0-stdout---supervisor-cpit7q0w.log''
+2021-06-10 12:05:40,669 WARN Failed to clean up ''./tmp\\win_0-stdout---supervisor-upusmn7n.log''
+2021-06-10 12:05:40,670 WARN Failed to clean up ''./tmp\\win_1-stderr---supervisor-1lasb3nj.log''
+2021-06-10 12:05:40,672 WARN Failed to clean up ''./tmp\\win_1-stderr---supervisor-t73d3hzv.log''
+2021-06-10 12:05:40,673 WARN Failed to clean up ''./tmp\\win_1-stdout---supervisor-32taki33.log''
+2021-06-10 12:05:40,674 WARN Failed to clean up ''./tmp\\win_1-stdout---supervisor-tm_uy3xk.log''
+2021-06-10 12:05:40,693 INFO process group added: 'sink'
+2021-06-10 12:05:40,696 INFO process group added: 'source'
+2021-06-10 12:05:40,733 INFO RPC interface 'supervisor' initialized
+2021-06-10 12:05:40,733 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 12:05:40,737 INFO supervisord started with pid 23924
+2021-06-10 12:05:41,262 INFO Spawned: 'win_0' with pid 14900
+2021-06-10 12:05:41,283 INFO Spawned: 'win_1' with pid 22240
+2021-06-10 12:05:41,308 INFO Spawned: 'dshow_0' with pid 15492
+2021-06-10 12:05:42,317 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:05:42,318 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:05:42,319 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:06:01,322 WARN Failed to clean up ''./tmp\\dshow_0-stderr---supervisor-0e7bbhlq.log''
+2021-06-10 12:06:01,323 WARN Failed to clean up ''./tmp\\dshow_0-stderr---supervisor-k5jxhcsf.log''
+2021-06-10 12:06:01,325 WARN Failed to clean up ''./tmp\\dshow_0-stderr---supervisor-oudn54n8.log''
+2021-06-10 12:06:01,326 WARN Failed to clean up ''./tmp\\dshow_0-stdout---supervisor-5_vk5hm3.log''
+2021-06-10 12:06:01,328 WARN Failed to clean up ''./tmp\\dshow_0-stdout---supervisor-micn0v8z.log''
+2021-06-10 12:06:01,329 WARN Failed to clean up ''./tmp\\dshow_0-stdout---supervisor-mvn8596x.log''
+2021-06-10 12:06:01,330 WARN Failed to clean up ''./tmp\\win_0-stderr---supervisor-2tqfo2l9.log''
+2021-06-10 12:06:01,330 WARN Failed to clean up ''./tmp\\win_0-stderr---supervisor-h3ifz_na.log''
+2021-06-10 12:06:01,331 WARN Failed to clean up ''./tmp\\win_0-stderr---supervisor-k3aif03c.log''
+2021-06-10 12:06:01,332 WARN Failed to clean up ''./tmp\\win_0-stdout---supervisor-cpit7q0w.log''
+2021-06-10 12:06:01,333 WARN Failed to clean up ''./tmp\\win_0-stdout---supervisor-fhlo2w43.log''
+2021-06-10 12:06:01,334 WARN Failed to clean up ''./tmp\\win_0-stdout---supervisor-upusmn7n.log''
+2021-06-10 12:06:01,337 WARN Failed to clean up ''./tmp\\win_1-stderr---supervisor-1lasb3nj.log''
+2021-06-10 12:06:01,339 WARN Failed to clean up ''./tmp\\win_1-stderr---supervisor-izwiaczf.log''
+2021-06-10 12:06:01,340 WARN Failed to clean up ''./tmp\\win_1-stderr---supervisor-t73d3hzv.log''
+2021-06-10 12:06:01,341 WARN Failed to clean up ''./tmp\\win_1-stdout---supervisor-2ha0tf1x.log''
+2021-06-10 12:06:01,342 WARN Failed to clean up ''./tmp\\win_1-stdout---supervisor-32taki33.log''
+2021-06-10 12:06:01,344 WARN Failed to clean up ''./tmp\\win_1-stdout---supervisor-tm_uy3xk.log''
+2021-06-10 12:06:01,371 INFO process group added: 'sink'
+2021-06-10 12:06:01,376 INFO process group added: 'source'
+2021-06-10 12:06:01,429 INFO RPC interface 'supervisor' initialized
+2021-06-10 12:06:01,430 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 12:06:01,433 INFO supervisord started with pid 19608
+2021-06-10 12:06:01,953 INFO Spawned: 'win_0' with pid 19552
+2021-06-10 12:06:01,971 INFO Spawned: 'win_1' with pid 23636
+2021-06-10 12:06:01,992 INFO Spawned: 'dshow_0' with pid 4352
+2021-06-10 12:06:03,007 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:06:03,008 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:06:03,009 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:06:42,104 INFO process group added: 'sink'
+2021-06-10 12:06:42,109 INFO process group added: 'source'
+2021-06-10 12:06:42,146 INFO RPC interface 'supervisor' initialized
+2021-06-10 12:06:42,146 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 12:06:42,146 INFO supervisord started with pid 19076
+2021-06-10 12:06:42,663 INFO Spawned: 'win_0' with pid 22188
+2021-06-10 12:06:42,688 INFO Spawned: 'win_1' with pid 10860
+2021-06-10 12:06:42,712 INFO Spawned: 'dshow_0' with pid 8408
+2021-06-10 12:06:43,729 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:06:43,729 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:06:43,729 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:11:41,840 INFO waiting for win_0 to stop
+2021-06-10 12:15:08,008 WARN killing 'win_0' (22188) with SIGTERM
+2021-06-10 12:15:08,018 INFO stopped: win_0 (exit status 1)
+2021-06-10 12:15:08,525 INFO waiting for win_1 to stop
+2021-06-10 12:15:09,038 INFO stopped: win_1 (exit status 1)
+2021-06-10 12:15:27,233 INFO process group added: 'sink'
+2021-06-10 12:15:27,233 INFO process group added: 'source'
+2021-06-10 12:15:27,280 INFO RPC interface 'supervisor' initialized
+2021-06-10 12:15:27,280 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-10 12:15:27,280 INFO supervisord started with pid 24196
+2021-06-10 12:15:27,799 INFO Spawned: 'win_0' with pid 21832
+2021-06-10 12:15:27,816 INFO Spawned: 'win_1' with pid 3660
+2021-06-10 12:15:27,833 INFO Spawned: 'dshow_0' with pid 5348
+2021-06-10 12:15:28,858 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:15:28,858 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:15:28,860 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:15:46,664 INFO waiting for win_0 to stop
+2021-06-10 12:15:46,664 INFO stopped: win_0 (exit status 1)
+2021-06-10 12:15:52,255 INFO waiting for win_1 to stop
+2021-06-10 12:15:52,255 INFO stopped: win_1 (exit status 1)
+2021-06-10 12:16:21,496 INFO waiting for dshow_0 to stop
+2021-06-10 12:16:21,999 INFO stopped: dshow_0 (exit status 1)
+2021-06-10 12:16:23,031 INFO Spawned: 'win_0' with pid 2588
+2021-06-10 12:16:23,064 INFO Spawned: 'win_1' with pid 12524
+2021-06-10 12:16:23,080 INFO Spawned: 'dshow_0' with pid 13044
+2021-06-10 12:16:24,099 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:16:24,099 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-10 12:16:24,099 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
