@@ -18,7 +18,7 @@ class Module:
         self.terminate = False
 
         self.module_name = self.__module__
-        if  self.module_name == '__main__':
+        if self.module_name == '__main__':
             filename = sys.modules[self.__module__].__file__
             self.module_name = os.path.splitext(os.path.basename(filename))[0]        
         

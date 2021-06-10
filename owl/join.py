@@ -9,9 +9,13 @@ import time
 import logging
 import json
 import sys
+import uuid
+
 import redis
 import task
 import module_base
+from owl import stream_composed
+
 
 class Module(module_base.Module):
     def __init__(self, config):
@@ -77,7 +81,7 @@ class Module(module_base.Module):
     def run(self):
         while not self.terminate:
             self.runOnce()
-            time.sleep(1)   
+            time.sleep(1)
 
 
 if __name__ == "__main__":

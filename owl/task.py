@@ -9,6 +9,7 @@ import uuid
 import logging
 import stream_composed
 
+
 class Producer():
     """Producent zdarzeń. Tworzy zdarzenia i umieszcza je w kolejach (kilku), zarządza powiązanymi strumieniami"""
 
@@ -22,12 +23,12 @@ class Producer():
         return self
 
     def __exit__(self, type, value, tb):
-        pass        
+        pass
 
-    def emit(self, task_data = {}):
+    def emit(self, task_data={}):
         """umieszczenie zdarzenia w kolejce wyjściowej i utworzenie powiązanych strumieni"""
 
-        streams_queues = {}        
+        streams_queues = {}
 
         # buduje liste strumieni z pustymi tablicami kolejki
         for sd in self.streams_classes:
@@ -43,7 +44,7 @@ class Producer():
             streams_queues[sn] = stream_queue_name
 
         task = {
-            "stream_names" : task_stream_queues,
+            "stream_names": task_stream_queues,
             "task_data": task_data
         }
 
@@ -51,8 +52,9 @@ class Producer():
 
         self.redis.rpush(f"owl:task_queue:{self.task_queue}", json.dumps(task))
         self.redis.expire(f"owl:task_queue:{self.task_queue}", self.expire_time)
-      
+
         return stream_composed.Producer(self.redis, streams_queues, self.streams_classes, self.expire_time * 2)
+
 
 class Consumer():
     """Konsument zdarzeń. Odczytuje zdarzenia z kojejki (jednej) i podłącza powiązane strumienie"""
@@ -63,21 +65,21 @@ class Consumer():
         self.streams_classes = streams_classes
         self.timeout = timeout
 
-
     def __iter__(self):
         return self
 
-    def __next__(self):      
+    def __next__(self):
         """odczytanie zdarzenia z kolejki i podłączenie powiązanych strumieni"""
-        
+
         if self.task_queue != "":
             task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
             if not task_data is None:
                 task_str = task_data[1]
                 task = json.loads(task_str)
                 logging.info(f"task received: {task}")
-                return task['task_data'], stream_composed.Consumer(self.redis, task['stream_names'], self.streams_classes, self.timeout)
+                return task['task_data'], stream_composed.Consumer(self.redis, task['stream_names'],
+                                                                   self.streams_classes, self.timeout)
             else:
-                return None, None               
+                return None, None
         else:
             return {}, {}
