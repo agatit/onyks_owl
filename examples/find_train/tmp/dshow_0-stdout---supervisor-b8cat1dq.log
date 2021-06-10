@@ -1,0 +1,474 @@
+2021-06-10 13:12:20 INFO module_source_dshow started.
+2021-06-10 13:12:20 INFO config file: C:\Users\Marcin\Agat_IT\gotowe_moduly\onyks_owl\examples\find_train/config.json section module_source_dshow
+2021-06-10 13:12:21 INFO task emited: {'stream_names': {'color': 'stage1:a0cc5af513d5476ebeeaa516faaeb443:color', 'metrics': 'stage1:a0cc5af513d5476ebeeaa516faaeb443:metrics'}, 'task_data': {}}
+2021-06-10 13:13:57 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:13:58 INFO task emited: {'stream_names': {'color': 'stage1:32ec2a8e07b348cd9ca16b866300e8d4:color', 'metrics': 'stage1:32ec2a8e07b348cd9ca16b866300e8d4:metrics'}, 'task_data': {}}
+2021-06-10 13:13:58 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:13:59 INFO task emited: {'stream_names': {'color': 'stage1:e7ef6c8d86b04f389b535fd512f56caf:color', 'metrics': 'stage1:e7ef6c8d86b04f389b535fd512f56caf:metrics'}, 'task_data': {}}
+2021-06-10 13:13:59 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:00 INFO task emited: {'stream_names': {'color': 'stage1:ccfd4b01f79144f89bdfdaeb0909172c:color', 'metrics': 'stage1:ccfd4b01f79144f89bdfdaeb0909172c:metrics'}, 'task_data': {}}
+2021-06-10 13:14:00 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:01 INFO task emited: {'stream_names': {'color': 'stage1:bc412831077c44dd95118129113d544d:color', 'metrics': 'stage1:bc412831077c44dd95118129113d544d:metrics'}, 'task_data': {}}
+2021-06-10 13:14:01 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:02 INFO task emited: {'stream_names': {'color': 'stage1:a860071220c546ea89479830aca7e432:color', 'metrics': 'stage1:a860071220c546ea89479830aca7e432:metrics'}, 'task_data': {}}
+2021-06-10 13:14:02 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:03 INFO task emited: {'stream_names': {'color': 'stage1:de14687da54a403489790f9d5bad1f03:color', 'metrics': 'stage1:de14687da54a403489790f9d5bad1f03:metrics'}, 'task_data': {}}
+2021-06-10 13:14:04 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:05 INFO task emited: {'stream_names': {'color': 'stage1:3aa1ffa6cd4d4bdf938c53b25f884821:color', 'metrics': 'stage1:3aa1ffa6cd4d4bdf938c53b25f884821:metrics'}, 'task_data': {}}
+2021-06-10 13:14:05 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:06 INFO task emited: {'stream_names': {'color': 'stage1:56f8620f4a9e47e5b9f3bbe404ee7636:color', 'metrics': 'stage1:56f8620f4a9e47e5b9f3bbe404ee7636:metrics'}, 'task_data': {}}
+2021-06-10 13:14:06 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:07 INFO task emited: {'stream_names': {'color': 'stage1:9c9b55766eac401284262cd41e14a3e7:color', 'metrics': 'stage1:9c9b55766eac401284262cd41e14a3e7:metrics'}, 'task_data': {}}
+2021-06-10 13:14:07 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:08 INFO task emited: {'stream_names': {'color': 'stage1:4ae75a4fffb24536903629a6a598b32f:color', 'metrics': 'stage1:4ae75a4fffb24536903629a6a598b32f:metrics'}, 'task_data': {}}
+2021-06-10 13:14:08 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:09 INFO task emited: {'stream_names': {'color': 'stage1:b24b214b404f47d0993beb9ff9305604:color', 'metrics': 'stage1:b24b214b404f47d0993beb9ff9305604:metrics'}, 'task_data': {}}
+2021-06-10 13:14:09 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:10 INFO task emited: {'stream_names': {'color': 'stage1:8442062187674c69b7f1a7c3c751c7d2:color', 'metrics': 'stage1:8442062187674c69b7f1a7c3c751c7d2:metrics'}, 'task_data': {}}
+2021-06-10 13:14:10 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:11 INFO task emited: {'stream_names': {'color': 'stage1:1c4fe759fbfb4fbca3bafd3606c8fad8:color', 'metrics': 'stage1:1c4fe759fbfb4fbca3bafd3606c8fad8:metrics'}, 'task_data': {}}
+2021-06-10 13:14:11 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:12 INFO task emited: {'stream_names': {'color': 'stage1:1a789d17ab7142f49679c94562987b27:color', 'metrics': 'stage1:1a789d17ab7142f49679c94562987b27:metrics'}, 'task_data': {}}
+2021-06-10 13:14:12 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:13 INFO task emited: {'stream_names': {'color': 'stage1:9679d22e9d304e03923a12d7d9860bea:color', 'metrics': 'stage1:9679d22e9d304e03923a12d7d9860bea:metrics'}, 'task_data': {}}
+2021-06-10 13:14:13 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:15 INFO task emited: {'stream_names': {'color': 'stage1:c6724aa1f9ca42a5a9580d922c1381d3:color', 'metrics': 'stage1:c6724aa1f9ca42a5a9580d922c1381d3:metrics'}, 'task_data': {}}
+2021-06-10 13:14:15 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:16 INFO task emited: {'stream_names': {'color': 'stage1:72ef9c8c36524f65ab3a46a0855e3b86:color', 'metrics': 'stage1:72ef9c8c36524f65ab3a46a0855e3b86:metrics'}, 'task_data': {}}
+2021-06-10 13:14:16 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:17 INFO task emited: {'stream_names': {'color': 'stage1:2807810e478e4b95b4ea5163216f1b09:color', 'metrics': 'stage1:2807810e478e4b95b4ea5163216f1b09:metrics'}, 'task_data': {}}
+2021-06-10 13:14:17 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:18 INFO task emited: {'stream_names': {'color': 'stage1:4b46455789c8482a9851ea407d13b62e:color', 'metrics': 'stage1:4b46455789c8482a9851ea407d13b62e:metrics'}, 'task_data': {}}
+2021-06-10 13:14:18 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:19 INFO task emited: {'stream_names': {'color': 'stage1:285479e81f9a49fd8d4f34851a6f8f3f:color', 'metrics': 'stage1:285479e81f9a49fd8d4f34851a6f8f3f:metrics'}, 'task_data': {}}
+2021-06-10 13:14:19 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:20 INFO task emited: {'stream_names': {'color': 'stage1:523c7275d41e47d1a2fbfc9faa426fe3:color', 'metrics': 'stage1:523c7275d41e47d1a2fbfc9faa426fe3:metrics'}, 'task_data': {}}
+2021-06-10 13:14:20 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:21 INFO task emited: {'stream_names': {'color': 'stage1:0d6ea8b92e8b479d8aee706444b202af:color', 'metrics': 'stage1:0d6ea8b92e8b479d8aee706444b202af:metrics'}, 'task_data': {}}
+2021-06-10 13:14:22 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:23 INFO task emited: {'stream_names': {'color': 'stage1:8f89bab22a86484fb7f8d523640d8838:color', 'metrics': 'stage1:8f89bab22a86484fb7f8d523640d8838:metrics'}, 'task_data': {}}
+2021-06-10 13:14:23 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:24 INFO task emited: {'stream_names': {'color': 'stage1:3c63ea7ffdc44c169af9b6d0a2c86793:color', 'metrics': 'stage1:3c63ea7ffdc44c169af9b6d0a2c86793:metrics'}, 'task_data': {}}
+2021-06-10 13:14:24 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:25 INFO task emited: {'stream_names': {'color': 'stage1:228546ab05194eddab99242fda1371fd:color', 'metrics': 'stage1:228546ab05194eddab99242fda1371fd:metrics'}, 'task_data': {}}
+2021-06-10 13:14:25 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:26 INFO task emited: {'stream_names': {'color': 'stage1:b847deed99ba428da38caf1e7942aecb:color', 'metrics': 'stage1:b847deed99ba428da38caf1e7942aecb:metrics'}, 'task_data': {}}
+2021-06-10 13:14:26 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:27 INFO task emited: {'stream_names': {'color': 'stage1:26a32d9e881c431e8a1fc33d91472c5a:color', 'metrics': 'stage1:26a32d9e881c431e8a1fc33d91472c5a:metrics'}, 'task_data': {}}
+2021-06-10 13:14:27 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:28 INFO task emited: {'stream_names': {'color': 'stage1:eb8219e3348040d5b33981a0c5a4ee40:color', 'metrics': 'stage1:eb8219e3348040d5b33981a0c5a4ee40:metrics'}, 'task_data': {}}
+2021-06-10 13:14:28 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:29 INFO task emited: {'stream_names': {'color': 'stage1:0b7d0a538339443fb9404dba33cc3614:color', 'metrics': 'stage1:0b7d0a538339443fb9404dba33cc3614:metrics'}, 'task_data': {}}
+2021-06-10 13:14:29 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:30 INFO task emited: {'stream_names': {'color': 'stage1:8a43a7eeb4c54e7e84af9c9e10a2a711:color', 'metrics': 'stage1:8a43a7eeb4c54e7e84af9c9e10a2a711:metrics'}, 'task_data': {}}
+2021-06-10 13:14:30 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:31 INFO task emited: {'stream_names': {'color': 'stage1:445d72d5f25a450a8ecc6a222d31154e:color', 'metrics': 'stage1:445d72d5f25a450a8ecc6a222d31154e:metrics'}, 'task_data': {}}
+2021-06-10 13:14:31 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:32 INFO task emited: {'stream_names': {'color': 'stage1:7c2cc6c8d8414271aa61e9a6388fbdc5:color', 'metrics': 'stage1:7c2cc6c8d8414271aa61e9a6388fbdc5:metrics'}, 'task_data': {}}
+2021-06-10 13:14:32 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:33 INFO task emited: {'stream_names': {'color': 'stage1:9275e653b0ff42488c213f2177ea7a10:color', 'metrics': 'stage1:9275e653b0ff42488c213f2177ea7a10:metrics'}, 'task_data': {}}
+2021-06-10 13:14:33 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:35 INFO task emited: {'stream_names': {'color': 'stage1:d609be84056f4b0c81ef752e343db706:color', 'metrics': 'stage1:d609be84056f4b0c81ef752e343db706:metrics'}, 'task_data': {}}
+2021-06-10 13:14:35 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:36 INFO task emited: {'stream_names': {'color': 'stage1:0a3d9ca65e0b42ca80e26cd035e1885c:color', 'metrics': 'stage1:0a3d9ca65e0b42ca80e26cd035e1885c:metrics'}, 'task_data': {}}
+2021-06-10 13:14:36 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:37 INFO task emited: {'stream_names': {'color': 'stage1:1de7789916ef40d2a834028ebf4d5caa:color', 'metrics': 'stage1:1de7789916ef40d2a834028ebf4d5caa:metrics'}, 'task_data': {}}
+2021-06-10 13:14:37 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:38 INFO task emited: {'stream_names': {'color': 'stage1:86c14c88e3874c85b5063d09b462bb2f:color', 'metrics': 'stage1:86c14c88e3874c85b5063d09b462bb2f:metrics'}, 'task_data': {}}
+2021-06-10 13:14:38 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:39 INFO task emited: {'stream_names': {'color': 'stage1:ed0c693f83144d1daf16b56fbf8d2d93:color', 'metrics': 'stage1:ed0c693f83144d1daf16b56fbf8d2d93:metrics'}, 'task_data': {}}
+2021-06-10 13:14:39 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:40 INFO task emited: {'stream_names': {'color': 'stage1:f5eb445b90af47b8b0d8e9150a9babac:color', 'metrics': 'stage1:f5eb445b90af47b8b0d8e9150a9babac:metrics'}, 'task_data': {}}
+2021-06-10 13:14:40 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:41 INFO task emited: {'stream_names': {'color': 'stage1:0ceddbccf72f42558417e2c1d9a7eef7:color', 'metrics': 'stage1:0ceddbccf72f42558417e2c1d9a7eef7:metrics'}, 'task_data': {}}
+2021-06-10 13:14:41 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:42 INFO task emited: {'stream_names': {'color': 'stage1:1379cf8455db41f59848115779b5aa1c:color', 'metrics': 'stage1:1379cf8455db41f59848115779b5aa1c:metrics'}, 'task_data': {}}
+2021-06-10 13:14:42 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:43 INFO task emited: {'stream_names': {'color': 'stage1:ca33b895440c4e6bb055570964f7c929:color', 'metrics': 'stage1:ca33b895440c4e6bb055570964f7c929:metrics'}, 'task_data': {}}
+2021-06-10 13:14:43 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:44 INFO task emited: {'stream_names': {'color': 'stage1:5b89dd0733ea4dd0adf8751463c9eb8a:color', 'metrics': 'stage1:5b89dd0733ea4dd0adf8751463c9eb8a:metrics'}, 'task_data': {}}
+2021-06-10 13:14:44 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:45 INFO task emited: {'stream_names': {'color': 'stage1:35401596d74a4a96ba491b952eba85ae:color', 'metrics': 'stage1:35401596d74a4a96ba491b952eba85ae:metrics'}, 'task_data': {}}
+2021-06-10 13:14:45 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:46 INFO task emited: {'stream_names': {'color': 'stage1:48d5bc6d887c4e8e8201c9193bac4270:color', 'metrics': 'stage1:48d5bc6d887c4e8e8201c9193bac4270:metrics'}, 'task_data': {}}
+2021-06-10 13:14:47 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:48 INFO task emited: {'stream_names': {'color': 'stage1:0629f7cbb20f4ac1b6aeab649428c314:color', 'metrics': 'stage1:0629f7cbb20f4ac1b6aeab649428c314:metrics'}, 'task_data': {}}
+2021-06-10 13:14:48 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:49 INFO task emited: {'stream_names': {'color': 'stage1:9376ddc28a82493cb9a9590ddc2e2808:color', 'metrics': 'stage1:9376ddc28a82493cb9a9590ddc2e2808:metrics'}, 'task_data': {}}
+2021-06-10 13:14:49 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:50 INFO task emited: {'stream_names': {'color': 'stage1:8b907e234ad846c99a02302ebf8e1a47:color', 'metrics': 'stage1:8b907e234ad846c99a02302ebf8e1a47:metrics'}, 'task_data': {}}
+2021-06-10 13:14:50 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:51 INFO task emited: {'stream_names': {'color': 'stage1:2e7ba80c27174f59add991782eccd69f:color', 'metrics': 'stage1:2e7ba80c27174f59add991782eccd69f:metrics'}, 'task_data': {}}
+2021-06-10 13:14:51 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:52 INFO task emited: {'stream_names': {'color': 'stage1:7e64d3e4595a4b5397cd63997ae81c7f:color', 'metrics': 'stage1:7e64d3e4595a4b5397cd63997ae81c7f:metrics'}, 'task_data': {}}
+2021-06-10 13:14:52 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:53 INFO task emited: {'stream_names': {'color': 'stage1:e8e8a628065a4cbca6965e816c7b0512:color', 'metrics': 'stage1:e8e8a628065a4cbca6965e816c7b0512:metrics'}, 'task_data': {}}
+2021-06-10 13:14:53 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:55 INFO task emited: {'stream_names': {'color': 'stage1:30a014ce8d3d4fa5a64c1035dd63c82e:color', 'metrics': 'stage1:30a014ce8d3d4fa5a64c1035dd63c82e:metrics'}, 'task_data': {}}
+2021-06-10 13:14:55 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:56 INFO task emited: {'stream_names': {'color': 'stage1:571198486da943cd87258af988defecc:color', 'metrics': 'stage1:571198486da943cd87258af988defecc:metrics'}, 'task_data': {}}
+2021-06-10 13:14:56 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:57 INFO task emited: {'stream_names': {'color': 'stage1:5034f38c54fa4f209f6aff44cddf1176:color', 'metrics': 'stage1:5034f38c54fa4f209f6aff44cddf1176:metrics'}, 'task_data': {}}
+2021-06-10 13:14:57 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:58 INFO task emited: {'stream_names': {'color': 'stage1:9f40bda9b8f049acb2bcd143691e201e:color', 'metrics': 'stage1:9f40bda9b8f049acb2bcd143691e201e:metrics'}, 'task_data': {}}
+2021-06-10 13:14:58 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:14:59 INFO task emited: {'stream_names': {'color': 'stage1:5887b3a41390478eacc86aef9f80593d:color', 'metrics': 'stage1:5887b3a41390478eacc86aef9f80593d:metrics'}, 'task_data': {}}
+2021-06-10 13:14:59 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:00 INFO task emited: {'stream_names': {'color': 'stage1:6c1923cf97824b57a6b4f47e9b82801f:color', 'metrics': 'stage1:6c1923cf97824b57a6b4f47e9b82801f:metrics'}, 'task_data': {}}
+2021-06-10 13:15:00 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:01 INFO task emited: {'stream_names': {'color': 'stage1:3d929aa02a63407f845efe3d27f157cd:color', 'metrics': 'stage1:3d929aa02a63407f845efe3d27f157cd:metrics'}, 'task_data': {}}
+2021-06-10 13:15:01 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:02 INFO task emited: {'stream_names': {'color': 'stage1:a37606281c1f4107b02a2d6c6a34fbd3:color', 'metrics': 'stage1:a37606281c1f4107b02a2d6c6a34fbd3:metrics'}, 'task_data': {}}
+2021-06-10 13:15:02 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:03 INFO task emited: {'stream_names': {'color': 'stage1:166d9bb621074a8f9a555ca229a9b1d1:color', 'metrics': 'stage1:166d9bb621074a8f9a555ca229a9b1d1:metrics'}, 'task_data': {}}
+2021-06-10 13:15:03 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:05 INFO task emited: {'stream_names': {'color': 'stage1:88bc69e6c5214c42969af1989a90305e:color', 'metrics': 'stage1:88bc69e6c5214c42969af1989a90305e:metrics'}, 'task_data': {}}
+2021-06-10 13:15:05 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:06 INFO task emited: {'stream_names': {'color': 'stage1:58428208a0a54eb8be16ffe9dd808c79:color', 'metrics': 'stage1:58428208a0a54eb8be16ffe9dd808c79:metrics'}, 'task_data': {}}
+2021-06-10 13:15:06 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:07 INFO task emited: {'stream_names': {'color': 'stage1:7b94af1b1e684c608affdcbbddd03d20:color', 'metrics': 'stage1:7b94af1b1e684c608affdcbbddd03d20:metrics'}, 'task_data': {}}
+2021-06-10 13:15:07 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:08 INFO task emited: {'stream_names': {'color': 'stage1:2b194ba86f1b41f5b11ac35cec3216c1:color', 'metrics': 'stage1:2b194ba86f1b41f5b11ac35cec3216c1:metrics'}, 'task_data': {}}
+2021-06-10 13:15:08 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:09 INFO task emited: {'stream_names': {'color': 'stage1:e8bebf89fa5d48c29a2c06469449d6cd:color', 'metrics': 'stage1:e8bebf89fa5d48c29a2c06469449d6cd:metrics'}, 'task_data': {}}
+2021-06-10 13:15:09 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:10 INFO task emited: {'stream_names': {'color': 'stage1:a1bde00831554180a4a63709b969f790:color', 'metrics': 'stage1:a1bde00831554180a4a63709b969f790:metrics'}, 'task_data': {}}
+2021-06-10 13:15:10 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:11 INFO task emited: {'stream_names': {'color': 'stage1:ad37777551ea43e3b01b3a3836bb514d:color', 'metrics': 'stage1:ad37777551ea43e3b01b3a3836bb514d:metrics'}, 'task_data': {}}
+2021-06-10 13:15:11 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:12 INFO task emited: {'stream_names': {'color': 'stage1:b715360848d04c209da2cca10a9e1410:color', 'metrics': 'stage1:b715360848d04c209da2cca10a9e1410:metrics'}, 'task_data': {}}
+2021-06-10 13:15:12 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:13 INFO task emited: {'stream_names': {'color': 'stage1:7d111e1f4a694e82979caeea5063d093:color', 'metrics': 'stage1:7d111e1f4a694e82979caeea5063d093:metrics'}, 'task_data': {}}
+2021-06-10 13:15:13 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:14 INFO task emited: {'stream_names': {'color': 'stage1:580f76f9ef594b8c8d5d5741141254a8:color', 'metrics': 'stage1:580f76f9ef594b8c8d5d5741141254a8:metrics'}, 'task_data': {}}
+2021-06-10 13:15:14 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:15 INFO task emited: {'stream_names': {'color': 'stage1:ef63348abfc545cd8103a58987370e52:color', 'metrics': 'stage1:ef63348abfc545cd8103a58987370e52:metrics'}, 'task_data': {}}
+2021-06-10 13:15:15 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:16 INFO task emited: {'stream_names': {'color': 'stage1:ecd2b9198b9546a9933f727528d4d9e4:color', 'metrics': 'stage1:ecd2b9198b9546a9933f727528d4d9e4:metrics'}, 'task_data': {}}
+2021-06-10 13:15:16 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:17 INFO task emited: {'stream_names': {'color': 'stage1:0475f233e3f54293bb139f41da0c752f:color', 'metrics': 'stage1:0475f233e3f54293bb139f41da0c752f:metrics'}, 'task_data': {}}
+2021-06-10 13:15:17 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:18 INFO task emited: {'stream_names': {'color': 'stage1:a17dc95b9ae74654ace3cf4de2c23485:color', 'metrics': 'stage1:a17dc95b9ae74654ace3cf4de2c23485:metrics'}, 'task_data': {}}
+2021-06-10 13:15:18 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:19 INFO task emited: {'stream_names': {'color': 'stage1:6b2e53d20eb6481f912c977876c2ef31:color', 'metrics': 'stage1:6b2e53d20eb6481f912c977876c2ef31:metrics'}, 'task_data': {}}
+2021-06-10 13:15:19 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:21 INFO task emited: {'stream_names': {'color': 'stage1:78f9991ed2ec4fcd9dbd6d71b1ff0e88:color', 'metrics': 'stage1:78f9991ed2ec4fcd9dbd6d71b1ff0e88:metrics'}, 'task_data': {}}
+2021-06-10 13:15:21 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:22 INFO task emited: {'stream_names': {'color': 'stage1:4faa8757c4dd4019b5936131ee7d6407:color', 'metrics': 'stage1:4faa8757c4dd4019b5936131ee7d6407:metrics'}, 'task_data': {}}
+2021-06-10 13:15:22 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:23 INFO task emited: {'stream_names': {'color': 'stage1:bbfeba5681834fd787b51f2fa5b61278:color', 'metrics': 'stage1:bbfeba5681834fd787b51f2fa5b61278:metrics'}, 'task_data': {}}
+2021-06-10 13:15:23 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:24 INFO task emited: {'stream_names': {'color': 'stage1:96f3a3470cf04d17972e9df99d52b85b:color', 'metrics': 'stage1:96f3a3470cf04d17972e9df99d52b85b:metrics'}, 'task_data': {}}
+2021-06-10 13:15:24 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:25 INFO task emited: {'stream_names': {'color': 'stage1:f38942e145a7402ba6a41aeeeac9b3b2:color', 'metrics': 'stage1:f38942e145a7402ba6a41aeeeac9b3b2:metrics'}, 'task_data': {}}
+2021-06-10 13:15:25 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:26 INFO task emited: {'stream_names': {'color': 'stage1:5a3969d8c02e47feb0864eab4709a532:color', 'metrics': 'stage1:5a3969d8c02e47feb0864eab4709a532:metrics'}, 'task_data': {}}
+2021-06-10 13:15:26 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:27 INFO task emited: {'stream_names': {'color': 'stage1:7415430b0b854985974c512dbe397f47:color', 'metrics': 'stage1:7415430b0b854985974c512dbe397f47:metrics'}, 'task_data': {}}
+2021-06-10 13:15:27 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:28 INFO task emited: {'stream_names': {'color': 'stage1:8534e88d3ec148e4bb780465aeea691c:color', 'metrics': 'stage1:8534e88d3ec148e4bb780465aeea691c:metrics'}, 'task_data': {}}
+2021-06-10 13:15:30 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:31 INFO task emited: {'stream_names': {'color': 'stage1:7707fe9399034dc18c33731a377700b6:color', 'metrics': 'stage1:7707fe9399034dc18c33731a377700b6:metrics'}, 'task_data': {}}
+2021-06-10 13:15:31 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:32 INFO task emited: {'stream_names': {'color': 'stage1:b85bff569f0746f89d89dc45618d3839:color', 'metrics': 'stage1:b85bff569f0746f89d89dc45618d3839:metrics'}, 'task_data': {}}
+2021-06-10 13:15:32 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:33 INFO task emited: {'stream_names': {'color': 'stage1:b53aa1cb680b4f90be7027002b4060ee:color', 'metrics': 'stage1:b53aa1cb680b4f90be7027002b4060ee:metrics'}, 'task_data': {}}
+2021-06-10 13:15:33 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:35 INFO task emited: {'stream_names': {'color': 'stage1:a25fff5539904e94bf5c8837ce5185f4:color', 'metrics': 'stage1:a25fff5539904e94bf5c8837ce5185f4:metrics'}, 'task_data': {}}
+2021-06-10 13:15:35 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:36 INFO task emited: {'stream_names': {'color': 'stage1:9bf06a4df712409e8782f3fa6c44145c:color', 'metrics': 'stage1:9bf06a4df712409e8782f3fa6c44145c:metrics'}, 'task_data': {}}
+2021-06-10 13:15:36 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:37 INFO task emited: {'stream_names': {'color': 'stage1:b19f07c645a24e2e8da325cd48a2339c:color', 'metrics': 'stage1:b19f07c645a24e2e8da325cd48a2339c:metrics'}, 'task_data': {}}
+2021-06-10 13:15:37 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:38 INFO task emited: {'stream_names': {'color': 'stage1:73f0d005ae074061850423f696075f4f:color', 'metrics': 'stage1:73f0d005ae074061850423f696075f4f:metrics'}, 'task_data': {}}
+2021-06-10 13:15:38 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:39 INFO task emited: {'stream_names': {'color': 'stage1:46c606068c6140d4821bbaed0e68eb48:color', 'metrics': 'stage1:46c606068c6140d4821bbaed0e68eb48:metrics'}, 'task_data': {}}
+2021-06-10 13:15:40 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:41 INFO task emited: {'stream_names': {'color': 'stage1:302fb23e23f448fdb0209f0b6c950a79:color', 'metrics': 'stage1:302fb23e23f448fdb0209f0b6c950a79:metrics'}, 'task_data': {}}
+2021-06-10 13:15:41 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:42 INFO task emited: {'stream_names': {'color': 'stage1:efd28784cc9e487492888ddfadd5d9b2:color', 'metrics': 'stage1:efd28784cc9e487492888ddfadd5d9b2:metrics'}, 'task_data': {}}
+2021-06-10 13:15:42 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:43 INFO task emited: {'stream_names': {'color': 'stage1:e157131c63084ec48e155c6688ec5eab:color', 'metrics': 'stage1:e157131c63084ec48e155c6688ec5eab:metrics'}, 'task_data': {}}
+2021-06-10 13:15:43 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:44 INFO task emited: {'stream_names': {'color': 'stage1:27452784c74d4c4dba8d88d814805dea:color', 'metrics': 'stage1:27452784c74d4c4dba8d88d814805dea:metrics'}, 'task_data': {}}
+2021-06-10 13:15:44 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:45 INFO task emited: {'stream_names': {'color': 'stage1:6a192b6bca884612936390ee526a56a5:color', 'metrics': 'stage1:6a192b6bca884612936390ee526a56a5:metrics'}, 'task_data': {}}
+2021-06-10 13:15:46 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:47 INFO task emited: {'stream_names': {'color': 'stage1:09d68882c1d345feaadc41e19166f780:color', 'metrics': 'stage1:09d68882c1d345feaadc41e19166f780:metrics'}, 'task_data': {}}
+2021-06-10 13:15:47 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:48 INFO task emited: {'stream_names': {'color': 'stage1:8f99a3278d99484cb98e0872db318ca6:color', 'metrics': 'stage1:8f99a3278d99484cb98e0872db318ca6:metrics'}, 'task_data': {}}
+2021-06-10 13:15:48 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:49 INFO task emited: {'stream_names': {'color': 'stage1:6d776014c6764664bbe8b461b44a3bdc:color', 'metrics': 'stage1:6d776014c6764664bbe8b461b44a3bdc:metrics'}, 'task_data': {}}
+2021-06-10 13:15:49 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:50 INFO task emited: {'stream_names': {'color': 'stage1:3ba22c3eee854a1aae6881033d0b275d:color', 'metrics': 'stage1:3ba22c3eee854a1aae6881033d0b275d:metrics'}, 'task_data': {}}
+2021-06-10 13:15:50 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:51 INFO task emited: {'stream_names': {'color': 'stage1:2e63ab1138444ca492890fcb533e8263:color', 'metrics': 'stage1:2e63ab1138444ca492890fcb533e8263:metrics'}, 'task_data': {}}
+2021-06-10 13:15:52 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:53 INFO task emited: {'stream_names': {'color': 'stage1:d2c61734eb3743a8a5acdd4fc8c9c28b:color', 'metrics': 'stage1:d2c61734eb3743a8a5acdd4fc8c9c28b:metrics'}, 'task_data': {}}
+2021-06-10 13:15:53 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:54 INFO task emited: {'stream_names': {'color': 'stage1:035f859da7904285a7ae536fc3eaad70:color', 'metrics': 'stage1:035f859da7904285a7ae536fc3eaad70:metrics'}, 'task_data': {}}
+2021-06-10 13:15:54 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:55 INFO task emited: {'stream_names': {'color': 'stage1:f94d10c554584e028f9701992b88fbc9:color', 'metrics': 'stage1:f94d10c554584e028f9701992b88fbc9:metrics'}, 'task_data': {}}
+2021-06-10 13:15:55 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:56 INFO task emited: {'stream_names': {'color': 'stage1:ec45cb953de4473d98b9f83ace476c86:color', 'metrics': 'stage1:ec45cb953de4473d98b9f83ace476c86:metrics'}, 'task_data': {}}
+2021-06-10 13:15:56 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:57 INFO task emited: {'stream_names': {'color': 'stage1:73d36491d2a54a47bf29bc08280fb787:color', 'metrics': 'stage1:73d36491d2a54a47bf29bc08280fb787:metrics'}, 'task_data': {}}
+2021-06-10 13:15:57 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:58 INFO task emited: {'stream_names': {'color': 'stage1:a7c0cea690764c0c9dae291c79e7bbfd:color', 'metrics': 'stage1:a7c0cea690764c0c9dae291c79e7bbfd:metrics'}, 'task_data': {}}
+2021-06-10 13:15:58 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:15:59 INFO task emited: {'stream_names': {'color': 'stage1:7a80a18713b941d8b280b42cc331df4c:color', 'metrics': 'stage1:7a80a18713b941d8b280b42cc331df4c:metrics'}, 'task_data': {}}
+2021-06-10 13:15:59 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:00 INFO task emited: {'stream_names': {'color': 'stage1:c9dbef3d4fe845ea8fc418bbb7a72ac7:color', 'metrics': 'stage1:c9dbef3d4fe845ea8fc418bbb7a72ac7:metrics'}, 'task_data': {}}
+2021-06-10 13:16:01 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:02 INFO task emited: {'stream_names': {'color': 'stage1:13825db234854bf38f96784b8bbf6cd0:color', 'metrics': 'stage1:13825db234854bf38f96784b8bbf6cd0:metrics'}, 'task_data': {}}
+2021-06-10 13:16:02 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:03 INFO task emited: {'stream_names': {'color': 'stage1:53753c68ed1f496099f038dadbb42709:color', 'metrics': 'stage1:53753c68ed1f496099f038dadbb42709:metrics'}, 'task_data': {}}
+2021-06-10 13:16:03 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:04 INFO task emited: {'stream_names': {'color': 'stage1:a271a18eb4b64856898e848f1de3b60d:color', 'metrics': 'stage1:a271a18eb4b64856898e848f1de3b60d:metrics'}, 'task_data': {}}
+2021-06-10 13:16:04 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:05 INFO task emited: {'stream_names': {'color': 'stage1:0deffad0019747de9bb58803a3634654:color', 'metrics': 'stage1:0deffad0019747de9bb58803a3634654:metrics'}, 'task_data': {}}
+2021-06-10 13:16:05 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:06 INFO task emited: {'stream_names': {'color': 'stage1:b38726a06c46497d82bcdb3fcc796dc6:color', 'metrics': 'stage1:b38726a06c46497d82bcdb3fcc796dc6:metrics'}, 'task_data': {}}
+2021-06-10 13:16:06 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:07 INFO task emited: {'stream_names': {'color': 'stage1:f0ae676b4a3943579b29e3edeacf5461:color', 'metrics': 'stage1:f0ae676b4a3943579b29e3edeacf5461:metrics'}, 'task_data': {}}
+2021-06-10 13:16:07 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:08 INFO task emited: {'stream_names': {'color': 'stage1:9c1067b2e11944c5be9b2d2e9267414e:color', 'metrics': 'stage1:9c1067b2e11944c5be9b2d2e9267414e:metrics'}, 'task_data': {}}
+2021-06-10 13:16:08 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:09 INFO task emited: {'stream_names': {'color': 'stage1:adbc33e3a70749b9b7e5e6d3d58d0506:color', 'metrics': 'stage1:adbc33e3a70749b9b7e5e6d3d58d0506:metrics'}, 'task_data': {}}
+2021-06-10 13:16:09 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:10 INFO task emited: {'stream_names': {'color': 'stage1:492ee6c180b140a181667ec8c4c937a5:color', 'metrics': 'stage1:492ee6c180b140a181667ec8c4c937a5:metrics'}, 'task_data': {}}
+2021-06-10 13:16:10 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:11 INFO task emited: {'stream_names': {'color': 'stage1:a4f6f1deca0c4af8a9633cf3b39c9b0e:color', 'metrics': 'stage1:a4f6f1deca0c4af8a9633cf3b39c9b0e:metrics'}, 'task_data': {}}
+2021-06-10 13:16:11 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:12 INFO task emited: {'stream_names': {'color': 'stage1:ed06069adb1e4c3686133221b46cbfec:color', 'metrics': 'stage1:ed06069adb1e4c3686133221b46cbfec:metrics'}, 'task_data': {}}
+2021-06-10 13:16:12 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:13 INFO task emited: {'stream_names': {'color': 'stage1:22debba063d74d41ab01d17b97027297:color', 'metrics': 'stage1:22debba063d74d41ab01d17b97027297:metrics'}, 'task_data': {}}
+2021-06-10 13:16:13 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:14 INFO task emited: {'stream_names': {'color': 'stage1:d32b98367b7d47b9a6f2c5c29f2da0f7:color', 'metrics': 'stage1:d32b98367b7d47b9a6f2c5c29f2da0f7:metrics'}, 'task_data': {}}
+2021-06-10 13:16:16 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:17 INFO task emited: {'stream_names': {'color': 'stage1:cfbdd0ff03fe49f3a5ee32b951fd1422:color', 'metrics': 'stage1:cfbdd0ff03fe49f3a5ee32b951fd1422:metrics'}, 'task_data': {}}
+2021-06-10 13:16:17 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:18 INFO task emited: {'stream_names': {'color': 'stage1:845451d36b594960832e9223a7c07b34:color', 'metrics': 'stage1:845451d36b594960832e9223a7c07b34:metrics'}, 'task_data': {}}
+2021-06-10 13:16:18 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:19 INFO task emited: {'stream_names': {'color': 'stage1:122eee598cb94984bdec0a2af9f0dcf0:color', 'metrics': 'stage1:122eee598cb94984bdec0a2af9f0dcf0:metrics'}, 'task_data': {}}
+2021-06-10 13:16:19 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:20 INFO task emited: {'stream_names': {'color': 'stage1:82edbf6507f944f1ab8c7dccf1c3927c:color', 'metrics': 'stage1:82edbf6507f944f1ab8c7dccf1c3927c:metrics'}, 'task_data': {}}
+2021-06-10 13:16:20 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:21 INFO task emited: {'stream_names': {'color': 'stage1:041d77eb52ef4f1196b67d2822d3e1b3:color', 'metrics': 'stage1:041d77eb52ef4f1196b67d2822d3e1b3:metrics'}, 'task_data': {}}
+2021-06-10 13:16:21 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:22 INFO task emited: {'stream_names': {'color': 'stage1:23ee04b47b1c43269f95d2e147666790:color', 'metrics': 'stage1:23ee04b47b1c43269f95d2e147666790:metrics'}, 'task_data': {}}
+2021-06-10 13:16:22 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:23 INFO task emited: {'stream_names': {'color': 'stage1:4f99aee629634ed3b9eaa6c008749943:color', 'metrics': 'stage1:4f99aee629634ed3b9eaa6c008749943:metrics'}, 'task_data': {}}
+2021-06-10 13:16:23 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:24 INFO task emited: {'stream_names': {'color': 'stage1:4f76651b3cac487f9c83a8516103e644:color', 'metrics': 'stage1:4f76651b3cac487f9c83a8516103e644:metrics'}, 'task_data': {}}
+2021-06-10 13:16:24 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:25 INFO task emited: {'stream_names': {'color': 'stage1:0a203c3997c245a8877743c2a3cd4743:color', 'metrics': 'stage1:0a203c3997c245a8877743c2a3cd4743:metrics'}, 'task_data': {}}
+2021-06-10 13:16:25 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:27 INFO task emited: {'stream_names': {'color': 'stage1:310e4e7c70244529869fce4bd00b043c:color', 'metrics': 'stage1:310e4e7c70244529869fce4bd00b043c:metrics'}, 'task_data': {}}
+2021-06-10 13:16:27 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:28 INFO task emited: {'stream_names': {'color': 'stage1:423e0806d99d418b9c6fd8195fbeddff:color', 'metrics': 'stage1:423e0806d99d418b9c6fd8195fbeddff:metrics'}, 'task_data': {}}
+2021-06-10 13:16:28 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:29 INFO task emited: {'stream_names': {'color': 'stage1:e0645176780a4739a17e23c2dbd0f88b:color', 'metrics': 'stage1:e0645176780a4739a17e23c2dbd0f88b:metrics'}, 'task_data': {}}
+2021-06-10 13:16:29 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:30 INFO task emited: {'stream_names': {'color': 'stage1:c01f99b1fecc42b9bff86a96b91df48f:color', 'metrics': 'stage1:c01f99b1fecc42b9bff86a96b91df48f:metrics'}, 'task_data': {}}
+2021-06-10 13:16:30 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:31 INFO task emited: {'stream_names': {'color': 'stage1:da6cc9734076498d87ec6eef840b1422:color', 'metrics': 'stage1:da6cc9734076498d87ec6eef840b1422:metrics'}, 'task_data': {}}
+2021-06-10 13:16:31 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:32 INFO task emited: {'stream_names': {'color': 'stage1:092d7fd9331b4d6ca7feeb4a2115bf06:color', 'metrics': 'stage1:092d7fd9331b4d6ca7feeb4a2115bf06:metrics'}, 'task_data': {}}
+2021-06-10 13:16:32 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:33 INFO task emited: {'stream_names': {'color': 'stage1:05e9dcae283d46eca2704f29d945ae1e:color', 'metrics': 'stage1:05e9dcae283d46eca2704f29d945ae1e:metrics'}, 'task_data': {}}
+2021-06-10 13:16:33 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:34 INFO task emited: {'stream_names': {'color': 'stage1:2ab9e83ad63849a6b216994f94e0b18e:color', 'metrics': 'stage1:2ab9e83ad63849a6b216994f94e0b18e:metrics'}, 'task_data': {}}
+2021-06-10 13:16:34 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:35 INFO task emited: {'stream_names': {'color': 'stage1:60d4918ca2f94d4981cdb65f4f4efe28:color', 'metrics': 'stage1:60d4918ca2f94d4981cdb65f4f4efe28:metrics'}, 'task_data': {}}
+2021-06-10 13:16:35 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:37 INFO task emited: {'stream_names': {'color': 'stage1:b824b51580624c6e95c3e5502bbe8557:color', 'metrics': 'stage1:b824b51580624c6e95c3e5502bbe8557:metrics'}, 'task_data': {}}
+2021-06-10 13:16:37 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:38 INFO task emited: {'stream_names': {'color': 'stage1:5c8488d764b845c4877c2c7ae7e5cd99:color', 'metrics': 'stage1:5c8488d764b845c4877c2c7ae7e5cd99:metrics'}, 'task_data': {}}
+2021-06-10 13:16:38 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:39 INFO task emited: {'stream_names': {'color': 'stage1:164ed33c55ec424faebd91889ce1a2a7:color', 'metrics': 'stage1:164ed33c55ec424faebd91889ce1a2a7:metrics'}, 'task_data': {}}
+2021-06-10 13:16:40 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:41 INFO task emited: {'stream_names': {'color': 'stage1:d65e9521ee7744ecba16454cc503bec1:color', 'metrics': 'stage1:d65e9521ee7744ecba16454cc503bec1:metrics'}, 'task_data': {}}
+2021-06-10 13:16:41 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:42 INFO task emited: {'stream_names': {'color': 'stage1:7a0749828d5a44ea9f5d1fa28b4dccaa:color', 'metrics': 'stage1:7a0749828d5a44ea9f5d1fa28b4dccaa:metrics'}, 'task_data': {}}
+2021-06-10 13:16:42 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:43 INFO task emited: {'stream_names': {'color': 'stage1:398e1b03488b4811be7c8524be3e9f9c:color', 'metrics': 'stage1:398e1b03488b4811be7c8524be3e9f9c:metrics'}, 'task_data': {}}
+2021-06-10 13:16:43 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:44 INFO task emited: {'stream_names': {'color': 'stage1:0b17282f9ae94df0b1978847f5849682:color', 'metrics': 'stage1:0b17282f9ae94df0b1978847f5849682:metrics'}, 'task_data': {}}
+2021-06-10 13:16:44 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:45 INFO task emited: {'stream_names': {'color': 'stage1:b5870d6a8b414332bcf78a4e136c57f1:color', 'metrics': 'stage1:b5870d6a8b414332bcf78a4e136c57f1:metrics'}, 'task_data': {}}
+2021-06-10 13:16:45 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:46 INFO task emited: {'stream_names': {'color': 'stage1:2a7079458d4a45b8a17851f64a47eef1:color', 'metrics': 'stage1:2a7079458d4a45b8a17851f64a47eef1:metrics'}, 'task_data': {}}
+2021-06-10 13:16:46 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:47 INFO task emited: {'stream_names': {'color': 'stage1:0dc4c2d98c4944569fbf2f50c11efb9b:color', 'metrics': 'stage1:0dc4c2d98c4944569fbf2f50c11efb9b:metrics'}, 'task_data': {}}
+2021-06-10 13:16:47 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:48 INFO task emited: {'stream_names': {'color': 'stage1:651ab0f40d9b4f1c9e5533efa1565aec:color', 'metrics': 'stage1:651ab0f40d9b4f1c9e5533efa1565aec:metrics'}, 'task_data': {}}
+2021-06-10 13:16:48 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:49 INFO task emited: {'stream_names': {'color': 'stage1:812115df656d4a23a46298a6aff83371:color', 'metrics': 'stage1:812115df656d4a23a46298a6aff83371:metrics'}, 'task_data': {}}
+2021-06-10 13:16:49 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:50 INFO task emited: {'stream_names': {'color': 'stage1:35dc3fa920da4d3e98e9933697dd13ca:color', 'metrics': 'stage1:35dc3fa920da4d3e98e9933697dd13ca:metrics'}, 'task_data': {}}
+2021-06-10 13:16:50 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:51 INFO task emited: {'stream_names': {'color': 'stage1:2461411fb46a42048b6aabcfcff93ad4:color', 'metrics': 'stage1:2461411fb46a42048b6aabcfcff93ad4:metrics'}, 'task_data': {}}
+2021-06-10 13:16:51 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:52 INFO task emited: {'stream_names': {'color': 'stage1:208256077fc84b9981182fe91fe888c8:color', 'metrics': 'stage1:208256077fc84b9981182fe91fe888c8:metrics'}, 'task_data': {}}
+2021-06-10 13:16:52 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:53 INFO task emited: {'stream_names': {'color': 'stage1:b7f25fe41cc44114aaee9f20635fc7df:color', 'metrics': 'stage1:b7f25fe41cc44114aaee9f20635fc7df:metrics'}, 'task_data': {}}
+2021-06-10 13:16:53 ERROR module_source_dshow runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 13:16:54 INFO task emited: {'stream_names': {'color': 'stage1:662e196d1dd643059484c796fc412088:color', 'metrics': 'stage1:662e196d1dd643059484c796fc412088:metrics'}, 'task_data': {}}

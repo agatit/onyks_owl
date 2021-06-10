@@ -1,0 +1,76 @@
+2021-06-10 12:15:28 INFO module_sink_win started.
+2021-06-10 12:15:28 INFO config file: C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\examples\camera_view/config.json section module_sink_win
+2021-06-10 12:15:39 INFO Nothing in task queue
+2021-06-10 12:15:49 INFO Nothing in task queue
+2021-06-10 12:16:23 INFO module_sink_win started.
+2021-06-10 12:16:23 INFO config file: C:\Users\Marcin\Agat It\gotowe_moduly\onyks_owl\examples\camera_view/config.json section module_sink_win
+2021-06-10 12:16:28 INFO task received: {'stream_names': {'color': 'stage1:70c165a7527e4c4a8d3edca16f554858:color', 'metrics': 'stage1:70c165a7527e4c4a8d3edca16f554858:metrics'}, 'task_data': {}}
+2021-06-10 12:21:44 INFO Nothing in task queue
+2021-06-10 12:21:54 INFO Nothing in task queue
+2021-06-10 12:22:06 INFO Nothing in task queue
+2021-06-10 12:22:06 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:07 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:08 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:09 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:10 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:11 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:12 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:13 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:14 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:15 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:16 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:17 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:19 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:20 ERROR module_sink_win runOnce error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+None
+2021-06-10 12:22:31 INFO Nothing in task queue
+2021-06-10 12:22:41 INFO Nothing in task queue
+2021-06-10 12:22:51 INFO Nothing in task queue
+2021-06-10 12:23:01 INFO Nothing in task queue
+2021-06-10 12:23:11 INFO Nothing in task queue
+2021-06-10 12:23:21 INFO Nothing in task queue
+2021-06-10 12:23:31 INFO Nothing in task queue
+2021-06-10 12:23:41 INFO Nothing in task queue
+2021-06-10 12:23:51 INFO Nothing in task queue
+2021-06-10 12:24:01 INFO Nothing in task queue
+2021-06-10 12:24:11 INFO Nothing in task queue
+2021-06-10 12:24:21 INFO Nothing in task queue
+2021-06-10 12:24:31 INFO Nothing in task queue
+2021-06-10 12:24:41 INFO Nothing in task queue
+2021-06-10 12:24:51 INFO Nothing in task queue
+2021-06-10 12:25:01 INFO Nothing in task queue
+2021-06-10 12:25:11 INFO Nothing in task queue
+2021-06-10 12:25:21 INFO Nothing in task queue
+2021-06-10 12:25:32 INFO Nothing in task queue
+2021-06-10 12:25:42 INFO Nothing in task queue
+2021-06-10 12:25:52 INFO Nothing in task queue
+2021-06-10 12:26:02 INFO Nothing in task queue
+2021-06-10 12:26:12 INFO Nothing in task queue
+2021-06-10 12:26:22 INFO Nothing in task queue
+2021-06-10 12:26:32 INFO Nothing in task queue
+2021-06-10 12:26:42 INFO Nothing in task queue
+2021-06-10 12:26:52 INFO Nothing in task queue
+2021-06-10 12:27:02 INFO Nothing in task queue
+2021-06-10 12:27:12 INFO Nothing in task queue
+2021-06-10 12:27:22 INFO Nothing in task queue
+2021-06-10 12:27:32 INFO Nothing in task queue
+2021-06-10 12:27:42 INFO Nothing in task queue
+2021-06-10 12:27:52 INFO Nothing in task queue
+2021-06-10 12:28:02 INFO Nothing in task queue
+2021-06-10 12:28:12 INFO Nothing in task queue
+2021-06-10 12:28:22 INFO Nothing in task queue
+2021-06-10 12:28:33 INFO Nothing in task queue
+2021-06-10 12:28:43 INFO Nothing in task queue

@@ -1,0 +1,549 @@
+2021-06-10 13:12:20 INFO module_train_check started.
+2021-06-10 13:12:20 ERROR module_train_check init error: 'module_train_check'
+None
+2021-06-10 13:12:20 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:21 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:22 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:23 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:24 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:25 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:26 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:27 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:28 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:29 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:30 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:31 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:32 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:33 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:34 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:35 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:36 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:37 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:38 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:39 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:40 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:41 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:42 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:43 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:44 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:45 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:46 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:47 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:48 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:49 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:50 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:51 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:52 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:53 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:54 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:55 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:56 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:57 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:58 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:12:59 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:00 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:01 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:02 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:03 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:04 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:05 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:06 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:08 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:09 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:10 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:11 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:12 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:13 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:14 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:15 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:16 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:17 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:18 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:19 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:20 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:21 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:22 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:23 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:24 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:25 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:26 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:27 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:28 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:29 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:30 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:31 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:32 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:33 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:34 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:35 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:36 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:37 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:38 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:39 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:40 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:41 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:42 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:43 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:44 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:45 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:46 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:47 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:48 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:49 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:50 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:51 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:52 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:53 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:54 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:55 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:56 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:57 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:58 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:13:59 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:00 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:01 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:02 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:03 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:04 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:05 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:06 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:07 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:08 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:09 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:10 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:11 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:12 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:13 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:14 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:15 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:16 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:17 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:18 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:19 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:20 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:21 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:22 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:23 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:24 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:25 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:26 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:27 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:28 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:29 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:30 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:31 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:32 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:33 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:34 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:35 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:36 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:37 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:38 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:39 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:40 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:41 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:42 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:43 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:44 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:45 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:46 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:47 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:48 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:49 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:50 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:51 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:52 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:53 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:54 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:55 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:56 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:57 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:58 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:14:59 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:00 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:02 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:03 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:04 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:05 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:06 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:07 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:08 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:09 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:10 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:11 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:12 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:13 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:14 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:15 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:16 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:17 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:18 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:19 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:20 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:21 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:22 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:23 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:24 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:25 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:26 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:27 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:28 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:29 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:30 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:31 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:32 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:33 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:34 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:35 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:36 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:37 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:38 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:39 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:40 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:41 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:42 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:43 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:44 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:45 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:46 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:47 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:48 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:49 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:50 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:51 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:52 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:53 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:54 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:55 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:56 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:57 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:58 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:15:59 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:00 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:01 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:02 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:03 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:04 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:05 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:06 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:07 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:08 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:09 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:10 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:11 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:12 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:13 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:14 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:15 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:16 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:17 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:18 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:19 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:20 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:21 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:22 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:23 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:24 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:25 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:26 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:27 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:28 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:29 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:30 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:31 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:32 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:33 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:34 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:35 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:36 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:37 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:38 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:39 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:40 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:41 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:42 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:43 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:44 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:45 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:46 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:47 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:48 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:49 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:50 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:51 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:52 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:53 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None
+2021-06-10 13:16:54 ERROR module_train_check runOnce error: 'Module' object has no attribute 'task_producer'
+None

@@ -2,7 +2,7 @@
     "module_source_dshow" : {   
         "output_queue" : "stage1",     
         "params": {
-            "device": 1
+            "device": 0
         }
     },
 
