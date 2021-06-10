@@ -1,1 +1,0 @@
-START "" supervisord -n -c supervisord.conf -q ./tmp -l ./tmp/supervisord.log -j ./tmp/supervisord.pid
