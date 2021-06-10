@@ -6,7 +6,7 @@
         }
     },
 
-    "module_slice" : { 
+    "module_train_check" : { 
         "input_queue" : "stage1",    
         "output_queue" : "stage2",  
         "params": {

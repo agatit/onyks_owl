@@ -45,8 +45,10 @@ class Module(module_base.Module):
                 object = hopefully_train_cascade.detectMultiScale(gray, Factor,neighbour)
                 for (x,y,w,h) in object: 
                     train_check = True  
-                    to_be_send = { "train_check": train_check, "train_pos": (x,y,w,h)}
-                    output_stream.emit(to_be_send)                      
+                    # to_be_send = { "train_check": train_check, "train_pos": (x,y,w,h)}
+                    # output_stream.emit(to_be_send) 
+                    cv2.rectangle(gray,(x, x+w), (y, y+h), (255,0,0), 5)
+                    cv2.imshow("img", gray)                     
                 
 
 if __name__ == "__main__":
