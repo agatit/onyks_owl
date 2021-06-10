@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "args": ["./examples/find_train/config.json"],
+            "args": ["./examples/plate_detection/config.json"],
             "console": "integratedTerminal"
         }
     ]
