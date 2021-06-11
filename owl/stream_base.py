@@ -4,15 +4,19 @@
 # Created on: python 3.8.7
 """Moduł obsługujący strumieni danych"""
 import json
+import time
 
 		
 
 class Producer:
-    def __init__(self, redis, stream_queue, expire_time=10):
+    def __init__(self, redis, stream_queue, expire_time=120, queue_limit=0, timeout=120):
         self.id = id
         self.redis = redis
         self.stream_queue = stream_queue
-        self.expire_time = expire_time     
+        self.expire_time = expire_time
+        self.timeout = timeout
+        self.queue_limit = queue_limit  
+        self.queue_space = queue_limit 
         self.refresh = 1
 
     def __enter__(self):
@@ -22,8 +26,15 @@ class Producer:
         self.end()
 
     def emit(self, data):
+        end_time = time.time() + self.timeout        
+        while self.queue_limit > 0 and self.queue_space <= 0:   
+            self.queue_space = self.queue_limit - self.redis.llen("owl:stream_queue:{self.stream_queue}")           
+            if time.time() > end_time:
+                raise TimeoutError("Output stream queue is full") 
+            time.sleep(1)
         self.redis.rpush(f"owl:stream_queue:{self.stream_queue}", data)
         self.redis.expire(f"owl:stream_queue:{self.stream_queue}", self.expire_time)
+        self.queue_space -= 1
 
     def end(self):
         self.redis.rpush(f"owl:stream_queue:{self.stream_queue}", b"")
@@ -31,7 +42,7 @@ class Producer:
 
 
 class Consumer:
-    def __init__(self, redis, stream_queue, timeout=5):
+    def __init__(self, redis, stream_queue, timeout=120):
         self.redis = redis
         self.stream_queue = stream_queue
         self.timeout = timeout     

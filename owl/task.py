@@ -12,11 +12,13 @@ import stream_composed
 class Producer():
     """Producent zdarzeń. Tworzy zdarzenia i umieszcza je w kolejach (kilku), zarządza powiązanymi strumieniami"""
 
-    def __init__(self, redis, task_queue, streams_classes, expire_time=120):
+    def __init__(self, redis, task_queue, streams_classes, expire_time=120, queue_limit=0, timeout=120):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
         self.expire_time = expire_time
+        self.timeout = timeout
+        self.queue_limit = queue_limit          
 
     def __enter__(self):
         return self
@@ -52,7 +54,7 @@ class Producer():
         self.redis.rpush(f"owl:task_queue:{self.task_queue}", json.dumps(task))
         self.redis.expire(f"owl:task_queue:{self.task_queue}", self.expire_time)
       
-        return stream_composed.Producer(self.redis, streams_queues, self.streams_classes, self.expire_time * 2)
+        return stream_composed.Producer(self.redis, streams_queues, self.streams_classes, self.expire_time, self.queue_limit, self.timeout)
 
 class Consumer():
     """Konsument zdarzeń. Odczytuje zdarzenia z kojejki (jednej) i podłącza powiązane strumienie"""

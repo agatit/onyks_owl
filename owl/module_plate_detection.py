@@ -52,7 +52,6 @@ class Module(module_base.Module):
                     if debug == 1:
                         output_data['color'] = cv2.rectangle(output_data['color'], (x, y), (x+w, y+h), (255,0,0), 5)                                        
                     
-                print(output_data['metrics'])
                 output_stream.emit(output_data)     
 
 if __name__ == "__main__":
