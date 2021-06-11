@@ -53,17 +53,25 @@ class Module:
             self.timeout = self.params.get('timeout', 10)  
 
             self.redis = redis.Redis()
-            
+
+            self.streams_init()
+                               
             consumers = {name : input_class for name, input_class in self.input_classes.items()}        
             self.task_consumer = task.Consumer(self.redis, self.config.get('input_queue', ""), consumers, self.timeout)
             producers = {name : output_class for name, output_class in self.output_classes.items()} 
             self.task_producer = task.Producer(self.redis, self.config.get('output_queue',""), producers, self.expire_time)  
 
         except Exception as e:
-            logging.error(f"{self.module_name} init error: {str(e)}\n{traceback.print_tb(e.__traceback__)}")             
-        
+            logging.error(f"{self.module_name}: {str(e)}\n\n{''.join(traceback.format_tb(e.__traceback__))}\n")
+            self.terminate = True           
 
-    def task_process(self, input_task_data, input_stream ):                   
+
+    def streams_init(self):
+        self.input_classes = {}
+        self.output_classes = {}
+
+
+    def task_process(self, input_task_data, input_stream):
         pass
 
 

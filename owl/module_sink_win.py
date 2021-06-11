@@ -17,13 +17,13 @@ import module_base
 
 
 class Module(module_base.Module):
-    def __init__(self, argv): 
+    def streams_init(self): 
         self.input_classes = {
             "color" : stream_video.Consumer,
             "metrics" : stream_data.Consumer
         }   
         self.output_classes = {}
-        super().__init__(argv)  
+
 
     def task_process(self, input_task_data, input_stream ):
         'przetwarzanie strumieni'

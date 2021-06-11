@@ -12,15 +12,16 @@ import module_base
 
 
 class Module(module_base.Module):
-    def __init__(self, config): 
-        self.input_classes = {}   
+
+    def streams_init(self): 
+        self.input_classes = {}
         self.output_classes = {
             "color" : stream_video.Producer,
             "metrics" : stream_data.Producer
         }
-        super().__init__(config)    
 
-    def task_process(self, input_task_data, input_stream ):
+
+    def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
 
         cap = cv2.VideoCapture(self.params.get('device', 0))
