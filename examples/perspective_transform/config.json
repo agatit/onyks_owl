@@ -1,15 +1,23 @@
 {
-    "module_source_dir" : {   
+    "module_source_dshow" : {   
         "output_queue" : "stage1",    
         "params": {
-            "path": "D:/AgatIT/onyks_owl/samples/youtube"
+            "_device": "samples/youtube/out_3_4.mp4",
+            "device": 1
         }
     },
 
     "module_perspective_transform" : {   
         "input_queue" : "stage1",
+        "output_queue" : "stage2", 
+        "params": {
+        }        
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : "stage2",
         "params": {
             "window_name": "camera_view"
         }        
-    }
+    }    
 }

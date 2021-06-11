@@ -6,6 +6,7 @@
 
 # Module imports
 import sys
+import time
 import stream_video
 import stream_data
 import module_base
@@ -29,23 +30,27 @@ class Module(module_base.Module):
             "color": stream_video.Consumer,
             "metrics": stream_data.Consumer
         }
-        self.output_classes = {}
+        self.output_classes = {
+            "color" : stream_video.Producer,
+            "metrics" : stream_data.Producer
+        }        
         super().__init__(argv)
 
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
 
-        frame_cnt = 0
-        for input_data in input_stream:
-            in_transformed = get_perspective_with_aspect_ratio(input_data['color'])
-        #     cv2.imshow(self.params.get('window_name', 'noname'), in_transformed)
-        #     if cv2.waitKey(1) & 0xFF == ord('q'):
-        #         break
-        # cv2.destroyAllWindows()
-            output_dir = r"C:\Users\Adam P\Documents\GitHub\onyks_owl\output_images\perpendicular_view_test"
-            output_filename = 'frame' + str(frame_cnt) + '.jpg'
-            cv2.imwrite(join(output_dir, output_filename), in_transformed)
-            frame_cnt+=1
+        with self.task_emit({}) as output_stream:
+            for input_data in input_stream:
+                begin = time.time()
+                in_transformed = get_perspective_with_aspect_ratio(input_data['color'])
+                print(f"czas wykonania: {time.time()-begin} s")
+
+                output_data = {
+                    "color": in_transformed,
+                    "metrics": input_data["metrics"]
+                }
+
+                output_stream.emit(output_data)
         #
     # # Sort coordinate points clock-wise, starting from top-left
     # # Inspired by the following discussion:
