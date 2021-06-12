@@ -18,6 +18,7 @@ class Producer:
         self.queue_limit = queue_limit  
         self.queue_space = queue_limit 
         self.refresh = 1
+        self.writing_time = 0 #debug
 
     def __enter__(self):
         return self
@@ -32,7 +33,9 @@ class Producer:
             if time.time() > end_time:
                 raise TimeoutError("Output stream queue is full") 
             time.sleep(1)
+        start = time.time()
         self.redis.rpush(f"owl:stream_queue:{self.stream_queue}", data)
+        self.writing_time = self.writing_time*0.99 + (time.time()-start)*0.01
         self.redis.expire(f"owl:stream_queue:{self.stream_queue}", self.expire_time)
         self.queue_space -= 1
 
