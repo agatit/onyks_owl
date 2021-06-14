@@ -5,11 +5,19 @@
 """Moduł obsługujący strumieni danych"""
 import json
 import time
+import redis
+import logging
 
 		
 
 class Producer:
-    def __init__(self, redis, stream_queue, expire_time=120, queue_limit=0, timeout=120):
+    def __init__(
+            self,
+            redis: redis.Redis,
+            stream_queue: str,
+            expire_time:int = 120,
+            queue_limit:int = 0,
+            timeout:int = 120):
         self.id = id
         self.redis = redis
         self.stream_queue = stream_queue
@@ -26,12 +34,15 @@ class Producer:
         self.end()
 
     def emit(self, data):
-        end_time = time.time() + self.timeout        
-        while self.queue_limit > 0 and self.queue_space <= 0:   
-            self.queue_space = self.queue_limit - self.redis.llen("owl:stream_queue:{self.stream_queue}")           
+        end_time = time.time() + self.timeout
+        while self.queue_limit > 0 and self.queue_space <= 0:  
+            len = self.redis.llen(f"owl:stream_queue:{self.stream_queue}")
+            self.queue_space = self.queue_limit - len
+            if self.queue_space <= 0:
+                time.sleep(0.1)
+            logging.info(f"time left: {end_time - time.time()}")
             if time.time() > end_time:
-                raise TimeoutError("Output stream queue is full") 
-            time.sleep(1)
+                raise TimeoutError("Output stream queue is full")
         self.redis.rpush(f"owl:stream_queue:{self.stream_queue}", data)
         self.redis.expire(f"owl:stream_queue:{self.stream_queue}", self.expire_time)
         self.queue_space -= 1
@@ -42,7 +53,11 @@ class Producer:
 
 
 class Consumer:
-    def __init__(self, redis, stream_queue, timeout=120):
+    def __init__(
+            self,
+            redis: redis.Redis,
+            stream_queue: str,
+            timeout:int = 120):
         self.redis = redis
         self.stream_queue = stream_queue
         self.timeout = timeout     
@@ -56,11 +71,11 @@ class Consumer:
         if resp is None:
             raise StopIteration
 
-        data_bytes = resp[1]        
+        data_bytes = resp[1]
 
         if data_bytes != b"":
             return data_bytes
         else:
-            raise StopIteration            
+            raise StopIteration
 
 

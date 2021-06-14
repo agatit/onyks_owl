@@ -12,6 +12,7 @@ import sys
 import redis
 import task
 import traceback
+import stream_composed
 
 class Module:
     def __init__(self, argv):
@@ -72,7 +73,7 @@ class Module:
         self.output_classes = {}
 
 
-    def task_process(self, input_task_data, input_stream):
+    def task_process(self, input_task_data: dict, input_stream: stream_composed.Consumer):
         pass
 
 
@@ -88,7 +89,13 @@ class Module:
         try:
             with self.task_producer:
                 for task_data, input_stream in self.task_consumer:
+                    print(f"asd {task_data} {input_stream}")
                     if not task_data is None:
+                        task = {
+                            "stream_names" : input_stream.streams_queues,
+                            "task_data": task_data
+                        }
+                        self.redis.set(f"owl:module:{self.module_name}:task", json.dumps(task), ex=self.expire_time)
                         self.task_process(task_data, input_stream)                                
                     else:
                         logging.info("Nothing in task queue")

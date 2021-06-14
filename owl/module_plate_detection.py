@@ -10,6 +10,7 @@ import json
 import logging
 import cv2
 import redis
+import time
 import task
 import stream_video
 import stream_data
@@ -40,7 +41,8 @@ class Module(module_base.Module):
         output_data = {}
 
         with self.task_emit({}) as output_stream:            
-            for input_data in input_stream:                
+            for input_data in input_stream:      
+                begin = time.time()          
                 output_data['color'] = input_data['color']
                 output_data['metrics'] = input_data['metrics']
                 output_data['metrics']['detected_plates'] = []
@@ -50,7 +52,8 @@ class Module(module_base.Module):
                 for (x,y,w,h) in detected_plates: 
                     output_data['metrics']['detected_plates'].append([int(x), int(y), int(w), int(h)])
                     if debug == 1:
-                        output_data['color'] = cv2.rectangle(output_data['color'], (x, y), (x+w, y+h), (255,0,0), 5)                                        
+                        output_data['color'] = cv2.rectangle(output_data['color'], (x, y), (x+w, y+h), (255,0,0), 5) 
+                        logging.info(f"execution time: {time.time() - begin}")
                     
                 output_stream.emit(output_data)     
 

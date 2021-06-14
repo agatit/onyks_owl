@@ -1,7 +1,7 @@
 {
     "module_source_dshow" : {   
         "output_queue" : "stage1",    
-        "stream_queue_limit" : 100, 
+        "stream_queue_limit" : 100,
         "params": {
             "device": "../../samples/youtube/out_2_21.mp4"
         }

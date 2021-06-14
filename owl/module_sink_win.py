@@ -25,7 +25,7 @@ class Module(module_base.Module):
         self.output_classes = {}
 
 
-    def task_process(self, input_task_data, input_stream ):
+    def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
         
         for input_data in input_stream:            
