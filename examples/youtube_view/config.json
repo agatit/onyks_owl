@@ -1,0 +1,18 @@
+{
+    "module_source_youtube" : {   
+        "output_queue" : "stage1",
+        "stream_queue_limit" : 100,
+        "params": {
+            "_url": "https://www.youtube.com/watch?v=pQKhS4F9sSM",
+            "url": "https://www.youtube.com/watch?v=xVMsAgHy_IY",
+            "_stream": "normal:mp4@640x360"
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : "stage1",    
+        "params": {
+            "window_name": "camera_view"
+        }        
+    }
+}

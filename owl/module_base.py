@@ -89,7 +89,6 @@ class Module:
         try:
             with self.task_producer:
                 for task_data, input_stream in self.task_consumer:
-                    print(f"asd {task_data} {input_stream}")
                     if not task_data is None:
                         task = {
                             "stream_names" : input_stream.streams_queues,
