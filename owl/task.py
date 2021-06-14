@@ -7,17 +7,27 @@
 import json
 import uuid
 import logging
+import redis
 import stream_composed
 
 
 class Producer():
     """Producent zdarzeń. Tworzy zdarzenia i umieszcza je w kolejach (kilku), zarządza powiązanymi strumieniami"""
 
-    def __init__(self, redis, task_queue, streams_classes, expire_time=120):
+    def __init__(
+            self,
+            redis: redis.Redis,
+            task_queue: str,
+            streams_classes: dict,
+            expire_time: int = 120,
+            queue_limit: int = 0,
+            timeout: int = 120):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
         self.expire_time = expire_time
+        self.timeout = timeout
+        self.queue_limit = queue_limit          
 
     def __enter__(self):
         return self
@@ -25,7 +35,7 @@ class Producer():
     def __exit__(self, type, value, tb):
         pass
 
-    def emit(self, task_data={}):
+    def emit(self, task_data: dict = {}) -> stream_composed.Producer:
         """umieszczenie zdarzenia w kolejce wyjściowej i utworzenie powiązanych strumieni"""
 
         streams_queues = {}
@@ -52,14 +62,19 @@ class Producer():
 
         self.redis.rpush(f"owl:task_queue:{self.task_queue}", json.dumps(task))
         self.redis.expire(f"owl:task_queue:{self.task_queue}", self.expire_time)
-
-        return stream_composed.Producer(self.redis, streams_queues, self.streams_classes, self.expire_time * 2)
+      
+        return stream_composed.Producer(self.redis, streams_queues, self.streams_classes, self.expire_time, self.queue_limit, self.timeout)
 
 
 class Consumer():
     """Konsument zdarzeń. Odczytuje zdarzenia z kojejki (jednej) i podłącza powiązane strumienie"""
 
-    def __init__(self, redis, task_queue, streams_classes, timeout=10):
+    def __init__(
+            self,
+            redis: redis.Redis,
+            task_queue: str,
+            streams_classes: dict,
+            timeout: int = 10):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
@@ -68,7 +83,7 @@ class Consumer():
     def __iter__(self):
         return self
 
-    def __next__(self):
+    def __next__(self) -> (dict, stream_composed.Consumer):      
         """odczytanie zdarzenia z kolejki i podłączenie powiązanych strumieni"""
 
         if self.task_queue != "":
@@ -82,4 +97,4 @@ class Consumer():
             else:
                 return None, None
         else:
-            return {}, {}
+            return {}, stream_composed.Consumer(self.redis, {}, {})

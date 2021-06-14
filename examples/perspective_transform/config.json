@@ -1,9 +1,11 @@
 {
     "module_source_dshow" : {   
         "output_queue" : "stage1",    
+        "stream_queue_limit" : 10, 
+        "timeout": 180,
         "params": {
-            "_device": "samples/youtube/out_3_4.mp4",
-            "device": 1
+            "device": "../../samples/youtube/out_3_4.mp4",
+            "_device": 1
         }
     },
 

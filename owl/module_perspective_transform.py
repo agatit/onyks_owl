@@ -25,7 +25,7 @@ from perspective.perspective_transform import get_perspective_with_aspect_ratio
 
 
 class Module(module_base.Module):
-    def __init__(self, argv):
+    def streams_init(self):
         self.input_classes = {
             "color": stream_video.Consumer,
             "metrics": stream_data.Consumer
@@ -33,8 +33,7 @@ class Module(module_base.Module):
         self.output_classes = {
             "color" : stream_video.Producer,
             "metrics" : stream_data.Producer
-        }        
-        super().__init__(argv)
+        }                
 
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'

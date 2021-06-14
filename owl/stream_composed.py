@@ -6,10 +6,12 @@
 
 class Producer():
 
-    def __init__(self, redis, streams_queues, streams_classes, expire_time=30):
+    def __init__(self, redis, streams_queues, streams_classes, expire_time=120, queue_limit=0, timeout=120):
         self.streams = {}
+        self.streams_queues = streams_queues
+        self.streams_classes = streams_classes
         for stream_name, stream_class in streams_classes.items():
-            self.streams[stream_name] = stream_class(redis, streams_queues[stream_name], expire_time)
+            self.streams[stream_name] = stream_class(redis, streams_queues[stream_name], expire_time, queue_limit, timeout)
 
     def __enter__(self):
         for p in self.streams.values():
@@ -31,10 +33,12 @@ class Producer():
 
 class Consumer():
 
-    def __init__(self, redis, stream_queues, streams_classes, timeout=5):
+    def __init__(self, redis, streams_queues, streams_classes, timeout=5):        
+        self.streams_queues = streams_queues
+        self.streams_classes = streams_classes
         self.streams = {}
         for stream_name, stream_class in streams_classes.items():
-            self.streams[stream_name] = stream_class(redis, f"{stream_queues[stream_name]}", timeout)
+            self.streams[stream_name] = stream_class(redis, f"{streams_queues[stream_name]}", timeout)
 
     def __iter__(self):
         return self

@@ -1,6 +1,7 @@
 {
     "module_source_dir" : {   
-        "output_queue" : "stage1",    
+        "output_queue" : "stage1",  
+        "stream_queue_limit" : 100,  
         "params": {
             "path": "D:/AgatIT/onyks_owl/samples/youtube"
         }
