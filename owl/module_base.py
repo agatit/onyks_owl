@@ -51,7 +51,7 @@ class Module:
 
             self.expire_time = self.config.get('expire_time', 120)
             self.timeout = self.config.get('timeout', 10)  
-            self.stream_queue_limit = self.config.get('stream_queue_limit', 0)
+            self.stream_queue_limit = self.config.get('stream_queue_limit', 100)
             self.params = self.config.get("params", {})
 
             self.redis = redis.Redis()
