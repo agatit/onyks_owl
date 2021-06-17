@@ -5,144 +5,8 @@ from os.path import join, basename
 import scipy.spatial.distance
 import math
 
-# Program local libraries
-# from load_parameters import load_camera_mtx_dist_from_pickle as load_mtx_dist
 
-# Where are the road test images?
-railway_test_images_dir = 'input_images/trains'
-
-# Point to a straight road image here
-railway_straight_image_filename = 'rect1.jpg'
-
-# Where you want to save warped straight image for check?
-railway_straight_warped_image_dir = 'output_images/perpendicular_view_test'
-
-# Where you want to save the transformation matrices (M,Minv)?
-M_Minv_output_dir = 'output_images/camera_calibration'
-
-# Notes:
-# First there should be a single cargo detection and THEN perspective applied, because the rails are not always straight line
-
-# Sort coordinate points clock-wise, starting from top-left
-# Inspired by the following discussion:
-# http://stackoverflow.com/questions/1709283/how-can-i-sort-a-coordinate-list-for-a-rectangle-counterclockwise
-def order_points(pts):
-    # Normalises the input into the [0, 2pi] space, added 0.5*pi to initiate from top left
-    # In this space, it will be naturally sorted "counter-clockwise", so we inverse order in the return
-    mx = np.sum(pts.T[0] / len(pts))
-    my = np.sum(pts.T[1] / len(pts))
-
-    l = []
-    for i in range(len(pts)):
-        l.append((math.atan2(pts.T[0][i] - mx, pts.T[1][i] - my) + 2 * np.pi + 0.5 * np.pi) % (2 * np.pi))
-    sort_idx = np.argsort(l)
-
-    return pts[sort_idx[::-1]]
-
-
-def get_transform_matrices(pts, img_size):
-    # Obtain a consistent order of the points and unpack them individually
-    src = order_points(pts)
-
-    # Give user some data to check
-    print('Here are the ordered src pts: \n', src)
-
-    # Destination points
-    dst = np.float32([[src[3][0], 0],
-                      [src[2][0], 0],
-                      [src[2][0], img_size[1]],
-                      [src[3][0], img_size[1]]])
-
-    # Give user some data to check
-    print('Here are the dst pts: \n', dst)
-
-    # Compute the perspective transform matrix and the inverse of it
-    M = cv2.getPerspectiveTransform(src, dst)
-    Minv = cv2.getPerspectiveTransform(dst, src)
-
-    return M, Minv
-
-
-# def trapezoid_vertices(image, a=(745, 467), b=(745, 203), c=(569, 475), d=(569, 266), bottom_crop_px=0):
-#     imshape = image.shape
-#
-#     trapezoid_h_px = a[1] - b[1]
-#
-#     # vertices = np.array([[
-#     #     (745, 208),
-#     #     (745, 470),
-#     #     (460, 307),
-#     #     (460, 479)]]
-#     #     , dtype=np.int32)
-#
-#     # 4 cargos, no aspect ratio kept
-#     vertices = np.array([[
-#         (745, 208),
-#         (745, 470),
-#         (460, 307),
-#         (460, 479)]]
-#         , dtype=np.int32)
-#
-#     return vertices
-
-# in current version, this function has the ability to undistort, but doesnt keep aspect ratio
-# def get_perspective_and_pickle_M_Minv():
-#     # Optimize source points by using straight railway test image
-#     # Load image
-#     Readname = join(railway_test_images_dir, railway_straight_image_filename)
-#     img = cv2.imread(Readname)
-#     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-#
-#     # Give user some data to check
-#     print('Here is the straight image shape: ', img.shape)
-#
-#     # Load camera coefficients
-#     mtx, dist = load_mtx_dist()
-#
-#     # Undistort and get image size
-#     # img = cv2.undistort(img, mtx, dist, None, mtx) # no need if the video is not distorted
-#     img_size = (img.shape[1], img.shape[0])
-#
-#     # trapezoid vertices
-#     pts = np.array([[
-#         (745, 208),
-#         (745, 470),
-#         (460, 307),
-#         (460, 479)]]
-#         , dtype=np.int32)
-#
-#     # Modify it to expected format
-#     pts = pts.reshape(pts.shape[1:])
-#     pts = pts.astype(np.float32)
-#
-#     # Give user some data to check
-#     print('Here are the initial src pts: \n', pts)
-#
-#     # get the transform matrices
-#     M, Minv = get_transform_matrices(pts, img_size)
-#
-#     # transform image and save it
-#     warped = cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_LINEAR)
-#
-#     write_name1 = join(railway_straight_warped_image_dir, 'Warped_2' + basename(Readname))
-#     cv2.imwrite(write_name1, warped)
-#
-#     # Save the transformation matrices for later use
-#     dist_pickle = {}
-#     dist_pickle["M"] = M
-#     dist_pickle["Minv"] = Minv
-#     write_name2 = join(M_Minv_output_dir, 'perspective_trans_matrices.p')
-#     pickle.dump(dist_pickle, open(write_name2, "wb"))
-#
-#     print('Done!')
-#     print("Warped image test: from [" + basename(Readname) + "] to [" + basename(write_name1) + "]")
-#     print("Here is the warped image: [" + write_name1 + "]")
-#     print("M and Minv saved: [pickled file saved to: " + write_name2 + "]")
-
-
-def get_perspective_with_aspect_ratio(frame):
-    # Readname = join(railway_test_images_dir, railway_straight_image_filename)
-    # img = cv2.imread(Readname)
+def get_perspective_Mtx_with_aspect_ratio(frame, points):
     img = frame
     (rows, cols, _) = img.shape
 
@@ -151,15 +15,16 @@ def get_perspective_with_aspect_ratio(frame):
     v0 = (rows) / 2.0
 
     # detected corners on the original image
+    # TO DO -- load points from config.json
+    #       -- get points based on the angle and distance of the camera
+    # p = []
+    # p.append((1125, 403))
+    # p.append((1920, 201))
+    # p.append((1126, 897))
+    # p.append((1919, 1055))
     p = []
-    # p.append((569, 265))
-    # p.append((747, 204))
-    # p.append((569, 474))
-    # p.append((745, 458))
-    p.append((1125, 403))
-    p.append((1920, 201))
-    p.append((1126, 897))
-    p.append((1919, 1055))
+    for point in points:
+        p.append(point)
 
     # widths and heights of the projected image
     w1 = scipy.spatial.distance.euclidean(p[0], p[1])
@@ -220,7 +85,7 @@ def get_perspective_with_aspect_ratio(frame):
     # project the image with the new w/h
     M = cv2.getPerspectiveTransform(pts1, pts2)
 
-    dst = cv2.warpPerspective(img, M, (W, H))
+    # dst = cv2.warpPerspective(img, M, (W, H))
 
     # cv2.imshow('img', img)
     # cv2.imshow('dst', dst)
@@ -228,13 +93,16 @@ def get_perspective_with_aspect_ratio(frame):
     # cv2.imwrite('output_images/perpendicular_view_test/warp_with_aspect_ratio1.png', dst)
     #
     # cv2.waitKey(0)
-    return dst
+    # return dst
+    return M, W, H
 
 
 if __name__ == "__main__":
     Readname = r"C:\Users\Adam P\Documents\GitHub\onyks_owl\input_images\trains\rect1.jpg"
     in_img = cv2.imread(Readname)
-    in_transformed = get_perspective_with_aspect_ratio(in_img)
+    #in_transformed = get_perspective_with_aspect_ratio(in_img)
+    M, W, H = in_transformed = get_perspective_with_aspect_ratio(in_img)
+    in_transformed = cv2.warpPerspective(in_img, M, (W, H))
     cv2.imshow('post_transform', in_transformed)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()

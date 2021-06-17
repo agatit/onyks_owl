@@ -1,9 +1,14 @@
 python module_source_dir.py D:\AgatIT\onyks_owl\examples\perspective_transform\config.json
+python module_source_dshow.py D:\AgatIT\onyks_owl\examples\perspective_transform\config.json
+python module_sink_win.py D:\AgatIT\onyks_owl\examples\perspective_transform\config.json
 python module_perspective_transform.py D:\AgatIT\onyks_owl\examples\perspective_transform\config.json
 
-
+python module_source_dir.py "C:\Users\Adam P\Documents\GitHub\onyks_owl\examples\perspective_transform"
+python module_perspective_transform.py "C:\Users\Adam P\Documents\GitHub\onyks_owl\examples\perspective_transform"
 
 docker run --name=redis_onyx --publish=6379:6379 --hostname=redis --restart=on-failure --detach redis:latest
 
 docker exec -it determined_vaughan sh
 # redis-cli
+
+cd C:\Users\Adam P\Documents\GitHub\onyks_owl\owl

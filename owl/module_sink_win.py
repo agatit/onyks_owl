@@ -8,6 +8,8 @@ import os
 import sys
 import json
 import logging
+import time
+
 import cv2
 import redis
 import task
@@ -28,8 +30,10 @@ class Module(module_base.Module):
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
         
-        for input_data in input_stream:            
+        for input_data in input_stream:
+            begin = time.time()
             cv2.imshow(self.params.get('window_name', 'noname'), input_data['color'])
+            print(f"czas po jakim wyswietla sie kolejny frame: {time.time() - begin} s")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         cv2.destroyAllWindows()
