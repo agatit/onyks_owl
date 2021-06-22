@@ -1,16 +1,15 @@
 {
     "module_source_cv" : {   
         "output_queue" : "stage1",
-        "stream_queue_limit" : 100,
         "params": {
-            "device": 1
+            "device": "https://sts058.feratel.co.at/streams/stsstore053/1/04155_60d1b91c-ea7bVid.mp4?dcsdesign=WTP_bergfex.at"
         }
     },
 
     "module_sink_win" : {   
         "input_queue" : "stage1",    
         "params": {
-            "window_name": "camera_view"
+            "window_name": "view"
         }        
     }
 }
