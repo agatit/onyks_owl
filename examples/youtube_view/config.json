@@ -1,11 +1,16 @@
 {
     "module_source_youtube" : {   
         "output_queue" : "stage1",
-        "stream_queue_limit" : 100,
+        "_stream_queue_limit" : 100,
         "params": {
-            "_url": "https://www.youtube.com/watch?v=pQKhS4F9sSM",
-            "url": "https://www.youtube.com/watch?v=xVMsAgHy_IY",
-            "_stream": "normal:mp4@640x360"
+            "url": "https://www.youtube.com/watch?v=pQKhS4F9sSM",
+            "_url": "https://www.youtube.com/watch?v=xVMsAgHy_IY",
+            "stream1": "normal:mp4@256x144",
+            "stream2": "normal:mp4@426x240",
+            "stream3": "normal:mp4@640x360",
+            "stream4": "normal:mp4@854x480",
+            "stream": "normal:mp4@1280x720",
+            "stream6": "normal:mp4@1920x1080"
         }
     },
 
