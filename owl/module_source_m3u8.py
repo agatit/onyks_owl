@@ -20,6 +20,7 @@ logging.getLogger('libav').setLevel(logging.ERROR)
 class Module(module_base.Module):
 
     last_segment = None
+    last_segment_time = None
 
     def streams_init(self): 
         self.input_classes = {}
@@ -47,8 +48,13 @@ class Module(module_base.Module):
 
         # oczekiwanie na nowy            
         if not stream_segment:
-            logging.warning("Need to wait for segment")
-            time.sleep(0.02)
+            sleep_time = 0.1
+            if self.last_segment_time:
+                sleep_time = self.last_segment.duration - (datetime.now() - self.last_segment_time).total_seconds() + 0.1
+            if sleep_time <= 0:
+                sleep_time = 0.1
+            logging.warning(f"Need to wait for segment {sleep_time}s")
+            time.sleep(sleep_time)
             return None        
 
         # sprawdzenie ciągłości
@@ -62,6 +68,8 @@ class Module(module_base.Module):
                     > timedelta(seconds=1):
             logging.error(f"Segment(s) lost from {self.last_segment.current_program_date_time + timedelta(seconds=self.last_segment.duration)} to {stream_segment.current_program_date_time}")
 
+        self.last_segment = stream_segment
+        self.last_segment_time = datetime.now()
         logging.debug(f"{segment_no}/{len(m3u8_obj.segments)} {stream_segment.current_program_date_time} {stream_segment.duration}")
         return stream_segment
 
@@ -75,7 +83,7 @@ class Module(module_base.Module):
             while True:                
                 stream_segment = self.get_segment(self.params['url'])
                 if not stream_segment:
-                    break
+                    continue
 
                 # dekodowanie
                 video_url = urljoin(self.params['url'], stream_segment.uri)
