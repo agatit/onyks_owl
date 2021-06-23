@@ -2,16 +2,18 @@ import numpy as np
 import cv2
 import glob
 import pickle
+import json
 from os.path import join, basename
 
 # Where are the camera images for calibration?
-camera_cal_dir_glob = 'input_images/camera_calibration/camera_cal*.jpg'
+camera_cal_dir_glob = '../../input_images/camera_calibration/chessboard*.png'
 
 # Where you want to save the calibration outputs?
-calibration_outputs_dir = 'output_images/camera_calibration'
+calibration_outputs_dir = '../../output_images/camera_calibration'
 
 # Filename to save the camera calibration result for later use (mtx, dist)
-calibration_mtx_dist_filename = 'camera_cal_dist_pickle.p'
+calibration_mtx_dist_filename = '../../output_images/camera_cal_dist_pickle.p'
+calibration_mtx_dist_filename_json = '../../output_images/camera_cal_dist_cache.json'
 
 # Chessboard numbers of internal corners (nx,ny)
 chessboard_size = (9, 6)
@@ -71,6 +73,17 @@ def calibrate_camera_and_pickle_mtx_dist():
     with open(write_name2, 'wb') as f:
         saved_obj = {"mtx": mtx, "dist": dist}
         pickle.dump(saved_obj, f)
+
+    mtx_list = mtx.tolist()
+    dist_list = dist.tolist()
+    saved_obj = {
+        "mtx": mtx_list,
+        "dist": dist_list
+    }
+
+    with open(calibration_mtx_dist_filename_json, 'w', encoding='utf8') as json_file:
+        json.dump(saved_obj, json_file, indent=3)
+
 
     print("Calibration process complete! [pickled file saved to: " + write_name2 + "]")
     print("Undistorted image test: from [" + images[0] + "] to [" + basename(write_name1) + "]")
