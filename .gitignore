@@ -8,3 +8,4 @@ __pycache__
 /examples/*/tmp/*
 !/examples/*/tmp/.gitkeep
 .vscode
+/.vscode/*

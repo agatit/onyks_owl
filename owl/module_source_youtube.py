@@ -7,7 +7,8 @@ import redis
 import task
 import stream_video
 import stream_data
-import module_base
+import module_source_m3u8
+from urllib.parse import urljoin
 import m3u8
 import av
 import pafy
@@ -15,8 +16,7 @@ import time
 from datetime import datetime
 
 
-
-class Module(module_base.Module):
+class Module(module_source_m3u8.Module):
 
     def streams_init(self): 
         self.input_classes = {}
@@ -25,45 +25,40 @@ class Module(module_base.Module):
             "metrics" : stream_data.Producer
         }
 
-        self.last_program_date_time =  None
-        self.next_frame = time.time()
-
+    def get_youtube_stream(self, url, stream_name="best"):
+        # odczytanie strumienia YT
+        video = pafy.new(url)
+        logging.info(f"Streams availaible: {video.streams}")        
+        if stream_name == "best":
+            stream = video.getbest(preftype="mp4")
+        else:
+            stream = next(s for s in video.streams if str(s)==stream_name)        
+        
+        return stream         
 
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
 
-        stream_name = self.params.get('stream', 'best')
-        video = pafy.new(self.params['url'])
-        logging.info(f"Streams availaible: {video.streams}")
-        
-        if stream_name == "best":
-            stream = video.getbest(preftype="mp4")
-        else:
-            stream = next(s for s in video.streams if str(s)==self.params['stream'])        
-
+        stream = self.get_youtube_stream(self.params['url'], self.params.get('stream', 'best'))
         frame_time = 1/int(stream._info['fps'])
+        next_frame = time.time()
 
         with self.task_emit({}) as output_stream:
+
             while True:                
                 if stream._info['protocol'] == 'm3u8':
-                    realtime = True
-                    m3u8_obj = m3u8.load(stream.url)
-                    stream_segment = m3u8_obj.segments[0]
-                    if self.last_program_date_time == None:
-                        last_program_date_time = stream_segment.program_date_time
-                    elif stream_segment.program_date_time > last_program_date_time + m3u8_obj.targetduration:
-                        logging.warning("Lost segment")
-                    elif stream_segment.program_date_time <= last_program_date_time:                       
-                        logging.warning("Need to wait for segment")
-                        time.sleep(frame_time)
-                        continue
-                    last_program_date_time = stream_segment.program_date_time
-                    video_url = stream_segment.uri
+                    realtime = self.params.get("realtime", True) # można wymusić realtime też dla normalnych
+                    stream_segment = self.get_segment(stream.url)
+                    if not stream_segment:
+                        break
+                    video_url = urljoin(self.params['url'], stream_segment.uri)
                 else:
-                    realtime = False # może wymusić realtime też dla normalnych?
+                    realtime = self.params.get("realtime", False) # można wymusić realtime też dla normalnych
                     video_url = stream.url
-
+                
+                # dekodowanie               
                 video_av = av.open(video_url, "r")
+                video_av.streams.video[0].thread_type = 'AUTO'
     
                 for frame in video_av.decode(video=0):
                     img = frame.to_ndarray(format="bgr24")
@@ -73,9 +68,9 @@ class Module(module_base.Module):
                     }
                     output_stream.emit(data)
 
-                    self.next_frame += frame_time
-                    if realtime and time.time() < self.next_frame:
-                        time.sleep(self.next_frame - time.time())
+                    next_frame += frame_time
+                    if realtime and time.time() < next_frame:
+                        time.sleep(next_frame - time.time())
 
 
 if __name__ == "__main__":
