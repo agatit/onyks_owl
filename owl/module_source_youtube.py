@@ -41,16 +41,18 @@ class Module(module_source_m3u8.Module):
 
         stream = self.get_youtube_stream(self.params['url'], self.params.get('stream', 'best'))
         frame_time = 1/int(stream._info['fps'])
-        next_frame = time.time()
+        
 
         with self.task_emit({}) as output_stream:
 
-            while True:                
+            while True:                   
+                next_frame =  time.time()
+
                 if stream._info['protocol'] == 'm3u8':
                     realtime = self.params.get("realtime", True) # można wymusić realtime też dla normalnych
                     stream_segment = self.get_segment(stream.url)
                     if not stream_segment:
-                        break
+                        continue
                     video_url = urljoin(self.params['url'], stream_segment.uri)
                 else:
                     realtime = self.params.get("realtime", False) # można wymusić realtime też dla normalnych
@@ -60,7 +62,7 @@ class Module(module_source_m3u8.Module):
                 video_av = av.open(video_url, "r")
                 video_av.streams.video[0].thread_type = 'AUTO'
     
-                for frame in video_av.decode(video=0):
+                for frame in video_av.decode(video=0):                    
                     img = frame.to_ndarray(format="bgr24")
                     data = {
                         'color' : img,
@@ -68,7 +70,7 @@ class Module(module_source_m3u8.Module):
                     }
                     output_stream.emit(data)
 
-                    next_frame += frame_time
+                    next_frame += frame_time * 0.99 # setna cześć klatki wyprzedzenia
                     if realtime and time.time() < next_frame:
                         time.sleep(next_frame - time.time())
 
