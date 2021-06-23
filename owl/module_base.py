@@ -51,7 +51,7 @@ class Module:
 
             self.expire_time = self.config.get('expire_time', 120)
             self.timeout = self.config.get('timeout', 10)  
-            self.stream_queue_limit = self.config.get('stream_queue_limit', 0)
+            self.stream_queue_limit = self.config.get('stream_queue_limit', 100)
             self.params = self.config.get("params", {})
 
             self.redis = redis.Redis()
@@ -89,7 +89,6 @@ class Module:
         try:
             with self.task_producer:
                 for task_data, input_stream in self.task_consumer:
-                    print(f"asd {task_data} {input_stream}")
                     if not task_data is None:
                         task = {
                             "stream_names" : input_stream.streams_queues,

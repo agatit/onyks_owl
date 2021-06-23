@@ -1,0 +1,23 @@
+{
+    "module_source_youtube" : {   
+        "output_queue" : "stage1",
+        "_stream_queue_limit" : 100,
+        "params": {
+            "url": "https://www.youtube.com/watch?v=pQKhS4F9sSM",
+            "_url": "https://www.youtube.com/watch?v=xVMsAgHy_IY",
+            "stream1": "normal:mp4@256x144",
+            "stream2": "normal:mp4@426x240",
+            "stream3": "normal:mp4@640x360",
+            "stream4": "normal:mp4@854x480",
+            "stream5": "normal:mp4@1280x720",
+            "stream": "normal:mp4@1920x1080"
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : "stage1",    
+        "params": {
+            "window_name": "camera_view"
+        }        
+    }
+}
