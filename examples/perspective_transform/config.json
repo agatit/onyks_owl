@@ -1,19 +1,20 @@
 {
-    "module_source_dshow" : {   
+    "module_source_cv" : {   
         "output_queue" : "stage1",    
         "stream_queue_limit" : 10, 
         "timeout": 180,
         "params": {
-            "device": "../../samples/youtube/out_3_4.mp4",
+            "device": "../../samples/camera_wisenet/train1.avi",
             "_device": 1
         }
     },
 
     "module_perspective_transform" : {   
-        "input_queue" : "stage1",qq
+        "input_queue" : "stage1",
         "output_queue" : "stage2", 
         "params": {
-			"trapezoid_coords": [[1125, 403], [1920, 201], [1126, 897], [1919, 1055]]
+			"trapezoid_coords": [[1125, 403], [1920, 201], [1126, 897], [1919, 1055]],
+			"trapezoid_coords_WISENET_t1": [[586, 442], [1511, 401], [581, 733], [1516, 881]]
         }        
     },
 

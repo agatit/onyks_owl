@@ -101,7 +101,7 @@ if __name__ == "__main__":
     Readname = r"C:\Users\Adam P\Documents\GitHub\onyks_owl\input_images\trains\rect1.jpg"
     in_img = cv2.imread(Readname)
     #in_transformed = get_perspective_with_aspect_ratio(in_img)
-    M, W, H = in_transformed = get_perspective_with_aspect_ratio(in_img)
+    M, W, H = get_perspective_Mtx_with_aspect_ratio(in_img, Readname)
     in_transformed = cv2.warpPerspective(in_img, M, (W, H))
     cv2.imshow('post_transform', in_transformed)
     if cv2.waitKey(1) & 0xFF == ord('q'):
