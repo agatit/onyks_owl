@@ -1,11 +1,10 @@
+import numpy
 import numpy as np
 import cv2
 import glob
 import pickle
 import json
 from os.path import join, basename
-
-import load_parameters
 
 # Where are the camera images for calibration?
 camera_cal_dir_glob = '../../input_images/camera_calibration/H.264/chessboard*.png'
@@ -19,6 +18,23 @@ calibration_mtx_dist_filename_json = '../../output_images/camera_cal_dist_cache.
 
 # Chessboard numbers of internal corners (nx,ny)
 chessboard_size = (9, 6)
+
+
+"""TODELETE paths"""
+calibration_outputs_dir_path = '../../output_images'
+
+# Filename used to save the camera calibration result (mtx,dist)
+calibration_mtx_dist_filename_nopath = 'camera_cal_dist_cache.json'
+
+def load_camera_mtx_dist_from_json():
+    dist_json = json.load(open(calibration_mtx_dist_filename_json, "rb"))
+    mtx_lst = dist_json["mtx"]
+    dist_lst = dist_json["dist"]
+
+    mtx = numpy.array(mtx_lst)
+    dist = numpy.array(dist_lst)
+
+    return mtx, dist
 
 
 def calibrate_camera_and_pickle_mtx_dist():
@@ -93,7 +109,7 @@ def calibrate_camera_and_pickle_mtx_dist():
 
 
 def undistort_test_image(write_name_dir, write_name_img):
-    mtx, dist = load_parameters.load_camera_mtx_dist_from_json()
+    mtx, dist = load_camera_mtx_dist_from_json()
     img = cv2.imread(write_name_dir + '/' + write_name_img)
 
     # cv2.imshow('image_name', img)
