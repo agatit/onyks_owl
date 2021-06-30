@@ -1,27 +1,20 @@
-import pickle
 import cv2
 import numpy as np
-from os.path import join, basename
 import scipy.spatial.distance
 import math
 
 
-def get_perspective_Mtx_with_aspect_ratio(frame, points):
-    img = frame
-    (rows, cols, _) = img.shape
+# modified answer https://stackoverflow.com/a/38402378 https://creativecommons.org/licenses/by-sa/4.0/
+# calculations based on paper:
+# https://www.microsoft.com/en-us/research/uploads/prod/2016/11/Digital-Signal-Processing.pdf
+def get_perspective(frame, points):
+    (rows, cols, _) = frame.shape
 
     # image center
-    u0 = (cols) / 2.0
-    v0 = (rows) / 2.0
+    u0 = cols / 2.0
+    v0 = rows / 2.0
 
-    # detected corners on the original image
-    # TO DO -- load points from config.json
-    #       -- get points based on the angle and distance of the camera
-    # p = []
-    # p.append((1125, 403))
-    # p.append((1920, 201))
-    # p.append((1126, 897))
-    # p.append((1919, 1055))
+    # append corners of the trapezoid [projected image]
     p = []
     for point in points:
         p.append(point)
@@ -45,7 +38,7 @@ def get_perspective_Mtx_with_aspect_ratio(frame, points):
     m3 = np.array((p[2][0], p[2][1], 1)).astype('float32')
     m4 = np.array((p[3][0], p[3][1], 1)).astype('float32')
 
-    # calculate the focal distance
+    # calculate the focal length f
     k2 = np.dot(np.cross(m1, m4), m3) / np.dot(np.cross(m2, m4), m3)
     k3 = np.dot(np.cross(m1, m4), m2) / np.dot(np.cross(m3, m4), m2)
 
@@ -60,24 +53,30 @@ def get_perspective_Mtx_with_aspect_ratio(frame, points):
     n32 = n3[1]
     n33 = n3[2]
 
-    f = math.sqrt(np.abs((1.0 / (n23 * n33)) * ((n21 * n31 - (n21 * n33 + n23 * n31) * u0 + n23 * n33 * u0 * u0) + (
+    # calculate the real aspect ratio
+    if k2 == 1 and k3 == 1:
+        ar_real = math.sqrt((n21 ** 2 + n22 ** 2) / (n31 ** 2 + n32 ** 2))
+    else:
+        f = math.sqrt(np.abs((1.0 / (n23 * n33)) * ((n21 * n31 - (n21 * n33 + n23 * n31) * u0 + n23 * n33 * u0 * u0) + (
                 n22 * n32 - (n22 * n33 + n23 * n32) * v0 + n23 * n33 * v0 * v0))))
 
-    A = np.array([[f, 0, u0], [0, f, v0], [0, 0, 1]]).astype('float32')
+        A = np.array([[f, 0, u0], [0, f, v0], [0, 0, 1]]).astype('float32')
 
-    At = np.transpose(A)
-    Ati = np.linalg.inv(At)
-    Ai = np.linalg.inv(A)
+        At = np.transpose(A)
+        Ati = np.linalg.inv(At)
+        Ai = np.linalg.inv(A)
 
-    # calculate the real aspect ratio
-    ar_real = math.sqrt(np.dot(np.dot(np.dot(n2, Ati), Ai), n2) / np.dot(np.dot(np.dot(n3, Ati), Ai), n3))
+        ar_real = math.sqrt(np.dot(np.dot(np.dot(n2, Ati), Ai), n2) / np.dot(np.dot(np.dot(n3, Ati), Ai), n3))
 
-    if ar_real < ar_vis:
-        W = int(w)
-        H = int(W / ar_real)
+    # scale w/h of the trapezoid into new W/H of the real image
+    # here: scaling down [the shorter rectangle's edge is shortened, the longer edge is scaled to the shorter]
+    # won't work when h/ar_real<1 or w*ar_real<1 [so for a very short length in pixels]
+    if ar_real > ar_vis:
+        H = int(h / ar_real)
+        W = int(h)
     else:
-        H = int(h)
-        W = int(ar_real * H)
+        W = int(w * ar_real)
+        H = int(w)
 
     pts1 = np.array(p).astype('float32')
     pts2 = np.float32([[0, 0], [W, 0], [0, H], [W, H]])
@@ -85,24 +84,22 @@ def get_perspective_Mtx_with_aspect_ratio(frame, points):
     # project the image with the new w/h
     M = cv2.getPerspectiveTransform(pts1, pts2)
 
-    # dst = cv2.warpPerspective(img, M, (W, H))
-
-    # cv2.imshow('img', img)
-    # cv2.imshow('dst', dst)
-    # # cv2.imwrite('output_images/perpendicular_view_test/orig1.png', img)
-    # cv2.imwrite('output_images/perpendicular_view_test/warp_with_aspect_ratio1.png', dst)
-    #
-    # cv2.waitKey(0)
-    # return dst
     return M, W, H
 
 
-if __name__ == "__main__":
-    Readname = r"C:\Users\Adam P\Documents\GitHub\onyks_owl\input_images\trains\rect1.jpg"
-    in_img = cv2.imread(Readname)
-    #in_transformed = get_perspective_with_aspect_ratio(in_img)
-    M, W, H = get_perspective_Mtx_with_aspect_ratio(in_img, Readname)
-    in_transformed = cv2.warpPerspective(in_img, M, (W, H))
-    cv2.imshow('post_transform', in_transformed)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        cv2.destroyAllWindows()
+# Sort coordinate points clock-wise, starting from top-left
+# Inspired by the following discussion:
+# http://stackoverflow.com/questions/1709283/how-can-i-sort-a-coordinate-list-for-a-rectangle-counterclockwise
+def order_points(pts):
+    pts = pts.astype(np.float32)
+    # Normalises the input into the [0, 2pi] space, added 0.5*pi to initiate from top left
+    # In this space, it will be naturally sorted "counter-clockwise", so we inverse order in the return
+    mx = np.sum(pts.T[0] / len(pts))
+    my = np.sum(pts.T[1] / len(pts))
+
+    l = []
+    for i in range(len(pts)):
+        l.append((math.atan2(pts.T[0][i] - mx, pts.T[1][i] - my) + 2 * np.pi + 0.5 * np.pi) % (2 * np.pi))
+    sort_idx = np.argsort(l)
+
+    return pts[sort_idx[::-1]].astype(np.int32)

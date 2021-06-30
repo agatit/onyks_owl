@@ -9,3 +9,7 @@ __pycache__
 !/examples/*/tmp/.gitkeep
 .vscode
 /.vscode/*
+.idea
+/.idea/*
+**/.idea/workspace.xml 
+**/.idea/tasks.xml
