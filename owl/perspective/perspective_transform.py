@@ -14,6 +14,9 @@ def get_perspective(frame, points):
     u0 = cols / 2.0
     v0 = rows / 2.0
 
+    # PerspectiveTransform() requires points to be passed in a specific order
+    points = order_points(points)
+
     # append corners of the trapezoid [projected image]
     p = []
     for point in points:
@@ -87,10 +90,32 @@ def get_perspective(frame, points):
     return M, W, H
 
 
-# Sort coordinate points clock-wise, starting from top-left
-# Inspired by the following discussion:
+# Sort coordinates clock-wise, starting from top-left, then revert the order of last two
+# PerspectiveTransform() requires first two points being clock-wise (starting top-left) and
+# ...last two points being counter-clock-wise (starting left-bottom)
 # http://stackoverflow.com/questions/1709283/how-can-i-sort-a-coordinate-list-for-a-rectangle-counterclockwise
 def order_points(pts):
+    pts = pts.astype(np.float32)
+    # Normalises the input into the [0, 2pi] space, added 0.5*pi to initiate from top left
+    # In this space, it will be naturally sorted "counter-clockwise", so we inverse order in the return
+    mx = np.sum(pts.T[0] / len(pts))
+    my = np.sum(pts.T[1] / len(pts))
+
+    l = []
+    for i in range(len(pts)):
+        l.append((math.atan2(pts.T[0][i] - mx, pts.T[1][i] - my) + 2 * np.pi + 0.5 * np.pi) % (2 * np.pi))
+    sort_idx = np.argsort(l)
+
+    # assumes there will always be 4 trapezoid vertices
+    sort_idx = sort_idx[::-1]
+    sort_idx_1 = sort_idx[0:2:1]
+    sort_idx_2 = sort_idx[4:1:-1]
+
+    sort_idx = np.concatenate((sort_idx_1, sort_idx_2))
+    return pts[sort_idx].astype(np.int32)
+
+
+def order_points_clockwise(pts):
     pts = pts.astype(np.float32)
     # Normalises the input into the [0, 2pi] space, added 0.5*pi to initiate from top left
     # In this space, it will be naturally sorted "counter-clockwise", so we inverse order in the return

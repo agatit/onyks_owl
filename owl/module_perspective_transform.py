@@ -18,6 +18,7 @@ import cv2
 # Program local libraries
 from perspective.perspective_transform import get_perspective
 
+
 class Module(module_base.Module):
     def streams_init(self):
         self.input_classes = {
@@ -33,7 +34,7 @@ class Module(module_base.Module):
         """przetwarzanie strumieni"""
 
         # trapezoid_coords = self.params.get('trapezoid_coords')
-        trapezoid_coords = self.params.get('trapezoid_coords_WISENET_t1')
+        trapezoid_coords = self.params.get('trapezoid_coords_CUSTNAME')
 
         """get parameters for Wisenet camera calibration"""
         mtx_list = self.params.get("mtx")
@@ -41,8 +42,7 @@ class Module(module_base.Module):
         mtx = np.array(mtx_list)
         dist = np.array(dist_list)
 
-
-        with self.task_emit({}) as output_stream:
+        with self.task_emit(input_task_data) as output_stream:
             runonce_flag = 0
             for input_data in input_stream:
                 begin = time.time()

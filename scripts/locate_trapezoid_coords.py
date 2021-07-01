@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import clipboard
 
-from owl.perspective.perspective_transform import order_points
+from owl.perspective.perspective_transform import order_points, order_points_clockwise
 from camera_calibration import load_camera_mtx_dist_from_json as load_mtx_dist
 
 # GLOBALS
@@ -56,9 +56,6 @@ def get_frame_from_video(path, video_filename, video_percentage):
     return frame, frame_name
 
 
-# https://www.programmersought.com/article/83224904620/
-# def capture_trapezoid_coords():
-
 def on_mouse_event(event, x, y, flags, param):
     global global_frame
     frame = param[0]
@@ -91,7 +88,7 @@ def on_mouse_event(event, x, y, flags, param):
                 clipboard.copy(copied_object)
                 print("Trapezoid coords have been copied to clipboard!")
 
-                ordered_pts = order_points(pts)
+                ordered_pts = order_points_clockwise(pts)
                 ordered_pts = ordered_pts.reshape((-1, 1, 2))
                 cv2.polylines(frame_canvas, [ordered_pts], True, (0, 255, 255))
 
