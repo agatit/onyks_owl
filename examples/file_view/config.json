@@ -1,5 +1,5 @@
 {
-    "module_source_dshow" : {   
+    "module_source_cv" : {   
         "output_queue" : "stage1",    
         "stream_queue_limit" : 100,
         "params": {

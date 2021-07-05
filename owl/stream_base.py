@@ -39,8 +39,7 @@ class Producer:
             len = self.redis.llen(f"owl:stream_queue:{self.stream_queue}")
             self.queue_space = self.queue_limit - len
             if self.queue_space <= 0:
-                time.sleep(0.1)
-            logging.info(f"time left: {end_time - time.time()}")
+                time.sleep(0.1)        
             if time.time() > end_time:
                 raise TimeoutError("Output stream queue is full")
         self.redis.rpush(f"owl:stream_queue:{self.stream_queue}", data)
