@@ -15,9 +15,9 @@ class Producer:
             self,
             redis: redis.Redis,
             stream_queue: str,
-            expire_time:int = 120,
-            queue_limit:int = 0,
-            timeout:int = 120):
+            expire_time:int,
+            queue_limit:int,
+            timeout:int):
         self.id = id
         self.redis = redis
         self.stream_queue = stream_queue
@@ -56,7 +56,7 @@ class Consumer:
             self,
             redis: redis.Redis,
             stream_queue: str,
-            timeout:int = 120):
+            timeout:int):
         self.redis = redis
         self.stream_queue = stream_queue
         self.timeout = timeout     

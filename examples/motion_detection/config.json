@@ -1,19 +1,32 @@
 {
-    "module_source_dshow" : {   
-        "output_queue" : "stage1",   
-        "stream_queue_limit" : 10, 
+    "comment" : "Źrdóła uwstawione są dla różnych wersji. Wybierz którą chczesz w supervisord.conf",
+
+    "module_source_youtube" : {   
+        "output_queue" : "stage1",
+        "stream_queue_limit" : 1000,
         "params": {
-            "device": "D:/Agat_IT/onyks_owl-main/onyks_owl-main/owl/out_2_10.mp4"
+            "url": "https://www.youtube.com/watch?v=pQKhS4F9sSM",
+            "stream": "normal:mp4@640x360",
+            "stream_": "normal:mp4@1920x1080"
+        }
+    },
+
+    "module_source_cv" : {   
+        "output_queue" : "stage1",  
+        "stream_queue_limit" : 100,         
+        "params": {
+            "device": 1
         }
     },
 
     "module_motion_detection" : { 
         "input_queue" : "stage1",    
+        "stream_queue_limit" : 100,         
         "output_queue" : "stage2",  
         "params": {
             "buffer_size": 25,
-            "compared_value": 150000,
-            "frame_counter": 0
+            "pixel_treshold": 5000,
+            "frame_gap": 5
         }
     },
 

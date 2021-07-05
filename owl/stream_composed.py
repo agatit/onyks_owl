@@ -6,7 +6,7 @@
 
 class Producer():
 
-    def __init__(self, redis, streams_queues, streams_classes, expire_time=120, queue_limit=0, timeout=120):
+    def __init__(self, redis, streams_queues, streams_classes, expire_time, queue_limit, timeout):
         self.streams = {}
         self.streams_queues = streams_queues
         self.streams_classes = streams_classes
@@ -33,7 +33,7 @@ class Producer():
 
 class Consumer():
 
-    def __init__(self, redis, streams_queues, streams_classes, timeout=5):        
+    def __init__(self, redis, streams_queues, streams_classes, timeout):        
         self.streams_queues = streams_queues
         self.streams_classes = streams_classes
         self.streams = {}

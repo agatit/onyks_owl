@@ -24,54 +24,59 @@ class Module(module_base.Module):
         self.output_classes = {
             "color" : stream_video.Producer,
             "metrics" : stream_data.Producer
-        }
+        }        
+    
+    def task_process(self, input_task_data, input_stream):    
         
-    def task_process(self, input_task_data, input_stream):
-        last_frame = None
-        period = time.time()
+        output_task_data = input_task_data
         frame_buffer = []
-        buffer_size = 25
-        compared_value = 150000
-        frame_counter = 0
-        state = 0
-        last_state = 0
+        output_stream = None
+        buffer_size = self.params.get("buffer_size", 25)
+        pixel_treshold = self.params.get("pixel_treshold", 0)
+        frame_gap = self.params.get("frame_gap", 5)
+        motion_state = False
+        frame_tail = 0
+
         for input_data in input_stream:
-            frame = input_data   
-            if len(frame_buffer) > 9:
-                dframe = cv2.absdiff(frame, frame_buffer[-5])
+            begin = time.time()
+            output_data = input_data
+
+            if len(frame_buffer) == buffer_size:
+                dframe = cv2.absdiff(input_data['color'], frame_buffer[-frame_gap]['color'])
                 gdframe = cv2.cvtColor(dframe, cv2.COLOR_BGR2GRAY)
                 ret, bwframe = cv2.threshold(gdframe,10,255,cv2.THRESH_BINARY)
                 pixel_count = cv2.countNonZero(bwframe)
-                
-                #wybieranie na którym torze jest większy ruch:
-                if pixel_count > compared_value:
-                    state = 1
-                    print("state:", bool(state))
+                motion_state =  pixel_count > pixel_treshold
+            else:
+                motion_state = False
+                        
+            #TODO: wybieranie na którym torze jest największy ruch            
+            output_task_data['railtrack'] = "0"
+
+            if motion_state:
+                if not output_stream:                        
+                    logging.debug("Motion begin")
+                    output_stream = self.task_emit(output_task_data)                    
+                frame_tail = len(frame_buffer)
+
+            if output_stream:
+                if frame_tail > 0:                
+                    output_stream.emit(frame_buffer[0])
+                    frame_tail -= 1                    
                 else:
-                    state = 0
-                    print("state:", bool(state))
-                    
-                if state == 1 or frame_counter < buffer_size:
-                    print("last_state_in_loop:", last_state)
-                    if state == 1 and last_state == 0:
-                        #output_task_data = input_task_data 
-                        output_stream = self.task_emit(input_task_data)
-                        print("1234")
-                    
-                    if state == 0:
-                        frame_counter += 1
-                        if frame_counter > buffer_size:
-                            output_stream.end()
-                    else:
-                        frame_counter = 0                               
-                output_stream.emit(input_data)   
-            last_state = state
-            print("last_state:", last_state)
-                    
-            frame_buffer.append(frame)
-            if len(frame_buffer) > buffer_size:
-                frame_buffer.pop(0)
-            frame = input_data
+                    logging.debug("Motion end")
+                    output_stream.end()
+                    output_stream = None                    
+
+            frame_buffer.append(output_data)
+            if len(frame_buffer) > buffer_size:                
+                frame_buffer.pop(0) # do śmieci
+        
+        # na wypadek zakończenia strumienia wejściowego podczas ruchu - emitujemy ogon
+        if output_stream:
+            while frame_tail > 0 and len(frame_buffer) > 0:
+                output_stream.emit(frame_buffer.pop(0))              
+                frame_tail -= 1
 
 
 if __name__ == "__main__":
