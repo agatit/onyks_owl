@@ -28,7 +28,7 @@ frames = []
 for fid in frameIds[:10]:
     video_stream.set(cv2.CAP_PROP_POS_FRAMES, fid)
     print("CAP_PROP_POS_FRAMES", cv2.CAP_PROP_POS_FRAMES)
-    ret, frame = video_stream.read()
+    frame = video_stream.read()
     frames.append(frame)
 
 video_stream.release()
