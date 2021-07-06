@@ -27,7 +27,7 @@ class Module(module_source_m3u8.Module):
 
     def get_youtube_stream(self, url, stream_name="best"):
         # odczytanie strumienia YT
-        video = pafy.new(url)
+        video = pafy.new(url, {"--no-check-certificate": True})
         logging.info(f"Streams availaible: {video.streams}")        
         if stream_name == "best":
             stream = video.getbest(preftype="mp4")
