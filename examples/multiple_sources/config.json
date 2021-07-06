@@ -1,0 +1,129 @@
+{
+    "desc" : "Obróbka kilku żródeł live",
+
+    "source_1" : {   
+        "output_queue" : "stage1_1",
+        "stream_queue_limit" : 100,
+        "params": {
+            "desc":"Deshler, Ohio USA - Virtual Railfan LIVE",
+            "url": "https://www.youtube.com/watch?v=KM1ivV-yfo0",
+            "stream": "normal:mp4@640x360",
+            "stream_": "normal:mp4@1920x1080"
+        }
+    },
+
+    "motion_detection_1" : { 
+        "input_queue" : "stage1_1",    
+        "stream_queue_limit" : 200,         
+        "output_queue" : "stage2",  
+        "params": {
+            "buffer_size": 250,
+            "pixel_treshold": 100000,
+            "frame_gap": 5
+        }
+    },    
+
+    "source_2" : {   
+        "output_queue" : "stage1_2",
+        "stream_queue_limit" : 100,
+        "params": {
+            "desc": "Plant City, Florida, USA | Virtual Railfan LIVE",
+            "url": "https://www.youtube.com/watch?v=wLC-Zg33RYc",
+            "stream": "normal:mp4@640x360",
+            "stream_": "normal:mp4@1920x1080"
+        }
+    },  
+
+    "motion_detection_2" : { 
+        "input_queue" : "stage1_2",    
+        "stream_queue_limit" : 200,         
+        "output_queue" : "stage2",
+        "params": {
+            "buffer_size": 500,
+            "pixel_treshold": 50000,
+            "frame_gap": 10
+        }
+    },    
+    
+    "source_3" : {   
+        "output_queue" : "stage1_3",
+        "stream_queue_limit" : 100,
+        "params": {
+            "desc": "East London Barking Cam 1a",
+            "url": "https://www.youtube.com/watch?v=unES4B7kTMY",
+            "stream": "normal:mp4@640x360",
+            "stream_": "normal:mp4@1920x1080"
+        }
+    },    
+    
+    "motion_detection_3" : { 
+        "input_queue" : "stage1_3",    
+        "stream_queue_limit" : 200,         
+        "output_queue" : "stage2",  
+        "params": {
+            "buffer_size": 250,
+            "pixel_treshold": 200000,
+            "frame_gap": 25
+        }
+    },    
+
+    "source_4" : {   
+        "output_queue" : "stage1_4",
+        "stream_queue_limit" : 100,
+        "params": {
+            "desc": "York ROC Camera No.1, Yorkshire UK - in Partnership with Network Rail | Railcam LIVE",
+            "url": "https://www.youtube.com/watch?v=zTl7MUeMDMk",
+            "stream": "normal:mp4@640x360",
+            "stream_": "normal:mp4@1920x1080"
+        }
+    },    
+    
+    "motion_detection_4" : { 
+        "input_queue" : "stage1_4",    
+        "stream_queue_limit" : 200,         
+        "output_queue" : "stage2",  
+        "params": {
+            "buffer_size": 250,
+            "pixel_treshold": 100000,
+            "frame_gap": 30
+        }
+    },  
+    
+    "source_5" : {   
+        "output_queue" : "stage1_5",
+        "stream_queue_limit" : 100,
+        "params": {
+            "desc": "Big Sandy, Texas USA (Static) - Virtual Railfan LIVE",
+            "url": "https://www.youtube.com/watch?v=8-GPpIvdetA",
+            "stream": "normal:mp4@640x360",
+            "stream_": "normal:mp4@1920x1080"
+        }
+    },    
+    
+    "motion_detection_5" : { 
+        "input_queue" : "stage1_5",    
+        "stream_queue_limit" : 200,         
+        "output_queue" : "stage2",  
+        "params": {
+            "buffer_size": 250,
+            "pixel_treshold": 100000,
+            "frame_gap": 5
+        }
+    },     
+
+    "module_sink_win" : {   
+        "input_queue" : "stage2",
+        "params": {
+            "window_name": "camera_view"
+        }        
+    },
+
+    "module_sink_file" : {   
+        "input_queue" : "stage2",    
+        "params": {
+            "filename": "out/captured_%Y%m%d_%H%M%S_%f.avi",
+            "framerate": 30,
+            "fourcc": "XVID"
+        }        
+    }    
+}
