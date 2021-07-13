@@ -31,22 +31,30 @@ class Module(module_base.Module):
         output_task_data = input_task_data
         frame_buffer = []
         output_stream = None
-        buffer_size = self.params.get("buffer_size", 25)
-        pixel_treshold = self.params.get("pixel_treshold", 0)
+        head_frames = self.params.get("head_frames", 100)
+        tail_frames = self.params.get("tail_frames", 100)
+        frames_treshold = self.params.get("frames_treshold", 10)
+        pixels_treshold = self.params.get("pixels_treshold", 50000)
         frame_gap = self.params.get("frame_gap", 5)
         motion_state = False
-        frame_tail = 0
+        motion_frames = 0
+        left_frames = 0
 
         for input_data in input_stream:
             begin = time.time()
             output_data = input_data
 
-            if len(frame_buffer) == buffer_size:
+            if len(frame_buffer) == head_frames:
                 dframe = cv2.absdiff(input_data['color'], frame_buffer[-frame_gap]['color'])
                 gdframe = cv2.cvtColor(dframe, cv2.COLOR_BGR2GRAY)
                 ret, bwframe = cv2.threshold(gdframe,10,255,cv2.THRESH_BINARY)
                 pixel_count = cv2.countNonZero(bwframe)
-                motion_state =  pixel_count > pixel_treshold
+                if pixel_count > pixels_treshold:
+                    motion_frames += 1
+                    print(f"motion_frames: {motion_frames} frames in motion:{motion_frames/frames_treshold:.2f}")
+                else:
+                    motion_frames = 0                    
+                motion_state = motion_frames >= frames_treshold
             else:
                 motion_state = False
                         
@@ -57,26 +65,29 @@ class Module(module_base.Module):
                 if not output_stream:                        
                     logging.debug("Motion begin")
                     output_stream = self.task_emit(output_task_data)                    
-                frame_tail = len(frame_buffer)
+                left_frames = len(frame_buffer) + tail_frames
 
             if output_stream:
-                if frame_tail > 0:                
+                if left_frames > 0:                
                     output_stream.emit(frame_buffer[0])
-                    frame_tail -= 1                    
+                    left_frames -= 1                                 
                 else:
                     logging.debug("Motion end")
                     output_stream.end()
                     output_stream = None                    
 
             frame_buffer.append(output_data)
-            if len(frame_buffer) > buffer_size:                
-                frame_buffer.pop(0) # do śmieci
+            if len(frame_buffer) > head_frames:                
+                frame_buffer.pop(0) # zbyt stara -> do śmieci
         
+        logging.debug("End of motion task")
+
         # na wypadek zakończenia strumienia wejściowego podczas ruchu - emitujemy ogon
         if output_stream:
-            while frame_tail > 0 and len(frame_buffer) > 0:
+            logging.debug("Write down tail of stream")
+            while left_frames > 0 and len(frame_buffer) > 0:
                 output_stream.emit(frame_buffer.pop(0))              
-                frame_tail -= 1
+                left_frames -= 1
 
 
 if __name__ == "__main__":

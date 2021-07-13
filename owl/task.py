@@ -18,15 +18,23 @@ class Producer():
             redis: redis.Redis,
             task_queue: str,
             streams_classes: dict,
-            expire_time: int,
-            queue_limit: int,
-            timeout: int):
+            queue_limit: int,            
+            task_expire_time: int,
+            task_timeout: int,
+            stream_expire_time: int,                        
+            stream_timeout: int):
+
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
-        self.expire_time = expire_time
-        self.timeout = timeout
-        self.queue_limit = queue_limit          
+        self.queue_limit = queue_limit
+
+        self.task_expire_time = task_expire_time
+        self.task_timeout = task_timeout
+        self.stream_expire_time = stream_expire_time
+        self.stream_timeout = stream_timeout
+        
+        
 
     def __enter__(self):
         return self
@@ -59,10 +67,18 @@ class Producer():
 
         logging.info(f"task emited: {task}")
 
-        self.redis.rpush(f"owl:task_queue:{self.task_queue}", json.dumps(task))
-        self.redis.expire(f"owl:task_queue:{self.task_queue}", self.expire_time)
+        p = self.redis.pipeline()  
+        p.rpush(f"owl:task_queue:{self.task_queue}", json.dumps(task))
+        p.expire(f"owl:task_queue:{self.task_queue}", self.task_expire_time)
+        p.execute()          
       
-        return stream_composed.Producer(self.redis, streams_queues, self.streams_classes, self.expire_time, self.queue_limit, self.timeout)
+        return stream_composed.Producer(
+            self.redis,
+            streams_queues,
+            self.streams_classes,
+            self.queue_limit,
+            self.stream_expire_time,            
+            self.stream_timeout)
 
 class Consumer():
     """Konsument zdarzeń. Odczytuje zdarzenia z kojejki (jednej) i podłącza powiązane strumienie"""
@@ -71,12 +87,18 @@ class Consumer():
             self,
             redis: redis.Redis,
             task_queue: str,
-            streams_classes: dict,
-            timeout: int):
+            streams_classes: dict,            
+            task_expire_time:int,
+            task_timeout: int,
+            stream_expire_time:int,
+            stream_timeout: int):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
-        self.timeout = timeout
+        self.task_expire_time = task_expire_time
+        self.task_timeout = task_timeout
+        self.stream_expire_time = stream_expire_time
+        self.stream_timeout = stream_timeout
 
 
     def __iter__(self):
@@ -86,13 +108,17 @@ class Consumer():
         """odczytanie zdarzenia z kolejki i podłączenie powiązanych strumieni"""
         
         if self.task_queue != "":
-            task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.timeout)
+            task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.task_timeout)
             if not task_data is None:
                 task_str = task_data[1]
                 task = json.loads(task_str)
                 logging.info(f"task received: {task}")
-                return task['task_data'], stream_composed.Consumer(self.redis, task['stream_names'], self.streams_classes, self.timeout)
+                return task['task_data'], stream_composed.Consumer(
+                    self.redis, task['stream_names'],
+                    self.streams_classes,
+                    self.stream_expire_time,
+                    self.stream_timeout)
             else:
                 return None, None
         else:
-            return {}, stream_composed.Consumer(self.redis, {}, {}, self.timeout)
+            return {}, stream_composed.Consumer(self.redis, {}, {}, self.stream_expire_time, self.stream_timeout)

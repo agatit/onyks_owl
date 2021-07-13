@@ -49,9 +49,11 @@ class Module:
                 print("Usage: module config_file.json [instance_name]")
                 exit()  
 
-            self.expire_time = self.config.get('expire_time', 120)
-            self.timeout = self.config.get('timeout', 1)  
             self.stream_queue_limit = self.config.get('stream_queue_limit', 100)
+            self.task_expire_time = self.config.get('task_expire_time', 10)
+            self.task_timeout = self.config.get('task_timeout', 120)
+            self.stream_expire_time = self.config.get('stream_expire_time', 10)
+            self.stream_timeout = self.config.get('stream_timeout', 5)            
             self.params = self.config.get("params", {})
 
             self.redis = redis.Redis()
@@ -59,12 +61,27 @@ class Module:
             self.streams_init()
                                
             consumers = {name : input_class for name, input_class in self.input_classes.items()}        
-            self.task_consumer = task.Consumer(self.redis, self.config.get('input_queue', ""), consumers, self.timeout)
+            self.task_consumer = task.Consumer(
+                self.redis,
+                self.config.get('input_queue', ""),
+                consumers,
+                self.task_expire_time,
+                self.task_timeout,
+                self.stream_expire_time,
+                self.stream_timeout)
             producers = {name : output_class for name, output_class in self.output_classes.items()} 
-            self.task_producer = task.Producer(self.redis, self.config.get('output_queue',""), producers, self.expire_time, self.stream_queue_limit,  2*self.timeout)  
+            self.task_producer = task.Producer(
+                self.redis,
+                self.config.get('output_queue',""),
+                producers,
+                self.stream_queue_limit, 
+                self.task_expire_time,
+                self.task_timeout, 
+                self.stream_expire_time,
+                self.stream_timeout)  
 
         except Exception as e:
-            logging.error(f"{self.module_name}: {str(e)}\n\n{''.join(traceback.format_tb(e.__traceback__))}\n")
+            logging.error(f"{self.module_name}: {str(e)}\n\n{u''.join(traceback.format_tb(e.__traceback__))}\n")
             self.terminate = True           
 
 
@@ -94,12 +111,12 @@ class Module:
                             "stream_names" : input_stream.streams_queues,
                             "task_data": task_data
                         }
-                        self.redis.set(f"owl:module:{self.module_name}:task", json.dumps(task), ex=self.expire_time)
+                        self.redis.set(f"owl:module:{self.module_name}:task", json.dumps(task), ex=self.task_expire_time)
                         self.task_process(task_data, input_stream)                                
                     else:
                         logging.info("Nothing in task queue")
         except Exception as e:
-            logging.error(f"{self.module_name} runOnce error: {str(e)}\n{traceback.print_tb(e.__traceback__)}")
+            logging.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
 
 
     def run(self):
