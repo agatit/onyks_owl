@@ -3,16 +3,9 @@ import cv2
 import numpy as np
 
 def getDispNorm(imgL, imgR):
-    # Calculating disparith using the StereoSGBM algorithm
     disp = stereo.compute(imgL, imgR).astype(np.float32)
-    # disp = cv2.normalize(disp,0,255,cv2.NORM_MINMAX)
     disp = cv2.normalize(disp, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_8U)
-    
     disp2 = np.dstack((disp, disp, disp))
-    # disp3 = cv2.normalize(disp2, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_8U)
-    
-    # cv2.imshow(windowNameC, disp3)
-    # conc = np.concatenate((preconc, disp3), axis = 0)
     return disp2
 def getDispClear(disp):
     disp4 = np.copy(disp)
@@ -47,14 +40,6 @@ windowNameC = 'Disparity'
 windowNameD = 'Concatenate'
 windowSize = (640, 480)
 
-# cv2.namedWindow(windowNameA, cv2.WINDOW_FREERATIO)
-# cv2.resizeWindow(windowNameA, windowSize)
-
-# cv2.namedWindow(windowNameB, cv2.WINDOW_FREERATIO)
-# cv2.resizeWindow(windowNameB, windowSize)
-
-# cv2.namedWindow(windowNameC, cv2.WINDOW_FREERATIO)
-# cv2.resizeWindow(windowNameC, windowSize)
 
 cv2.namedWindow(windowNameD, cv2.WINDOW_FREERATIO)
 cv2.resizeWindow(windowNameD, 1920, 1080)
@@ -87,34 +72,16 @@ ret, imgR = cap.read()
 imgL = imgR
 ret, imgR = cap.read() 
 
-out_name = v_name[:-4] + 'out' + '.avi'
-# out_cap = cv2.VideoCapture(0)
-out_fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out_framerate = cap.get(cv2.CAP_PROP_FPS)
-out_size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-out_out = cv2.VideoWriter(out_name, out_fourcc, out_framerate, (1280, 960))
-
 while ret:
     imgL = cv2.resize(imgL, windowSize)
     imgR = cv2.resize(imgR, windowSize)
-
-    # cv2.imshow(windowNameA, imgL)
-    # cv2.imshow(windowNameB, imgR)
-    # cv2.imshow(windowNameC, disp)
     dispNorm = getDispNorm(imgL, imgR)
-    dispClear = getDispClear(dispNorm)
-    conc = concImages(imgL, imgR, dispNorm, dispClear)
+    cv2.imshow(windowNameD, dispNorm)
 
-    cv2.imshow(windowNameD, conc)
-
-    out_out.write(conc)
-    # print('%d - %d' % (disp.max(), disp3.max()))
-    # print(f'{disp.max()} - {disp3.max()}')
     imgL = imgR
     ret, imgR = cap.read()
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
-out_out.release()
 cap.release()
 cv2.destroyAllWindows()
