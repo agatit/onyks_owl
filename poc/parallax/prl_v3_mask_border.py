@@ -1,9 +1,11 @@
 import os
 import cv2
 import numpy as np
+from skimage.morphology import closing,disk
+
 
 # v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_1.mp4')
-v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39.mp4')
+v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3.mp4')
 f_name_full = os.path.join(os.path.abspath(os.path.dirname(__file__)),'./test_full.png')
 f_name_disp = os.path.join(os.path.abspath(os.path.dirname(__file__)),'./test_disp.png')
 
@@ -21,13 +23,13 @@ windowSize = windowSize = (imgR.shape[1], imgR.shape[0])
 resizeSize = (640, 360)
 
 
-out_name = v_name[:-4] + '_V3_test_resv_len1' + '.avi'
+out_name = v_name[:-4] + '_V3_test_resv_len1_border' + '.avi'
 # out_cap = cv2.VideoCapture(0)
 out_fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out_framerate = cap.get(cv2.CAP_PROP_FPS)
 out_size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 # out_out = cv2.VideoWriter(out_name, out_fourcc, out_framerate, (windowSize[0] * 2, windowSize[1] * 2))
-out_out = cv2.VideoWriter(out_name, out_fourcc, out_framerate, (resizeSize[0] * 2, resizeSize[1]))
+out_out = cv2.VideoWriter(out_name, out_fourcc, out_framerate, (resizeSize[0], resizeSize[1]))
 
 frames_left = cap.get(cv2.CAP_PROP_FRAME_COUNT)
 
@@ -55,8 +57,8 @@ def getDispV3(imgL, imgR):
     vis = cv2.ximgproc.getDisparityVis(filtered_disp)
     disp = cv2.normalize(vis, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_8U)
     
-    disp2 = np.dstack((disp, disp, disp))
-    return disp2
+    # disp2 = np.dstack((disp, disp, disp))
+    return disp
 
 
 def getDispClear(disp):
@@ -79,10 +81,33 @@ while ret:
     imgR = cv2.resize(imgR, resizeSize)
 
     dispV3 = getDispV3(imgL, imgR)
-    conc = concImages(imgL, dispV3)
-    cv2.imshow(windowNameD, conc)
+    cv2.imshow("xdd", dispV3)
+    # conc = concImages(imgL, dispV3)
 
-    out_out.write(conc)
+    dispV3[dispV3 > 40] = 255
+    dispV3[dispV3 <= 40] = 0
+
+    
+
+    median = cv2.medianBlur(dispV3,5)
+
+    # kernel = disk(10)   
+    # img_opening = closing(median,kernel)
+    imgL[median == 0] = 0
+
+    # krawędź
+
+    # Creating kernel
+    kernel = np.ones((3, 3), np.uint8)
+    
+    # Using cv2.erode() method 
+    bord = cv2.erode(median, kernel) 
+    border = median - bord
+    cv2.imshow(windowNameD, imgL)
+    cv2.imshow("xd", border)
+    
+    border2 = np.dstack((border, border, border))
+    out_out.write(border2)
     imgL = imgR
     # imgTemp = imgR
     ret, imgR = cap.read()

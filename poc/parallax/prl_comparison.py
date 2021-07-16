@@ -31,10 +31,12 @@ stereo = cv2.StereoSGBM_create(minDisparity = minDisparity,
 
 
 ret, imgR = cap.read() 
-windowSize = windowSize = (imgR.shape[1], imgR.shape[0])
-resizeSize = (640, 360)
+
 imgL = imgR
 ret, imgR = cap.read() 
+
+windowSize = windowSize = (imgR.shape[1], imgR.shape[0])
+resizeSize = (640, 360)
 
 out_name = v_name[:-4] + 'cmp_resize_very_V3' + '.avi'
 # out_cap = cv2.VideoCapture(0)
