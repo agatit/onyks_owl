@@ -5,7 +5,9 @@ from skimage.morphology import closing,disk
 
 
 # v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_1.mp4')
-v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_5.mp4')
+# v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_5.mp4')
+# v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39.mp4')
+v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3.mp4')
 f_name_full = os.path.join(os.path.abspath(os.path.dirname(__file__)),'./test_full.png')
 f_name_disp = os.path.join(os.path.abspath(os.path.dirname(__file__)),'./test_disp.png')
 
@@ -99,14 +101,9 @@ while ret:
     cv2.imshow(windowNameD, imgL)
     cv2.imshow("xd", median)
     
-    # out_out.write(imgL)
-    out_out.write(dispV33)
-    imgL = imgR
-    # imgTemp = imgR
-    ret, imgR = cap.read()
-    frames_left -= 1
-    if frames_left % 10 == 0:
-        print(frames_left, " frames left")
+    out_out.write(imgL)
+    # out_out.write(dispV33)
+    
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
@@ -115,7 +112,14 @@ while ret:
     #     break
     # elif k == ord('s'):
     #     cv2.imwrite(f_name_full, imgL)
-    #     cv2.imwrite(f_name_disp, dispV3)
+    #     # cv2.imwrite(f_name_disp, dispV3)
+    
+    imgL = imgR
+    # imgTemp = imgR
+    ret, imgR = cap.read()
+    frames_left -= 1
+    if frames_left % 10 == 0:
+        print(frames_left, " frames left")
     
 out_out.release()
 cap.release()

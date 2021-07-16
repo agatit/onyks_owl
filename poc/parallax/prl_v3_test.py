@@ -97,7 +97,7 @@ while ret:
     #     break
     # elif k == ord('s'):
     #     cv2.imwrite(f_name_full, imgL)
-    #     cv2.imwrite(f_name_disp, dispV3)
+        # cv2.imwrite(f_name_disp, dispV3)
     
 out_out.release()
 cap.release()
