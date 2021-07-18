@@ -4,6 +4,7 @@ import os
 import logging
 import cv2
 import sys
+from numpy.core.numeric import count_nonzero
 import redis
 import task
 import json
@@ -33,22 +34,25 @@ class Module(module_base.Module):
         output_stream = None
         buffer_size = self.params.get("buffer_size", 25)
         pixel_treshold = self.params.get("pixel_treshold", 0)
+        pixel_treshold_counter1 = self.params.get("pixel_treshold_to_counter1", 30000)
+        pixel_treshold_counter2 = self.params.get("pixel_treshold_to_counter2", 55000)
         frame_gap = self.params.get("frame_gap", 5)
         motion_state = False
         frame_tail = 0
         track_detection0 = False
         track_detection1 = False
-        hbf, hf, wbf, wf = 550, 90, 310, 280 #track nr.0
-        hbf2, hf2, wbf2, wf2 = 600, 90, 30, 200 #track nr.1
-        track_window = (wbf, hbf, wf, hf)
-        track_window2 = (wbf2, hbf2, wf2, hf2)
-        offset_sum = 50000
+        roi1 = np.array([[(30,565),  
+                         (690,705), 
+                         (620,610),
+                         (190,545)]], dtype=np.int32)
+        roi2 = np.array([[(60,655),
+                          (660,825),
+                          (600,705),
+                          (190,610)]], dtype=np.int32)
         """
-        hbf -> height base of frame
-        hf -> height of frame
-        wbf -> width base of frame
-        wf -> width of frame
+        roi: (width,height)
         """
+        
 
         for input_data in input_stream:
             begin = time.time()
@@ -60,41 +64,32 @@ class Module(module_base.Module):
                 ret, bwframe = cv2.threshold(gdframe,10,255,cv2.THRESH_BINARY)
                 pixel_count = cv2.countNonZero(bwframe)
                 motion_state =  pixel_count > pixel_treshold
-                
+                channel_count = dframe.shape[2]
+                ignore_mask_color = (255,)*channel_count
+                mask1 = np.zeros(bwframe.shape, dtype=np.uint8)
+                mask2 = np.zeros(bwframe.shape, dtype=np.uint8)
+                cv2.fillPoly(mask1, roi1, ignore_mask_color)
+                cv2.fillPoly(mask2, roi2, ignore_mask_color)
+                cv2.polylines(input_data['color'], roi1, isClosed=True, color=(255,0,0),thickness=2)
+                cv2.polylines(input_data['color'], roi2, isClosed=True, color=(255,255,0),thickness=2)
+                masked_frame1 = cv2.bitwise_and(gdframe, mask1) 
+                masked_frame2 = cv2.bitwise_and(gdframe, mask2)
+                pixel_counter1 = count_nonzero(masked_frame1)
+                print("pixel_counter1:", pixel_counter1)
+                pixel_counter2 = count_nonzero(masked_frame2)
+                print("pixel_counter2:", pixel_counter2)
+                if pixel_counter1 > pixel_treshold_counter1:
+                    track_detection0 = True
+                else:
+                    track_detection0 = False
+                if pixel_counter2 > pixel_treshold_counter2:
+                    track_detection1 = True
+                else:
+                    track_detection1 = False
             else:
                 motion_state = False
                         
             #TODO: wybieranie na którym torze jest największy ruch            
-            if len(track_window) == 4 and len(track_window2) == 4:
-                if hbf > 0 and hf > 0 and wbf > 0 and wf > 0 and hbf2 > 0 and hf2 > 0 and wbf2 > 0 and wf > 0:
-                    roi = input_data['color'][hbf:hbf + hf, wbf:wbf + wf]
-                    roi2 = input_data['color'][hbf2:hbf2 + hf2, wbf2:wbf2 + wf2]
-                    hsv_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
-                    hsv_roi2 = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
-                    mask = np.zeros_like(hsv_roi, dtype="uint8")
-                    mask2 = np.zeros_like(hsv_roi2, dtype="uint8")
-                    Bit_wised = cv2.bitwise_and(hsv_roi, hsv_roi, mask)
-                    Bit_wised2 = cv2.bitwise_and(hsv_roi2, hsv_roi2, mask2)
-                    sum_of_roi = np.sum(roi)
-                    sum_of_roi2 = np.sum(roi2)
-                    print("sum_of_roi:", sum_of_roi)
-                    print("sum_of_roi2:", sum_of_roi2)
-                    cv2.rectangle(input_data['color'], (wbf, hbf), (wbf+wf, hbf+hf), (255, 0, 0), 2)
-                    cv2.rectangle(input_data['color'], (wbf2, hbf2), (wbf2+wf2, hbf2+hf2), (255, 255, 0), 2)
-          
-                    if sum_of_roi  < sum_of_roi2 + offset_sum:
-                        track_detection0 = True
-                        print("Detekcja toru 0 udana")
-                    else:
-                        track_detection0 = False
-                        print("Detekcja toru 0 nieudana")
-                    
-                    if sum_of_roi2 < sum_of_roi + offset_sum:
-                        track_detection1 = True
-                        print("Detekcja toru 1 udana")
-                    else:
-                        track_detection1 = False
-                        print("Detekcja toru 1 nieudana")
                     
             if motion_state:
                 if not output_stream:                        
@@ -108,10 +103,11 @@ class Module(module_base.Module):
                     frame_tail -= 1    
                     if track_detection0 == True:
                         output_task_data['railtrack'] = "0"
-                        output_stream = self.task_emit(output_task_data)  
+                        output_stream = self.task_emit(output_task_data) 
+                    
                     if track_detection1 == True:
                         output_task_data['railtrack'] = "1"
-                        output_stream = self.task_emit(output_task_data)              
+                        output_stream = self.task_emit(output_task_data)            
                 else:
                     logging.debug("Motion end")
                     output_stream.end()
