@@ -1,5 +1,5 @@
 {
-    "comment" : "Źrdóła uwstawione są dla różnych wersji. Wybierz którą chczesz w supervisord.conf",
+    "comment" : "Źrdóła uwstawione są dla różnych wersji. Wybierz którą chcesz w supervisord.conf",
 
     "module_source_youtube" : {   
         "output_queue" : "stage1",
@@ -15,7 +15,7 @@
         "output_queue" : "stage1",  
         "stream_queue_limit" : 100,         
         "params": {
-            "device": 1
+            "device": "D:/Agat_IT/onyks_owl_main/owl/out_2_10.mp4"
         }
     },
 
@@ -25,7 +25,9 @@
         "output_queue" : "stage2",  
         "params": {
             "buffer_size": 25,
-            "pixel_treshold": 5000,
+            "pixel_treshold": 320000,
+            "pixel_treshold_to_coounter1": 30000,
+            "pixel_treshold_to_coounter2": 55000,
             "frame_gap": 5
         }
     },
