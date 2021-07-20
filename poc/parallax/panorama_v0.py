@@ -4,25 +4,25 @@ import numpy as np
 import os
 
 # Load our images
-img1 = cv2.imread(os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_full_r.png"))
-img2 = cv2.imread(os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_full_l.png"))
+imgr = cv2.imread(os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_full_r.png"))
+imgl = cv2.imread(os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_full_l.png"))
 
-img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+imgr_gray = cv2.cvtColor(imgr, cv2.COLOR_BGR2GRAY)
+imgl_gray = cv2.cvtColor(imgl, cv2.COLOR_BGR2GRAY)
 
-cv2.imshow("img1_gray", img1_gray)
-cv2.imshow("img2_gray", img2_gray)
+cv2.imshow("imgr_gray", imgr_gray)
+cv2.imshow("imgl_gray", imgl_gray)
 
 # Create our ORB detector and detect keypoints and descriptors
 orb = cv2.ORB_create(nfeatures=2000)
 
 # Find the key points and descriptors with ORB
-keypoints1, descriptors1 = orb.detectAndCompute(img1, None)
-keypoints2, descriptors2 = orb.detectAndCompute(img2, None)
+keypoints1, descriptors1 = orb.detectAndCompute(imgr, None)
+keypoints2, descriptors2 = orb.detectAndCompute(imgl, None)
 
-cv2.imshow("keypoints", cv2.drawKeypoints(img1, keypoints1, None, (255, 0, 255)))
+cv2.imshow("keypoints", cv2.drawKeypoints(imgr, keypoints1, None, (255, 0, 255)))
 
-cv2.imshow("keypoints2", cv2.drawKeypoints(img2, keypoints2, None, (255, 0, 255)))
+cv2.imshow("keypoints2", cv2.drawKeypoints(imgl, keypoints2, None, (255, 0, 255)))
 cv2.waitKey()
 
 # Create a BFMatcher object.
@@ -32,21 +32,21 @@ bf = cv2.BFMatcher_create(cv2.NORM_HAMMING)
 # Find matching points
 matches = bf.knnMatch(descriptors1, descriptors2,k=2)
 
-def draw_matches(img1, keypoints1, img2, keypoints2, matches):
-    r, c = img1.shape[:2]
-    r1, c1 = img2.shape[:2]
+def draw_matches(imgr, keypoints1, imgl, keypoints2, matches):
+    r, c = imgr.shape[:2]
+    r1, c1 = imgl.shape[:2]
 
     # Create a blank image with the size of the first image + second image
     output_img = np.zeros((max([r, r1]), c+c1, 3), dtype='uint8')
-    output_img[:r, :c, :] = np.dstack([img1, img1, img1])
-    output_img[:r1, c:c+c1, :] = np.dstack([img2, img2, img2])
+    output_img[:r, :c, :] = np.dstack([imgr, imgr, imgr])
+    output_img[:r1, c:c+c1, :] = np.dstack([imgl, imgl, imgl])
 
     # Go over all of the matching points and extract them
     for match in matches:
-        img1_idx = match.queryIdx
-        img2_idx = match.trainIdx
-        (x1, y1) = keypoints1[img1_idx].pt
-        (x2, y2) = keypoints2[img2_idx].pt
+        imgr_idx = match.queryIdx
+        imgl_idx = match.trainIdx
+        (x1, y1) = keypoints1[imgr_idx].pt
+        (x2, y2) = keypoints2[imgl_idx].pt
 
         # Draw circles on the keypoints
         cv2.circle(output_img, (int(x1),int(y1)), 4, (0, 255, 255), 1)
@@ -61,7 +61,7 @@ all_matches = []
 for m, n in matches:
     all_matches.append(m)
 
-img3 = draw_matches(img1_gray, keypoints1, img2_gray, keypoints2, all_matches[:30])
+img3 = draw_matches(imgr_gray, keypoints1, imgl_gray, keypoints2, all_matches[:30])
 cv2.imshow("img3", img3)
 cv2.waitKey()
 
@@ -71,15 +71,15 @@ for m, n in matches:
     if m.distance < 0.6 * n.distance:
         good.append(m)
 
-cv2.imshow("keypoints1", cv2.drawKeypoints(img1, [keypoints1[m.queryIdx] for m in good], None, (255, 0, 255)))
-cv2.imshow("keypoints2", cv2.drawKeypoints(img2, [keypoints2[m.trainIdx] for m in good], None, (255, 0, 255)))
+cv2.imshow("keypoints1", cv2.drawKeypoints(imgr, [keypoints1[m.queryIdx] for m in good], None, (255, 0, 255)))
+cv2.imshow("keypoints2", cv2.drawKeypoints(imgl, [keypoints2[m.trainIdx] for m in good], None, (255, 0, 255)))
 
 cv2.waitKey()
 
-def warpImages(img1, img2, H):
+def warpImages(imgr, imgl, H):
 
-  rows1, cols1 = img1.shape[:2]
-  rows2, cols2 = img2.shape[:2]
+  rows1, cols1 = imgr.shape[:2]
+  rows2, cols2 = imgl.shape[:2]
 
   list_of_points_1 = np.float32([[0,0], [0, rows1],[cols1, rows1], [cols1, 0]]).reshape(-1, 1, 2)
   temp_points = np.float32([[0,0], [0,rows2], [cols2,rows2], [cols2,0]]).reshape(-1,1,2)
@@ -97,8 +97,8 @@ def warpImages(img1, img2, H):
   
   H_translation = np.array([[1, 0, translation_dist[0]], [0, 1, translation_dist[1]], [0, 0, 1]])
 
-  output_img = cv2.warpPerspective(img2, H_translation.dot(H), (x_max-x_min, y_max-y_min))
-  output_img[translation_dist[1]:rows1+translation_dist[1], translation_dist[0]:cols1+translation_dist[0]] = img1
+  output_img = cv2.warpPerspective(imgl, H_translation.dot(H), (x_max-x_min, y_max-y_min))
+  output_img[translation_dist[1]:rows1+translation_dist[1], translation_dist[0]:cols1+translation_dist[0]] = imgr
 
   return output_img
 
@@ -113,7 +113,7 @@ if len(good) > MIN_MATCH_COUNT:
     # Establish a homography
     M, _ = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC,5.0)
     
-    result = warpImages(img2, img1, M)
+    result = warpImages(imgl, imgr, M)
 
     cv2.imshow("finale", result)
 

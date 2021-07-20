@@ -3,21 +3,21 @@ import cv2
 import numpy as np
 import os
 
-def draw_matches(img1, keypoints1, img2, keypoints2, matches):
-        r, c = img1.shape[:2]
-        r1, c1 = img2.shape[:2]
+def draw_matches(imgr, keypoints1, imgl, keypoints2, matches):
+        r, c = imgr.shape[:2]
+        r1, c1 = imgl.shape[:2]
 
         # Create a blank image with the size of the first image + second image
         output_img = np.zeros((max([r, r1]), c+c1, 3), dtype='uint8')
-        output_img[:r, :c, :] = np.dstack([img1, img1, img1])
-        output_img[:r1, c:c+c1, :] = np.dstack([img2, img2, img2])
+        output_img[:r, :c, :] = np.dstack([imgr, imgr, imgr])
+        output_img[:r1, c:c+c1, :] = np.dstack([imgl, imgl, imgl])
 
         # Go over all of the matching points and extract them
         for match in matches:
-            img1_idx = match.queryIdx
-            img2_idx = match.trainIdx
-            (x1, y1) = keypoints1[img1_idx].pt
-            (x2, y2) = keypoints2[img2_idx].pt
+            imgr_idx = match.queryIdx
+            imgl_idx = match.trainIdx
+            (x1, y1) = keypoints1[imgr_idx].pt
+            (x2, y2) = keypoints2[imgl_idx].pt
 
             # Draw circles on the keypoints
             cv2.circle(output_img, (int(x1),int(y1)), 4, (0, 255, 255), 1)
@@ -27,9 +27,9 @@ def draw_matches(img1, keypoints1, img2, keypoints2, matches):
             cv2.line(output_img, (int(x1),int(y1)), (int(x2)+c,int(y2)), (0, 255, 255), 1)
             
         return output_img
-def warpImages(img1, img2, H):
-    rows1, cols1 = img1.shape[:2]
-    rows2, cols2 = img2.shape[:2]
+def warpImages(imgr, imgl, H):
+    rows1, cols1 = imgr.shape[:2]
+    rows2, cols2 = imgl.shape[:2]
 
     list_of_points_1 = np.float32([[0,0], [0, rows1],[cols1, rows1], [cols1, 0]]).reshape(-1, 1, 2)
     temp_points = np.float32([[0,0], [0,rows2], [cols2,rows2], [cols2,0]]).reshape(-1,1,2)
@@ -47,8 +47,8 @@ def warpImages(img1, img2, H):
     
     H_translation = np.array([[1, 0, translation_dist[0]], [0, 1, translation_dist[1]], [0, 0, 1]])
 
-    output_img = cv2.warpPerspective(img2, H_translation.dot(H), (x_max-x_min, y_max-y_min))
-    output_img[translation_dist[1]:rows1+translation_dist[1], translation_dist[0]:cols1+translation_dist[0]] = img1
+    output_img = cv2.warpPerspective(imgl, H_translation.dot(H), (x_max-x_min, y_max-y_min))
+    output_img[translation_dist[1]:rows1+translation_dist[1], translation_dist[0]:cols1+translation_dist[0]] = imgr
 
     return output_img
 def crop(image):
@@ -79,8 +79,8 @@ def crop(image):
     # cv2.waitKey()
     return crop
 
-cv2.namedWindow("img1_gray", cv2.WINDOW_FREERATIO)
-cv2.namedWindow("img2_gray", cv2.WINDOW_FREERATIO)
+cv2.namedWindow("imgr_gray", cv2.WINDOW_FREERATIO)
+cv2.namedWindow("imgl_gray", cv2.WINDOW_FREERATIO)
 cv2.namedWindow("keypoints1", cv2.WINDOW_FREERATIO)
 cv2.namedWindow("keypoints2", cv2.WINDOW_FREERATIO)
 cv2.namedWindow("keypoints3", cv2.WINDOW_FREERATIO)
@@ -89,47 +89,55 @@ cv2.namedWindow("img3", cv2.WINDOW_FREERATIO)
 cv2.namedWindow("finale", cv2.WINDOW_FREERATIO)
 
 
-# v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_test_res_len1.avi')
-# o_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_test_res_len1_pan.png')
-v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39.mp4')
-o_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_pan.png')
+v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_test_res_len1.avi')
+o_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_test_res_len1_pan.png')
+# v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39.mp4')
+# o_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_pan.png')
 # v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3_V3_test_res_len1.avi')
 # o_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3_V3_test_res_len1_pan.png')
+# v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3_V3.avi')
+# o_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3_V3_pan.png')
 cap = cv2.VideoCapture(v_name)
 
 # Load our images
-# img1 = cv2.imread(os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_full_r.png"))
-# img2 = cv2.imread(os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_full_l.png"))
+# imgr = cv2.imread(os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_full_r.png"))
+# imgl = cv2.imread(os.path.join(os.path.abspath(os.path.dirname(__file__)),"test_full_l.png"))
+# start = 60
+# skipped = 20
+start = 60
+skipped = 20
+results = []
+for i in range(start):
+    _, _ = cap.read()
 
-ret, img1 = cap.read()
-skipped = 10
+ret, imgl = cap.read()
 for i in range(skipped):
-    ret, img2 = cap.read()
+    ret, imgr = cap.read()
 while ret:
-    # img1_crop = crop(img1)
-    # img2_crop = crop(img2)
-    # img1_gray = cv2.cvtColor(img1_crop, cv2.COLOR_BGR2GRAY)
-    # img2_gray = cv2.cvtColor(img2_crop, cv2.COLOR_BGR2GRAY)
-    img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-    img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+    # imgr_crop = crop(imgr)
+    # imgl_crop = crop(imgl)
+    # imgr_gray = cv2.cvtColor(imgr_crop, cv2.COLOR_BGR2GRAY)
+    # imgl_gray = cv2.cvtColor(imgl_crop, cv2.COLOR_BGR2GRAY)
+    imgr_gray = cv2.cvtColor(imgr, cv2.COLOR_BGR2GRAY)
+    imgl_gray = cv2.cvtColor(imgl, cv2.COLOR_BGR2GRAY)
 
-    # cv2.imshow("img1", img1)
-    # cv2.imshow("img1_crop", img1_crop)
-    # cv2.imshow("img2", img2)
-    # cv2.imshow("img2_crop", img2_crop) 
+    # cv2.imshow("imgr", imgr)
+    # cv2.imshow("imgr_crop", imgr_crop)
+    # cv2.imshow("imgl", imgl)
+    # cv2.imshow("imgl_crop", imgl_crop) 
     # cv2.waitKey()
-    # cv2.imshow("img1_gray", img1_gray)
-    # cv2.imshow("img2_gray", img2_gray)
+    cv2.imshow("imgr_gray", imgr_gray)
+    cv2.imshow("imgl_gray", imgl_gray)
 
     # Create our ORB detector and detect keypoints and descriptors
     orb = cv2.ORB_create(nfeatures=2000)
 
     # Find the key points and descriptors with ORB
-    keypoints1, descriptors1 = orb.detectAndCompute(img1, None)
-    keypoints2, descriptors2 = orb.detectAndCompute(img2, None)
+    keypoints1, descriptors1 = orb.detectAndCompute(imgr, None)
+    keypoints2, descriptors2 = orb.detectAndCompute(imgl, None)
 
-    cv2.imshow("keypoints1", cv2.drawKeypoints(img1, keypoints1, None, (255, 0, 255)))
-    cv2.imshow("keypoints2", cv2.drawKeypoints(img2, keypoints2, None, (255, 0, 255)))
+    cv2.imshow("keypoints1", cv2.drawKeypoints(imgr, keypoints1, None, (255, 0, 255)))
+    cv2.imshow("keypoints2", cv2.drawKeypoints(imgl, keypoints2, None, (255, 0, 255)))
 
     # Create a BFMatcher object.
     # It will find all of the matching keypoints on two images
@@ -144,7 +152,7 @@ while ret:
     for m, n in matches:
         all_matches.append(m)
 
-    img3 = draw_matches(img1_gray, keypoints1, img2_gray, keypoints2, all_matches[:30])
+    img3 = draw_matches(imgr_gray, keypoints1, imgl_gray, keypoints2, all_matches[:30])
     cv2.imshow("img3", img3)
 
     # Finding the best matches
@@ -153,8 +161,8 @@ while ret:
         if m.distance < 0.6 * n.distance:
             good.append(m)
 
-    cv2.imshow("keypoints3", cv2.drawKeypoints(img1, [keypoints1[m.queryIdx] for m in good], None, (255, 0, 255)))
-    cv2.imshow("keypoints4", cv2.drawKeypoints(img2, [keypoints2[m.trainIdx] for m in good], None, (255, 0, 255)))
+    cv2.imshow("keypoints3", cv2.drawKeypoints(imgr, [keypoints1[m.queryIdx] for m in good], None, (255, 0, 255)))
+    cv2.imshow("keypoints4", cv2.drawKeypoints(imgl, [keypoints2[m.trainIdx] for m in good], None, (255, 0, 255)))
 
     # Set minimum match condition
     MIN_MATCH_COUNT = 10
@@ -167,18 +175,20 @@ while ret:
         # Establish a homography
         M, _ = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC,5.0)
         
-        result = warpImages(img2, img1, M)
+        result = warpImages(imgl, imgr, M)
         # result_crop = crop(result)
         cv2.imshow("finale", result)
+        results.append(result)
 
     k = cv2.waitKey() & 0xFF
     if k == ord('q'):
         break
-    # img1 = img2
-    if result is not None:
-        img1 = np.copy(result)
-    # ret, img2 = cap.read()
+    imgl = imgr
+    # if result is not None:
+    #     imgl = np.copy(result)
+    # ret, imgr = cap.read()
     for i in range(skipped):
-        ret, img2 = cap.read()
+        ret, imgr = cap.read()
 cv2.imwrite(o_name, result)
 cap.release()
+print(len(results))

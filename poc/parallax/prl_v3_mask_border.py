@@ -5,7 +5,8 @@ from skimage.morphology import closing,disk
 
 
 # v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_1.mp4')
-v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3.mp4')
+# v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3.mp4')
+v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39.mp4')
 f_name_full = os.path.join(os.path.abspath(os.path.dirname(__file__)),'./test_full.png')
 f_name_disp = os.path.join(os.path.abspath(os.path.dirname(__file__)),'./test_disp.png')
 
@@ -23,7 +24,7 @@ windowSize = windowSize = (imgR.shape[1], imgR.shape[0])
 resizeSize = (640, 360)
 
 
-out_name = v_name[:-4] + '_V3_test_resv_len1_border' + '.avi'
+out_name = v_name[:-4] + '_V3_test_resv_border' + '.avi'
 # out_cap = cv2.VideoCapture(0)
 out_fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out_framerate = cap.get(cv2.CAP_PROP_FPS)
@@ -107,7 +108,8 @@ while ret:
     cv2.imshow("xd", border)
     
     border2 = np.dstack((border, border, border))
-    out_out.write(border2)
+    border3 = imgL + border2
+    out_out.write(border3)
     imgL = imgR
     # imgTemp = imgR
     ret, imgR = cap.read()
