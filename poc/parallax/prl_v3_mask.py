@@ -20,12 +20,12 @@ cv2.resizeWindow(windowNameD, 1280, 720)
 ret, imgL = cap.read() 
 # ret, imgTemp = cap.read() 
 ret, imgR = cap.read() 
-windowSize = windowSize = (imgR.shape[1], imgR.shape[0])
+windowSize = (imgR.shape[1], imgR.shape[0])
 # resizeSize = (1280, 720)
 # resizeSize = (640, 360)
 
 
-out_name = v_name[:-4] + '_V3_masked_nores' + '.avi'
+out_name = v_name[:-4] + '_V3_mask2_nores' + '.avi'
 # out_cap = cv2.VideoCapture(0)
 out_fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out_framerate = cap.get(cv2.CAP_PROP_FPS)
@@ -83,7 +83,7 @@ while ret:
     # imgR = cv2.resize(imgR, resizeSize)
 
     dispV3 = getDispV3(imgL, imgR)
-    dispV33 = np.dstack((dispV3, dispV3, dispV3))
+    # dispV33 = np.dstack((dispV3, dispV3, dispV3))
     
     # conc = concImages(imgL, dispV3)
 
@@ -97,13 +97,14 @@ while ret:
     # kernel = disk(10)   
     # img_opening = closing(median,kernel)
     imgL[median == 0] = 0
-    kernel = np.ones((3,3), np.uint8)
-    dispV3 = cv2.erode(dispV3, kernel)
-    cv2.imshow(windowNameD, imgL)
+    # kernel = np.ones((3,3), np.uint8)
+    # dispV3 = cv2.erode(dispV3, kernel)
+    # cv2.imshow(windowNameD, median)
     cv2.imshow("xd", median)
-    
-    out_out.write(imgL)
+    # dispV4 = np.dstack((dispV3, dispV3, dispV3))
+    median2 = np.dstack((median, median, median))
     # out_out.write(dispV33)
+    out_out.write(median2)
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

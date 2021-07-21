@@ -22,7 +22,7 @@ cv2.namedWindow(windowName, cv2.WINDOW_FREERATIO)
 cv2.createTrackbar(trackbar1_name, windowName , threshold1_default, alpha_slider_max, set_threshold1)
 cv2.createTrackbar(trackbar2_name, windowName , threshold1_default, alpha_slider_max, set_threshold1)
 
-v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_test_res_len1.avi')
+v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_mask_nores.avi')
 # v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39.mp4')
 # o_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_test_res_len1_pan.png')
 
