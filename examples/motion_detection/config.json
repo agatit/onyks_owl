@@ -11,7 +11,7 @@
         }
     },
 
-    "module_source_cv" : {   
+    "module_source_camera" : {   
         "output_queue" : "stage1",  
         "stream_queue_limit" : 100,         
         "params": {
@@ -19,14 +19,47 @@
         }
     },
 
+    "module_source_file" : {   
+        "output_queue" : "stage1",  
+        "stream_queue_limit" : 100,         
+        "params": {
+            "device": 1
+        }
+    },  
+    
+    "module_source_dir" : {   
+        "output_queue" : "stage1",  
+        "stream_queue_limit" : 100,  
+        "params": {
+            "path": "../../samples/railtracks/"
+        }
+    },    
+
     "module_motion_detection" : { 
         "input_queue" : "stage1",    
         "stream_queue_limit" : 100,         
         "output_queue" : "stage2",  
         "params": {
-            "buffer_size": 25,
-            "pixel_treshold": 5000,
-            "frame_gap": 5
+            "frame_gap": 5,
+            "image_size": [1080, 1920],
+            "railtracks": [
+                {
+                    "name": "tor1",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[30,565], [690,705], [620,610], [190,545]],
+                    "pixel_treshold": 30000,
+                    "frames_treshold": 10
+                },
+                {
+                    "name": "tor2",
+                    "head_frames": 250,
+                    "tail_frames": 250,                    
+                    "roi": [[60,655], [660,825], [600,705], [190,610]],
+                    "pixel_treshold": 30000,
+                    "frames_treshold": 10
+                }
+            ]
         }
     },
 
