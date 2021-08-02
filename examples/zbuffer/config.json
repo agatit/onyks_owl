@@ -1,0 +1,48 @@
+{
+    "comment" : "Źrdóła uwstawione są dla różnych wersji. Wybierz którą chczesz w supervisord.conf",
+
+    "module_source_youtube" : {   
+        "output_queue" : "stage1",
+        "stream_queue_limit" : 100,
+        "params": {
+            "url": "https://www.youtube.com/watch?v=pQKhS4F9sSM",
+            "stream": "normal:mp4@640x360",
+            "stream_": "normal:mp4@1920x1080"
+        }
+    },
+
+    "module_source_cv" : {   
+        "output_queue" : "stage1",    
+        "stream_queue_limit" : 100,
+        "params": {
+            "expire_time" : 600,
+            "device" : "../../samples/youtube/out_2_39.mp4"
+        }
+    },
+    "module_zbuffer" : {
+        "input_queue" : "stage1",
+        "stream_queue_limit" : 100,
+        "output_queue" : "stage2",
+        "params" : {
+            "wls_lambda": 8000,
+            "wls_sigma": 1.5,
+            "buffer_size": 2
+        }
+    },
+
+    "module_sink_file" : {   
+        "input_queue" : "stage2",
+        
+        "params": {
+            "filename": "out/test_%Y%m%d_%H%M%S_%f.avi",
+            "framerate": 25,
+            "fourcc": "XVID"
+        }        
+    },
+    "module_sink_win" : {   
+        "input_queue" : "stage2",
+        "params": {
+            "window_name": "zbuffer_view"
+        }        
+    }
+}

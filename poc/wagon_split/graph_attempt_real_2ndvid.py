@@ -2,22 +2,11 @@ import cv2
 import numpy as np
 import os
 
-v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_mask_nores.avi')
+v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_3_3.mp4')
 # v_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'../../samples/youtube/out_2_39_V3_mask2_nores.avi')
 cap = cv2.VideoCapture(v_name)
 frames_left = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-
-# keyPoints = (
-#              (25, 275),
-#              (27, 107),
-#              (462, 119),
-#              (463, 240)
-#              )
-
-# rectangles = (
-#     ((75, 321),(78, 825)),
-#     ((1386, 357),(1389, 720))
-# )
+# cv2.namedWindow('xd', cv2.WINDOW_FREERATIO)
 colors = (
     (255, 0,   0),
     (255, 127, 0),
@@ -37,50 +26,55 @@ colors = (
 # image = cv2.line(image, start_point, end_point, color, thickness)
 
 
-rect_size = (10, 200)
-rect_first = (75, 300)
-rect_last = (1386, 300)
-rect_count = 8
-rect_distance = int((rect_last[0] - rect_first[0]) / rect_count)
+# rect_size = (100, 100)
+# rect_first = (750, 450)
+# rect_last = (750, 950)
+rect_size = (60, 300)
+rect_first = (75, 600)
+rect_last = (1386, 800)
+rect_count = 6
+# rect_distance = int((rect_last[0] - rect_first[0]) / rect_count)
+rect_distance = (int((rect_last[0] - rect_first[0]) / rect_count), int((rect_last[1] - rect_first[1]) / (rect_count - 1))) 
 rectangles = []
 
-plot_mod_x = 3
+plot_mod_x = 2
 plot_mod_y = 0.5
 plot_start = (75, 200)
 
 for i in range(rect_count):
-    item = ((rect_first[0] + rect_distance * i, rect_first[1]), (rect_first[0] + rect_distance * i + rect_size[0], rect_first[1] + rect_size[1]))
+    item = ((rect_first[0] + rect_distance[0] * i,                rect_first[1] + rect_distance[1] * i),
+            (rect_first[0] + rect_distance[0] * i + rect_size[0], rect_first[1] + rect_distance[1] * i + rect_size[1]))
     rectangles.append(item)
-# TODO interesting...   To teraz jeszcze z przesuwaniem w osi Y
 results = [[] for i in range(int(rect_count))] 
 frame_number = 0
 ret, img = cap.read() 
 while ret:
-    imgb = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    imga = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    imgb = imga[:,:,0]
     
     ### Rysowanie ###
     for i, rect in enumerate(rectangles):
-        cv2.rectangle(img, rect[0], rect[1], colors[i], 1)
+        cv2.rectangle(img, rect[0], rect[1], colors[i * 2], 1)
 
     for i, line in enumerate(results):
         if frame_number < 2:
             continue
-        if i == 3:
+        if i == 2 or i == 3:
             for j in range(frame_number - 1):
-                start_point = (int(plot_start[0] + j * plot_mod_x), int(line[j] * plot_mod_y))
-                end_point = (int(plot_start[0] + (j+1) * plot_mod_x), int(line[j+1] * plot_mod_y))
-                cv2.line(img, start_point, end_point, colors[i], 1)
-
+                start_point = (int(plot_start[0] + j     * plot_mod_x), -1 * int(line[j]   * plot_mod_y) + plot_start[1]) # + i * 10)
+                end_point   = (int(plot_start[0] + (j+1) * plot_mod_x), -1 * int(line[j+1] * plot_mod_y) + plot_start[1]) # + i * 10)
+                cv2.line(img, start_point, end_point, colors[i * 2], 1)
+    cv2.line(img, plot_start, (1920, plot_start[1]), (0, 0, 0), 1)
 
     cv2.imshow("xd", img)
     
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
         break
-    elif k == ord('e'):
+    elif k == ord(' '):
         ### Generowanie danych ###
         for i, rect in enumerate(rectangles):
-            check = imgb[rect[0][1]:rect[1][1], rect[0][0]:rect[1][0]] 
+            check = imgb[rect[0][1] + 1 : rect[1][1] - 1, rect[0][0] + 1 : rect[1][0] - 1] 
             val = cv2.countNonZero(check)
             # results[i].append(val)
             try:
@@ -100,6 +94,3 @@ while ret:
 
 cap.release()
 cv2.destroyAllWindows()
-
-# TODO uśrednianie obrazu nieprzetworzonego
-# TODO zbuffer na innym materiale
