@@ -3,17 +3,16 @@
         "output_queue" : "stage1", 
         "stream_queue_limit" : 100, 
         "params" : {
-            "device" : 0
+            "device" : "C:\\Users\\Marcin\\Agat_IT\\crossing2.mp4"
         }
     },
 
-    "module_plate_detection" : { 
+    "module_velocity_measure" : { 
         "input_queue" : "stage1",    
         "output_queue" : "stage2",  
         "params": {
-            "factor" : 1.1,
-            "neighbour" : 4,
-            "debug" : 1             
+            "delay" : 5
+                 
         }
     },
 

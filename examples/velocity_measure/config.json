@@ -1,0 +1,36 @@
+{
+    "module_source_dshow" : {   
+        "output_queue" : "stage1", 
+        "stream_queue_limit" : 100, 
+        "params" : {
+            "device" : "C:\\Users\\Marcin\\Agat_IT\\crossing2.mp4"
+        }
+    },
+                                
+    "module_velocity_measure" : { 
+        "input_queue" : "stage1",    
+        "output_queue" : "stage2",  
+        "params": {
+            "delay" : 5,                        
+            "points" : 10,
+            "p1_c" : [0,0],
+            "p2_c" : [3000,3000],
+            "dis_min" : 10,
+            "y_max" : 3,
+            "klasa_dokladnosci_predkosci" : 10,
+            "shift_min" : 10,
+            "shift_max" : 20,
+            "min_factor" : 0.8,
+            "max_factor" : 1.4,
+            "debug": 1
+                 
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : "stage2",
+        "params": {
+            "window_name" : "camera_view"
+        }        
+    }
+}

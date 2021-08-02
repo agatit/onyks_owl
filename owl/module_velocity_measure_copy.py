@@ -27,8 +27,6 @@ bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 frame_tab = []
 shift_tab_x = []
 shift_tab_y = []
-med_shift_tab = []
-
 
 class Module(module_base.Module):
     def streams_init(self): 
@@ -49,16 +47,18 @@ class Module(module_base.Module):
         points = self.params.get("points", 20)
         p1_c = self.params.get("p1_c", [0,0])
         p2_c = self.params.get("p2_c", [3000,3000])
-        dis_min = self.params.get("dis_min", 10)
+   
         klasa_dokladnosci_predkosci = self.params.get("klasa_dokladnosci_predkosci", 10)
         shift_min = self.params.get("shift_min", 10)
         shift_max = self.params.get("shift_max", 20)
         y_max = self.params.get("y_max", 3)
+       
         debug = self.params.get("debug", 0)
         deviation = self.params.get("deviation", 3)
 
         output_data = {}
         output_able = False
+        med_shift_tab = []
 
         with self.task_emit({}) as output_stream:            
             for input_data in input_stream:     
@@ -74,7 +74,7 @@ class Module(module_base.Module):
 
                 
                 frame = input_data['color']
-                frame = frame[p1_c[0]:p2_c[0],p1_c[1]:p2_c[1]]
+                #frame = frame[p1_c[0]:p2_c[0],p1_c[1]:p2_c[1]]
                 frame_tab.append(frame)
                 frame_delayed = frame_tab[0]
                 if len(frame_tab) > delay:
@@ -95,9 +95,8 @@ class Module(module_base.Module):
                         p2 = kp2[match.trainIdx].pt
                         
                         #obliczanie predkosci
-                        x_dis = p1[0] - p2[0]
-                        y_dis = p1[1] - p2[1]
-                        #print(f"x_dis: {x_dis}, y_dis: {y_dis}")
+                        x_dis = int(p1[0])-int(p2[0])
+                        y_dis = (int(p1[1])-int(p2[1]))
                         shift_x = x_dis/delay
                         shift_y = y_dis/delay
                         
@@ -122,8 +121,7 @@ class Module(module_base.Module):
                         if shift_x != 0:                   
                             shift_matches_x = shift_matches_x + shift_x 
                             shift_matches_y = shift_matches_y + shift_y     #odrzuc predkosci w pionie 
-                            i_matches = i_matches + 1        
-                            
+                            i_matches = i_matches + 1
                     if i_matches != 0:
                         shift_frame_x = shift_matches_x/i_matches
                         shift_frame_y = shift_matches_y/i_matches 
@@ -131,7 +129,26 @@ class Module(module_base.Module):
                         shift_frame_x = 0
                         shift_frame_y = 0
                         
+                    if shift_frame_x !=0:
+                        shift_tab_x.append(shift_frame_x)
+                        shift_tab_y.append(shift_frame_y)
+                        if len(shift_tab_x) > klasa_dokladnosci_predkosci:
+                            trash_x = shift_tab_x.pop(0)
+                            trash_y = shift_tab_y.pop(0)
+                            shift_min = 0.8*abs(average_shift_x)
+                            shift_max = 1.4*abs(average_shift_x)
+                        average_shift_x = sum(shift_tab_x)/len(shift_tab_x)
+                        print(average_shift_x)
+                        average_shift_y = sum(shift_tab_y)/len(shift_tab_y)
+                        there_is_no_move = 0
+                        #print(average_shift_y)
+                    else:
+                        there_is_no_move = there_is_no_move + 1
+
                     
+                    if there_is_no_move == 15:
+                        med_shift_tab.clear()
+                        there_is_no_move = 0
                     
                     if shift_frame_x !=0:
                         shift_tab_x.append(shift_frame_x)
@@ -139,6 +156,8 @@ class Module(module_base.Module):
                         if len(shift_tab_x) > klasa_dokladnosci_predkosci:
                             trash_x = shift_tab_x.pop(0)
                             trash_y = shift_tab_y.pop(0)
+                            shift_min = 0.8*abs(average_shift_x)
+                            shift_max = 1.4*abs(average_shift_x)
                         average_shift_x = sum(shift_tab_x)/len(shift_tab_x)
                         print(average_shift_x)
                         average_shift_y = sum(shift_tab_y)/len(shift_tab_y)
@@ -146,16 +165,9 @@ class Module(module_base.Module):
                         average_shift=[average_shift_x,average_shift_y]
                         standard_deviation_shift_x = numpy.var(shift_tab_x, ddof=1)
                         standard_deviation_shift_y = numpy.var(shift_tab_y, ddof=1)
-                        standard_deviation_shift =[standard_deviation_shift_x, standard_deviation_shift_y]
                         output_able = True
                         output_data['metrics']['velocity'] = average_shift
                         output_data['metrics']['standard deviation'] = standard_deviation_shift
-                    else:
-                        there_is_no_move = there_is_no_move + 1
-
-                    if there_is_no_move == 15:
-                        med_shift_tab.clear()
-                        there_is_no_move = 0
 
                     if debug == 1:
                         if output_able:
