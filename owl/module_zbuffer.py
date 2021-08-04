@@ -14,7 +14,7 @@ import stream_data
 import module_base
 import copy
 
-# Moduł do detekcji pociągów:
+# Moduł do detekcji odległości ruchomych obiektów od kamery:
 
 class Module(module_base.Module):
 
@@ -28,8 +28,6 @@ class Module(module_base.Module):
             "metrics" : stream_data.Producer
         }        
     def getDisp(self, imgL, imgR):
-        # logging.info(imgL.keys())
-        # logging.info(imgR.shape())
         left_for_matcher = cv2.cvtColor(imgL,  cv2.COLOR_BGR2GRAY)
         right_for_matcher = cv2.cvtColor(imgR, cv2.COLOR_BGR2GRAY)
 
@@ -52,44 +50,25 @@ class Module(module_base.Module):
         self.wls_filter.setLambda(wls_lambda)
         self.wls_filter.setSigmaColor(wls_sigma)
         self.right_matcher = cv2.ximgproc.createRightMatcher(self.left_matcher)
-        cv2.namedWindow('xddd', cv2.WINDOW_FREERATIO)
         output_task_data = input_task_data
         buffer_size = self.params.get("buffer_size", 2)
         frame_buffer = []
         output_stream = None
-        motion_state = False
-        frame_tail = 0
         for input_data in input_stream:
             begin = time.time()
-
             if len(frame_buffer) == buffer_size:
                 output_frame = copy.deepcopy(input_data)
-                cv2.imshow('xddd', frame_buffer[0]['color'])
-                cv2.waitKey(1)
                 output_frame['color'] = self.getDisp(frame_buffer[0]['color'], frame_buffer[buffer_size-1]['color'])
-                logging.debug("Output frame made")
-                
                 if not output_stream:
-                    logging.debug("Material begin")
                     output_stream = self.task_emit(output_task_data)
                     logging.debug("Output stream created")
                 output_stream.emit(output_frame)
-                logging.debug("Output frame send")
             frame_buffer.append(input_data)
-            logging.debug("Frame appended")
             if len(frame_buffer) > buffer_size:
-                logging.debug("OY! There's too much frames mate!")
                 frame_buffer.pop(0) # do śmieci
-                logging.debug("Frame yeet'ed")
         logging.debug("Material end")
         output_stream.end()
         output_stream = None
-        
-        # na wypadek zakończenia strumienia wejściowego podczas ruchu - emitujemy ogon
-        # if output_stream:
-        #     while frame_tail > 0 and len(frame_buffer) > 0:
-        #         output_stream.emit(frame_buffer.pop(0))              
-        #         frame_tail -= 1
 
 
 if __name__ == "__main__":
