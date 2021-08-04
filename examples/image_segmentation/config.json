@@ -1,0 +1,28 @@
+{
+    "comment" : "Źrdóła uwstawione są dla różnych wersji. Wybierz którą chczesz w supervisord.conf",
+
+    "module_source_cv" : {   
+        "output_queue" : "stage1",    
+        "stream_queue_limit" : 100,
+        "params": {
+            "device": "../../samples/motion_detection/out_3_4.mp4"
+        }
+    },
+
+    "module_image_segmentation" : { 
+        "input_queue" : "stage1",    
+        "stream_queue_limit" : 100,         
+        "output_queue" : "stage2",  
+        "params": {
+            "model_path": "model.h5"
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : "stage2",
+        "params": {
+            "window_name": "camera_view"
+        }        
+    }
+    
+}
