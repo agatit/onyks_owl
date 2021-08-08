@@ -9,6 +9,8 @@ import uuid
 import logging
 import redis
 import stream_composed
+from typing import Tuple
+
 
 class Producer():
     """Producent zdarzeń. Tworzy zdarzenia i umieszcza je w kolejach (kilku), zarządza powiązanymi strumieniami"""
@@ -40,12 +42,12 @@ class Producer():
         return self
 
     def __exit__(self, type, value, tb):
-        pass        
+        pass
 
     def emit(self, task_data: dict = {}) -> stream_composed.Producer:
         """umieszczenie zdarzenia w kolejce wyjściowej i utworzenie powiązanych strumieni"""
 
-        streams_queues = {}        
+        streams_queues = {}
 
         # buduje liste strumieni z pustymi tablicami kolejki
         for sd in self.streams_classes:
@@ -61,7 +63,7 @@ class Producer():
             streams_queues[sn] = stream_queue_name
 
         task = {
-            "stream_names" : task_stream_queues,
+            "stream_names": task_stream_queues,
             "task_data": task_data
         }
 
@@ -79,6 +81,7 @@ class Producer():
             self.queue_limit,
             self.stream_expire_time,            
             self.stream_timeout)
+
 
 class Consumer():
     """Konsument zdarzeń. Odczytuje zdarzenia z kojejki (jednej) i podłącza powiązane strumienie"""
@@ -100,13 +103,12 @@ class Consumer():
         self.stream_expire_time = stream_expire_time
         self.stream_timeout = stream_timeout
 
-
     def __iter__(self):
         return self
 
-    def __next__(self) -> (dict, stream_composed.Consumer):      
+    def __next__(self) -> Tuple[dict, stream_composed.Consumer]:
         """odczytanie zdarzenia z kolejki i podłączenie powiązanych strumieni"""
-        
+
         if self.task_queue != "":
             task_data = self.redis.blpop(f"owl:task_queue:{self.task_queue}", self.task_timeout)
             if not task_data is None:

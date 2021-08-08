@@ -21,8 +21,11 @@ class Module(module_base.Module):
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
 
+        output_task_data = {}
+
         cap = cv2.VideoCapture(self.params.get('device', 0))
-        with self.task_emit({}) as output_stream:
+        output_task_data['source_name'] = self.params.get('source_name',self.params.get('device', "unknown"))
+        with self.task_emit(output_task_data) as output_stream:
             ret,frame = cap.read()
             while(not frame is None): 
                 data = {

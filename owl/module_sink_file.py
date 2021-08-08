@@ -29,13 +29,21 @@ class Module(module_base.Module):
         'zapis strumienia do pliku'
 
         frame_no = 0
+        filename = ""
+        out = None
 
         for input_data in input_stream:
             frame = input_data['color']
             if frame_no == 0:
                 fourcc_str = self.params.get('fourcc', 'XVID')
-                fourcc = cv2.VideoWriter_fourcc(*fourcc_str)
-                filename = datetime.now().strftime(self.params.get('filename', 'output_%Y%m%d_%H%M%S_%f.avi'))
+                fourcc = cv2.VideoWriter_fourcc(*fourcc_str)          
+                      
+                filename = self.params.get('filename', input_task_data.get('source_name', 'noname'))
+                if 'railtrack' in input_task_data:
+                    filename += f"_{input_task_data['railtrack']}"
+                filename += datetime.now().strftime('_%Y%m%d_%H%M%S_%f.avi')
+                filename = os.path.join(self.params.get('path',"."), filename)
+
                 framerate = self.params.get('framerate', 20.0)
                 height, width = frame.shape[0:2]
                 logging.info(f"file {filename} writing started (fourcc:{fourcc_str} framerate:{framerate} size:{(width, height)})")
@@ -43,7 +51,8 @@ class Module(module_base.Module):
             out.write(frame)
             frame_no += 1  
         
-        out.release()
+        if out:
+            out.release()
         logging.info(f"file {filename} writing finished")
         
 

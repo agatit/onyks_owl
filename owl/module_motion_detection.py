@@ -33,11 +33,19 @@ class Module(module_base.Module):
         for rt in self.railtracks:                                    
             rt.setdefault("head_frames", 100)
             rt.setdefault("tail_frames", 100)
+            rt.setdefault("distance_treshold", 5)
             rt.setdefault("frames_treshold", 10)
-            rt.setdefault("pixels_treshold", 50000)
-            rt.setdefault("frame_gap", 5)
+            rt.setdefault("pixels_treshold", 50)
+            rt.setdefault("frame_gap", 2)
+            rt.setdefault("debug", False)
+            rt.setdefault("overlaps", [])
             rt['initial_mask'] = np.zeros(image_size, dtype=np.uint8)
             cv2.fillPoly(rt['initial_mask'], np.array([rt['roi']], dtype=np.int32), [255])              
+
+            if self.params['debug']:
+                cv2.imshow(rt['name'], rt['initial_mask'])
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
     
 
     def task_process(self, input_task_data, input_stream):    
@@ -58,47 +66,64 @@ class Module(module_base.Module):
             output_data = input_data
 
             if is_first_frame:
+                is_first_frame = False
+                input_size = input_data['color'].shape
                 for rt in self.railtracks:
-                    is_first_frame = False
-
-                    input_size = input_data['color'].shape
-                    rt['mask'] = cv2.resize(rt['initial_mask'], (input_size[1], input_size[0]))
+                    rt['mask'] = cv2.resize(rt['initial_mask'], (input_size[1], input_size[0]))                  
+                    pixel_count = cv2.countNonZero(rt['mask'])
+                    rt['pixel_count_treshold'] = int(pixel_count * rt['pixels_treshold'] / 100)
 
             for rt in self.railtracks:
                 if len(frame_buffer) == rt['head_frames']:
+                    # wyznaczanie obszaru ruchu
                     dframe = cv2.absdiff(input_data['color'], frame_buffer[-rt['frame_gap']]['color'])
                     gdframe = cv2.cvtColor(dframe, cv2.COLOR_BGR2GRAY)
-                    ret, bwframe = cv2.threshold(gdframe,10,255,cv2.THRESH_BINARY)
-                    masked_bwframe = cv2.bitwise_and(bwframe, rt['mask']) 
-                    pixel_count = cv2.countNonZero(masked_bwframe)
-                    if pixel_count > rt['pixels_treshold']:
-                        motion_frames += 1
-                        print(f"motion_frames: {motion_frames} frames in motion:{motion_frames/rt['frames_treshold']:.2f}")
+                    ret, bwframe = cv2.threshold(gdframe,rt['distance_treshold'],255,cv2.THRESH_BINARY)
+
+                    # maskowanie maską toru
+                    rt['masked_bwframe'] = cv2.bitwise_and(bwframe, rt['mask'])     
+
+                    pixel_count = cv2.countNonZero(rt['masked_bwframe'])
+                    
+                    # filtrowanie progiem liczby ruchomych ramek
+                    if pixel_count > rt['pixel_count_treshold']:
+                        rt['motion_frames'] += 1
                     else:
-                        motion_frames = 0                    
-                    motion_state = motion_frames >= rt['frames_treshold']
+                        rt['motion_frames'] = 0                    
+                    rt['motion_state'] = rt['motion_frames'] >= rt['frames_treshold']
+                    
+                    # sprawdzenie czy nie ma ruchu na torze zasłaniającym
+                    if rt['motion_state'] and any(
+                                            map(lambda r: r["motion_state"],
+                                            filter(lambda r: rt['name'] in r["overlaps"], self.railtracks))):
+                        rt['motion_state'] = False
+                        rt['motion_frames'] = 0
+
                 else:
-                    motion_state = False
-                            
-                #TODO: wybieranie na którym torze jest największy ruch            
-                output_task_data['railtrack'] = "0"
+                    rt['motion_state'] = False                                
 
-                if motion_state:
+                # obsługa wykrycia ruchu -> task
+                if rt['motion_state']:
                     if not rt['output_stream']:                        
-                        logging.debug("Motion begin")
-                        rt['output_stream'] = self.task_emit(output_task_data)                    
-                    left_frames = len(frame_buffer) + rt['tail_frames']
+                        logging.debug(f"Motion begin on {rt['name']}")
+                        output_task_data["railtrack"] = rt['name']
+                        rt['output_stream'] = self.task_emit(output_task_data)                                    
+                    rt['left_frames'] = min(rt['head_frames'], len(frame_buffer)) + rt['tail_frames']
 
-                if rt['output_stream']:
-                    if left_frames > 0:                
+                # generowanie i zakończenie strumieni wyjsciowych
+                if rt['output_stream']:                       
+                    if rt['left_frames'] > 0:   
+                        if self.params['debug'] and rt['masked_bwframe'] is not None:
+                            frame_buffer[0]['color'] = cv2.cvtColor(rt['masked_bwframe'], cv2.COLOR_GRAY2BGR)
                         rt['output_stream'].emit(frame_buffer[0])
-                        left_frames -= 1                                 
+                        rt['left_frames'] -= 1                               
                     else:
-                        logging.debug("Motion end")
+                        logging.debug(f"Motion end on {rt['name']}")
                         rt['output_stream'].end()
-                        rt['output_stream'] = None                    
+                        rt['output_stream'] = None                        
 
-            frame_buffer.append(output_data)
+            # rotacja bufora
+            frame_buffer.append(output_data)            
             if len(frame_buffer) > max_head_frames:                
                 frame_buffer.pop(0) # zbyt stara -> do śmieci
         
@@ -110,8 +135,12 @@ class Module(module_base.Module):
                 i = 0
                 while rt['left_frames'] > 0 and len(frame_buffer) > i:
                     i += 1
-                    rt['output_stream'].emit(frame_buffer[-i])              
-                    rt['left_frames'] -= 1                
+                    rt['output_stream'].emit(frame_buffer[-i])                        
+                    rt['left_frames'] -= 1   
+                rt['output_stream'].end()
+
+        if begin + 0.1 < time.time():
+            logging.debug(f"Processing time: {time.time() - begin}")
 
 
 if __name__ == "__main__":

@@ -28,13 +28,16 @@ class Module(module_base.Module):
     def task_process(self, input_task_data, input_stream ):
         'przetwarzanie strumieni'
         
+        output_task_data = {}
         path = self.params.get('path', ".")
         logging.info(f"read dir {path}")
         
         for filename in os.listdir(path):
             logging.info(f"read file {os.path.join(path,filename)}")
             cap = cv2.VideoCapture(os.path.join(path,filename))
-            with self.task_emit({}) as output_stream:
+            
+            output_task_data['source_name'] = filename
+            with self.task_emit(output_task_data) as output_stream:
                 ret,frame = cap.read()
                 while(not frame is None): 
                     data = {

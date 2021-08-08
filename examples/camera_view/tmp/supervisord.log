@@ -1,0 +1,22 @@
+2021-06-11 14:10:43,924 INFO process group added: 'sink'
+2021-06-11 14:10:43,924 INFO process group added: 'source'
+2021-06-11 14:10:48,643 INFO RPC interface 'supervisor' initialized
+2021-06-11 14:10:48,643 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-11 14:10:48,659 INFO supervisord started with pid 22088
+2021-06-11 14:10:49,159 INFO Spawned: 'win_0' with pid 14240
+2021-06-11 14:10:49,159 INFO Spawned: 'win_1' with pid 18336
+2021-06-11 14:10:49,159 INFO Spawned: 'dshow_0' with pid 8348
+2021-06-11 14:10:50,188 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-11 14:10:50,188 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-11 14:10:50,188 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-11 14:14:16,812 INFO process group added: 'sink'
+2021-06-11 14:14:16,812 INFO process group added: 'source'
+2021-06-11 14:14:21,369 INFO RPC interface 'supervisor' initialized
+2021-06-11 14:14:21,369 CRIT Server 'inet_http_server' running without any HTTP authentication checking
+2021-06-11 14:14:21,370 INFO supervisord started with pid 15960
+2021-06-11 14:14:21,886 INFO Spawned: 'win_0' with pid 19572
+2021-06-11 14:14:21,886 INFO Spawned: 'win_1' with pid 18680
+2021-06-11 14:14:21,886 INFO Spawned: 'dshow_0' with pid 20376
+2021-06-11 14:14:22,896 INFO success: win_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-11 14:14:22,896 INFO success: win_1 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-11 14:14:22,896 INFO success: dshow_0 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

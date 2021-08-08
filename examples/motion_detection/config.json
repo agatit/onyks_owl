@@ -5,7 +5,9 @@
         "output_queue" : "stage1",
         "stream_queue_limit" : 1000,
         "params": {
-            "url": "https://www.youtube.com/watch?v=pQKhS4F9sSM",
+            "desc": "Big Sandy, Texas USA (Static) - Virtual Railfan LIVE",
+            "name": "big_sandy",
+            "url": "https://www.youtube.com/watch?v=8-GPpIvdetA",
             "stream": "normal:mp4@640x360",
             "stream_": "normal:mp4@1920x1080"
         }
@@ -13,7 +15,7 @@
 
     "module_source_camera" : {   
         "output_queue" : "stage1",  
-        "stream_queue_limit" : 100,         
+        "stream_queue_limit" : 100,    
         "params": {
             "device": 1
         }
@@ -21,7 +23,7 @@
 
     "module_source_file" : {   
         "output_queue" : "stage1",  
-        "stream_queue_limit" : 100,         
+        "stream_queue_limit" : 100,       
         "params": {
             "device": 1
         }
@@ -29,35 +31,41 @@
     
     "module_source_dir" : {   
         "output_queue" : "stage1",  
-        "stream_queue_limit" : 100,  
+        "stream_queue_limit" : 100,
         "params": {
-            "path": "../../samples/railtracks/"
+            "path": "samples/motion_detection/big_sandy"
         }
     },    
 
     "module_motion_detection" : { 
         "input_queue" : "stage1",    
-        "stream_queue_limit" : 100,         
+        "stream_queue_limit" : 100,        
         "output_queue" : "stage2",  
         "params": {
+            "debug": 0,
             "frame_gap": 5,
-            "image_size": [1080, 1920],
+            "image_size": [360, 640],
             "railtracks": [
                 {
-                    "name": "tor1",
+                    "name": "LOW",
                     "head_frames": 250,
                     "tail_frames": 250,                                        
-                    "roi": [[30,565], [690,705], [620,610], [190,545]],
-                    "pixel_treshold": 30000,
-                    "frames_treshold": 10
+                    "roi": [[0, 324], [537, 186], [520, 157], [1, 251]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 2,
+                    "overlaps": ["UP"]
                 },
                 {
-                    "name": "tor2",
+                    "name": "UP",
                     "head_frames": 250,
-                    "tail_frames": 250,                    
-                    "roi": [[60,655], [660,825], [600,705], [190,610]],
-                    "pixel_treshold": 30000,
-                    "frames_treshold": 10
+                    "tail_frames": 250,                                        
+                    "roi": [[0, 249], [430, 172], [432, 136], [0, 178]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 2
                 }
             ]
         }
@@ -66,7 +74,15 @@
     "module_sink_win" : {   
         "input_queue" : "stage2",
         "params": {
-            "window_name": "camera_view"
+            "window_name": "test"
         }        
-    }
+    },
+
+    "module_sink_file" : {   
+        "input_queue" : "stage2",    
+        "params": {
+            "framerate": 30,
+            "fourcc": "XVID"
+        }        
+    }       
 }

@@ -32,61 +32,70 @@ class Module(module_base.Module):
     def get_segment(self, url):
 
         m3u8_obj = m3u8.load(url)    
-        stream_segment = m3u8_obj.segments[-1] #domyślnie najnowszy
-        segment_no = 0
-
-        # wybór segmentu
+        segment = m3u8_obj.segments[-1] #domyślnie najnowszy
+        segment_no = len(m3u8_obj.segments)-1
+        
         if self.last_segment:                                      
-            for i in range(len(m3u8_obj.segments)):
-                if m3u8_obj.segments[i].uri == self.last_segment.uri:
-                    if i+1 < len(m3u8_obj.segments):
-                        stream_segment = m3u8_obj.segments[i+1]
-                        segment_no = i+1
-                    else:
-                        stream_segment = None                            
-                    break                      
-
-        # oczekiwanie na nowy            
-        if not stream_segment:
-            sleep_time = 0.1
-            if self.last_segment_time:
-                sleep_time = self.last_segment.duration - (datetime.now() - self.last_segment_time).total_seconds() + 0.1
-            if sleep_time <= 0:
+            # bieżący segment jest najnowszy - oczekiwanie na nowy            
+            while m3u8_obj.segments[-1].uri == self.last_segment.uri:
                 sleep_time = 0.1
-            logging.warning(f"Need to wait for segment {sleep_time}s")
-            time.sleep(sleep_time)
-            return None        
+                if self.last_segment_time:
+                    sleep_time = self.last_segment.duration - (datetime.now() - self.last_segment_time).total_seconds() + 0.1
+                if sleep_time <= 0:
+                    sleep_time = 0.1
+                logging.warning(f"Need to wait for segment {sleep_time}s")
+                time.sleep(sleep_time)
+                m3u8_obj = m3u8.load(url)
 
-        # sprawdzenie ciągłości
-        if self.last_segment \
-                and self.last_segment.current_program_date_time \
-                and self.last_segment.duration \
-                and stream_segment.current_program_date_time \
-                and stream_segment.current_program_date_time  \
-                    - (self.last_segment.current_program_date_time \
-                    + timedelta(seconds=self.last_segment.duration)) \
-                    > timedelta(seconds=1):
-            logging.error(f"Segment(s) lost from {self.last_segment.current_program_date_time + timedelta(seconds=self.last_segment.duration)} to {stream_segment.current_program_date_time}")
+            # szukanie segmentu następnego
+            segment = None
+            for i in range(len(m3u8_obj.segments)-1):
+                if m3u8_obj.segments[i].uri == self.last_segment.uri: # może lepiej sprawdzać po czasie?
+                    segment_no = i+1
+                    segment = m3u8_obj.segments[segment_no]                    
+                    break
+            
+            if not segment:
+                segment_no = 0
+                segment = m3u8_obj.segments[segment_no]                
 
-        self.last_segment = stream_segment
+                # sprawdzenie ciągłości
+                if self.last_segment.current_program_date_time \
+                        and self.last_segment.duration \
+                        and segment.current_program_date_time \
+                        and segment.current_program_date_time  \
+                            - (self.last_segment.current_program_date_time \
+                            + timedelta(seconds=self.last_segment.duration)) \
+                            > timedelta(seconds=1):
+                    logging.error(f"Segment(s) lost from {self.last_segment.current_program_date_time + timedelta(seconds=self.last_segment.duration)} to {segment.current_program_date_time}")                        
+                    self.last_segment = None
+                    return None, -1             
+
+        self.last_segment = segment  
+        if self.last_segment_time:
+            measured_time = (datetime.now() - self.last_segment_time).total_seconds()
+        else:
+            measured_time = 0
+        logging.debug(f"{segment_no}/{len(m3u8_obj.segments)} {segment.current_program_date_time} {segment.duration} ({measured_time:.1f})")
         self.last_segment_time = datetime.now()
-        logging.debug(f"{segment_no}/{len(m3u8_obj.segments)} {stream_segment.current_program_date_time} {stream_segment.duration}")
-        return stream_segment
-
+        
+        return segment, len(m3u8_obj.segments) - segment_no - 1
 
 
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
+        output_task_data = {}
 
-        with self.task_emit({}) as output_stream:
+        output_task_data['source_name'] = self.params.get('source_name',self.last_segment.title)
+        with self.task_emit(output_task_data) as output_stream:
             
             while True:                
-                stream_segment = self.get_segment(self.params['url'])
-                if not stream_segment:
-                    continue
+                segment, segments_left = self.get_segment(self.params['url'])
+                if not segment:                    
+                    return
 
                 # dekodowanie
-                video_url = urljoin(self.params['url'], stream_segment.uri)
+                video_url = urljoin(self.params['url'], segment.uri)
                 video_av = av.open(video_url, "r")
                 video_av.streams.video[0].thread_type = 'AUTO'
     

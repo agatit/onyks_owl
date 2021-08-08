@@ -6,6 +6,7 @@
         "stream_queue_limit" : 250,
         "params": {
             "desc":"Deshler, Ohio USA - Virtual Railfan LIVE",
+            "name": "deshler",
             "url": "https://www.youtube.com/watch?v=KM1ivV-yfo0",
             "stream": "normal:mp4@640x360",
             "stream_": "normal:mp4@1920x1080"
@@ -14,13 +15,34 @@
 
     "motion_detection_1" : { 
         "input_queue" : "stage1_1",    
-        "stream_queue_limit" : 500,         
+        "stream_queue_limit" : 10000,         
         "output_queue" : "stage2",  
         "params": {
-            "head_frames": 250,
-            "tail_frames": 250,
-            "pixels_treshold": 200000,
-            "frame_gap": 10            
+            "debug": 0,
+            "frame_gap": 5,
+            "image_size": [360, 640],
+            "railtracks": [
+                {
+                    "name": "LR",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[0, 117], [0, 240], [442, 200], [323, 106]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 2
+                },
+                {
+                    "name": "TD",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[456, 200], [637, 316], [638, 200], [586, 186]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 2
+                }                
+            ]
         }
     },    
 
@@ -29,6 +51,7 @@
         "stream_queue_limit" : 250,
         "params": {
             "desc": "Plant City, Florida, USA | Virtual Railfan LIVE",
+            "name": "plant_city",
             "url": "https://www.youtube.com/watch?v=wLC-Zg33RYc",
             "stream": "normal:mp4@640x360",
             "stream_": "normal:mp4@1920x1080"
@@ -37,22 +60,43 @@
 
     "motion_detection_2" : { 
         "input_queue" : "stage1_2",    
-        "stream_queue_limit" : 500,         
-        "output_queue" : "stage2",
+        "stream_queue_limit" : 10000,        
+        "output_queue" : "stage2",  
         "params": {
-            "head_frames": 500,
-            "tail_frames": 500,
-            "pixels_treshold": 50000,
-            "frame_gap": 5
+            "debug": 0,
+            "frame_gap": 5,
+            "image_size": [360, 640],
+            "railtracks": [
+                {
+                    "name": "TD",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[1, 235], [1, 228], [166, 285], [4, 356]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 5,
+                    "distance_treshold": 5,
+                    "frame_gap": 2
+                },
+                {
+                    "name": "LR",
+                    "head_frames": 250,
+                    "tail_frames": 250,                    
+                    "roi": [[0, 233], [1, 177], [636, 307], [400, 359]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 5,
+                    "distance_treshold": 10
+                }
+            ]
         }
-    },    
+    },   
     
     "source_3" : {   
         "output_queue" : "stage1_3",
         "stream_queue_limit" : 250,
         "params": {
             "desc": "East London Barking Cam 1a",
-            "url": "https://www.youtube.com/watch?v=unES4B7kTMY",
+            "name": "east_london",
+            "url": "https://www.youtube.com/watch?v=RuaYyao1PR0",
             "stream": "normal:mp4@640x360",
             "stream_": "normal:mp4@1920x1080"
         }
@@ -60,13 +104,57 @@
     
     "motion_detection_3" : { 
         "input_queue" : "stage1_3",    
-        "stream_queue_limit" : 500,         
+        "stream_queue_limit" : 10000,         
         "output_queue" : "stage2",  
         "params": {
-            "head_frames": 250,
-            "tail_frames": 250,
-            "pixels_treshold": 200000,
-            "frame_gap": 25
+            "debug": 0,
+            "frame_gap": 5,
+            "image_size": [360, 640],
+            "railtracks": [
+                {
+                    "name": "1",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[638, 173], [208, 134], [207, 120], [638, 93]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 5,
+                    "distance_treshold": 5,
+                    "frame_gap": 2,
+                    "overlaps": ["2","3","4"]
+                },
+                {
+                    "name": "2",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[639, 211], [639, 250], [235, 157], [239, 152]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 2,
+                    "overlaps": ["3","4"]
+                },
+                {
+                    "name": "3",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[637, 308], [637, 252], [208, 153], [211, 164]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 5,
+                    "distance_treshold": 5,
+                    "frame_gap": 2,
+                    "overlaps": ["4"]
+                },
+                {
+                    "name": "4",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[304, 359], [147, 173], [148, 145], [638, 305], [638, 358]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 5,
+                    "distance_treshold": 5,
+                    "frame_gap": 2
+                }
+            ]
         }
     },    
 
@@ -75,6 +163,7 @@
         "stream_queue_limit" : 250,
         "params": {
             "desc": "York ROC Camera No.1, Yorkshire UK - in Partnership with Network Rail | Railcam LIVE",
+            "name": "york",
             "url": "https://www.youtube.com/watch?v=zTl7MUeMDMk",
             "stream": "normal:mp4@640x360",
             "stream_": "normal:mp4@1920x1080"
@@ -83,13 +172,101 @@
     
     "motion_detection_4" : { 
         "input_queue" : "stage1_4",    
-        "stream_queue_limit" : 500,         
+        "stream_queue_limit" : 10000,         
         "output_queue" : "stage2",  
         "params": {
-            "head_frames": 500,
-            "tail_frames": 500,
-            "pixels_treshold": 10000,
-            "frame_gap": 15
+            "debug": 0,
+            "frame_gap": 5,
+            "image_size": [360, 640],
+            "railtracks": [
+                {
+                    "name": "1",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[134, 217], [134, 190], [423, 299], [383, 319]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 5,
+                    "overlaps": ["2"]
+                },
+                {
+                    "name": "2",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[144, 195], [587, 357], [611, 325], [156, 177]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 5,
+                    "overlaps": ["3"]
+                },
+                {
+                    "name": "3",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[638, 329], [638, 290], [184, 154], [178, 169]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 5,
+                    "overlaps": ["4"]
+                },
+                {
+                    "name": "4",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[638, 287], [637, 266], [209, 134], [202, 157]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 5,
+                    "overlaps": ["5"]
+                },
+                {
+                    "name": "5",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[639, 265], [639, 254], [290, 155], [290, 162]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 5,
+                    "overlaps": ["6"]
+                },
+                {
+                    "name": "6",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[639, 252], [639, 228], [296, 137], [294, 148]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 5,
+                    "overlaps": ["7"]
+                },
+                {
+                    "name": "7",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[639, 226], [638, 211], [305, 130], [303, 138]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 5,
+                    "overlaps": ["8"]
+                },
+                {
+                    "name": "8",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[639, 209], [639, 187], [313, 121], [311, 132]],
+                    "pixels_treshold": 25,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 5
+                }
+            ]
         }
     },  
     
@@ -98,6 +275,7 @@
         "stream_queue_limit" : 250,
         "params": {
             "desc": "Big Sandy, Texas USA (Static) - Virtual Railfan LIVE",
+            "name": "big_sandy",
             "url": "https://www.youtube.com/watch?v=8-GPpIvdetA",
             "stream": "normal:mp4@640x360",
             "stream_": "normal:mp4@1920x1080"
@@ -106,14 +284,35 @@
     
     "motion_detection_5" : { 
         "input_queue" : "stage1_5",    
-        "stream_queue_limit" : 500,         
+        "stream_queue_limit" : 10000,         
         "output_queue" : "stage2",  
         "params": {
-            "head_frames": 250,
-            "tail_frames": 250,
-            "pixels_treshold": 20000,
-            "frames_treshold": 15,
-            "frame_gap": 10
+            "debug": 0,
+            "frame_gap": 5,
+            "image_size": [360, 640],
+            "railtracks": [
+                {
+                    "name": "LOW",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[0, 324], [537, 186], [520, 157], [1, 251]],
+                    "pixels_treshold": 15,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 2,
+                    "overlaps": ["UP"]
+                },
+                {
+                    "name": "UP",
+                    "head_frames": 250,
+                    "tail_frames": 250,                                        
+                    "roi": [[0, 249], [430, 172], [432, 136], [0, 178]],
+                    "pixels_treshold": 15,
+                    "frames_treshold": 10,
+                    "distance_treshold": 5,
+                    "frame_gap": 2
+                }
+            ]
         }
     },     
 
@@ -127,7 +326,7 @@
     "module_sink_file" : {   
         "input_queue" : "stage2",    
         "params": {
-            "filename": "out/captured_%Y%m%d_%H%M%S_%f.avi",
+            "path": "out",
             "framerate": 30,
             "fourcc": "XVID"
         }        

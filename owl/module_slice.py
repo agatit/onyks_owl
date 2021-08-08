@@ -46,7 +46,7 @@ class Module(module_base.Module):
                 metrics["frame_no"] = frame_no
                 output_data = {"color" : input_data['color'], "metrics" : metrics}                      
                 output_stream.emit(output_data) 
-                frame_no += 1  
+                frame_no += 1
             else:      
                 output_stream.end()  
                 logging.info("end of slice")

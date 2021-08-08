@@ -20,7 +20,7 @@ class Module:
         self.terminate = False
 
         self.module_name = self.__module__
-        if  self.module_name == '__main__':
+        if self.module_name == '__main__':
             filename = sys.modules[self.__module__].__file__
             self.module_name = os.path.splitext(os.path.basename(filename))[0]        
         
@@ -51,10 +51,22 @@ class Module:
 
             self.stream_queue_limit = self.config.get('stream_queue_limit', 100)
             self.task_expire_time = self.config.get('task_expire_time', 10)
-            self.task_timeout = self.config.get('task_timeout', 120)
-            self.stream_expire_time = self.config.get('stream_expire_time', 10)
-            self.stream_timeout = self.config.get('stream_timeout', 5)            
+            self.stream_expire_time = self.config.get('stream_expire_time', self.task_expire_time)
+            self.task_timeout = self.config.get('task_timeout', self.stream_expire_time)            
+            self.stream_timeout = self.config.get('stream_timeout', self.stream_expire_time)            
             self.params = self.config.get("params", {})
+
+            if self.task_expire_time > self.task_timeout:
+                logging.error("task_expire_time CANNOT be bigger than task_timeout")
+                exit()
+
+            if self.stream_expire_time > self.stream_timeout:
+                logging.error("stream_expire_time CANNOT be bigger than stream_timeout")
+                exit()                
+
+            if self.task_expire_time > self.stream_expire_time:
+                logging.error("task_expire_time CANNOT be bigger than stream_expire_time")
+                exit()                
 
             self.redis = redis.Redis()
 
@@ -114,7 +126,7 @@ class Module:
                         self.redis.set(f"owl:module:{self.module_name}:task", json.dumps(task), ex=self.task_expire_time)
                         self.task_process(task_data, input_stream)                                
                     else:
-                        logging.info("Nothing in task queue")
+                        logging.debug("Nothing in task queue")
         except Exception as e:
             logging.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
 

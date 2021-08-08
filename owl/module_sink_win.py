@@ -27,9 +27,13 @@ class Module(module_base.Module):
 
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
+
+        window_name = self.params.get('window_name', input_task_data.get('source_name', 'noname'))
+        if 'railtrack' in input_task_data:
+            window_name = f"{window_name}_{input_task_data['railtrack']}"
         
         for input_data in input_stream:            
-            cv2.imshow(self.params.get('window_name', 'noname'), input_data['color'])
+            cv2.imshow(window_name, input_data['color'])
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         cv2.destroyAllWindows()

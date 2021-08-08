@@ -1,0 +1,3 @@
+2021-06-11 14:14:22 INFO module_source_dshow started.
+2021-06-11 14:14:22 INFO config file: c:\agat_source\onyks_owl\examples\camera_view/config.json section module_source_dshow
+2021-06-11 14:14:22 INFO task emited: {'stream_names': {'color': 'stage1:b935437026b0489bb65f0effe4ff9488:color', 'metrics': 'stage1:b935437026b0489bb65f0effe4ff9488:metrics'}, 'task_data': {}}
