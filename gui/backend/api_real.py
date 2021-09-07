@@ -1,6 +1,7 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 import json
+import os
 
 # TODO inna klasa na zczytywanie plików
 # TODO zrobienie requesta pod te pliki
@@ -20,10 +21,11 @@ import json
 app = Flask(__name__)
 api = Api(app)
 
-filename = './config_default.json'
+filename = os.path.join(os.path.abspath(os.path.dirname(__file__)),'./config_default.json')
 MODULES = []
 CONFIG_DEFAULT = {} # TODO doprowadzić do używalności "config_default.json"
 SETTINGS = {}
+
 # TODO czytanie plików log'ów
 def data_init(filename):
     ###  CONFIG_DEFAULT  ###
@@ -49,21 +51,49 @@ class RestApp(Resource):
     def get(self):
         return CONFIG_DEFAULT
     def put(self):
-        CONFIG_DEFAULT = request.form['data'] # TODO tu się pewnie rypnie
+        CONFIG_DEFAULT = request.form['data']
         return CONFIG_DEFAULT
 
 class Module_x(Resource):
     def get(self, module_id):
         return {module_id:CONFIG_DEFAULT[module_id]}
     def put(self, module_id):
-        CONFIG_DEFAULT[module_id] = request.form['data'] # TODO tu się pewnie rypnie
+        print(type(request.form))
+        print(request)
+        # data = request.form.to_dict(flat=False)
+        data = request.form.copy().to_dict()
+        print(data)
+        '''
+        parser = reqparse.RequestParser()
+        for x in CONFIG_DEFAULT[module_id].keys():
+            print(x)
+            parser.add_argument(x)
+        args = parser.parse_args()
+        print('Oto GET data - ', end='')
+        print(args)
+        CONFIG_DEFAULT[module_id] = args
+        '''
         return CONFIG_DEFAULT[module_id]
 
 class Parameter(Resource):
-    def get(self, module_id, parameter): # TODO tu się nie rypnie, tylko rozjebie
+    def get(self, module_id, parameter):
         return CONFIG_DEFAULT[module_id][parameter]
     def put(self, module_id, parameter):
-        CONFIG_DEFAULT[module_id][parameter] = request.form['data'] 
+        parser = reqparse.RequestParser()
+        parser.add_argument('data')
+        # TODO  - stworzyć 'default_config'
+        #       - zacząć na jego podstawie robić walidację, żeby mi user nie wstawiał idiotyzmów, np 'hwdp' do Int'a
+        #       - znaczy 'default_config' jakby okej, ale czy walidacja u mnie czy na froncie...
+        # print(request)
+        args = parser.parse_args()
+        print('Oto GET data - ', end='')
+        print(args)
+        # TODO nno działać toto działa, ale no... Czy to ma sens? Czy uwzględniłem wszystkie przypadki?
+        try:
+            put_in = int(args['data'])
+        except:
+            put_in = args['data']
+        CONFIG_DEFAULT[module_id][parameter] = put_in
         return CONFIG_DEFAULT[module_id][parameter]
 
 class Settings(Resource): # TODO kaman, od chłopa będę pobierał listę modułów? Co ten gówniak niby wie?!?!?
