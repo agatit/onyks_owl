@@ -10,7 +10,7 @@ class Files():
         examples = os.listdir(path=MY_PATH)
         self.examples = {}
         for x in examples:
-            if x != 'split':
+            if x != 'split': # TODO Wyjątek na jeden moduł, do wywalenia
                 self.examples[x] = Example(x)
     def get_names(self):
         return self.examples.keys()
