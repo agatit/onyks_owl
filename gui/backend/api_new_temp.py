@@ -1,12 +1,25 @@
+from file_read_new_temp import Files
 # TODO "api_new_temp", "api_real"... Nno te nazwy poogarniać...
 
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import json
-
+# TODO (może wraz z frontem za jakiś czas) eleganckie środowisko uruchomieniowe
+    # w sensie niech by to było ostatecznie na Dockerze, Kubernetsie, czy w kartonie.
+    # Ale już teraz zacząć się zastanawiać nad takim ogarnięciem "podprojektów" i instrukcji do nich, żeby zaraz potem wpisać jedną/dwie linijki na spokojnie, a nie dzwonić potem do każdego o 4 nad ranem że coś skiepścił a chciał tylko popaczeć...
 
 app = Flask(__name__)
 api = Api(app)
+data = Files()
+# TODO po podorabianiu NULL'i, tutaj przy NULL zwracać ładny komunikat
+# TODO a przy powodzeniach kod 200, czy coś w ten tegies
+# TODO czy ja w ogóle regulaminowe klamerkowo etc. dane teraz zwracam?
+    # postarajmy się żeby w tym drugim pliku było to obcykane
+# TODO co zwraca POST/PUT?
+    # Z tutka tak wygląda jakby "to co GET, ale poziom niżej".
+# A DELETE?
+    # "should return the updated resource" gdzieś Stack mamrocze. Raczej tego się trzymam
+    # Jakby, i tak się bym trzymał, ale miałem nadzieję znaleźć jakieś profesjonalniejsze poprawcie w tej sprawie :ppp
 
 """
 Kolejki zdarzeń z mapowaniem strumieni (do rozważenia, w tej chwili pliki config nie przewidują takiej struktury):
@@ -15,108 +28,192 @@ Kolejki zdarzeń z mapowaniem strumieni (do rozważenia, w tej chwili pliki conf
 /owlapi/projects(<id>)/task_queues(id)/params
 /owlapi/projects(<id>)/task_queues(id)/params(<name>)
 /owlapi/projects(<id>)/task_queues(id)/mapping - tablica par wejście-wyjście
-
 """
 
 class Projects(Resource):
+    '''
+    A więc jak stworzyć projekt?
+    Patrząc na to co teraz mam, to "projektem" byłby nowy folder z foderu "examples", z 'config.json', skryptami odpalającymi, i 'supervisord.conf'
+    Z JEDNYM skryptem odpalającym
+    I BEZ 'supervisord.conf', bo odchodzimy od tego 
+    Dobra, tutaj wystawiał będę same nazwy projektów
+    TODO foldery z 'examples' wczytywać jako "projekty"
+    '''
     def get(self):
-        pass
+        return data.get_projects()
     def post(self):
-        pass
+        # Pewnie stworzyć projekt o "tej" nazwie, "Files" ogarniają jakiś basic config...
+        parser = reqparse.RequestParser()
+        parser.add_argument('name')
+        name = parser.parse_args()
+        data.create_project(name)
+        return data.get_projects()
 class Project_x(Resource):
-    pass
+    '''
+    Nno pojedyńczy projekt, ale co zwracać?
+    'config.json'?
+    'state' projektu?
+    '''
+    def get(self, project_id):
+        return data.get_project_conf(project_id)
 
 class Modules(Resource):
-    pass
+    '''
+    TODO GET, POST listowanie/dodawanie
+    Lista modułów w projekcie
+        czyli elementów z 'owl'
+            czyli pierwszych elementów z 'config.json'
+    '''
+    def get(self, project_id):
+        return data.get_modules(project_id)
+    def post(self, project_id, name):
+        parser = reqparse.RequestParser()
+        parser.add_argument('name')
+        name = parser.parse_args()
+        data.create_module(project_id, name)
+        return data.get_modules(project_id)
+
 class Module_x(Resource):
-    pass
+    '''
+    TODO GET,DELETE - info/usuwanie
+    Na 'delete' skasowanie modułu
+    Na 'get' info o module
+        czyli wchodzimy głębiej w słownik/configs
+    '''
+    def get(self, project_id, module_id):
+        return data.get_module_data(project_id, module_id)
+    def delete(self, project_id, module_id):
+        data.delete_module(project_id, module_id)
+        return data.get_module_data(project_id, module_id)
 class Input_queue(Resource):
+    '''
+    TODO GET,PUT - nazwa kolejki (wydzielone określanie kolejek do rysowania połaczeń)
+    '''
     pass
 class Output_queue(Resource):
+    '''
+    TODO GET,PUT - nazwa kolejki (wydzielone określanie kolejek do rysowania połaczeń)
+    W obu zwrócenie nazwy kolejki. Albo NULLa jeżeli np. inputa nie ma, bo zamiast tego jest 'input device' czy coś
+    '''
     pass
 class Param_defs(Resource):
+    '''
+    TODO GET - lista paramatrów z typami, mogą być typy złożone do których będzie trzeba zrobić edytory
+    'params' + typ danych
+        kłania się walidacja i rzutowanie
+    tylko skąd wziąć typ danych?
+        musi być zdefiniowany wcześniej, szczególnie jeżeli typy mają być "złożone"...
+    '''
     pass
 class Params(Resource):
-    pass
+    '''
+    TODO GET - lista paramatrów z wartościami
+    samo 'params'
+    '''
+    def get(self, project_id, module_id):
+        return data.get_module_params(project_id, module_id)
 class Parameter(Resource):
-    pass
+    '''
+    TODO GET,PUT - zmiana wartości parametru
+    sam pojedyńczy 'params'
+    '''
+    def get(self, project_id, module_id, parameter):
+        return data.get_module_parameter(project_id, module_id, parameter)
+    def put(self, project_id, module_id, parameter):
+        parser = reqparse.RequestParser()
+        parser.add_argument('value')
+        value = parser.parse_args()
+        # TODO gdzieś w tej okolicy walidacja/porównanie typu otrzymanej wartości z typem który być powinien
+        data.set_module_parameter(project_id, module_id, parameter, value)
+        return data.get_module_parameter(project_id, module_id, parameter)
+
 class Module_state(Resource):
-    pass
+    '''
+    czyli dorabiamy 'SETTINGS'/metadane 
+        ale nie do całego 'projektu', tylko do 'modułów'
+        ... nie. W 'configu' raczej nie ma co tego trzymać...
+        Oddzielnie jakoś, w samej 'bazie danych'
+        Nawet nie w bazie. Tutaj, w klasie!
+    TODO GET,PUT - czy działa
+    Metadata #1 - status. ON/OFF
+    '''
+    def get(self, project_id, module_id):
+        return data.get_module_state(project_id, module_id)
+    def put(self, project_id, module_id):
+        pass
+
+# TODO te poniżej START, STOP i RESTART, to żeby jakieś ogarnianie było że jak jest wystartowane, to raczej START nie zadziała. Albo RESTART jak jest STOP odpalony
+# Zwracać pewnie będą kod && MODULE_STATE
+# ...
+# Może w drugim pliku walidacja, i na returnie MODULE_STATE i opinia(udało się/nie udało się)
+# Chociaż taka skomplikowana procedura, przy zmianie wartości zero-jedynkowej...
+# OWSZEM! JAKIŚ PROBLEM?
+# Ale fakt, jakieś toto trochę skomplikowane, do tego się przysiądzie po zrobieniu poprzednich modułów
+
 class Module_start(Resource):
-    pass
+    '''
+    TODO POST
+    '''
+    def post(self, project_id, module_id):
+        pass
 class Module_stop(Resource):
-    pass
+    '''
+    TODO POST
+    Zmiana statusu
+    '''
+    def post(self, project_id, module_id):
+        pass
 class Module_restart(Resource):
-    pass
+    '''
+    TODO POST
+    If ON: turn OFF, turn ON; else NULL;
+    '''
+    def post(self, project_id, module_id):
+        pass
 class Module_log(Resource):
-    pass
+    '''
+    TODO GET - pobranie loga. w parametrze może być ilośc wpisów
+    Tylko gdzie/skąd będą logi, jak nie z supervisora?
+    '''
+    def get(self, project_id, module_id):
+        pass
 class Task_queue_length(Resource):
+    '''
+    Ilość tasków w kolejce
+    albo "Ile modułów korzysta z kolejki?"
+    '''
+    # C H O C I A Ż
+    # Jak to będzie ogarniane inaczej niedługo, to pewnie nie będę musiał główkować nad zczutywaniem parametrów po kolei i domyślaniu się, tylko zczytam np. inną tabelę z bazy
     pass
 class Task_queue_flush(Resource):
+    '''
+    ???
+    '''
     pass
-class Module_x(Resource):
-    pass
-class Module_x(Resource):
-    pass
-class Module_x(Resource):
-    pass
-class Module_x(Resource):
-    pass
+
 
 ### ZARZĄDZANIE PROJEKTAMI ###
-api.add_resource(Projects,          '/owlapi/projects')                                                     # TODO widok 'projektów'
-# A więc jak stworzyć projekt?
-# Patrząc na to co teraz mam, to "projektem" byłby nowy folder z foderu "examples", z 'config.json', skryptami odpalającymi, i 'supervisord.conf'
-# Z JEDNYM skryptem odpalającym
-# I BEZ 'supervisord.conf', bo odchodzimy od tego 
-# Dobra, tutaj wystawiał będę same nazwy projektów
-# TODO foldery z 'examples' wczytywać jako "projekty"
-                                                                                                            # TODO GET & POST
-api.add_resource(Project_x,         '/owlapi/projects<string:project_id>')                                  # TODO pojedyńczy projekt 
-# Nno pojedyńczy projekt, ale co zwracać?
-# 'config.json'?
-# 'state' projektu?
+api.add_resource(Projects,          '/owlapi/projects')
+api.add_resource(Project_x,         '/owlapi/projects<string:project_id>')
 
 ### EDYCJA TORU PRZETWARZANIA ###
-api.add_resource(Modules,           '/owlapi/<string:project_id>/modules')                                  # TODO GET, POST listowanie/dodawanie
-# Lista modułów w projekcie
-    # czyli elementów z 'owl'
-        # czyli pierwszych elementów z 'config.json'
-api.add_resource(Module_x,          '/owlapi/<string:project_id>/<string:module_id>')                       # TODO GET,DELETE - info/usuwanie
-# Na 'delete' skasowanie modułu
-# Na 'get' info o module
-    # czyli wchodzimy głębiej w słownik/configs
-api.add_resource(Input_queue,       '/owlapi/<string:project_id>/<string:module_id>/input_queue')           # TODO GET,PUT - nazwa kolejki (wydzielone określanie kolejek do rysowania połaczeń)
-api.add_resource(Output_queue,      '/owlapi/<string:project_id>/<string:module_id>/output_queue')          # TODO GET,PUT - nazwa kolejki (wydzielone określanie kolejek do rysowania połaczeń)
-# W obu zwrócenie nazwy kolejki. Albo NULLa jeżeli np. inputa nie ma, bo zamiast tego jest 'input device' czy coś
-
-api.add_resource(Param_defs,        '/owlapi/<string:project_id>/<string:module_id>/param_defs')            # TODO GET - lista paramatrów z typami, mogą być typy złożone do których będzie trzeba zrobić edytory
-# 'params' + typ danych
-    # kłania się walidacja i rzutowanie
-api.add_resource(Params,            '/owlapi/<string:project_id>/<string:module_id>/params')                # TODO GET - lista paramatrów z wartościami
-# samo 'params'
-api.add_resource(Parameter,         '/owlapi/<string:project:id>/<string:project_id>/<string:parameter>')   # TODO GET,PUT - zmiana wartości parametru
-# sam pojedyńczy 'params'
+api.add_resource(Modules,           '/owlapi/<string:project_id>/modules')
+api.add_resource(Module_x,          '/owlapi/<string:project_id>/<string:module_id>')
+api.add_resource(Input_queue,       '/owlapi/<string:project_id>/<string:module_id>/input_queue')
+api.add_resource(Output_queue,      '/owlapi/<string:project_id>/<string:module_id>/output_queue')
+api.add_resource(Param_defs,        '/owlapi/<string:project_id>/<string:module_id>/param_defs')
+api.add_resource(Params,            '/owlapi/<string:project_id>/<string:module_id>/params')
+api.add_resource(Parameter,         '/owlapi/<string:project:id>/<string:project_id>/<string:parameter>')
 
 ### URUCHOMIENIE/DEBUG ###
-# czyli dorabiamy 'SETTINGS'/metadane 
-    # ale nie do całego 'projektu', tylko do 'modułów'
-    # ... nie. W 'configu' raczej nie ma co tego trzymać...
-    # Oddzielnie jakoś, w samej 'bazie danych'
-    # Nawet nie w bazie. Tutaj, w klasie!
-api.add_resource(Module_state,      '/owlapi/<string:project_id>/<string:module_id>/state')                 # TODO GET,PUT - czy działa
-# Metadata #1 - status. ON/OFF
-api.add_resource(Module_start,      '/owlapi/<string:project_id>/<string:module_id>/start')                 # TODO POST
-api.add_resource(Module_stop,       '/owlapi/<string:project_id>/<string:module_id>/stop')                  # TODO POST
-# Zmiana statusu
-api.add_resource(Module_restart,    '/owlapi/<string:project_id>/modules<string_module_id>/restart')        # TODO POST
-# If ON: turn OFF, turn ON; else NULL;
-api.add_resource(Module_log,        '/owlapi/<string:project_id/<string:module_id>/log')                    # TODO GET - pobranie loga. w parametrze może być ilośc wpisów
-# Tylko gdzie/skąd będą logi, jak nie z supervisora?
+
+api.add_resource(Module_state,      '/owlapi/<string:project_id>/<string:module_id>/state')
+api.add_resource(Module_start,      '/owlapi/<string:project_id>/<string:module_id>/start')
+api.add_resource(Module_stop,       '/owlapi/<string:project_id>/<string:module_id>/stop')
+api.add_resource(Module_restart,    '/owlapi/<string:project_id>/modules<string_module_id>/restart')
+api.add_resource(Module_log,        '/owlapi/<string:project_id/<string:module_id>/log')
 api.add_resource(Task_queue_length, '/owlapi/<string:project_id>/<string:task_queue_id>/length')
-# Ilość tasków w kolejce
-    # albo "Ile modułów korzysta z kolejki?"
 api.add_resource(Task_queue_flush,  '/owlapi/<string:project_id>/<string:task_queue_id>/flush')
-# ???
+
 if __name__ == '__main__':
     app.run(debug=True)
