@@ -29,7 +29,10 @@ Kolejki zdarzeń z mapowaniem strumieni (do rozważenia, w tej chwili pliki conf
 /owlapi/projects(<id>)/task_queues(id)/params(<name>)
 /owlapi/projects(<id>)/task_queues(id)/mapping - tablica par wejście-wyjście
 """
-
+"""
+/owlapi/modules (lista modułów ogólnie dostępnych)
+/owlapi/modules/<string:module_id> (dostępne parametry modułu)
+"""
 class Projects(Resource):
     '''
     A więc jak stworzyć projekt?
@@ -37,7 +40,6 @@ class Projects(Resource):
     Z JEDNYM skryptem odpalającym
     I BEZ 'supervisord.conf', bo odchodzimy od tego 
     Dobra, tutaj wystawiał będę same nazwy projektów
-    TODO foldery z 'examples' wczytywać jako "projekty"
     '''
     def get(self):
         return data.get_projects()
@@ -58,14 +60,22 @@ class Project_x(Resource):
         return data.get_project_conf(project_id)
 
 class Modules(Resource):
+    def get(self):
+        return data.get_modules()
+
+class Module_x(Resource):
+    def get(self, module_id):
+        return data.get_module_data(module_id)
+
+class Project_modules(Resource):
     '''
-    TODO GET, POST listowanie/dodawanie
+    GET, POST listowanie/dodawanie
     Lista modułów w projekcie
         czyli elementów z 'owl'
             czyli pierwszych elementów z 'config.json'
     '''
     def get(self, project_id):
-        return data.get_modules(project_id)
+        return data.get_project_modules(project_id)
     def post(self, project_id, name):
         parser = reqparse.RequestParser()
         parser.add_argument('name')
@@ -73,15 +83,15 @@ class Modules(Resource):
         data.create_module(project_id, name)
         return data.get_modules(project_id)
 
-class Module_x(Resource):
+class Project_module_x(Resource):
     '''
-    TODO GET,DELETE - info/usuwanie
+    GET,DELETE - info/usuwanie
     Na 'delete' skasowanie modułu
     Na 'get' info o module
         czyli wchodzimy głębiej w słownik/configs
     '''
     def get(self, project_id, module_id):
-        return data.get_module_data(project_id, module_id)
+        return data.get_project_module_data(project_id, module_id)
     def delete(self, project_id, module_id):
         data.delete_module(project_id, module_id)
         return data.get_module_data(project_id, module_id)
@@ -107,14 +117,14 @@ class Param_defs(Resource):
     pass
 class Params(Resource):
     '''
-    TODO GET - lista paramatrów z wartościami
+    GET - lista paramatrów z wartościami
     samo 'params'
     '''
     def get(self, project_id, module_id):
         return data.get_module_params(project_id, module_id)
 class Parameter(Resource):
     '''
-    TODO GET,PUT - zmiana wartości parametru
+    GET,PUT - zmiana wartości parametru
     sam pojedyńczy 'params'
     '''
     def get(self, project_id, module_id, parameter):
@@ -134,7 +144,7 @@ class Module_state(Resource):
         ... nie. W 'configu' raczej nie ma co tego trzymać...
         Oddzielnie jakoś, w samej 'bazie danych'
         Nawet nie w bazie. Tutaj, w klasie!
-    TODO GET,PUT - czy działa
+    GET,PUT - czy działa
     Metadata #1 - status. ON/OFF
     '''
     def get(self, project_id, module_id):
@@ -152,27 +162,27 @@ class Module_state(Resource):
 
 class Module_start(Resource):
     '''
-    TODO POST
+    POST
     '''
     def post(self, project_id, module_id):
         pass
 class Module_stop(Resource):
     '''
-    TODO POST
+    POST
     Zmiana statusu
     '''
     def post(self, project_id, module_id):
         pass
 class Module_restart(Resource):
     '''
-    TODO POST
+    POST
     If ON: turn OFF, turn ON; else NULL;
     '''
     def post(self, project_id, module_id):
         pass
 class Module_log(Resource):
     '''
-    TODO GET - pobranie loga. w parametrze może być ilośc wpisów
+    GET - pobranie loga. w parametrze może być ilośc wpisów
     Tylko gdzie/skąd będą logi, jak nie z supervisora?
     '''
     def get(self, project_id, module_id):
@@ -191,29 +201,33 @@ class Task_queue_flush(Resource):
     '''
     pass
 
+### DEFINICJE ###
+api.add_resource(Modules,                   '/owlapi/modules')
+api.add_resource(Module_x,                  '/owlapi/modules(<string:module_id>)/params')
 
 ### ZARZĄDZANIE PROJEKTAMI ###
-api.add_resource(Projects,          '/owlapi/projects')
-api.add_resource(Project_x,         '/owlapi/projects<string:project_id>')
+api.add_resource(Projects,                  '/owlapi/projects')
+api.add_resource(Project_x,                 '/owlapi/projects(<string:project_id>)')
 
 ### EDYCJA TORU PRZETWARZANIA ###
-api.add_resource(Modules,           '/owlapi/<string:project_id>/modules')
-api.add_resource(Module_x,          '/owlapi/<string:project_id>/<string:module_id>')
-api.add_resource(Input_queue,       '/owlapi/<string:project_id>/<string:module_id>/input_queue')
-api.add_resource(Output_queue,      '/owlapi/<string:project_id>/<string:module_id>/output_queue')
-api.add_resource(Param_defs,        '/owlapi/<string:project_id>/<string:module_id>/param_defs')
-api.add_resource(Params,            '/owlapi/<string:project_id>/<string:module_id>/params')
-api.add_resource(Parameter,         '/owlapi/<string:project:id>/<string:project_id>/<string:parameter>')
+api.add_resource(Project_modules,           '/owlapi/projects(<string:project_id>)/modules')
+api.add_resource(Project_module_x,          '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)')
+api.add_resource(Input_queue,               '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/input_queue')
+api.add_resource(Output_queue,              '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/output_queue')
+api.add_resource(Param_defs,                '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/param_defs')
+api.add_resource(Params,                    '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/params')
+api.add_resource(Parameter,                 '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/params(<string:parameter>)')
 
 ### URUCHOMIENIE/DEBUG ###
 
-api.add_resource(Module_state,      '/owlapi/<string:project_id>/<string:module_id>/state')
-api.add_resource(Module_start,      '/owlapi/<string:project_id>/<string:module_id>/start')
-api.add_resource(Module_stop,       '/owlapi/<string:project_id>/<string:module_id>/stop')
-api.add_resource(Module_restart,    '/owlapi/<string:project_id>/modules<string_module_id>/restart')
-api.add_resource(Module_log,        '/owlapi/<string:project_id/<string:module_id>/log')
-api.add_resource(Task_queue_length, '/owlapi/<string:project_id>/<string:task_queue_id>/length')
-api.add_resource(Task_queue_flush,  '/owlapi/<string:project_id>/<string:task_queue_id>/flush')
+api.add_resource(Module_state,              '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/state')
+api.add_resource(Module_start,              '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/start')
+api.add_resource(Module_stop,               '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/stop')
+api.add_resource(Module_restart,            '/owlapi/projects(<string:project_id>)/modules(<string_module_id>)/restart')
+api.add_resource(Module_log,                '/owlapi/projects(<string:project_id>)/modules(<string:module_id>)/log')
+
+api.add_resource(Task_queue_length,         '/owlapi/projects(<string:project_id>)/modules(<string:task_queue_id>)/length')
+api.add_resource(Task_queue_flush,          '/owlapi/projects(<string:project_id>)/modules(<string:task_queue_id>)/flush')
 
 if __name__ == '__main__':
     app.run(debug=True)
