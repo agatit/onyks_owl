@@ -1,1 +1,1 @@
-![Alt text](/projectState.png?raw=true "Optional Title")
+![Alt text](./projectState.png?raw=true "Optional Title")
