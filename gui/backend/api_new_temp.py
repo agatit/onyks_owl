@@ -33,68 +33,42 @@ Kolejki zdarzeń z mapowaniem strumieni (do rozważenia, w tej chwili pliki conf
 /owlapi/modules (lista modułów ogólnie dostępnych)
 /owlapi/modules/<string:module_id> (dostępne parametry modułu)
 """
-class Projects(Resource):
-    '''
-    A więc jak stworzyć projekt?
-    Patrząc na to co teraz mam, to "projektem" byłby nowy folder z foderu "examples", z 'config.json', skryptami odpalającymi, i 'supervisord.conf'
-    Z JEDNYM skryptem odpalającym
-    I BEZ 'supervisord.conf', bo odchodzimy od tego 
-    Dobra, tutaj wystawiał będę same nazwy projektów
-    '''
-    def get(self):
-        return data.get_projects()
-    def post(self):
-        # Pewnie stworzyć projekt o "tej" nazwie, "Files" ogarniają jakiś basic config...
-        parser = reqparse.RequestParser()
-        parser.add_argument('name')
-        name = parser.parse_args()
-        data.create_project(name)
-        return data.get_projects()
-class Project_x(Resource):
-    '''
-    Nno pojedyńczy projekt, ale co zwracać?
-    'config.json'?
-    'state' projektu?
-    '''
-    def get(self, project_id):
-        return data.get_project_conf(project_id)
 
 class Modules(Resource):
     def get(self):
         return data.get_modules()
+        # TODO ej, czy jak na tych GET'ach jest taka lista, to gites?!?!
 
 class Module_x(Resource):
     def get(self, module_id):
         return data.get_module_data(module_id)
 
+class Projects(Resource):
+    def get(self):
+        return data.get_projects()
+        # TODO może zwracać projekt dopiero po znalezieniu config'u w folderze...
+        # tylko to też w tej funkcji głębiej ogarnąć sytuację, gdy będzie trzeba stworzyć folder, a on już istnieje
+    def post(self):
+        json_data = request.get_json(force=True) # TODO po co ten "force"? Ogólnie to jest skopiowane ze Stacka i działa, nie to co wcześniej...
+        return data.create_project(json_data['name'])
+class Project_x(Resource):
+    def get(self, project_id):
+        return data.get_project_conf(project_id)
+
 class Project_modules(Resource):
-    '''
-    GET, POST listowanie/dodawanie
-    Lista modułów w projekcie
-        czyli elementów z 'owl'
-            czyli pierwszych elementów z 'config.json'
-    '''
     def get(self, project_id):
         return data.get_project_modules(project_id)
-    def post(self, project_id, name):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name')
-        name = parser.parse_args()
-        data.create_module(project_id, name)
-        return data.get_modules(project_id)
-
+    def post(self, project_id):
+        json_data = request.get_json(force=True) # TODO po co ten "force"? Ogólnie to jest skopiowane ze Stacka i działa, nie to co wcześniej...
+        return data.add_project_module(project_id, json_data['name'])
+        
 class Project_module_x(Resource):
-    '''
-    GET,DELETE - info/usuwanie
-    Na 'delete' skasowanie modułu
-    Na 'get' info o module
-        czyli wchodzimy głębiej w słownik/configs
-    '''
     def get(self, project_id, module_id):
         return data.get_project_module_data(project_id, module_id)
     def delete(self, project_id, module_id):
-        data.delete_module(project_id, module_id)
-        return data.get_module_data(project_id, module_id)
+        data.delete_project_module(project_id, module_id)
+        return data.get_project_modules(project_id) # TODO nieno, te returny coś ten tegies...
+    # TODO ten DELETE to może do klasy wyżej...
 class Input_queue(Resource):
     '''
     TODO GET,PUT - nazwa kolejki (wydzielone określanie kolejek do rysowania połaczeń)
@@ -116,12 +90,11 @@ class Param_defs(Resource):
     '''
     pass
 class Params(Resource):
-    '''
-    GET - lista paramatrów z wartościami
-    samo 'params'
-    '''
     def get(self, project_id, module_id):
         return data.get_module_params(project_id, module_id)
+
+# Do tego miejsca ogarnięte get/put/delete/post
+# więcej jak zrobię podstawowe configi modułów z typami danych
 class Parameter(Resource):
     '''
     GET,PUT - zmiana wartości parametru
