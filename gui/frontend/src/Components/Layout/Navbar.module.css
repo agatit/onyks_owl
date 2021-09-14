@@ -1,0 +1,24 @@
+.navbar {
+  height: 5%;
+  min-height: 60px;
+  width: 100%;
+  display: flex;
+  background: #e0d7d7;
+  border-bottom: 5px solid rgb(124, 111, 110);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 2rem;
+  color: rgb(27, 27, 26);
+  font-weight: bold;
+  padding-left: 20px;
+}
+
+.controls {
+  margin-left: 10px;
+}
+svg {
+  margin-right: 20px;
+}

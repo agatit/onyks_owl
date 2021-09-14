@@ -1,20 +1,26 @@
 import createEngine from "@projectstorm/react-diagrams";
 import * as React from "react";
-import { Menu } from "./Menu-UI/Menu";
+import { Menu } from "./Components/UI/Menu-UI/Menu";
 import { Diagrams } from "./DiagramsM";
 import "./styles.css";
+import Layout from "./Components/Layout/Layout";
+import SideBar from "./Components/Layout/SideBar";
+import Navbar from "./Components/Layout/Navbar";
+import ToolBar from "./Components/Layout/ToolBar";
 
 const engine = createEngine();
 
 export default function App() {
   return (
-    <div>
-      <div className="App">
-        <Diagrams engine={engine} />
+    <Layout>
+      <Navbar />
+      <div className="content">
+        <SideBar />
+        <div className="App">
+          <Diagrams engine={engine} />
+        </div>
+        <ToolBar engine={engine} />
       </div>
-      <div className="sidenav">
-        <Menu engine={engine} />
-      </div>
-    </div>
+    </Layout>
   );
 }

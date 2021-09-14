@@ -1,5 +1,5 @@
 import { DiagramEngine } from "@projectstorm/react-diagrams";
-import { NodeModel } from "../../CustomDiagramNodes/NodeModel";
+import { NodeModel } from "../../../CustomDiagramNodes/NodeModel";
 import React from "react";
 
 export interface BtnProps {

@@ -1,9 +1,9 @@
 import { DefaultLinkModel, DiagramModel } from "@projectstorm/react-diagrams";
-import { NodeFactory } from "./CustomDiagramNodes/NodeFactory";
-import { NodeModel } from "./CustomDiagramNodes/NodeModel";
+import { NodeFactory } from "./Components/CustomDiagramNodes/NodeFactory";
+import { NodeModel } from "./Components/CustomDiagramNodes/NodeModel";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
-import { CustomLinkFactory } from "./CustomLinks/CustomLinkFactory";
-import { CustomLinkModel } from "./CustomLinks/CustomLinkModel";
+import { CustomLinkFactory } from "./Components/CustomLinks/CustomLinkFactory";
+import { CustomLinkModel } from "./Components/CustomLinks/CustomLinkModel";
 
 export const Diagrams = (props: any) => {
   // create an instance of the engine with all the defaults
@@ -66,18 +66,7 @@ export const Diagrams = (props: any) => {
   link5.setTargetPort(node6.getPort("In"));
 
   const model = new DiagramModel();
-  model.addAll(
-    node1,
-    node2,
-    node3,
-    node5,
-    node6,
-    linkTest,
-    link1,
-    link3,
-    link4,
-    link5
-  );
+  model.addAll(node1, node2, node3, node5, node6, link1, link3, link4, link5);
 
   engine.setModel(model);
   return <CanvasWidget className="diagram-container" engine={engine} />;

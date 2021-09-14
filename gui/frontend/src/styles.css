@@ -1,14 +1,15 @@
 .App {
-  font-family: sans-serif;
-  text-align: center;
-  height: calc(100vh);
-  width: 90%;
+  position: relative;
+  flex-grow: 1;
+  height: 100vh;
 }
 
 .diagram-container {
-  width: 100%;
+  min-width: 800px;
+  position: relative;
   height: 100%;
-  /*background: rgb(239, 252, 208); */
+  min-height: 100%;
+  width: 100%;
   background-image: url("app-background.jpg");
 }
 
@@ -78,19 +79,14 @@
   width: 100%;
 }
 
-.root {
-  height: 100%;
-  width: 100%;
-}
-
 .add-button {
-  background: royalblue;
+  background: rgb(46, 41, 20);
   font-size: 14px;
   padding: 7px 20px;
   border: 0px;
   color: rgb(253, 253, 253);
-  width: 100%;
-  border: 2px solid #fbfdfb;
+  border-radius: 3px;
+  margin: 3px;
   cursor: pointer;
 }
 
