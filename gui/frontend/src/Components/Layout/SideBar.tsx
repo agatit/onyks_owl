@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import ListModule from "../UI/ListModule";
 
 import classes from "./SideBar.module.css";
 
@@ -22,7 +23,11 @@ function SideBar(props: any) {
       <h2 className={classes.sidTitle}>Dostępne moduły:</h2>
       <ul>
         {DUMMY_DATA.map((module) => {
-          return <li className={classes.nodeLabel}>{module.name}</li>;
+          return (
+            <li>
+              <ListModule module={module} />
+            </li>
+          );
         })}
       </ul>
     </div>

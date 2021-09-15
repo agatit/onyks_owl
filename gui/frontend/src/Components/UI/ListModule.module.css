@@ -1,0 +1,11 @@
+.module {
+  color: #171531;
+  font-family: Arial;
+  font-weight: bold;
+  padding: 5px;
+  margin: 0px 10px;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  background-color: #60a0bb;
+}

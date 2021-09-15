@@ -7,6 +7,21 @@ import { CustomLinkModel } from "./Components/CustomLinks/CustomLinkModel";
 
 export const Diagrams = (props: any) => {
   // create an instance of the engine with all the defaults
+
+  function onNodeDrop(event: React.DragEvent<HTMLDivElement>) {
+    var moduleData = JSON.parse(event.dataTransfer.getData("diagram-node"));
+    const droppedNode = new NodeModel({
+      color: "LemonChiffon",
+      title: moduleData.name,
+      content: "Source",
+      source: true,
+    });
+    droppedNode.setPosition(engine.getRelativeMousePoint(event));
+    engine.getModel().addNode(droppedNode);
+
+    engine.repaintCanvas();
+  }
+
   const engine = props.engine;
   engine.getNodeFactories().registerFactory(new NodeFactory());
   engine.getLinkFactories().registerFactory(new CustomLinkFactory());
@@ -69,7 +84,19 @@ export const Diagrams = (props: any) => {
   model.addAll(node1, node2, node3, node5, node6, link1, link3, link4, link5);
 
   engine.setModel(model);
-  return <CanvasWidget className="diagram-container" engine={engine} />;
+  return (
+    <div
+      className="App"
+      onDrop={(event) => {
+        onNodeDrop(event);
+      }}
+      onDragOver={(event) => {
+        event.preventDefault();
+      }}
+    >
+      <CanvasWidget className="diagram-container" engine={engine} />
+    </div>
+  );
 };
 
 // TODO: Odczyt schematów z API

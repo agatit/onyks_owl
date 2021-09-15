@@ -8,17 +8,17 @@ import SideBar from "./Components/Layout/SideBar";
 import Navbar from "./Components/Layout/Navbar";
 import ToolBar from "./Components/Layout/ToolBar";
 
-const engine = createEngine();
-
 export default function App() {
+  const engine = createEngine();
+
   return (
     <Layout>
       <Navbar />
       <div className="content">
         <SideBar />
-        <div className="App">
-          <Diagrams engine={engine} />
-        </div>
+
+        <Diagrams engine={engine} />
+
         <ToolBar engine={engine} />
       </div>
     </Layout>
