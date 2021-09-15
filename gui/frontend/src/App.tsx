@@ -1,6 +1,5 @@
 import createEngine from "@projectstorm/react-diagrams";
 import * as React from "react";
-import { Menu } from "./Components/UI/Menu-UI/Menu";
 import { Diagrams } from "./DiagramsM";
 import "./styles.css";
 import Layout from "./Components/Layout/Layout";
@@ -16,9 +15,7 @@ export default function App() {
       <Navbar />
       <div className="content">
         <SideBar />
-
         <Diagrams engine={engine} />
-
         <ToolBar engine={engine} />
       </div>
     </Layout>

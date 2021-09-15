@@ -1,6 +1,3 @@
-import { ClassNames } from "@emotion/react";
-import Rect from "react";
-
 import calsses from "./ListModule.module.css";
 
 function ListModule(props: any) {

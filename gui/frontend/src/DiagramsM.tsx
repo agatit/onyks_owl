@@ -1,11 +1,19 @@
-import { DefaultLinkModel, DiagramModel } from "@projectstorm/react-diagrams";
+import {
+  DefaultLinkModel,
+  DiagramEngine,
+  DiagramModel,
+} from "@projectstorm/react-diagrams";
 import { NodeFactory } from "./Components/CustomDiagramNodes/NodeFactory";
 import { NodeModel } from "./Components/CustomDiagramNodes/NodeModel";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
 import { CustomLinkFactory } from "./Components/CustomLinks/CustomLinkFactory";
 import { CustomLinkModel } from "./Components/CustomLinks/CustomLinkModel";
 
-export const Diagrams = (props: any) => {
+interface diagramProps {
+  engine: DiagramEngine;
+}
+
+export const Diagrams = (props: diagramProps) => {
   // create an instance of the engine with all the defaults
 
   function onNodeDrop(event: React.DragEvent<HTMLDivElement>) {
@@ -66,7 +74,6 @@ export const Diagrams = (props: any) => {
   const linkBase = new CustomLinkModel();
   linkBase.setSourcePort(node1.getPort("Out"));
   linkBase.setTargetPort(node3.getPort("In"));
-  const linkTest = engine.getFactoryForLink(linkBase).generateModel({});
   const link1 = new CustomLinkModel();
   link1.setSourcePort(node1.getPort("Out"));
   link1.setTargetPort(node3.getPort("In"));

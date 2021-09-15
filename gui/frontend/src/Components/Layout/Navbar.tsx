@@ -1,5 +1,3 @@
-import { ClassNames } from "@emotion/react";
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faCog } from "@fortawesome/free-solid-svg-icons";
 
