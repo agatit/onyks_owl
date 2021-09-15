@@ -50,8 +50,6 @@ class Module(module_base.Module):
       
         return stream_composed.Producer(self.redis, streams_queues, self.streams_classes, self.expire_time * 2)             
 
-        except Exception as e:
-            logging.error(f"{self.module_name} init error: {str(e)}") 
         
 
     def task_process(self, input_task_data, input_stream ):                   

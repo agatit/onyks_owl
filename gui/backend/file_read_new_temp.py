@@ -14,10 +14,17 @@ ERROR_RETVAL = {
     'message': 'OOpsie, Something went wrong :('
 } # TODO nieno, więcej tych retval'ów żeby było wiadomo co gdzie dokładnie...
 # TODO w jednym z configów jest "comment". Może to też uwzględnić...
-class Files():
+class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Project'a podklasą 'Module'
+                # TODO zmienić nazwę tej klasy żeby lepiej się kwalifilowała w koncepcję
+                # TODO może niektóre operacje plikowe zwalić na 'Project'
     def __init__(self, projects_path = DEFAULT_PATH_PROJECTS, modules_path = DEFAULT_PATH_MODULES):
         self.projects_dir = projects_path
         self.modules_dir = modules_path
+        self.projects = {}
+        # TODO na starcie skan, porobić obiekty projektów
+        # ej, robić od razu obiekty?
+        # w sumie czemu nie? Odpalanie modułów to byłby bezsens, ale zrobienie gruntu pod nie jest spox
+
     
     ### DEFINICJE ###
     def get_modules(self):
@@ -38,13 +45,10 @@ class Files():
         return projects
     def create_project(self, name):
         try:
-            os.mkdir(os.path.join(DEFAULT_PATH_PROJECTS, name)) 
-            # TODO Jeżeli folder istnieje
-                # jeżeli w folderze jest 'config.json'
-                    # wywal błąd, że już taki moduł istnieje
-                # else
-                    # stwórz config
-                    # return 0
+            if os.path.isfile(os.path.join(DEFAULT_PATH_PROJECTS, name, 'config.json')):
+                return ERROR_RETVAL
+            if not os.path.exists(os.path.join(DEFAULT_PATH_PROJECTS, name)):
+                os.mkdir(os.path.join(DEFAULT_PATH_PROJECTS, name))
             with open(os.path.join(DEFAULT_PATH_PROJECTS, name, 'config.json'), 'w') as file:
                 json.dump(EMPTY_CONFIG,file, ensure_ascii=False, indent=4) # TODO 'skipkeys'?
             return 'coś' # TODO returny
@@ -110,7 +114,6 @@ class Files():
         a teraz lece jakieś configi poprzerabiać na nową modłę
         albo nie, to potem
         logi?
-        # TODO jak pójdzie całkiem nowa implementacja 'config.json' to pewnie trzeba będzie popoprawiać rzeczu tu i tam...
         '''
         
     def get_module_parameter(self, project_id, module_id, parameter):
