@@ -17,6 +17,10 @@ import module_base
 
 
 class Module(module_base.Module):
+    def __init__(self, argv):
+        super(Module, self).__init__(argv)
+        self.default_config['params'][1]['window_name'] = ['string', 'noname']
+
     def streams_init(self): 
         self.input_classes = {
             "color" : stream_video.Consumer,

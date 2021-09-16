@@ -1,0 +1,7 @@
+2021-09-16 14:22:29 INFO module_sink_win started.
+2021-09-16 14:22:29 ERROR module_sink_win: 'modules'
+
+  File "/home/hubert/Documents/GitHub/onyks_owl/owl/module_base.py", line 52, in __init__
+    self.config = config_file['modules'][name]
+
+

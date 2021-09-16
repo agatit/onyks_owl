@@ -30,16 +30,26 @@ class Module:
         logging.basicConfig(level=logging.DEBUG, handlers=[handler])
         logging.info(f"{self.module_name} started.")
 
+        self.default_config = {
+            'stream_queue_limit': ['int', 100],
+            'task_expire_time': ['int', 10],
+            'stream_expire_time': ['int', 10],
+            'task_timeout': ['int', 10],
+            'stream_timeout': ['int', 10],
+            "params": ['parameters', {}],
+            'input_queue': ['string', ""],
+            'output_queue': ['string', ""],
+        }
         try:
             if len(argv) > 1:
                 with open(argv[1], "rb") as f:
-                    config_file = json.load(f)                    
+                    config_file = json.load(f)
                     if len(argv) > 2:
                         name = argv[2]
                     else:
-                        name = self.module_name                    
+                        name = self.module_name
 
-                    self.config = config_file[name]
+                    self.config = config_file['modules'][name]
                     if self.config is None:
                         logging.info(f"config file: {argv[1]} do not contain section for {name}")    
                         exit()
@@ -136,6 +146,8 @@ class Module:
             self.runOnce()
             time.sleep(1)   
 
+    def get_config(self):
+        return self.default_config
 
 if __name__ == "__main__":
     print("Do not call base class!")

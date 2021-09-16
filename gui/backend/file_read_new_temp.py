@@ -1,6 +1,10 @@
 import os
 import json
 import glob
+import shutil
+import subprocess
+
+from logs_test import Project#, Module
 
 
 DEFAULT_PATH_PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../examples")
@@ -20,10 +24,10 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
     def __init__(self, projects_path = DEFAULT_PATH_PROJECTS, modules_path = DEFAULT_PATH_MODULES):
         self.projects_dir = projects_path
         self.modules_dir = modules_path
+        # TODO czasem 'dir', czasem 'path', nieno, ujednolicić to!
         self.projects = {}
-        # TODO na starcie skan, porobić obiekty projektów
-        # ej, robić od razu obiekty?
-        # w sumie czemu nie? Odpalanie modułów to byłby bezsens, ale zrobienie gruntu pod nie jest spox
+        # for project in os.listdir(path = self.projects_dir): # TODO winksza walidacja, sprawdzić też config.json. Oddzielna funkcja
+        #     self.add_project(project)
 
     
     ### DEFINICJE ###
@@ -34,50 +38,72 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
         mod3 = [x.replace('.py', '') for x in mod2]
         return mod3
     def get_module_data(self, module_id):
+        # proc = subprocess.Popen(['python3', os.path.join(self.modules_dir, module_id + '.py'), os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../examples/perspective_transform/config.json')], stdin=subprocess.PIPE ,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc = subprocess.Popen(['python3'], stdin=subprocess.PIPE ,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print (proc.communicate(b'import os\nos.getcwd()', timeout=15))
+        # print (proc.communicate(b'os.getcwd()'))
+        print (proc.communicate(b'from module_perspective_transform import Module'))
+        print (proc.communicate('x = Module("./../examples/perspective_transform/config.json")'))
+        print (proc.communicate('x.get_config()'))
+        proc.kill()
         # module.py -> get_config()
             # czy coś takiego...
         pass
     
     ### ZARZĄDZANIE PROJEKTAMI ###
+    '''
+    Walidacja projektu:
+    - Jeżeli nie istnieje plik 'project/config.json', to znaczy że projektu nie ma
+        - Więc jeżeli istnieje folder 'project', to można go wywalić, cnie? # TODO
+    - Jeżeli plik 'project/config.json' istnieje, to mamy projekt!
+        - sprawdzać układ pliku 'config.json'? # TODO
+    '''
     def get_projects(self):
-        projects = os.listdir(path = self.projects_dir)
-        # return json.dumps(projects, ensure_ascii=False)
-        return projects
+        return self.projects.keys()
+        # TODO zaczynam się bardziej opierać na danych w pamięci. Nie wiem jak będzie wyglądało zarządzanie później, ale pewnie wskazane byłoby uwzględnienie jakiegoś refresh'a
+    def add_project(self, name):
+        if not os.path.isfile(os.path.join(self.projects_dir, name, 'config.json')):
+            print(f'Project {name} nonexistent')
+            if os.path.exists(os.path.join(self.projects_dir, name)):
+                shutil.rmtree(os.path.join(self.projects_dir, name))
+                print('Invalid directory removed')
+        else:
+            print(f'Project {name} found!')
+            if name == 'perspective_transform':
+                self.projects[name] = Project(os.path.join(self.projects_dir, name), self.modules_dir)
+                print(f'Project {name} added!') # TODO if self.projects[name] is not None ?
+    '''
+    Chwila, mam add_project() do dodawania już istniejących projektów
+    i create_project() do dodawania nowiutkich projektów
+    ...
+    na pewno powinienem stworzyć metodę validate_project() strikte pod walidację
+    i może wyjebać add_project() po tym...
+    
+    Zaraz chwila! Po zrobieniu add_project() w __init__ mam posprzątane, create_project może na lajcie tworzyć bez walidowania
+    '''
+
     def create_project(self, name):
         try:
-            if os.path.isfile(os.path.join(DEFAULT_PATH_PROJECTS, name, 'config.json')):
-                return ERROR_RETVAL
-            if not os.path.exists(os.path.join(DEFAULT_PATH_PROJECTS, name)):
-                os.mkdir(os.path.join(DEFAULT_PATH_PROJECTS, name))
-            with open(os.path.join(DEFAULT_PATH_PROJECTS, name, 'config.json'), 'w') as file:
-                json.dump(EMPTY_CONFIG,file, ensure_ascii=False, indent=4) # TODO 'skipkeys'?
+            os.mkdir(os.path.join(self.projects_dir, name))
+            with open(os.path.join(self.projects_dir, name, 'config.json'), 'w') as file:
+                json.dump(EMPTY_CONFIG,file, ensure_ascii=False, indent=4)
+            self.add_project(name)
             return 'coś' # TODO returny
         except:
             return ERROR_RETVAL
 
     def get_project_conf(self, project_id):
-        try:
-            with open(os.path.join(self.projects_dir, project_id, 'config.json')) as file:
-                config = json.load(file)
-            return config
-        except:
-            return ERROR_RETVAL
+        return self.projects[project_id].get_config()
     def set_project_conf(self, project_id, data):
-        try:
-            with open(os.path.join(self.projects_dir, project_id, 'config.json'), 'w') as file:
-                json.dump(data,file, ensure_ascii=False, indent=4) # TODO 'skipkeys'? 
-            return 'coś'    # TODO returny
-        except:
-            return ERROR_RETVAL
+        return self.projects[project_id].set_config(data)
+        
     ### EDYCJA TORU PRZETWARZANIA ###
     def get_project_modules(self, project_id):
-        try:
-            config = self.get_project_conf(project_id)
-            modules = list(config['modules'].keys())
-            return modules
-        except:
-            return ERROR_RETVAL
+        return self.projects[project_id].get_modules()
+        
     def add_project_module(self, project_id, module_name):
+        return self.projects[project_id].add_module(module_name)
+        
         modules = self.get_modules()
         if module_name in modules:
             config = self.get_project_conf(project_id)
@@ -86,6 +112,7 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
         else:
             return ERROR_RETVAL
     def get_project_module_data(self, project_id, module_id):
+        # return self.projects[project_id].get_module_data(module_id)
         config = self.get_project_conf(project_id)
         if config['modules'][module_id]:
             module = config['modules'][module_id]
@@ -153,13 +180,14 @@ if __name__ == '__main__':
     # print(List.get_names())
     # print(x.get_projects())
     # print(x.get_project_conf('perspective_transform'))
-    print(x.get_modules())
+    # print(x.get_modules())
     # print(x.get_project_modules('perspective_transform'))
     # print(x.delete_project_module('perspective_transform','module_sink_file'))
     # print(x.get_project_modules('perspective_transform'))
-    # print(x.get_module_data('perspective_transform', 'module_source_cv'))
+    # print(x.get_project_module_data('perspective_transform', 'module_source_cv'))
     # print(x.get_module_params('perspective_transform', 'module_source_cv'))
     
     # print(x.create_project('xddd'))
     # print(x.get_projects())
     # print(x.get_module_params('perspective_transform', 'module_sink_file'))
+    print(x.get_module_data('module_source_cv'))

@@ -20,6 +20,12 @@ from perspective.perspective_transform import get_perspective
 
 
 class Module(module_base.Module):
+    def __init__(self, argv):
+        super(Module, self).__init__(argv)
+        self.default_config['params']['mtx'] = ['list', []]
+        self.default_config['params']['dist'] = ['list', []]
+        self.default_config['params']['trapezoid_coords'] = ['list', []]
+
     def streams_init(self):
         self.input_classes = {
             "color": stream_video.Consumer,
@@ -29,6 +35,8 @@ class Module(module_base.Module):
             "color": stream_video.Producer,
             "metrics": stream_data.Producer
         }
+        
+
 
     def task_process(self, input_task_data, input_stream):
         """przetwarzanie strumieni"""

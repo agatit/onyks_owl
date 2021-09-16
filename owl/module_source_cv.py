@@ -10,6 +10,9 @@ import stream_data
 import module_base
 
 class Module(module_base.Module):
+    def __init__(self, argv):
+        super(Module, self).__init__(argv)
+        self.default_config['params'][1]['device'] = ['string|int', 0]
 
     def streams_init(self): 
         self.input_classes = {}
