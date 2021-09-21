@@ -21,7 +21,7 @@
             "min_v_tab_length" : 15,
             "max_v_tab_length" : 100,
             "deviation" : 2,
-            "debug": 1
+            "debug": 0
             
              
 
