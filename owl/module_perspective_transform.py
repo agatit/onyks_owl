@@ -22,9 +22,9 @@ from perspective.perspective_transform import get_perspective
 class Module(module_base.Module):
     def __init__(self, argv):
         super(Module, self).__init__(argv)
-        self.default_config['params']['mtx'] = ['list', []]
-        self.default_config['params']['dist'] = ['list', []]
-        self.default_config['params']['trapezoid_coords'] = ['list', []]
+        self.default_config['params'][1]['mtx'] = ['list', []]
+        self.default_config['params'][1]['dist'] = ['list', []]
+        self.default_config['params'][1]['trapezoid_coords'] = ['list', []]
 
     def streams_init(self):
         self.input_classes = {
@@ -75,4 +75,16 @@ class Module(module_base.Module):
 
 if __name__ == "__main__":
     module = Module(sys.argv)
+    '''
+    if argv[1] == run:
+        module.run()
+    else
+        module.get_config()
+    
+    # TODO argv
+    '''
+    # print(sys.argv[1:])
+    # if sys.argv[len(sys.argv)-1] == 'config':
+    #     module.get_config()
+    # else:
     module.run()

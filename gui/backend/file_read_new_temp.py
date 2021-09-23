@@ -3,7 +3,7 @@ import json
 import glob
 import shutil
 import subprocess
-
+import time
 from logs_test import Project#, Module
 
 
@@ -26,8 +26,8 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
         self.modules_dir = modules_path
         # TODO czasem 'dir', czasem 'path', nieno, ujednolicić to!
         self.projects = {}
-        # for project in os.listdir(path = self.projects_dir): # TODO winksza walidacja, sprawdzić też config.json. Oddzielna funkcja
-        #     self.add_project(project)
+        for project in os.listdir(path = self.projects_dir): # TODO winksza walidacja, sprawdzić też config.json. Oddzielna funkcja
+            self.add_project(project)
 
     
     ### DEFINICJE ###
@@ -38,17 +38,16 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
         mod3 = [x.replace('.py', '') for x in mod2]
         return mod3
     def get_module_data(self, module_id):
-        # proc = subprocess.Popen(['python3', os.path.join(self.modules_dir, module_id + '.py'), os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../examples/perspective_transform/config.json')], stdin=subprocess.PIPE ,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         proc = subprocess.Popen(['python3'], stdin=subprocess.PIPE ,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print (proc.communicate(b'import os\nos.getcwd()', timeout=15))
-        # print (proc.communicate(b'os.getcwd()'))
-        print (proc.communicate(b'from module_perspective_transform import Module'))
-        print (proc.communicate('x = Module("./../examples/perspective_transform/config.json")'))
-        print (proc.communicate('x.get_config()'))
+        proc.stdin.write(bytes('import os\n', encoding='utf-8'))
+        proc.stdin.write(bytes('os.chdir("' + DEFAULT_PATH_MODULES + '")\n', encoding='utf-8'))
+        proc.stdin.write(bytes('print(os.getcwd())\n', encoding='utf-8'))
+        proc.stdin.write(bytes('from module_perspective_transform import Module\n', encoding='utf-8'))
+        proc.stdin.write(bytes("x = Module('" + DEFAULT_PATH_PROJECTS + "/" + module_id + "/config.json')\n", encoding='utf-8')) # TODO czy tutaj się nie rypnie bez "os.path.join()" ?
+        proc.stdin.write(bytes('print(x)\n', encoding='utf-8'))
+        return_value = proc.communicate()[0].decode('utf-8')
         proc.kill()
-        # module.py -> get_config()
-            # czy coś takiego...
-        pass
+        return return_value
     
     ### ZARZĄDZANIE PROJEKTAMI ###
     '''
@@ -178,7 +177,7 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
 if __name__ == '__main__':
     x = Files()
     # print(List.get_names())
-    # print(x.get_projects())
+    print(x.get_projects())
     # print(x.get_project_conf('perspective_transform'))
     # print(x.get_modules())
     # print(x.get_project_modules('perspective_transform'))
@@ -190,4 +189,12 @@ if __name__ == '__main__':
     # print(x.create_project('xddd'))
     # print(x.get_projects())
     # print(x.get_module_params('perspective_transform', 'module_sink_file'))
-    print(x.get_module_data('module_source_cv'))
+    # print(x.get_module_data('module_source_cv'))
+    # print(x.get_module_data('module_perspective_transform'))
+    x.projects['perspective_transform'].start_project()
+    time.sleep(5)
+    # print(x.projects['perspective_transform'].get_logs())
+
+    with open('xd.json', 'w') as y:
+        json.dump(x.projects['perspective_transform'].get_logs(), y, ensure_ascii=False, indent=4)
+    x.projects['perspective_transform'].stop_project()

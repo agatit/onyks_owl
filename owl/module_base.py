@@ -41,7 +41,9 @@ class Module:
             'output_queue': ['string', ""],
         }
         try:
+            print(len(argv))
             if len(argv) > 1:
+                print(argv[1:])
                 with open(argv[1], "rb") as f:
                     config_file = json.load(f)
                     if len(argv) > 2:
