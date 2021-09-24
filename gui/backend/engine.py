@@ -4,8 +4,7 @@ import glob
 import shutil
 import subprocess
 import time
-from logs_test import Project#, Module
-
+from project import Project
 
 DEFAULT_PATH_PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../examples")
 DEFAULT_PATH_MODULES = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../owl")
@@ -14,11 +13,9 @@ EMPTY_CONFIG = {
     'modules': {},
     'pipeline': {}
 }
-ERROR_RETVAL = {
-    'message': 'OOpsie, Something went wrong :('
-} # TODO nieno, więcej tych retval'ów żeby było wiadomo co gdzie dokładnie...
+
 # TODO w jednym z configów jest "comment". Może to też uwzględnić...
-class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Project'a podklasą 'Module'
+class Engine():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Project'a podklasą 'Module'
                 # TODO zmienić nazwę tej klasy żeby lepiej się kwalifilowała w koncepcję
                 # TODO może niektóre operacje plikowe zwalić na 'Project'
     def __init__(self, projects_path = DEFAULT_PATH_PROJECTS, modules_path = DEFAULT_PATH_MODULES):
@@ -36,7 +33,8 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
         mod = list(filter(lambda k: '.py' in k, modules))       # pliki z '.py'
         mod2 = list(filter(lambda k: '__init__' not in k, mod)) # pliki bez __init__
         mod3 = [x.replace('.py', '') for x in mod2]
-        return mod3
+        return mod3, 200
+
     def get_module_data(self, module_id):
         proc = subprocess.Popen(['python3'], stdin=subprocess.PIPE ,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         proc.stdin.write(bytes('import os\n', encoding='utf-8'))
@@ -47,7 +45,7 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
         proc.stdin.write(bytes('print(x)\n', encoding='utf-8'))
         return_value = proc.communicate()[0].decode('utf-8')
         proc.kill()
-        return return_value
+        return return_value, 200
     
     ### ZARZĄDZANIE PROJEKTAMI ###
     '''
@@ -59,7 +57,6 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
     '''
     def get_projects(self):
         return self.projects.keys()
-        # TODO zaczynam się bardziej opierać na danych w pamięci. Nie wiem jak będzie wyglądało zarządzanie później, ale pewnie wskazane byłoby uwzględnienie jakiegoś refresh'a
     def add_project(self, name):
         if not os.path.isfile(os.path.join(self.projects_dir, name, 'config.json')):
             print(f'Project {name} nonexistent')
@@ -103,28 +100,16 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
     def add_project_module(self, project_id, module_name):
         return self.projects[project_id].add_module(module_name)
         
-        modules = self.get_modules()
-        if module_name in modules:
-            config = self.get_project_conf(project_id)
-            config['modules'][module_name] = self.get_module_data(module_name)
-            return 'coś'
-        else:
-            return ERROR_RETVAL
     def get_project_module_data(self, project_id, module_id):
-        # return self.projects[project_id].get_module_data(module_id)
-        config = self.get_project_conf(project_id)
-        if config['modules'][module_id]:
-            module = config['modules'][module_id]
-            return module
-        else:
-            return ERROR_RETVAL
+        return self.projects[project_id].get_module_data(module_id)
+        # config = self.get_project_conf(project_id)
+        # if config['modules'][module_id]:
+        #     module = config['modules'][module_id]
+        #     return module
+        # else:
+        #     return ERROR_RETVAL
     def delete_project_module(self, project_id, module_id):
-        config = self.get_project_conf(project_id)
-        if config['modules'][module_id]:
-            del config['modules'][module_id]
-            return self.set_project_conf(project_id, config)
-        else:
-            return ERROR_RETVAL
+        return self.projects[project_id].delete_module(module_id)
     def get_module_params(self, project_id, module_id):
         config = self.get_project_conf(project_id)
         if config['modules'][module_id]['params']:
@@ -175,7 +160,7 @@ class Files():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Proj
 
 
 if __name__ == '__main__':
-    x = Files()
+    x = Engine()
     # print(List.get_names())
     print(x.get_projects())
     # print(x.get_project_conf('perspective_transform'))
