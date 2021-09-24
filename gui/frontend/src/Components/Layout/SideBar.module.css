@@ -16,6 +16,10 @@ ul {
   padding: 0;
 }
 
+li {
+  overflow-wrap: break-word;
+}
+
 .sidTitle {
   padding-left: 10px;
 }

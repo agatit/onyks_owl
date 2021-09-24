@@ -5,9 +5,10 @@ import {
 } from "@projectstorm/react-diagrams";
 import { NodeFactory } from "./Components/CustomDiagramNodes/NodeFactory";
 import { NodeModel } from "./Components/CustomDiagramNodes/NodeModel";
-import { CanvasWidget } from "@projectstorm/react-canvas-core";
-import { CustomLinkFactory } from "./Components/CustomLinks/CustomLinkFactory";
-import { CustomLinkModel } from "./Components/CustomLinks/CustomLinkModel";
+import {
+  CanvasWidget,
+  DeleteItemsAction,
+} from "@projectstorm/react-canvas-core";
 
 interface diagramProps {
   engine: DiagramEngine;
@@ -18,11 +19,16 @@ export const Diagrams = (props: diagramProps) => {
 
   function onNodeDrop(event: React.DragEvent<HTMLDivElement>) {
     var moduleData = JSON.parse(event.dataTransfer.getData("diagram-node"));
+    const moduleProps = Object.keys(moduleData);
     const droppedNode = new NodeModel({
       color: "LemonChiffon",
       title: moduleData.name,
       content: "Source",
     });
+    droppedNode.params = moduleData["params"];
+    droppedNode.module_id = moduleData["id"];
+
+    console.log(droppedNode);
     droppedNode.setPosition(engine.getRelativeMousePoint(event));
     engine.getModel().addNode(droppedNode);
 
@@ -62,6 +68,9 @@ export const Diagrams = (props: diagramProps) => {
   const model = new DiagramModel();
   model.addAll(node1, node2, node3, link1);
 
+  engine
+    .getActionEventBus()
+    .registerAction(new DeleteItemsAction({ keyCodes: [46] }));
   engine.setModel(model);
   return (
     <div
@@ -77,5 +86,3 @@ export const Diagrams = (props: diagramProps) => {
     </div>
   );
 };
-
-// TODO: Odczyt schematów z API

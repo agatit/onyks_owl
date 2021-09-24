@@ -21,14 +21,9 @@ class NodeAbstractWidget extends React.Component<
     this.state = {};
   }
 
-  changeName() {
-    store.dispatch(selectedNode(this.props.node));
-    this.props.node.title = "TEST";
-  }
-
   render() {
     return (
-      <div className={clsx("custom-node-port")} onDoubleClick={this.changeName}>
+      <div className={clsx("custom-node-port")}>
         {!this.props.node.source && (
           <PortWidget
             engine={this.props.engine}
@@ -114,9 +109,13 @@ export class NodeWidget extends React.Component<
     this.state = {};
   }
 
+  handleClick = () => {
+    store.dispatch(selectedNode(this.props.node));
+  };
+
   render() {
     return (
-      <div className="custom-node">
+      <div className="custom-node" onClick={this.handleClick}>
         <div
           className="custom-node-header"
           style={{ backgroundColor: this.props.node.color }}

@@ -1,4 +1,3 @@
-import { NodeWidget } from "@projectstorm/react-diagrams-core";
 import { NodeModel } from "../../Components/CustomDiagramNodes/NodeModel";
 import { nodeActionTypes } from "../Reducers/nodeReducer";
 

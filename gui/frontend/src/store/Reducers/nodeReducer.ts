@@ -6,7 +6,7 @@ export const nodeActionTypes = {
 
 const initialState = {
   selectedNode: {},
-  test: "s",
+  test: true,
 };
 
 interface nodeAction {
@@ -17,10 +17,7 @@ interface nodeAction {
 export const nodesData = (state = initialState, action: nodeAction) => {
   switch (action.type) {
     case nodeActionTypes.SET_SELECTED_NODE:
-      console.log(
-        "In reducer! - " + action.node.title + " test: " + state.test
-      );
-      return { ...state, selectedNode: action.node, test: state.test + "1" };
+      return { ...state, selectedNode: action.node, test: !state.test };
     default:
       return state;
   }

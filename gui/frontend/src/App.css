@@ -12,7 +12,11 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-.srd-diagram { height: 80vh; background-color: aliceblue; width: 90%; }
+.srd-diagram {
+  height: 80vh;
+  background-color: aliceblue;
+  width: 90%;
+}
 
 .App-header {
   background-color: #282c34;
