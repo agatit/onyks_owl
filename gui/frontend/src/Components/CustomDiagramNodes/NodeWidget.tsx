@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams-core";
 import { NodeModel } from "./NodeModel";
 import { store } from "../../store/store";
-import { selectedNode } from "../../store/Actions/nodeActions";
+import { deleteNode, selectedNode } from "../../store/Actions/nodeActions";
 
 export interface NodeWidgetProps {
   node: NodeModel;
@@ -19,6 +19,11 @@ class NodeAbstractWidget extends React.Component<
   constructor(props: NodeWidgetProps) {
     super(props);
     this.state = {};
+    this.props.node.registerListener({
+      entityRemoved: ({ entity }: any) => {
+        store.dispatch(deleteNode(this.props.node));
+      },
+    });
   }
 
   render() {

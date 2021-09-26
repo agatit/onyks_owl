@@ -39,7 +39,7 @@ export class NodeModel extends StormNodeModel {
     this.outputs = options.outputs || [];
     this.params = {};
     this.module_id = "node";
-    // setup an in and out port
+
     if (this.content && !this.source) {
       this.addPort(
         new DefaultPortModel({

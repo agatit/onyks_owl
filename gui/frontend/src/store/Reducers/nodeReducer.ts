@@ -2,10 +2,11 @@ import { NodeModel } from "../../Components/CustomDiagramNodes/NodeModel";
 
 export const nodeActionTypes = {
   SET_SELECTED_NODE: "SET_SELECTED_NODE",
+  ON_NODE_DELETE: "ON_NODE_DELETE",
 };
 
 const initialState = {
-  selectedNode: {},
+  selectedNode: undefined,
   test: true,
 };
 
@@ -18,6 +19,9 @@ export const nodesData = (state = initialState, action: nodeAction) => {
   switch (action.type) {
     case nodeActionTypes.SET_SELECTED_NODE:
       return { ...state, selectedNode: action.node, test: !state.test };
+    case nodeActionTypes.ON_NODE_DELETE:
+      console.log(undefined);
+      return { ...state, selectedNode: undefined, test: !state.test };
     default:
       return state;
   }

@@ -1,5 +1,5 @@
 import {
-  DefaultLinkModel,
+  DefaultLabelFactory,
   DiagramEngine,
   DiagramModel,
 } from "@projectstorm/react-diagrams";
@@ -9,17 +9,19 @@ import {
   CanvasWidget,
   DeleteItemsAction,
 } from "@projectstorm/react-canvas-core";
+import { DemoCanvasWidget } from "./Components/Layout/CanvasWidget";
+import { useEffect, useState } from "react";
+import Modal from "./Components/Layout/Utils/Modal";
+import Backdrop from "./Components/Layout/Utils/Backdrop";
 
 interface diagramProps {
   engine: DiagramEngine;
 }
 
 export const Diagrams = (props: diagramProps) => {
-  // create an instance of the engine with all the defaults
-
   function onNodeDrop(event: React.DragEvent<HTMLDivElement>) {
     var moduleData = JSON.parse(event.dataTransfer.getData("diagram-node"));
-    const moduleProps = Object.keys(moduleData);
+    // const moduleProps = Object.keys(moduleData);
     const droppedNode = new NodeModel({
       color: "LemonChiffon",
       title: moduleData.name,
@@ -28,50 +30,60 @@ export const Diagrams = (props: diagramProps) => {
     droppedNode.params = moduleData["params"];
     droppedNode.module_id = moduleData["id"];
 
-    console.log(droppedNode);
     droppedNode.setPosition(engine.getRelativeMousePoint(event));
     engine.getModel().addNode(droppedNode);
 
     engine.repaintCanvas();
   }
 
+  async function loadSchema() {
+    const url = "testSchema3.json";
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    var newModel = new DiagramModel();
+    var modelString = JSON.stringify(data);
+    newModel.deserializeModel(JSON.parse(modelString), engine);
+    engine.setModel(newModel);
+    setSchemaLoading(false);
+  }
+
   const engine = props.engine;
+  const [isSchemaLoading, setSchemaLoading] = useState(true);
   engine.getNodeFactories().registerFactory(new NodeFactory());
-
-  // --- node source
-  const node1 = new NodeModel({
-    color: "LemonChiffon",
-    title: "Źródło OUT",
-    content: "Source",
-    source: true,
-  });
-  node1.setPosition(100, 100);
-  // --- node data
-  const node2 = new NodeModel({
-    color: "LemonChiffon",
-    title: "Źródło IN/OUT",
-    content: "Dane",
-  });
-  node2.setPosition(350, 100);
-  const node3 = new NodeModel({
-    color: "LightCyan",
-    title: "Źródło IN/OUT",
-    content: "Dane",
-  });
-  node3.setPosition(350, 200);
-
-  // TESTOWY SCHEMAT
-  const link1 = new DefaultLinkModel();
-  link1.setSourcePort(node1.getPort("Out"));
-  link1.setTargetPort(node3.getPort("In"));
-
-  const model = new DiagramModel();
-  model.addAll(node1, node2, node3, link1);
+  engine.getLabelFactories().registerFactory(new DefaultLabelFactory());
 
   engine
     .getActionEventBus()
     .registerAction(new DeleteItemsAction({ keyCodes: [46] }));
-  engine.setModel(model);
+
+  useEffect(() => {
+    console.log("ładowanie");
+
+    setTimeout(loadSchema, 4000);
+  }, []);
+
+  if (isSchemaLoading) {
+    engine.setModel(new DiagramModel());
+    return (
+      <div
+        className="App"
+        onDrop={(event) => {
+          onNodeDrop(event);
+        }}
+        onDragOver={(event) => {
+          event.preventDefault();
+        }}
+      >
+        <DemoCanvasWidget>
+          <CanvasWidget className="diagram-container" engine={engine} />
+        </DemoCanvasWidget>
+        ;{isSchemaLoading && <Modal text="Trwa ładowanie schematu..." />}
+        {isSchemaLoading && <Backdrop />}
+      </div>
+    );
+  }
+
   return (
     <div
       className="App"
@@ -82,7 +94,9 @@ export const Diagrams = (props: diagramProps) => {
         event.preventDefault();
       }}
     >
-      <CanvasWidget className="diagram-container" engine={engine} />
+      <DemoCanvasWidget>
+        <CanvasWidget className="diagram-container" engine={engine} />
+      </DemoCanvasWidget>
     </div>
   );
 };

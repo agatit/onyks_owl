@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import React, { forwardRef } from "react";
 
 enum InputType {
   button = "button",
@@ -80,9 +80,7 @@ interface TextInputProps extends BaseInputProps {
 }
 
 function TextInputBase(props: TextInputProps, ref: any) {
-  const [currentValue, setCurrentValue] = useState(props.initValue);
-
-  function handleChange() {}
+  //const [currentValue, setCurrentValue] = useState(props.initValue);
 
   return (
     <div>

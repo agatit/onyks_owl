@@ -1,5 +1,5 @@
 .module {
-  color: #171531;
+  color: #dbd3d3;
   font-family: Arial;
   font-weight: bold;
   padding: 5px;
@@ -7,5 +7,5 @@
   border-radius: 3px;
   margin-bottom: 5px;
   cursor: pointer;
-  background-color: #60a0bb;
+  background-color: #3f3b3b;
 }

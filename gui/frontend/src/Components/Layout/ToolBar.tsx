@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
-import data from "../../data/schemas/testSchema3.json";
+import React from "react";
 import classses from "./Toolbar.module.css";
-import Button from "../UI/Button";
-import { DiagramEngine, DiagramModel } from "@projectstorm/react-diagrams-core";
-import getNotification, { NotificationType } from "../UI/Notification";
+import { DiagramEngine } from "@projectstorm/react-diagrams-core";
 import { NodeModel } from "../CustomDiagramNodes/NodeModel";
 import { connect } from "react-redux";
 import { store } from "../../store/store";
 import { useRef } from "react";
 import { selectedNode } from "../../store/Actions/nodeActions";
 import { TextInput } from "../UI/Inputs";
-import { parseClassName } from "react-toastify/dist/utils";
 
 interface toolBarProps {
   engine: DiagramEngine;
@@ -48,29 +44,35 @@ function ToolBar(props: toolBarProps) {
     }
   };
 
+  if (node === undefined) {
+    return (
+      <div className={classses.toolBar}>
+        <h2>Brak wybranego modułu</h2>
+      </div>
+    );
+  }
+
   return (
     <div className={classses.toolBar}>
-      <h2>
-        Moduł: {props.node.title ? props.node.title : "Brak wybranego modułu"}
-      </h2>
+      <h2>{node.title ? node.title : "Brak nazwy modułu"}</h2>
       <TextInput
         ref={nameInputRef}
         onChangeAction={handlePropertyChange}
         id="name-input"
-        initValue={props.node.title}
+        initValue={node.title}
         labelText="Nazwa: "
         propName={titleProp}
         refNum={10}
       />
 
-      {props.node.params != undefined &&
+      {props.node.params !== undefined &&
         Object.keys(props.node.params).map((paramKey, index) => {
           return (
             <TextInput
               ref={addToRefs}
               onChangeAction={handlePropertyChange}
-              id={props.node.params[paramKey] + "-" + props.node.module_id}
-              initValue={props.node.params[paramKey]}
+              id={node.params[paramKey] + "-" + node.module_id}
+              initValue={node.params[paramKey]}
               labelText={
                 paramKey.charAt(0).toUpperCase() + paramKey.slice(1) + ": "
               }

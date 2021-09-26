@@ -1,8 +1,12 @@
-import React from "react";
-import { toast } from "react-toastify";
 import classes from "./Button.module.css";
 
-function Button(props: any) {
+interface BtnProps {
+  color?: string;
+  action: () => void;
+  text: string;
+}
+
+function Button(props: BtnProps) {
   return (
     <button
       color={props.color}
