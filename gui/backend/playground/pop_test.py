@@ -6,8 +6,8 @@ import importlib.abc
 import os
 
 
-mod_nam = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl/module_perspective_transform.py'))
-mod_nam_2 = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl'))
+mod_nam = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../../owl/module_perspective_transform.py'))
+mod_nam_2 = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../../owl'))
 # x = importlib.import_module('Module', sys.argv[1])
 # print(mod_nam)
 # w = importlib.import_module('Module', mod_nam)
@@ -28,20 +28,21 @@ def my_import(name):
 
 if __name__ == '__main__':
 
-    def import_file(full_name, path):
-        """Import a python module from a path. 3.4+ only.
+    # def import_file(full_name, path):
+    #     """Import a python module from a path. 3.4+ only.
 
-        Does not call sys.modules[full_name] = path
-        """
-        from importlib import util
+    #     Does not call sys.modules[full_name] = path
+    #     """
+    #     from importlib import util
 
-        spec = util.spec_from_file_location(full_name, path)
-        mod = util.module_from_spec(spec)
+    #     spec = util.spec_from_file_location(full_name, path)
+    #     mod = util.module_from_spec(spec)
 
-        spec.loader.exec_module(mod)
-        return mod
+    #     spec.loader.exec_module(mod)
+    #     return mod
 
-    import_file('Module', mod_nam)
+    # import_file('Module', mod_nam)
+
     # import importlib.machinery
     # modulename = importlib.machinery.SourceFileLoader('Module',mod_nam).load_module()
 
@@ -53,18 +54,18 @@ if __name__ == '__main__':
     # print(ldr.load_module('Module', __file__= mod_nam))
     
     
-    # import importlib.util
-    # import sys
+    import importlib.util
+    import sys
 
-    # # For illustrative purposes.
+    # For illustrative purposes.
 
-    # file_path = mod_nam
-    # module_name = 'Module'
+    file_path = mod_nam
+    module_name = 'Module'
 
-    # spec = importlib.util.spec_from_file_location(module_name, file_path, submodule_search_locations=mod_nam_2)
-    # module = importlib.util.module_from_spec(spec)
-    # sys.modules[module_name] = module
-    # spec.loader.exec_module(module)
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
     '''
     Odpalanie modułu w ten sposób ma problemy z wczytaniem dodatkowych modułów lokalnych dla siebie(stream_video)
     ale takto działa, ale włąśnie nie do końca
@@ -100,4 +101,4 @@ if __name__ == '__main__':
     #     if path is not None:
     #         setattr(parent_module, child_name, module)
     #     return module
-    # import_module('Module', mod_nam)
+    # import_module('Module')
