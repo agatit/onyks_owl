@@ -3,6 +3,8 @@
 
 import sys
 import importlib.abc
+import importlib
+import importlib.util
 import os
 
 
@@ -12,7 +14,9 @@ mod_nam_2 = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file
 # print(mod_nam)
 # w = importlib.import_module('Module', mod_nam)
 
-# print(importlib.find_module('Module', '../../owl/module_perspective_transform.py'))
+# print(importlib.abc.Finder.find_module('Module', '../../owl/module_perspective_transform.py'))
+# mpf = importlib.abc.MetaPathFinder()
+# print(mpf.find_module(fullname='Module', path=mod_nam_2))
 
 # w = importlib.import_module('Module', '../../owl/module_perspective_transform.py')
 def my_import(name):
@@ -23,11 +27,39 @@ def my_import(name):
         mod = getattr(mod, comp)
     return mod
 
-# x = w("./../examples/perspective_transform/config.json")
+# x = w("./../../examples/perspective_transform/config.json")
 # x.get_config()
 
 if __name__ == '__main__':
-
+    
+    """
+    sys.path.append(str(mod_nam_2))
+    module = importlib.import_module('owl')
+    class_ = getattr(module, 'Module')
+    instance = class_()
+    """
+    
+    sys.path.append(mod_nam_2)
+    xd = 'module_perspective_transform'
+    # from xd import Module
+    # from module_perspective_transform import Module
+    # w = importlib.import_module('Module', xd)
+    w = importlib.util.find_spec('module_perspective_transform', mod_nam_2)
+    print(w)
+    module = importlib.util.module_from_spec(w)
+    sys.modules['module_perspective_transform'] = module
+    x = sys.modules['module_perspective_transform']()
+    print(x.get_config())
+    # w = importlib.import_module('Module', mod_nam)
+    # x = Module()
+    
+    '''
+    sys.path.append(str(mod_nam))
+    from owl import Module
+    # from sys.path[-1] import Module
+    x = Module()
+    y = x.get_config()
+    '''
     # def import_file(full_name, path):
     #     """Import a python module from a path. 3.4+ only.
 
@@ -53,7 +85,7 @@ if __name__ == '__main__':
     # ldr = importlib.abc.Loader()
     # print(ldr.load_module('Module', __file__= mod_nam))
     
-    
+    """
     import importlib.util
     import sys
 
@@ -63,9 +95,14 @@ if __name__ == '__main__':
     module_name = 'Module'
 
     spec = importlib.util.spec_from_file_location(module_name, file_path)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
-    spec.loader.exec_module(module)
+    module_class = importlib.util.module_from_spec(spec)
+    # sys.modules[module_name] = module
+    mc2 = spec.loader.create_module(spec)
+    spec.loader.exec_module(module_class)
+    # module_class.get_config()
+    pass
+    module_class = None
+    """
     '''
     Odpalanie modułu w ten sposób ma problemy z wczytaniem dodatkowych modułów lokalnych dla siebie(stream_video)
     ale takto działa, ale włąśnie nie do końca

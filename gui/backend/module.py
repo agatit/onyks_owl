@@ -1,6 +1,11 @@
 import os
 import subprocess
+import multiprocessing
+import importlib.util
+import sys
 
+# TODO ejkurwadefaultconfigtotenztypami!!!!!!1111!1!1!!!
+mod_nam_2 = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../../owl'))
 
 class Module():
     def __init__(self, name, project_path, module_path, config_path):
@@ -24,24 +29,34 @@ class Module():
         proc.stdin.write(bytes('print(x)\n',                                                                    encoding='utf-8'))
         self.default_config = proc.communicate()[0].decode('utf-8')
         proc.kill()
+        # TODO wywalić stąd kiedyś ten 'subprocess' raczej...
+
+
+        sys.path.append(mod_nam_2)
+        w = importlib.util.find_spec(self.name, self.module_path)
+        itertools = importlib.import_module(self.name)
+        x = itertools.Module([self.name,self.config_path])
+        print(x.get_config())
+        module = importlib.util.module_from_spec(w)
+        sys.modules[self.name] = module # TODO ta linijka chyba hasiok
+        # TODO ogólnie nazwy w tej okolicy ogarnąć
 
     def module_start(self):
-        if self.process_handler is None:
-            self.file1 = open(self.stdout_path, "w")
-            self.file2 = open(self.stderr_path, "w")
-            self.process_handler = subprocess.Popen(['python3', self.module_path, self.config_path], stdout=self.file1, stderr=self.file2)
-            return 'jest gites'
-        else:
-            return 'ej, to już jest odpalone...'
+
+        file_path = self.module_path + self.name + '.py'
+        module_name = 'Module'
+
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        self.process_handler = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.process_handler)
+        # TODO logi?
         '''
         except:
             return 'ej, coś się zjebało'
         '''
     def module_stop(self):
         if self.process_handler:
-            self.process_handler.kill()
-            self.file1.close()
-            self.file2.close()
+            self.process_handler = None
         else:
             return 'ej, to już nie żyje i tak...'
     def module_restart(self):
@@ -66,3 +81,5 @@ class Module():
 
     def get_default_config(self):
         return self.default_config
+    def get_params(self):
+        return self.config

@@ -10,6 +10,15 @@ import time
 
 import numpy as np
 
+from pathlib import Path
+
+if __package__ == '':
+    file = Path(__file__).resolve()
+    parent, top = file.parent, file.parents[1]
+
+    sys.path.append(str(parent))
+    __package__ = 'onyks_owl' # TODO do pomyślenia czy ja tego potrzebuję...
+
 import stream_video
 import stream_data
 import module_base
