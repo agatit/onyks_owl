@@ -86,7 +86,7 @@ class Engine():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Pro
             self.add_project(name)
             return 'coś' # TODO returny
         except:
-            return ERROR_RETVAL
+            return 'error'
 
     def get_project_conf(self, project_id):
         return self.projects[project_id].get_config()
@@ -110,22 +110,18 @@ class Engine():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Pro
         #     return ERROR_RETVAL
     def delete_project_module(self, project_id, module_id):
         return self.projects[project_id].delete_module(module_id)
+    
+    # TODO to pod spodem wymaga dostosowania pod nową strukturę klas
+    # ale za to się wezmę jak pogadamy o config'u
     def get_module_params(self, project_id, module_id):
-        config = self.get_project_conf(project_id)
-        if config['modules'][module_id]['params']:
-            params = config['modules'][module_id]['params']
-            return params
-        else:
-            return ERROR_RETVAL
-        ''')YM projekcie, w TYM module, jest TAKI parametr
-        jeżeli nie ma...
-        co jeżeli nie ma? będzie NULL czy glizda?
-        glizda całkiem
-        także try catchy więcej...
-        a teraz lece jakieś configi poprzerabiać na nową modłę
-        albo nie, to potem
-        logi?
-        '''
+        return self.projects[project_id].get_module_params(module_id)
+        # config = self.get_project_conf(project_id)
+        # if config['modules'][module_id]['params']:
+        #     params = config['modules'][module_id]['params']
+        #     return params
+        # else:
+        #     return 'error'
+
         
     def get_module_parameter(self, project_id, module_id, parameter):
         config = self.get_project_conf(project_id)
@@ -180,6 +176,6 @@ if __name__ == '__main__':
     time.sleep(5)
     # print(x.projects['perspective_transform'].get_logs())
 
-    with open('xd.json', 'w') as y:
-        json.dump(x.projects['perspective_transform'].get_logs(), y, ensure_ascii=False, indent=4)
+    # with open('xd.json', 'w') as y:
+    #     json.dump(x.projects['perspective_transform'].get_logs(), y, ensure_ascii=False, indent=4)
     x.projects['perspective_transform'].stop_project()

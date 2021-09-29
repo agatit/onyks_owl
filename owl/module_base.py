@@ -24,11 +24,16 @@ class Module:
             filename = sys.modules[self.__module__].__file__
             self.module_name = os.path.splitext(os.path.basename(filename))[0]        
         
-        handler = logging.StreamHandler(sys.stdout)
+        # handler = logging.StreamHandler(sys.stdout)
+        log_dir = os.path.dirname(argv[1]) + '/logs/' # TODO ogarnąć to po ludzku
+        handler = logging.FileHandler(filename = log_dir + self.module_name + '.txt', mode='a')
         formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S")
         handler.setFormatter(formatter)
-        logging.basicConfig(level=logging.DEBUG, handlers=[handler])
-        logging.info(f"{self.module_name} started.")
+        # logging.basicConfig(level=logging.DEBUG, handlers=[handler])
+        self.log_object = logging.getLogger(name='logger4'+self.module_name)
+        self.log_object.setLevel(logging.DEBUG)
+        self.log_object.addHandler(handler)
+        self.log_object.info(f"{self.module_name} started.")
 
         self.default_config = {
             'stream_queue_limit': ['int', 100],
@@ -53,10 +58,10 @@ class Module:
 
                     self.config = config_file['modules'][name]
                     if self.config is None:
-                        logging.info(f"config file: {argv[1]} do not contain section for {name}")    
+                        self.log_object.info(f"config file: {argv[1]} do not contain section for {name}")    
                         exit()
 
-                    logging.info(f"config file: {argv[1]} section {name}")
+                    self.log_object.info(f"config file: {argv[1]} section {name}")
             else:
                 print("Usage: module config_file.json [instance_name]")
                 exit()  
@@ -69,15 +74,15 @@ class Module:
             self.params = self.config.get("params", {})
 
             if self.task_expire_time > self.task_timeout:
-                logging.error("task_expire_time CANNOT be bigger than task_timeout")
+                self.log_object.error("task_expire_time CANNOT be bigger than task_timeout")
                 exit()
 
             if self.stream_expire_time > self.stream_timeout:
-                logging.error("stream_expire_time CANNOT be bigger than stream_timeout")
+                self.log_object.error("stream_expire_time CANNOT be bigger than stream_timeout")
                 exit()                
 
             if self.task_expire_time > self.stream_expire_time:
-                logging.error("task_expire_time CANNOT be bigger than stream_expire_time")
+                self.log_object.error("task_expire_time CANNOT be bigger than stream_expire_time")
                 exit()                
 
             self.redis = redis.Redis()
@@ -105,7 +110,7 @@ class Module:
                 self.stream_timeout)  
 
         except Exception as e:
-            logging.error(f"{self.module_name}: {str(e)}\n\n{u''.join(traceback.format_tb(e.__traceback__))}\n")
+            self.log_object.error(f"{self.module_name}: {str(e)}\n\n{u''.join(traceback.format_tb(e.__traceback__))}\n")
             self.terminate = True           
 
 
@@ -138,9 +143,9 @@ class Module:
                         self.redis.set(f"owl:module:{self.module_name}:task", json.dumps(task), ex=self.task_expire_time)
                         self.task_process(task_data, input_stream)                                
                     else:
-                        logging.debug("Nothing in task queue")
+                        self.log_object.debug("Nothing in task queue")
         except Exception as e:
-            logging.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
+            self.log_object.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
 
 
     def run(self):

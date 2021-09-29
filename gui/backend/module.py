@@ -5,7 +5,7 @@ import importlib.util
 import sys
 
 # TODO ejkurwadefaultconfigtotenztypami!!!!!!1111!1!1!!!
-mod_nam_2 = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../../owl'))
+mod_nam_2 = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl'))
 
 class Module():
     def __init__(self, name, project_path, module_path, config_path):
@@ -25,7 +25,7 @@ class Module():
         proc.stdin.write(bytes('os.chdir("' + self.module_path + '")\n',                                        encoding='utf-8'))
         proc.stdin.write(bytes('print(os.getcwd())\n',                                                          encoding='utf-8'))
         proc.stdin.write(bytes('from module_perspective_transform import Module\n',                             encoding='utf-8'))
-        proc.stdin.write(bytes("x = Module('" + self.project_path + "/perspective_transform/config.json')\n",   encoding='utf-8'))
+        proc.stdin.write(bytes("x = Module('" + self.project_path + "/config.json')\n",   encoding='utf-8'))
         proc.stdin.write(bytes('print(x)\n',                                                                    encoding='utf-8'))
         self.default_config = proc.communicate()[0].decode('utf-8')
         proc.kill()
@@ -33,27 +33,23 @@ class Module():
 
 
         sys.path.append(mod_nam_2)
-        w = importlib.util.find_spec(self.name, self.module_path)
-        itertools = importlib.import_module(self.name)
-        x = itertools.Module([self.name,self.config_path])
-        print(x.get_config())
-        module = importlib.util.module_from_spec(w)
-        sys.modules[self.name] = module # TODO ta linijka chyba hasiok
+        # module_spec = importlib.util.find_spec(self.name, self.module_path) # Coś do importu
+        module_wrapper = importlib.import_module(self.name) # Też coś do importu
+        self.module_object = module_wrapper.Module([self.name,self.config_path]) # Stricte obiekt
+        print(self.module_object.get_config())
+        # module = importlib.util.module_from_spec(module_spec)
+        # sys.modules[self.name] = module # TODO ta linijka chyba hasiok
         # TODO ogólnie nazwy w tej okolicy ogarnąć
 
     def module_start(self):
-
-        file_path = self.module_path + self.name + '.py'
-        module_name = 'Module'
-
-        spec = importlib.util.spec_from_file_location(module_name, file_path)
-        self.process_handler = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(self.process_handler)
-        # TODO logi?
+        long = multiprocessing.get_logger()
+        # self.process_handler = Module([self.name, self.config_path])
+        # self.process_handler.run()
         '''
         except:
             return 'ej, coś się zjebało'
         '''
+        pass
     def module_stop(self):
         if self.process_handler:
             self.process_handler = None
