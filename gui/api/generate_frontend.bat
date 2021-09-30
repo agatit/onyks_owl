@@ -1,0 +1,1 @@
+java -jar openapi-generator-cli.jar generate -g typescript-redux-query -i owlapi.yaml -o ../frontend-swagger
