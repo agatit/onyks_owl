@@ -1,0 +1,1211 @@
+openapi: "3.0.0"
+
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Onyks Wagon Location API"
+
+servers:
+  - url: http://localhost/owlapi
+
+paths:
+
+  /project:
+
+    get:
+      tags:
+        - "project_management"
+      summary: "Get list of projects"
+      description: ""
+      operationId: "listProjects"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project not found"
+        "405":
+          description: "Validation exception"
+
+    post:
+      tags:
+        - "project_management"
+      summary: "Adding new project"
+      description: ""
+      operationId: "addProject"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/Project"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema: 
+                "$ref": "#/components/schemas/Project"
+        "405":
+          description: "Invalid input"
+
+    put:
+      tags:
+      - "project_management"
+      summary: "Updates a Project"
+      description: ""
+      operationId: "updateProject"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project that needs to be updated"
+        required: true
+        schema:
+          type: "string" 
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Project' 
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: "Project not found"              
+        "405":
+          description: "Invalid input"          
+
+  /project({projectId}):
+
+    get:
+      tags:
+      - "project_management"
+      summary: "Find Project by ID"
+      description: "Returns a single project"
+      operationId: "getProject"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of project to return"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Project"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project not found"
+
+    delete:
+      tags:
+      - "project_management"
+      summary: "Deletes a Project"
+      description: ""
+      operationId: "deleteProject"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "Project id to delete"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project not found"
+      
+  /module_def:
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get list of module definitions"
+      description: ""
+      operationId: "listModuleDef"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ModuleDef"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Module definition not found"    
+
+  /project({projectId})/module:
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get list of project modules"
+      description: ""
+      operationId: "listModules"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Module"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Module definition not found"
+
+    post:
+      tags:
+        - "project_editor"  
+      summary: "Add module to project"
+      operationId: "addModule"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"      
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Module"          
+        "400":
+          description: "Invalid ProjectID supplied"   
+        "404":
+          description: "Project definition not found"                   
+        "405":
+          description: "Validation exception"             
+  
+  /project({projectId})/module({moduleId}):
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get specified project module"
+      description: ""
+      operationId: "getModule"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "moduleId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Module"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Module definition not found"    
+    
+    delete:
+      tags:
+        - "project_editor"
+      summary: "Delete module from project"
+      operationId: "deleteModule"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "moduleId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"      
+      responses:
+        '200':
+          description: OK
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Module definition not found" 
+
+  /project({projectId})/module({moduleId})/param:
+    get:
+      tags:
+        - "property_editor"
+      summary: "Get list of module params"
+      operationId: "listModuleParams"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "moduleId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref:  "#/components/schemas/ModuleParam"
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Project or module not found"  
+
+    put:
+      tags:
+      - "property_editor"
+      summary: "Updates module param"
+      operationId: "updateModuleParam"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project that needs to be updated"
+        required: true
+        schema:
+          type: "string"
+      - name: "moduleId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/ModuleParam' 
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModuleParam"
+        "404":
+          description: "Project or Module or Param not found"              
+        "405":
+          description: "Invalid input"
+
+
+  /project({projectId})/queue:
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get list of project queues"
+      description: ""
+      operationId: "listQueues"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"      
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Queue"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"
+
+    post:
+      tags:
+        - "project_editor"  
+      summary: "Add queue to project"
+      operationId: "addQueue"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Module"          
+        "400":
+          description: "Invalid ID supplied"   
+        "404":
+          description: "Project definition not found"                   
+        "405":
+          description: "Validation exception"
+
+    put:
+      tags:
+        - "project_editor"  
+      summary: "Update queue to project"
+      operationId: "updateQueue"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Module"          
+        "400":
+          description: "Invalid ID supplied"   
+        "404":
+          description: "Project definition not found"                   
+        "405":
+          description: "Validation exception"           
+
+  /project({projectId})/queue({moduleId}):
+
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get specified of project queue"
+      description: ""
+      operationId: "getQueue"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "moduleId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Queue"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"
+
+    delete:
+      tags:
+        - "project_editor"
+      summary: "Delete queue from project"
+      operationId: "deleteQueue"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "moduleId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"        
+      responses:
+        '200':
+          description: OK
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"                     
+
+  /project({projectId})/queue({queueId})/param:
+    get:
+      tags:
+        - "property_editor"
+      summary: "Get list of queue params"
+      operationId: "listQueueParams"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "queueId"
+        in: "path"
+        description: "ID of Queue"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref:  "#/components/schemas/QueueParam"
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Project or queue not found"
+
+    put:
+      tags:
+      - "property_editor"
+      summary: "Updates queue param"
+      operationId: "updateQueueParam"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "queueId"
+        in: "path"
+        description: "ID of Queue"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/QueueParam'
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/QueueParam"
+        "404":
+          description: "Project or queue or param not found"
+        "405":
+          description: "Invalid input"
+
+  /project({projectId})/resource:
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get list of project resources"
+      description: ""
+      operationId: "listResources"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"      
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProjectResource"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"
+
+    post:
+      tags:
+        - "project_editor"  
+      summary: "Add resource to project"
+      operationId: "addResource"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProjectResource"          
+        "400":
+          description: "Invalid ID supplied"   
+        "404":
+          description: "Project definition not found"                   
+        "405":
+          description: "Validation exception"
+
+    put:
+      tags:
+        - "project_editor"  
+      summary: "Update resource to project"
+      operationId: "updateResource"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Module"          
+        "400":
+          description: "Invalid ID supplied"   
+        "404":
+          description: "Project definition not found"                   
+        "405":
+          description: "Validation exception"           
+
+  /project({projectId})/resource({resourceId}):
+
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get specified of project resource"
+      description: ""
+      operationId: "getResource"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "resourceId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProjectResource"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"
+
+    delete:
+      tags:
+        - "project_editor"
+      summary: "Delete resource from project"
+      operationId: "deleteResource"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "resourceId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"        
+      responses:
+        '200':
+          description: OK
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"   
+
+  /project({projectId})/instance:
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get list of project instances"
+      description: ""
+      operationId: "listInstances"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"      
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Instance"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"
+
+    post:
+      tags:
+        - "project_editor"  
+      summary: "Add instance to project"
+      operationId: "addInstance"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Module"          
+        "400":
+          description: "Invalid ID supplied"   
+        "404":
+          description: "Project definition not found"                   
+        "405":
+          description: "Validation exception"
+
+    put:
+      tags:
+        - "project_editor"  
+      summary: "Update instance to project"
+      operationId: "runInstance"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Module"          
+        "400":
+          description: "Invalid ID supplied"   
+        "404":
+          description: "Project definition not found"                   
+        "405":
+          description: "Validation exception"           
+
+  /project({projectId})/instance({instanceId}):
+
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get specified of project instance"
+      description: ""
+      operationId: "getInstance"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Instance"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"
+
+    delete:
+      tags:
+        - "project_editor"
+      summary: "Delete instance from project"
+      operationId: "killInstance"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Module"
+        required: true
+        schema:
+          type: "string"        
+      responses:
+        '200':
+          description: OK
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Project definition not found"     
+
+  /project({projectId})/instance({instanceId})/module:
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get specified project instance"
+      description: ""
+      operationId: "listInstanceModules"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/InstanceModule"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Instance definition not found"    
+
+  /project({projectId})/instance({instanceId})/module({instanceModuleId}):
+    get:
+      tags:
+        - "property_editor"
+      summary: "Get list of instance modules"
+      operationId: "getInstanceModule"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceModuleId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"        
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/InstanceModule"           
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Project or instance not found" 
+
+  /project({projectId})/instance({instanceId})/module({instanceModuleId})/reset:
+    get:
+      tags:
+        - "property_editor"
+      summary: "Reset instance module"
+      operationId: "resetInstanceModule"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceModuleId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"        
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/InstanceModule"           
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Project or instance not found" 
+
+  /project({projectId})/instance({instanceId})/queue:
+    get:
+      tags:
+        - "project_editor"
+      summary: "Get specified project instance"
+      description: ""
+      operationId: "listInstanceQueues"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/InstanceQueue"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Instance definition not found"    
+
+  /project({projectId})/instance({instanceId})/queue(instanceQueueId):
+    get:
+      tags:
+        - "property_editor"
+      summary: "Get list of instance queues"
+      operationId: "getInstanceQueue"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/InstanceQueue"           
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Project or instance not found" 
+
+  /project({projectId})/instance({instanceId})/queue(instanceQueueId)/current_image:
+    get:
+      tags:
+        - "property_editor"
+      summary: "Get list of instance queues"
+      operationId: "getQueueCurrentImage"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: integer            
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Project or instance not found" 
+
+  /project({projectId})/instance({instanceId})/queue(instanceQueueId)/clean:
+    post:
+      tags:
+        - "property_editor"
+      summary: "Cleans queue"
+      operationId: "cleanQueue"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"
+      - name: "instanceId"
+        in: "path"
+        description: "ID of Instance"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: integer            
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "Project or instance not found"           
+
+components:
+
+  schemas:
+
+    ModuleDef:
+      type: "object"
+      description: "List of module files in owl folder defining BaseModule descendant" 
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        description:
+          type: "string"
+
+    ModuleParamDef:
+      type: "object"
+      description: "List of parameters aquired by calling module's class method ...." 
+      properties:
+        module_def:
+          $ref: "#/components/schemas/ModuleDef"
+        id:
+          type: "string"
+        description:
+          type: "string"
+        type:
+          type: "string"
+          description: "Każdy typ powinien mieć dedykowany edytor w property managerze"
+          enum:
+          - "string"
+          - "float"
+          - "integer"
+          - "quad"
+          - "region"
+          - "region_list"
+          - "resource"    
+
+    QueueParamDef:
+      type: "object"
+      description: "Constant set of queue parameters, hardcoded in API"
+      properties:
+        id:
+          type: "string"
+        description:
+          type: "string"
+        type:
+          type: "string"
+          description: "TODO: Każdy typ powinien mieć dedykowany edytor w property managerze"
+          enum:
+          - "string"
+          - "float"
+          - "integer"
+          - "quad"
+          - "region"
+          - "region_list"
+          - "resource" 
+
+    Project:
+      type: "object"
+      description: "List of directories containing config.json with data from that files"
+      properties:
+        id:
+          type: "string"
+        comment:
+          type: "string"
+
+    Module:
+      type: "object"
+      description: "List of modules defined in specified config.json"
+      properties:
+        module_def:
+          $ref: "#/components/schemas/ModuleDef"
+        project:
+          $ref: "#/components/schemas/Project"
+        input:
+          $ref: "#/components/schemas/Queue"
+        output:
+          $ref: "#/components/schemas/Queue"        
+        name: 
+          type: "string"
+        comment:
+          type: "string"
+
+    ModuleParam:
+      type: "object"
+      description: "List of all parameters availaible for module filled with values from specified config.json or default values"
+      properties:
+        module:
+          $ref: "#/components/schemas/Module"
+        param_def:
+          $ref: "#/components/schemas/ModuleParamDef"
+        value:
+          type: "string"
+
+    Queue:
+      type: "object"
+      properties:
+        project:
+          $ref: "#/components/schemas/Project"
+        name:
+          type: "string"
+        task_queue_limit:
+          type: "integer"        
+        stream_queue_limit:
+          type: "integer"
+        task_queue_timeout:
+          type: "integer"        
+        stream_queue_timeout:
+          type: "integer"
+          
+    QueueParam:
+      type: "object"
+      properties:
+        module:
+          $ref: "#/components/schemas/Queue"    
+        param_def:
+          $ref: "#/components/schemas/ModuleParamDef"
+        value:
+          type: "string"
+
+    Instance:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        project:
+          $ref: "#/components/schemas/Project"
+      
+    InstanceModule:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        project_instance:
+          $ref: "#/components/schemas/Instance"   
+        module:
+          $ref: "#/components/schemas/Module" 
+      
+    InstanceQueue:
+      type: "object" 
+      properties:
+        id:
+          type: "string"
+        project_instance:
+          $ref: "#/components/schemas/Instance"   
+        queue:
+          $ref: "#/components/schemas/Queue"       
+
+    ProjectResource:
+      type: "object" 
+      properties:
+        project:
+          $ref: "#/components/schemas/Module"
+        url:
+          type: "string"
+          format: "binary"

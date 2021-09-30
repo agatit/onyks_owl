@@ -1,0 +1,1 @@
+java -jar openapi-generator-cli.jar generate -g python-flask -i owlapi.yaml -o ../backend-swagger
