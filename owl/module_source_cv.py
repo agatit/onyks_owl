@@ -26,7 +26,7 @@ class Module(module_base.Module):
 
         output_task_data = {}
 
-        cap = cv2.VideoCapture(self.params.get('device', 0))
+        cap = cv2.VideoCapture(self.params.get('device', 0)) # TODO odgórna weryfikacja czy plik istnieje
         output_task_data['source_name'] = self.params.get('source_name',self.params.get('device', "unknown"))
         with self.task_emit(output_task_data) as output_stream:
             ret,frame = cap.read()

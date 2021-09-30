@@ -26,7 +26,7 @@ class Module:
         
         # handler = logging.StreamHandler(sys.stdout)
         log_dir = os.path.dirname(argv[1]) + '/logs/' # TODO ogarnąć to po ludzku
-        handler = logging.FileHandler(filename = log_dir + self.module_name + '.txt', mode='a')
+        handler = logging.FileHandler(filename = log_dir + self.module_name + '.txt', mode='w') # TODO zastanowić się czy mode='w' czy mode='a'
         formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S")
         handler.setFormatter(formatter)
         # logging.basicConfig(level=logging.DEBUG, handlers=[handler])
@@ -97,7 +97,8 @@ class Module:
                 self.task_expire_time,
                 self.task_timeout,
                 self.stream_expire_time,
-                self.stream_timeout)
+                self.stream_timeout,
+                self.log_object)
             producers = {name : output_class for name, output_class in self.output_classes.items()} 
             self.task_producer = task.Producer(
                 self.redis,
@@ -107,7 +108,8 @@ class Module:
                 self.task_expire_time,
                 self.task_timeout, 
                 self.stream_expire_time,
-                self.stream_timeout)  
+                self.stream_timeout,
+                self.log_object)  
 
         except Exception as e:
             self.log_object.error(f"{self.module_name}: {str(e)}\n\n{u''.join(traceback.format_tb(e.__traceback__))}\n")

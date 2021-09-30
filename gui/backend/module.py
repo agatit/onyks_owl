@@ -3,9 +3,10 @@ import subprocess
 import multiprocessing
 import importlib.util
 import sys
+import threading
 
 # TODO ejkurwadefaultconfigtotenztypami!!!!!!1111!1!1!!!
-mod_nam_2 = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl'))
+owl_path = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl'))
 
 class Module():
     def __init__(self, name, project_path, module_path, config_path):
@@ -19,30 +20,26 @@ class Module():
         self.stderr_path = os.path.join(self.project_path, name + '_stderr.txt')
 
         self.process_handler = None
+        # self.thread_handler = None
 
-        proc = subprocess.Popen(['python3'], stdin=subprocess.PIPE ,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        proc.stdin.write(bytes('import os\n',                                                                   encoding='utf-8'))
-        proc.stdin.write(bytes('os.chdir("' + self.module_path + '")\n',                                        encoding='utf-8'))
-        proc.stdin.write(bytes('print(os.getcwd())\n',                                                          encoding='utf-8'))
-        proc.stdin.write(bytes('from module_perspective_transform import Module\n',                             encoding='utf-8'))
-        proc.stdin.write(bytes("x = Module('" + self.project_path + "/config.json')\n",   encoding='utf-8'))
-        proc.stdin.write(bytes('print(x)\n',                                                                    encoding='utf-8'))
-        self.default_config = proc.communicate()[0].decode('utf-8')
-        proc.kill()
-        # TODO wywalić stąd kiedyś ten 'subprocess' raczej...
+        self.import_class()
+        self.import_default_config()
 
+        # self.thread_handler = threading.Thread(target=self.module_object.run) # TODO nieco dziwnie to wygląda, ale raczej zadziała
+        # self.thread_handler.daemon = True
+        self.process_handler = multiprocessing.Process(target=self.module_object.run, daemon=True)
 
-        sys.path.append(mod_nam_2)
-        # module_spec = importlib.util.find_spec(self.name, self.module_path) # Coś do importu
-        module_wrapper = importlib.import_module(self.name) # Też coś do importu
+    def import_class(self):
+        sys.path.append(owl_path)
+        module_wrapper = importlib.import_module(self.name) # Coś do importu, wrapper na klasę
         self.module_object = module_wrapper.Module([self.name,self.config_path]) # Stricte obiekt
-        print(self.module_object.get_config())
-        # module = importlib.util.module_from_spec(module_spec)
-        # sys.modules[self.name] = module # TODO ta linijka chyba hasiok
-        # TODO ogólnie nazwy w tej okolicy ogarnąć
+
+    def import_default_config(self):
+        self.default_config = self.module_object.get_config()
 
     def module_start(self):
-        long = multiprocessing.get_logger()
+        self.process_handler.start()
+        # self.thread_handler.run()
         # self.process_handler = Module([self.name, self.config_path])
         # self.process_handler.run()
         '''
@@ -51,10 +48,9 @@ class Module():
         '''
         pass
     def module_stop(self):
-        if self.process_handler:
-            self.process_handler = None
-        else:
-            return 'ej, to już nie żyje i tak...'
+        self.process_handler.terminate()
+        self.process_handler.join() # TODO przenieść tego join'a wyżej w klasach
+        pass
     def module_restart(self):
         if self.module_stop() == 'ej, to już nie żyje i tak...':
             return 'question mark'

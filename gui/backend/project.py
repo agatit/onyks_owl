@@ -60,6 +60,8 @@ class Project():
         # TODO metoda w klasie modułu czyszcząca tą klasę. Wyłącz moduł, takie tam
         del self.modules[module_name]
 
+    def get_module_params(self, module_name):
+        return self.modules[module_name].get_params() # TODO ej no nie wiem czy pobierać paramy z modułu czy z 'config.json'
     def get_config(self):
         return self.config_json
     def start_project(self):

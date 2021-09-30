@@ -50,8 +50,9 @@ class Module(module_base.Module):
     def task_process(self, input_task_data, input_stream):
         """przetwarzanie strumieni"""
 
-        # trapezoid_coords = self.params.get('trapezoid_coords')
-        trapezoid_coords = self.params.get('trapezoid_coords_CUSTNAME')
+        tc = self.params.get('trapezoid_coords')
+        trapezoid_coords = np.array(tc)
+        # trapezoid_coords = self.params.get('trapezoid_coords_CUSTNAME')
 
         """get parameters for Wisenet camera calibration"""
         mtx_list = self.params.get("mtx")
