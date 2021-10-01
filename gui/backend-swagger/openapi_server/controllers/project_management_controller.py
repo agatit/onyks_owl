@@ -4,6 +4,10 @@ import six
 from openapi_server.models.project import Project  # noqa: E501
 from openapi_server import util
 
+from pathlib import Path
+import json
+
+project_path = "../../examples"
 
 def add_project(project=None):  # noqa: E501
     """Adding new project
@@ -43,7 +47,16 @@ def get_project(project_id):  # noqa: E501
 
     :rtype: Project
     """
-    return 'do some magic!'
+
+    response = []
+    pathlist = list(Path(project_path).glob(f'**/{project_id}/config.json'))
+    if len(pathlist) != 1:
+        return connexion.NoContent, 404
+    else:
+        with open(pathlist[0], "rb") as f:
+            config = json.load(f)
+        prj = Project(pathlist[0].parent.name, config.get("desc", "no description"))
+        return prj
 
 
 def list_projects():  # noqa: E501
@@ -54,7 +67,17 @@ def list_projects():  # noqa: E501
 
     :rtype: List[Project]
     """
-    return 'do some magic!'
+
+    response = []
+    pathlist = Path(project_path).glob('**/*/config.json')
+    for path in pathlist:
+        print(path.parent.name)
+        with open(path, "rb") as f:
+            config = json.load(f)
+        prj = Project(path.parent.name, config.get("desc", "no description"))
+        response.append(prj)
+
+    return response
 
 
 def update_project(project_id, project=None):  # noqa: E501
