@@ -1,0 +1,20 @@
+.PlayerMenu {
+  height: 5vh;
+  min-height: 45px;
+  width: 100%;
+  display: flex;
+  background: #131212;
+  align-items: center;
+  padding-left: 1rem;
+}
+
+.controls span {
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.playBtn svg {
+  position: absolute;
+  left: 50%;
+  right: 50%;
+}

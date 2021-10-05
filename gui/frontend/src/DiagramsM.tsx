@@ -13,12 +13,9 @@ import { DemoCanvasWidget } from "./Components/Layout/CanvasWidget";
 import { useEffect, useState } from "react";
 import Modal from "./Components/Layout/Utils/Modal";
 import Backdrop from "./Components/Layout/Utils/Backdrop";
+import { connect } from "react-redux";
 
-interface diagramProps {
-  engine: DiagramEngine;
-}
-
-export const Diagrams = (props: diagramProps) => {
+const Diagrams = (props: any) => {
   function onNodeDrop(event: React.DragEvent<HTMLDivElement>) {
     var moduleData = JSON.parse(event.dataTransfer.getData("diagram-node"));
     // const moduleProps = Object.keys(moduleData);
@@ -100,3 +97,11 @@ export const Diagrams = (props: diagramProps) => {
     </div>
   );
 };
+
+const mapStateToProps = (state: any) => {
+  return { engine: state.engineReducer.engine, test: state.nodesData.test };
+};
+
+const connector = connect(mapStateToProps)(Diagrams);
+
+export default connector;

@@ -30,6 +30,7 @@
   max-height: 40rem;
   max-width: 25%;
   position: absolute;
+  min-width: 300px;
 }
 
 .createPrjBtn {
@@ -56,4 +57,9 @@
   color: rgb(255, 247, 202);
   background-color: rgba(22, 53, 71, 0.75);
   border-radius: 50%;
+}
+
+.menu li span {
+  margin-left: 2vh;
+  color: black;
 }

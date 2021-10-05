@@ -10,10 +10,6 @@ function Navbar(props: any) {
       <Link to="/" style={{ textDecoration: "none" }}>
         <div className={classes.logo}> Onyks_owl</div>
       </Link>
-      <div className={classes.controls}>
-        <FontAwesomeIcon icon={faPlay} color="green" size="2x" />
-        <FontAwesomeIcon icon={faPause} color="grey" size="2x" />
-      </div>
       <FontAwesomeIcon icon={faCog} color="grey" size="2x" />
     </header>
   );

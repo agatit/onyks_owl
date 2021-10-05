@@ -86,7 +86,11 @@ function ToolBar(props: toolBarProps) {
 }
 
 const mapStateToProps = (state: any) => {
-  return { node: state.nodesData.selectedNode, test: state.nodesData.test };
+  return {
+    node: state.nodesData.selectedNode,
+    test: state.nodesData.test,
+    engine: state.engineReducer.engine,
+  };
 };
 
 const connector = connect(mapStateToProps)(ToolBar);
