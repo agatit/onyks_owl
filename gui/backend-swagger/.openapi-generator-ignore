@@ -22,4 +22,4 @@
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
 
-gui/backend-swagger/openapi_server/controllers/project_management_controller.py
+project_management_controller.py
