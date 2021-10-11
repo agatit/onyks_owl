@@ -15,26 +15,31 @@ class Project(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id=None, comment=None):  # noqa: E501
+    def __init__(self, id=None, name=None, description=None):  # noqa: E501
         """Project - a model defined in OpenAPI
 
         :param id: The id of this Project.  # noqa: E501
         :type id: str
-        :param comment: The comment of this Project.  # noqa: E501
-        :type comment: str
+        :param name: The name of this Project.  # noqa: E501
+        :type name: str
+        :param description: The description of this Project.  # noqa: E501
+        :type description: str
         """
         self.openapi_types = {
             'id': str,
-            'comment': str
+            'name': str,
+            'description': str
         }
 
         self.attribute_map = {
             'id': 'id',
-            'comment': 'comment'
+            'name': 'name',
+            'description': 'description'
         }
 
         self._id = id
-        self._comment = comment
+        self._name = name
+        self._description = description
 
     @classmethod
     def from_dict(cls, dikt) -> 'Project':
@@ -65,26 +70,51 @@ class Project(Model):
         :param id: The id of this Project.
         :type id: str
         """
+        if id is None:
+            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id
 
     @property
-    def comment(self):
-        """Gets the comment of this Project.
+    def name(self):
+        """Gets the name of this Project.
 
 
-        :return: The comment of this Project.
+        :return: The name of this Project.
         :rtype: str
         """
-        return self._comment
+        return self._name
 
-    @comment.setter
-    def comment(self, comment):
-        """Sets the comment of this Project.
+    @name.setter
+    def name(self, name):
+        """Sets the name of this Project.
 
 
-        :param comment: The comment of this Project.
-        :type comment: str
+        :param name: The name of this Project.
+        :type name: str
+        """
+        if name is None:
+            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
+
+        self._name = name
+
+    @property
+    def description(self):
+        """Gets the description of this Project.
+
+
+        :return: The description of this Project.
+        :rtype: str
+        """
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        """Sets the description of this Project.
+
+
+        :param description: The description of this Project.
+        :type description: str
         """
 
-        self._comment = comment
+        self._description = description

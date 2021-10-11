@@ -1,4 +1,4 @@
-openapi: "3.0.0"
+openapi: "3.0.3"
 
 info:
   description: ""
@@ -27,12 +27,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Project"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Project not found"
-        "405":
-          description: "Validation exception"
+        "500":
+          description: "Internal error"
 
     post:
       tags:
@@ -41,8 +37,9 @@ paths:
       description: ""
       operationId: "addProject"
       requestBody:
+        required: true
         content:
-          '*/*':
+          'application/json':
             schema:
               $ref: "#/components/schemas/Project"
       responses:
@@ -52,8 +49,12 @@ paths:
             'application/json':
               schema: 
                 "$ref": "#/components/schemas/Project"
-        "405":
+        "400":
           description: "Invalid input"
+        "409":
+          description: "Alredy exists"
+        "500":
+          description: "Internal error"          
 
     put:
       tags:
@@ -61,16 +62,10 @@ paths:
       summary: "Updates a Project"
       description: ""
       operationId: "updateProject"
-      parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project that needs to be updated"
-        required: true
-        schema:
-          type: "string" 
       requestBody:
+        required: true
         content:
-          '*/*':
+          'application/json':
             schema:
               $ref: '#/components/schemas/Project' 
       responses:
@@ -80,10 +75,12 @@ paths:
             'application/json':
               schema:
                 $ref: "#/components/schemas/Project"
+        "400":
+          description: "Invalid input"                
         "404":
           description: "Project not found"              
-        "405":
-          description: "Invalid input"          
+        "500":
+          description: "Internal error"       
 
   /project({projectId}):
 
@@ -108,9 +105,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Project"
         "400":
-          description: "Invalid ID supplied"
+          description: "Invalid input"
         "404":
           description: "Project not found"
+        "500":
+          description: "Intrenal error"
 
     delete:
       tags:
@@ -127,9 +126,11 @@ paths:
           type: "string"
       responses:
         "400":
-          description: "Invalid ID supplied"
+          description: "Invalid input"
         "404":
           description: "Project not found"
+        "500":
+          description: "Delete error"
       
   /module_def:
     get:
@@ -191,7 +192,13 @@ paths:
         description: "ID of Project"
         required: true
         schema:
-          type: "string"      
+          type: "string"   
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Module"      
       responses:
         '200':
           description: OK
@@ -204,7 +211,39 @@ paths:
         "404":
           description: "Project definition not found"                   
         "405":
-          description: "Validation exception"             
+          description: "Validation exception" 
+          
+    put:
+      tags:
+        - "project_editor"  
+      summary: "Add module to project"
+      operationId: "updateModule"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of Project"
+        required: true
+        schema:
+          type: "string"   
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Module"      
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/Module"          
+        "400":
+          description: "Invalid ProjectID supplied"   
+        "404":
+          description: "Project definition not found"                   
+        "405":
+          description: "Validation exception"           
   
   /project({projectId})/module({moduleId}):
     get:
@@ -317,9 +356,9 @@ paths:
           type: "string"
       requestBody:
         content:
-          '*/*':
+          'application/json':
             schema:
-              $ref: '#/components/schemas/ModuleParam' 
+              $ref:  "#/components/schemas/ModuleParam" 
       responses:
         "200":
           description: "OK"
@@ -373,13 +412,19 @@ paths:
         required: true
         schema:
           type: "string"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Queue"           
       responses:
         '200':
           description: OK
           content:
             'application/json':
               schema:
-                $ref: "#/components/schemas/Module"          
+                $ref: "#/components/schemas/Queue"          
         "400":
           description: "Invalid ID supplied"   
         "404":
@@ -399,13 +444,19 @@ paths:
         required: true
         schema:
           type: "string"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Queue"            
       responses:
         '200':
           description: OK
           content:
             'application/json':
               schema:
-                $ref: "#/components/schemas/Module"          
+                $ref: "#/components/schemas/Queue"          
         "400":
           description: "Invalid ID supplied"   
         "404":
@@ -1060,6 +1111,8 @@ components:
     ModuleDef:
       type: "object"
       description: "List of module files in owl folder defining BaseModule descendant" 
+      required:
+        - "id"
       properties:
         id:
           type: "string"
@@ -1071,6 +1124,9 @@ components:
     ModuleParamDef:
       type: "object"
       description: "List of parameters aquired by calling module's class method ...." 
+      required:
+        - "id"
+        - "type"
       properties:
         module_def:
           $ref: "#/components/schemas/ModuleDef"
@@ -1093,6 +1149,9 @@ components:
     QueueParamDef:
       type: "object"
       description: "Constant set of queue parameters, hardcoded in API"
+      required:
+        - "id"
+        - "type"
       properties:
         id:
           type: "string"
@@ -1112,17 +1171,35 @@ components:
 
     Project:
       type: "object"
-      description: "List of directories containing config.json with data from that files"
+      description: "List of directories containing config.json with data from that files"    
+      required:
+        - "id"
+        - "name"
       properties:
         id:
           type: "string"
-        comment:
+          nullable: false
+        name:
+          type: "string"
+          nullable: false
+        description:
           type: "string"
 
     Module:
       type: "object"
       description: "List of modules defined in specified config.json"
+      required:
+        - "id"
+        - "module_def_id"
       properties:
+        id:
+          type: "string"
+        module_def_id:
+          type: "string"     
+        name: 
+          type: "string"
+        comment:
+          type: "string"
         module_def:
           $ref: "#/components/schemas/ModuleDef"
         project:
@@ -1130,48 +1207,50 @@ components:
         input:
           $ref: "#/components/schemas/Queue"
         output:
-          $ref: "#/components/schemas/Queue"        
-        name: 
-          type: "string"
-        comment:
-          type: "string"
+          $ref: "#/components/schemas/Queue"             
+  
 
     ModuleParam:
       type: "object"
       description: "List of all parameters availaible for module filled with values from specified config.json or default values"
+      required:
+        - "param_def_id"
       properties:
+        param_def_id:
+          type: "string"      
+        value:
+          type: "string"
         module:
           $ref: "#/components/schemas/Module"
         param_def:
-          $ref: "#/components/schemas/ModuleParamDef"
-        value:
-          type: "string"
+          $ref: "#/components/schemas/ModuleParamDef"          
 
     Queue:
       type: "object"
+      required:
+        - "id"
+        - "name"
       properties:
-        project:
-          $ref: "#/components/schemas/Project"
+        id:
+          type: "string"
         name:
           type: "string"
-        task_queue_limit:
-          type: "integer"        
-        stream_queue_limit:
-          type: "integer"
-        task_queue_timeout:
-          type: "integer"        
-        stream_queue_timeout:
-          type: "integer"
+        project:
+          $ref: "#/components/schemas/Project"          
           
     QueueParam:
       type: "object"
+      required:
+        - "params_def_id"
       properties:
+        params_def_id:
+          type: "string"     
+        value:
+          type: "string"           
         module:
           $ref: "#/components/schemas/Queue"    
         param_def:
-          $ref: "#/components/schemas/ModuleParamDef"
-        value:
-          type: "string"
+          $ref: "#/components/schemas/QueueParamDef"
 
     Instance:
       type: "object"

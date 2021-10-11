@@ -21,9 +21,11 @@ class Module(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, module_def=None, project=None, input=None, output=None, name=None, comment=None):  # noqa: E501
+    def __init__(self, id=None, module_def=None, project=None, input=None, output=None, name=None, comment=None):  # noqa: E501
         """Module - a model defined in OpenAPI
 
+        :param id: The id of this Module.  # noqa: E501
+        :type id: str
         :param module_def: The module_def of this Module.  # noqa: E501
         :type module_def: ModuleDef
         :param project: The project of this Module.  # noqa: E501
@@ -38,6 +40,7 @@ class Module(Model):
         :type comment: str
         """
         self.openapi_types = {
+            'id': str,
             'module_def': ModuleDef,
             'project': Project,
             'input': Queue,
@@ -47,6 +50,7 @@ class Module(Model):
         }
 
         self.attribute_map = {
+            'id': 'id',
             'module_def': 'module_def',
             'project': 'project',
             'input': 'input',
@@ -55,6 +59,7 @@ class Module(Model):
             'comment': 'comment'
         }
 
+        self._id = id
         self._module_def = module_def
         self._project = project
         self._input = input
@@ -72,6 +77,29 @@ class Module(Model):
         :rtype: Module
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def id(self):
+        """Gets the id of this Module.
+
+
+        :return: The id of this Module.
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this Module.
+
+
+        :param id: The id of this Module.
+        :type id: str
+        """
+        if id is None:
+            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
+
+        self._id = id
 
     @property
     def module_def(self):

@@ -70,6 +70,8 @@ class ModuleDef(Model):
         :param id: The id of this ModuleDef.
         :type id: str
         """
+        if id is None:
+            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id
 

@@ -24,29 +24,37 @@ def add_instance(project_id):  # noqa: E501
     return 'do some magic!'
 
 
-def add_module(project_id):  # noqa: E501
+def add_module(project_id, module):  # noqa: E501
     """Add module to project
 
      # noqa: E501
 
     :param project_id: ID of Project
     :type project_id: str
+    :param module: 
+    :type module: dict | bytes
 
     :rtype: Module
     """
+    if connexion.request.is_json:
+        module = Module.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
-def add_queue(project_id):  # noqa: E501
+def add_queue(project_id, queue):  # noqa: E501
     """Add queue to project
 
      # noqa: E501
 
     :param project_id: ID of Project
     :type project_id: str
+    :param queue: 
+    :type queue: dict | bytes
 
-    :rtype: Module
+    :rtype: Queue
     """
+    if connexion.request.is_json:
+        queue = Queue.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
@@ -289,16 +297,37 @@ def run_instance(project_id):  # noqa: E501
     return 'do some magic!'
 
 
-def update_queue(project_id):  # noqa: E501
+def update_module(project_id, module):  # noqa: E501
+    """Add module to project
+
+     # noqa: E501
+
+    :param project_id: ID of Project
+    :type project_id: str
+    :param module: 
+    :type module: dict | bytes
+
+    :rtype: Module
+    """
+    if connexion.request.is_json:
+        module = Module.from_dict(connexion.request.get_json())  # noqa: E501
+    return 'do some magic!'
+
+
+def update_queue(project_id, queue):  # noqa: E501
     """Update queue to project
 
      # noqa: E501
 
     :param project_id: ID of Project
     :type project_id: str
+    :param queue: 
+    :type queue: dict | bytes
 
-    :rtype: Module
+    :rtype: Queue
     """
+    if connexion.request.is_json:
+        queue = Queue.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
