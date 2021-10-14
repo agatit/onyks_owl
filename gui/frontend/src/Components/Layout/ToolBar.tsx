@@ -3,7 +3,7 @@ import classses from "./Toolbar.module.css";
 import { DiagramEngine } from "@projectstorm/react-diagrams-core";
 import { NodeModel } from "../CustomDiagramNodes/NodeModel";
 import { connect } from "react-redux";
-import { store } from "../../store/store";
+import store from "../../store/store";
 import { useRef } from "react";
 import { selectedNode } from "../../store/Actions/nodeActions";
 import { TextInput } from "../UI/Inputs";

@@ -23,14 +23,12 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  top: 40%;
-  left: 15%;
-  height: 200px;
-  max-height: 40rem;
-  max-width: 25%;
+  max-width: 40%;
   position: absolute;
+  height: 100vh;
+  width: 30%;
   min-width: 300px;
+  background-color: rgb(187, 206, 206);
 }
 
 .createPrjBtn {
@@ -59,7 +57,13 @@
   border-radius: 50%;
 }
 
-.menu li span {
-  margin-left: 2vh;
+.menu li a {
+  margin-left: 1vh;
   color: black;
+  display: inline-block;
+}
+
+.menu ul {
+  overflow: auto;
+  max-height: 180px;
 }

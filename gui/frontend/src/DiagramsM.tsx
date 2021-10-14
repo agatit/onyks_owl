@@ -55,28 +55,18 @@ const Diagrams = (props: any) => {
     .registerAction(new DeleteItemsAction({ keyCodes: [46] }));
 
   useEffect(() => {
-    console.log("ładowanie");
-
     setTimeout(loadSchema, 4000);
   }, []);
 
   if (isSchemaLoading) {
     engine.setModel(new DiagramModel());
     return (
-      <div
-        className="App"
-        onDrop={(event) => {
-          onNodeDrop(event);
-        }}
-        onDragOver={(event) => {
-          event.preventDefault();
-        }}
-      >
+      <div className="App">
         <DemoCanvasWidget>
           <CanvasWidget className="diagram-container" engine={engine} />
         </DemoCanvasWidget>
-        ;{isSchemaLoading && <Modal text="Trwa ładowanie schematu..." />}
-        {isSchemaLoading && <Backdrop />}
+        <Modal text="Trwa ładowanie schematu..." />
+        <Backdrop />
       </div>
     );
   }

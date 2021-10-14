@@ -2,7 +2,7 @@ import * as React from "react";
 import clsx from "clsx";
 import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams-core";
 import { NodeModel } from "./NodeModel";
-import { store } from "../../store/store";
+import store from "../../store/store";
 import { deleteNode, selectedNode } from "../../store/Actions/nodeActions";
 
 export interface NodeWidgetProps {
