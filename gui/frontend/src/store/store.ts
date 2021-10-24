@@ -1,9 +1,9 @@
-import Reducers from "./Reducers";
 import { applyMiddleware, createStore, combineReducers } from "redux";
 import { entitiesReducer, queriesReducer, queryMiddleware } from "redux-query";
 import superagentInterface from "redux-query-interface-superagent";
 import { nodesData } from "./Reducers/nodeReducer";
 import { engineReducer } from "./Reducers/engineReducer";
+import { queueReducer } from "./Reducers/queueReducer";
 
 export const getQueries = (state: any) => state.queries;
 export const getEntities = (state: any) => state.entities;
@@ -11,6 +11,7 @@ export const getEntities = (state: any) => state.entities;
 const reducer = combineReducers({
   nodesData,
   engineReducer,
+  queueReducer,
   entities: entitiesReducer,
   queries: queriesReducer,
 });

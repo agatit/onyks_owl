@@ -1,14 +1,13 @@
 import * as React from "react";
-import clsx from "clsx";
 import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams-core";
 import { NodeModel } from "./NodeModel";
-import store from "../../store/store";
-import { deleteNode, selectedNode } from "../../store/Actions/nodeActions";
 
 export interface NodeWidgetProps {
   node: NodeModel;
   engine: DiagramEngine;
 }
+
+//   NOWA WERSJA - OWL NODE
 
 export interface NodeWidgetState {}
 
@@ -19,20 +18,15 @@ class NodeAbstractWidget extends React.Component<
   constructor(props: NodeWidgetProps) {
     super(props);
     this.state = {};
-    this.props.node.registerListener({
-      entityRemoved: ({ entity }: any) => {
-        store.dispatch(deleteNode(this.props.node));
-      },
-    });
   }
-
+  /*
   render() {
     return (
       <div className={clsx("custom-node-port")}>
         {!this.props.node.source && (
           <PortWidget
             engine={this.props.engine}
-            port={this.props.node.getPort("In")}
+            //  port={this.props.node.getPort("In")}
             className={clsx("circle-porter", "circle-porter-in")}
           >
             <div className={clsx("circle-port")} />
@@ -41,17 +35,19 @@ class NodeAbstractWidget extends React.Component<
         {this.props.node.content}
         <PortWidget
           engine={this.props.engine}
-          port={this.props.node.getPort("Out")}
+          // port={this.props.node.getPort("Out")}
           className={clsx("circle-porter", "circle-porter-out")}
         >
           <div className={clsx("circle-port")} />
         </PortWidget>
       </div>
     );
-  }
+    
+  }*/
 }
 
-class NodeFunctionWidget extends React.Component<
+/*
+export class NodeFunctionWidget extends React.Component<
   NodeWidgetProps,
   NodeWidgetState
 > {
@@ -104,7 +100,7 @@ class NodeFunctionWidget extends React.Component<
     );
   }
 }
-
+*/
 export class NodeWidget extends React.Component<
   NodeWidgetProps,
   NodeWidgetState
@@ -115,7 +111,7 @@ export class NodeWidget extends React.Component<
   }
 
   handleClick = () => {
-    store.dispatch(selectedNode(this.props.node));
+    // store.dispatch(selectedNode(this.props.node));
   };
 
   render() {
@@ -127,18 +123,32 @@ export class NodeWidget extends React.Component<
         >
           {this.props.node.title}
         </div>
-        {this.props.node.content ? (
-          <NodeAbstractWidget
-            node={this.props.node}
-            engine={this.props.engine}
-          />
-        ) : (
-          <NodeFunctionWidget
-            node={this.props.node}
-            engine={this.props.engine}
-          />
-        )}
+        {
+          this.props.node.content ? (
+            <NodeAbstractWidget
+              node={this.props.node}
+              engine={this.props.engine}
+            />
+          ) : undefined
+          // :(
+          //   <NodeFunctionWidget
+          //     node={this.props.node}
+          //     engine={this.props.engine}
+          //   />
+          // )
+        }
       </div>
     );
   }
 }
+
+/*
+ this.props.node.registerListener({
+      entityRemoved: ({ entity }: any) => {
+        //store.dispatch(deleteNode(this.props.node));
+        store.dispatch(
+          getDeleteModuleFromProjectRequest("Test", this.props.node.id)
+        );
+      },
+    });
+    */

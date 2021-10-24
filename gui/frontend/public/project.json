@@ -1,10 +1,11 @@
 [
   {
     "id": "Test",
-    "comment": "Comment"
+    "name": "Test",
+    "description": "Przykladowy opis projektu"
   },
   {
-    "id": "Drugi test",
-    "comment": "Comment"
+    "id": "Drugi_test",
+    "name": "Symulator"
   }
 ]

@@ -1,1 +1,15 @@
+.list_util {
+  cursor: pointer;
+  margin-left: 10px;
+}
 
+#hidden {
+  display: none;
+  width: 100%;
+  margin-top: 10px;
+  resize: none;
+}
+
+#visible:hover #hidden {
+  display: block;
+}

@@ -1,1 +1,1 @@
-export const getProjectList = (state: any) => state.entities.projects;
+export const selectProjectList = (state: any) => state.entities.projects;

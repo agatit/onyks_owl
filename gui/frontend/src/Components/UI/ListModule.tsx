@@ -10,6 +10,7 @@ function ListModule(props: any) {
           "diagram-node",
           JSON.stringify(props.module)
         );
+        console.log(JSON.stringify(props.module));
       }}
     >
       {props.module.name}

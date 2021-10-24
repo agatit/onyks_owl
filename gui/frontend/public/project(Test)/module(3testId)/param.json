@@ -1,0 +1,10 @@
+[
+  {
+    "param_def_id": "Testowy_param",
+    "value": "50"
+  },
+  {
+    "param_def_id": "Inny_param",
+    "value": "Lorem ipsum"
+  }
+]

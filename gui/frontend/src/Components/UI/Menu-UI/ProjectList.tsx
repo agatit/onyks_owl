@@ -1,42 +1,138 @@
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { Project } from "../../../store/redux-query/models/Project";
 import { useHistory } from "react-router-dom";
+import {
+  getDeleteProjectRequest,
+  getProjectListRequest,
+  getUpdateProjectRequest,
+} from "../../../store/Queries";
+import classes from "./ProjectList.module.css";
+import { selectProjectList } from "../../../store/selectors/projectSelectors";
+import { connect } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { ProjectListRequestConfig } from "../../../store/QueryConfigs";
+import Backdrop from "../../Layout/Utils/Backdrop";
 
 interface ProjectListProps {
   projects: Project[];
+  deleteProject: (projectID: string) => void;
+  getProjectList: () => void;
+  updateProject: (project: Project) => void;
 }
 
 function ProjectList(props: ProjectListProps) {
   const history = useHistory();
 
-  const editBtnHandler = () => {
-    history.push("/edit");
+  const [isPending, setIsPending] = useState(true);
+  const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      props.getProjectList();
+      setIsPending(false);
+    }, 4000);
+  }, []);
+
+  const editBtnHandler = (projectId: string) => {
+    history.push(`/edit/${projectId}`, { projectID: projectId });
   };
 
-  const wrapListElement = (project: Project) => {
+  const deleteBtnHandler = (projectId: string) => {
+    props.deleteProject(projectId);
+  };
+
+  const projectBtnHandler = (projectId: string) => {
+    history.push(`/player/${projectId}`, { projectID: projectId });
+  };
+
+  const descriptionInputBlurHandler = (project: Project) => {
+    if (descriptionTextAreaRef.current != null) {
+      const currentDesc = descriptionTextAreaRef.current.value;
+      project.description = currentDesc;
+      props.updateProject(project);
+    }
+  };
+
+  const wrapListElement = (project: Project, index: number) => {
     const path = "/player/";
     return (
-      <ListGroup.Item as="li">
-        <Link to={path} style={{ textDecoration: "none" }}>
-          <Button variant="dark">{project.id}</Button>
-        </Link>
-        <Link to="/edit" style={{ textDecoration: "none" }}>
-          <FontAwesomeIcon icon={faEdit} size="lg" />
-        </Link>
-        <FontAwesomeIcon icon={faTrashAlt} size="lg" onClick={editBtnHandler} />
+      <ListGroup.Item as="li" id={classes.visible} key={index}>
+        <Button
+          variant="dark"
+          className={classes.list_util}
+          onClick={() => {
+            projectBtnHandler(project.id);
+          }}
+        >
+          {project.name}
+        </Button>
+        <FontAwesomeIcon
+          icon={faEdit}
+          size="lg"
+          className={classes.list_util}
+          onClick={() => {
+            editBtnHandler(project.id);
+          }}
+        />
+        <FontAwesomeIcon
+          icon={faTrashAlt}
+          size="lg"
+          onClick={() => {
+            deleteBtnHandler(project.id);
+          }}
+          className={classes.list_util}
+        />
+        {project.description && (
+          <textarea
+            id={classes.hidden}
+            rows={3}
+            defaultValue={project.description}
+            ref={descriptionTextAreaRef}
+            onBlur={() =>
+              descriptionInputBlurHandler({
+                id: project.id,
+                name: project.name,
+                description: project.description,
+              })
+            }
+          ></textarea>
+        )}
       </ListGroup.Item>
     );
   };
 
+  if (isPending) {
+    return <Backdrop />;
+  }
+
   return (
     <ListGroup as="ul">
       {props.projects &&
-        props.projects.map((project) => wrapListElement(project))}
+        props.projects.map((project, index) => wrapListElement(project, index))}
     </ListGroup>
   );
 }
 
-export default ProjectList;
+const mapStateToProps = (state: any) => {
+  return {
+    projects: selectProjectList(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    deleteProject: (projectID: string) => {
+      dispatch(getDeleteProjectRequest(projectID));
+    },
+    getProjectList: () => {
+      dispatch(getProjectListRequest(ProjectListRequestConfig));
+    },
+    updateProject: (project: Project) => {
+      dispatch(getUpdateProjectRequest(project));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectList);

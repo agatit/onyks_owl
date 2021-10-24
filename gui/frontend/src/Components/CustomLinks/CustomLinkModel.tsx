@@ -3,7 +3,7 @@ import { DefaultLinkModel } from "@projectstorm/react-diagrams";
 export class CustomLinkModel extends DefaultLinkModel {
   constructor() {
     super({
-      type: "test",
+      type: "OwlQueue",
       width: 10,
     });
   }

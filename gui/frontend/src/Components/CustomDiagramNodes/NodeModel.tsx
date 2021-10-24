@@ -6,6 +6,7 @@ import {
   BaseModelOptions,
   DeserializeEvent,
 } from "@projectstorm/react-canvas-core";
+import { Project, Queue } from "../../store/redux-query";
 
 export interface NodeModelOptions extends BaseModelOptions {
   color?: string;
@@ -25,6 +26,12 @@ export class NodeModel extends StormNodeModel {
   outputs: string[];
   params: { [key: string]: any };
   module_id: string;
+  id: string;
+  moduleDefId: string;
+  project: Project;
+  input: Queue;
+  output: Queue;
+  name: string;
 
   constructor(options: NodeModelOptions = {}) {
     super({
@@ -39,6 +46,12 @@ export class NodeModel extends StormNodeModel {
     this.outputs = options.outputs || [];
     this.params = {};
     this.module_id = "node";
+    this.id = "testId";
+    this.moduleDefId = "test ModuleDefId";
+    this.project = { id: "initial ID", name: "Initial name" };
+    this.input = { id: "initial ID", name: "Initial name" };
+    this.output = { id: "initial ID", name: "Initial name" };
+    this.name = "Request Test Name";
 
     if (this.content && !this.source) {
       this.addPort(
