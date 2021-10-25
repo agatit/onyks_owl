@@ -170,7 +170,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Get list of project instances
+      summary: Get list of project instances TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -198,7 +198,7 @@ paths:
           description: Project definition not found
         "405":
           description: Validation exception
-      summary: Add instance to project
+      summary: Add instance to project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -226,7 +226,7 @@ paths:
           description: Project definition not found
         "405":
           description: Validation exception
-      summary: Update instance to project
+      summary: Update instance to project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -257,7 +257,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Delete instance from project
+      summary: Delete instance from project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -291,7 +291,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Get specified of project instance
+      summary: Get specified of project instance TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -328,7 +328,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Instance definition not found
-      summary: Get specified project instance
+      summary: Get specified project instance TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -371,7 +371,7 @@ paths:
           description: Invalid ID
         "404":
           description: Project or instance not found
-      summary: Get list of instance modules
+      summary: Get list of instance modules TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -414,7 +414,7 @@ paths:
           description: Invalid ID
         "404":
           description: Project or instance not found
-      summary: Reset instance module
+      summary: Reset instance module TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -451,7 +451,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Instance definition not found
-      summary: Get specified project instance
+      summary: Get specified project instance TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -486,7 +486,7 @@ paths:
           description: Invalid ID
         "404":
           description: Project or instance not found
-      summary: Get list of instance queues
+      summary: Get list of instance queues TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -521,7 +521,7 @@ paths:
           description: Invalid ID
         "404":
           description: Project or instance not found
-      summary: Cleans queue
+      summary: Cleans queue TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -556,7 +556,7 @@ paths:
           description: Invalid ID
         "404":
           description: Project or instance not found
-      summary: Get list of instance queues
+      summary: Get list of instance queues TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -585,7 +585,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Module definition not found
-      summary: Get list of project modules
+      summary: Get list of project modules TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -619,7 +619,7 @@ paths:
           description: Project definition not found
         "405":
           description: Validation exception
-      summary: Add module to project
+      summary: Add module to project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -653,7 +653,7 @@ paths:
           description: Project definition not found
         "405":
           description: Validation exception
-      summary: Add module to project
+      summary: Add module to project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -684,7 +684,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Module definition not found
-      summary: Delete module from project
+      summary: Delete module from project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -718,7 +718,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Module definition not found
-      summary: Get specified project module
+      summary: Get specified project module TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -755,7 +755,7 @@ paths:
           description: Invalid ID
         "404":
           description: Project or module not found
-      summary: Get list of module params
+      summary: Get list of module params TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -794,7 +794,7 @@ paths:
           description: Project or Module or Param not found
         "405":
           description: Invalid input
-      summary: Updates module param
+      summary: Updates module param TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -823,7 +823,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Get list of project queues
+      summary: Get list of project queues TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -857,7 +857,7 @@ paths:
           description: Project definition not found
         "405":
           description: Validation exception
-      summary: Add queue to project
+      summary: Add queue to project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -891,7 +891,7 @@ paths:
           description: Project definition not found
         "405":
           description: Validation exception
-      summary: Update queue to project
+      summary: Update queue to project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -922,7 +922,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Delete queue from project
+      summary: Delete queue from project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -956,7 +956,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Get specified of project queue
+      summary: Get specified of project queue TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -993,7 +993,7 @@ paths:
           description: Invalid ID
         "404":
           description: Project or queue not found
-      summary: Get list of queue params
+      summary: Get list of queue params TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -1032,7 +1032,7 @@ paths:
           description: Project or queue or param not found
         "405":
           description: Invalid input
-      summary: Updates queue param
+      summary: Updates queue param TODO
       tags:
       - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
@@ -1061,7 +1061,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Get list of project resources
+      summary: Get list of project resources TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -1089,7 +1089,7 @@ paths:
           description: Project definition not found
         "405":
           description: Validation exception
-      summary: Add resource to project
+      summary: Add resource to project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -1117,7 +1117,7 @@ paths:
           description: Project definition not found
         "405":
           description: Validation exception
-      summary: Update resource to project
+      summary: Update resource to project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -1148,7 +1148,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Delete resource from project
+      summary: Delete resource from project TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
@@ -1182,7 +1182,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Get specified of project resource
+      summary: Get specified of project resource TODO
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller

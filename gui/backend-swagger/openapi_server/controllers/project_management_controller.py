@@ -13,6 +13,13 @@ import shutil
 
 project_path = "../../examples"
 
+import sys
+sys.path.append('../backend')
+
+from engine import Engine
+x = Engine()
+
+
 def add_project(project=None):  # noqa: E501
     """Adding new project
 
@@ -95,7 +102,8 @@ def get_project(project_id):  # noqa: E501
         raise ProblemException(404, "Project not exists", str(e))
         
     return 'Deleted', 200            
-
+    # TODO na pewno nie "config"
+    # return x.get_project_conf(project_id)
 
 def list_projects():  # noqa: E501
     """Get list of projects
@@ -115,7 +123,7 @@ def list_projects():  # noqa: E501
         response.append(prj)
 
     return response
-
+    return x.get_projects()
 
 def update_project(project=None):  # noqa: E501
     """Updates a Project

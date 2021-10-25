@@ -31,9 +31,11 @@ from perspective.perspective_transform import get_perspective
 class Module(module_base.Module):
     def __init__(self, argv):
         super(Module, self).__init__(argv)
-        self.default_config['params'][1]['mtx'] = ['list', []]
-        self.default_config['params'][1]['dist'] = ['list', []]
-        self.default_config['params'][1]['trapezoid_coords'] = ['list', []]
+        self.default_config['params'][1]['mtx'] = ['list', [[1161.107086941478,0.0,948.2004474733628],[0.0,1166.8887234211986,608.8830018574113],[0.0,0.0,1.0]]]
+        self.default_config['params'][1]['dist'] = ['list', [[-0.5435658832121913,0.8889895278168062,-0.017174260409137283,0.004614250484695657,-1.1537064635161052]]]
+        self.default_config['params'][1]['trapezoid_coords'] = ['list', [[1125,403],[1920,201],[1126,897],[1919,1055]]]
+        self.default_config['description'] = "Deskrypszyn"
+        self.default_config['id'] = "Jakie niby ID?!?!"
 
     def streams_init(self):
         self.input_classes = {
@@ -50,13 +52,13 @@ class Module(module_base.Module):
     def task_process(self, input_task_data, input_stream):
         """przetwarzanie strumieni"""
 
-        tc = self.params.get('trapezoid_coords')
+        tc = self.params.get('trapezoid_coords', self.default_config['params'][1]['trapezoid_coords'][1])
         trapezoid_coords = np.array(tc)
         # trapezoid_coords = self.params.get('trapezoid_coords_CUSTNAME')
 
         """get parameters for Wisenet camera calibration"""
-        mtx_list = self.params.get("mtx")
-        dist_list = self.params.get("dist")
+        mtx_list = self.params.get("mtx", self.default_config['params'][1]['mtx'][1])
+        dist_list = self.params.get("dist", self.default_config['params'][1]['dist'][1])
         mtx = np.array(mtx_list)
         dist = np.array(dist_list)
 
@@ -85,16 +87,4 @@ class Module(module_base.Module):
 
 if __name__ == "__main__":
     module = Module(sys.argv)
-    '''
-    if argv[1] == run:
-        module.run()
-    else
-        module.get_config()
-    
-    # TODO argv
-    '''
-    # print(sys.argv[1:])
-    # if sys.argv[len(sys.argv)-1] == 'config':
-    #     module.get_config()
-    # else:
     module.run()

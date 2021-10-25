@@ -8,8 +8,6 @@ app = Flask(__name__)
 api = Api(app)
 data = Engine()
 
-# TODO GET/POST/PUT/DELETE zwracanie kodów
-
 class Modules(Resource):
     def get(self):
         return data.get_modules()

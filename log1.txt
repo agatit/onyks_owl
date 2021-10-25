@@ -1,9 +1,0 @@
-2021-09-22 18:05:13 INFO module_source_cv started.
-2
-['/home/hubert/Documents/GitHub/onyks_owl/gui/backend/../../examples/file_view/config.json']
-2021-09-22 18:05:13 ERROR module_source_cv: 'modules'
-
-  File "/home/hubert/Documents/GitHub/onyks_owl/owl/module_base.py", line 54, in __init__
-    self.config = config_file['modules'][name]
-
-

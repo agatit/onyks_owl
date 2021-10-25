@@ -5,11 +5,13 @@
     "version": "0.2.0",
     "configurations": [        
         {
-            "name": "Python: Current File",
+            "name": "Python: Swagger",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
+            // "program": "${file}",
+            "program": "${cwd}/gui/backend-swagger/openapi_server",
+            "console": "integratedTerminal",
+            "env": { "PYTHONPATH": "${workspaceRoot}/gui/backend-swagger"}
         },
         {
             "name": "perspective_transformation",

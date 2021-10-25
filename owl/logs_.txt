@@ -1,0 +1,7 @@
+2021-10-20 13:28:24 INFO module_perspective_transform started.
+2021-10-20 13:28:24 ERROR module_perspective_transform: [Errno 2] No such file or directory: '/home/hubert/Documents/GitHub/onyks_owl/gui/backend/../../examples/module_perspective_transform/config.json'
+
+  File "/home/hubert/Documents/GitHub/onyks_owl/owl/module_base.py", line 65, in __init__
+    with open(argv[1], "rb") as f:
+
+

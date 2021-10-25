@@ -1,5 +1,6 @@
 import connexion
 import six
+import json
 
 from openapi_server.models.instance import Instance  # noqa: E501
 from openapi_server.models.instance_module import InstanceModule  # noqa: E501
@@ -9,6 +10,12 @@ from openapi_server.models.module_def import ModuleDef  # noqa: E501
 from openapi_server.models.project_resource import ProjectResource  # noqa: E501
 from openapi_server.models.queue import Queue  # noqa: E501
 from openapi_server import util
+
+import sys
+sys.path.append('../backend')
+
+from engine import Engine
+x = Engine()
 
 
 def add_instance(project_id):  # noqa: E501
@@ -21,7 +28,7 @@ def add_instance(project_id):  # noqa: E501
 
     :rtype: Module
     """
-    return 'do some magic!'
+    return x.add_project_instance(project_id, instance_id)
 
 
 def add_module(project_id, module):  # noqa: E501
@@ -39,6 +46,8 @@ def add_module(project_id, module):  # noqa: E501
     if connexion.request.is_json:
         module = Module.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
+    # return x.add_project_module(project_id, "TODO nazwa modułu")
+    return x.add_project_module(project_id, "TODO nazwa modułu")
 
 
 def add_queue(project_id, queue):  # noqa: E501
@@ -83,7 +92,7 @@ def delete_module(project_id, module_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return x.delete_project_module(project_id, module_id)
 
 
 def delete_queue(project_id, module_id):  # noqa: E501
@@ -143,7 +152,7 @@ def get_module(project_id, module_id):  # noqa: E501
 
     :rtype: Module
     """
-    return 'do some magic!'
+    return x.get_project_module_data(project_id, module_id)
 
 
 def get_queue(project_id, module_id):  # noqa: E501
@@ -231,7 +240,7 @@ def list_instances(project_id):  # noqa: E501
 
     :rtype: List[Instance]
     """
-    return 'do some magic!'
+    return x.get_project_instances(project_id)
 
 
 def list_module_def():  # noqa: E501
@@ -242,7 +251,7 @@ def list_module_def():  # noqa: E501
 
     :rtype: List[ModuleDef]
     """
-    return 'do some magic!'
+    return x.get_modules()
 
 
 def list_modules(project_id):  # noqa: E501
@@ -255,7 +264,7 @@ def list_modules(project_id):  # noqa: E501
 
     :rtype: List[Module]
     """
-    return 'do some magic!'
+    return x.get_project_modules(project_id)
 
 
 def list_queues(project_id):  # noqa: E501
@@ -281,7 +290,7 @@ def list_resources(project_id):  # noqa: E501
 
     :rtype: List[ProjectResource]
     """
-    return 'do some magic!'
+    return x.get_project_conf(project_id)
 
 
 def run_instance(project_id):  # noqa: E501

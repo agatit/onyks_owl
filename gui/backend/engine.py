@@ -5,6 +5,8 @@ import shutil
 import subprocess
 import time
 from project import Project
+from module import Module
+import ast
 
 DEFAULT_PATH_PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../examples")
 DEFAULT_PATH_MODULES = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../owl")
@@ -14,39 +16,63 @@ EMPTY_CONFIG = {
     'pipeline': {}
 }
 
-# TODO w jednym z configów jest "comment". Może to też uwzględnić...
-class Engine():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Project'a podklasą 'Module'
-                # TODO zmienić nazwę tej klasy żeby lepiej się kwalifilowała w koncepcję
-                # TODO może niektóre operacje plikowe zwalić na 'Project'
+class Engine():
     def __init__(self, projects_path = DEFAULT_PATH_PROJECTS, modules_path = DEFAULT_PATH_MODULES):
-        self.projects_dir = projects_path
-        self.modules_dir = modules_path
+        self.projects_path = projects_path
+        self.modules_path = modules_path
         # TODO czasem 'dir', czasem 'path', nieno, ujednolicić to!
         self.projects = {}
-        for project in os.listdir(path = self.projects_dir): # TODO winksza walidacja, sprawdzić też config.json. Oddzielna funkcja
+        for project in os.listdir(path = self.projects_path): # TODO winksza walidacja, sprawdzić też config.json. Oddzielna funkcja
             self.add_project(project)
 
     
     ### DEFINICJE ###
     def get_modules(self):
-        modules = os.listdir(path = self.modules_dir)
+        modules = os.listdir(path = self.modules_path)
         mod = list(filter(lambda k: '.py' in k, modules))       # pliki z '.py'
         mod2 = list(filter(lambda k: '__init__' not in k, mod)) # pliki bez __init__
         mod3 = [x.replace('.py', '') for x in mod2]
-        return mod3, 200
+        retval = {}
+        retval_mod = {}
+        for module_name in mod3:
+            if module_name == 'module_base' or \
+               module_name == 'module_source_cv' or \
+               module_name == 'module_perspective_transform' or \
+               module_name == 'module_sink_win':
+                retval[module_name] = {}
+                mod_data = self.get_module_data(module_name)
+                # print("mod data:" + mod_data)
+                print(mod_data)
+                retval[module_name]['description'] = mod_data.get('description', 'Default description')
+                retval[module_name]['id'] = mod_data.get('id', 'Default ID')
+                retval[module_name]['name'] = module_name
+                
+                # temp_mod = Module(module_name, None, os.path.join(self.modules_path, module_name + '.py'), None)
+                # retval[module_name]['description'] = temp_mod.get_config.get('description', 'Default description')
+                # retval[module_name]['id'] = temp_mod.get_config.get('id', 'Default ID')
+                # retval[module_name]['name'] = module_name
+                # TODO nno ten kod to mocno placeholderowy jest
+        return retval
 
     def get_module_data(self, module_id):
+        # TODO kaman, mogę już ten subproces wywalić...
         proc = subprocess.Popen(['python3'], stdin=subprocess.PIPE ,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         proc.stdin.write(bytes('import os\n', encoding='utf-8'))
         proc.stdin.write(bytes('os.chdir("' + DEFAULT_PATH_MODULES + '")\n', encoding='utf-8'))
-        proc.stdin.write(bytes('print(os.getcwd())\n', encoding='utf-8'))
-        proc.stdin.write(bytes('from module_perspective_transform import Module\n', encoding='utf-8'))
-        proc.stdin.write(bytes("x = Module('" + DEFAULT_PATH_PROJECTS + "/" + module_id + "/config.json')\n", encoding='utf-8')) # TODO czy tutaj się nie rypnie bez "os.path.join()" ?
-        proc.stdin.write(bytes('print(x)\n', encoding='utf-8'))
+        # proc.stdin.write(bytes('print(os.getcwd())\n', encoding='utf-8'))
+        proc.stdin.write(bytes('from ' + module_id + ' import Module\n', encoding='utf-8'))
+        proc.stdin.write(bytes("x = Module(['" + module_id + "', '" + DEFAULT_PATH_PROJECTS + "/" + module_id + "/config.json', 'None'])\n", encoding='utf-8')) # TODO czy tutaj się nie rypnie bez "os.path.join()" ?
+        proc.stdin.write(bytes('print(x.get_config())', encoding='utf-8'))
         return_value = proc.communicate()[0].decode('utf-8')
         proc.kill()
-        return return_value, 200
+        print(module_id)
+        r2 = ast.literal_eval(return_value)
+        return r2
     
+    def add_project_instance(self, project_id, instance_id):
+        return self.projects[project_id].add_project_instance(instance_id)
+    def get_project_instances(self, project_id):
+        return self.projects[project_id].get_project_instances()
     ### ZARZĄDZANIE PROJEKTAMI ###
     '''
     Walidacja projektu:
@@ -56,32 +82,25 @@ class Engine():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Pro
         - sprawdzać układ pliku 'config.json'? # TODO
     '''
     def get_projects(self):
-        return self.projects.keys()
+        return list(self.projects.keys())
+        # TODO gdzieś dodać "comment"'y
     def add_project(self, name):
-        if not os.path.isfile(os.path.join(self.projects_dir, name, 'config.json')):
-            print(f'Project {name} nonexistent')
-            if os.path.exists(os.path.join(self.projects_dir, name)):
-                shutil.rmtree(os.path.join(self.projects_dir, name))
-                print('Invalid directory removed')
+        if not os.path.isfile(os.path.join(self.projects_path, name, 'config.json')):
+            # print(f'Project {name} nonexistent')
+            # if os.path.exists(os.path.join(self.projects_path, name)):
+            #     shutil.rmtree(os.path.join(self.projects_path, name))
+            #     print('Invalid directory removed')
+            pass
         else:
-            print(f'Project {name} found!')
+            # print(f'Project {name} found!')
             if name == 'perspective_transform':
-                self.projects[name] = Project(os.path.join(self.projects_dir, name), self.modules_dir)
-                print(f'Project {name} added!') # TODO if self.projects[name] is not None ?
-    '''
-    Chwila, mam add_project() do dodawania już istniejących projektów
-    i create_project() do dodawania nowiutkich projektów
-    ...
-    na pewno powinienem stworzyć metodę validate_project() strikte pod walidację
-    i może wyjebać add_project() po tym...
-    
-    Zaraz chwila! Po zrobieniu add_project() w __init__ mam posprzątane, create_project może na lajcie tworzyć bez walidowania
-    '''
+                self.projects[name] = Project(os.path.join(self.projects_path, name), self.modules_path)
+                # print(f'Project {name} added!') # TODO if self.projects[name] is not None ?
 
     def create_project(self, name):
         try:
-            os.mkdir(os.path.join(self.projects_dir, name))
-            with open(os.path.join(self.projects_dir, name, 'config.json'), 'w') as file:
+            os.mkdir(os.path.join(self.projects_path, name))
+            with open(os.path.join(self.projects_path, name, 'config.json'), 'w') as file:
                 json.dump(EMPTY_CONFIG,file, ensure_ascii=False, indent=4)
             self.add_project(name)
             return 'coś' # TODO returny
@@ -102,26 +121,12 @@ class Engine():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Pro
         
     def get_project_module_data(self, project_id, module_id):
         return self.projects[project_id].get_module_data(module_id)
-        # config = self.get_project_conf(project_id)
-        # if config['modules'][module_id]:
-        #     module = config['modules'][module_id]
-        #     return module
-        # else:
-        #     return ERROR_RETVAL
+
     def delete_project_module(self, project_id, module_id):
         return self.projects[project_id].delete_module(module_id)
-    
-    # TODO to pod spodem wymaga dostosowania pod nową strukturę klas
-    # ale za to się wezmę jak pogadamy o config'u
+
     def get_module_params(self, project_id, module_id):
         return self.projects[project_id].get_module_params(module_id)
-        # config = self.get_project_conf(project_id)
-        # if config['modules'][module_id]['params']:
-        #     params = config['modules'][module_id]['params']
-        #     return params
-        # else:
-        #     return 'error'
-
         
     def get_module_parameter(self, project_id, module_id, parameter):
         config = self.get_project_conf(project_id)
@@ -158,7 +163,7 @@ class Engine():  # To to byłaby klasa główna, jej podklasą 'Project', a 'Pro
 if __name__ == '__main__':
     x = Engine()
     # print(List.get_names())
-    print(x.get_projects())
+    # print(x.get_projects())
     # print(x.get_project_conf('perspective_transform'))
     # print(x.get_modules())
     # print(x.get_project_modules('perspective_transform'))
@@ -171,11 +176,21 @@ if __name__ == '__main__':
     # print(x.get_projects())
     # print(x.get_module_params('perspective_transform', 'module_sink_file'))
     # print(x.get_module_data('module_source_cv'))
-    # print(x.get_module_data('module_perspective_transform'))
-    x.projects['perspective_transform'].start_project()
-    time.sleep(5)
-    # print(x.projects['perspective_transform'].get_logs())
+    # rd = x.get_module_data('perspective_transform')
+    # print(rd[0].decode('utf-8'), rd[1].decode('utf-8'))
+    # print(x.get_modules())
+    # /project({projectId})/instance
+    x.add_project_instance('perspective_transform', 'este_iksden')
+    print(x.get_project_instances('perspective_transform'))
 
-    # with open('xd.json', 'w') as y:
-    #     json.dump(x.projects['perspective_transform'].get_logs(), y, ensure_ascii=False, indent=4)
-    x.projects['perspective_transform'].stop_project()
+
+
+
+
+    # x.projects['perspective_transform'].start_project()
+    # time.sleep(5)
+    # # print(x.projects['perspective_transform'].get_logs())
+
+    # # with open('xd.json', 'w') as y:
+    # #     json.dump(x.projects['perspective_transform'].get_logs(), y, ensure_ascii=False, indent=4)
+    # x.projects['perspective_transform'].stop_project()

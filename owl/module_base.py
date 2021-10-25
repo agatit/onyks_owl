@@ -14,6 +14,8 @@ import task
 import traceback
 import stream_composed
 
+DEFAULT_PATH_LOGS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"logs")
+
 class Module:
     def __init__(self, argv):
         'Czytanie konfiguracji i inicjalizacja'
@@ -25,15 +27,31 @@ class Module:
             self.module_name = os.path.splitext(os.path.basename(filename))[0]        
         
         # handler = logging.StreamHandler(sys.stdout)
-        log_dir = os.path.dirname(argv[1]) + '/logs/' # TODO ogarnąć to po ludzku
-        handler = logging.FileHandler(filename = log_dir + self.module_name + '.txt', mode='w') # TODO zastanowić się czy mode='w' czy mode='a'
-        formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S")
-        handler.setFormatter(formatter)
-        # logging.basicConfig(level=logging.DEBUG, handlers=[handler])
-        self.log_object = logging.getLogger(name='logger4'+self.module_name)
-        self.log_object.setLevel(logging.DEBUG)
-        self.log_object.addHandler(handler)
-        self.log_object.info(f"{self.module_name} started.")
+        # print("argv: ", argv)
+        try:
+            self.instance_id = argv[2] # np. perspective_transform_01
+            if self.instance_id is not None:
+                # try:
+                #     os.mkdir(log_dir)
+                # except:
+                #     pass
+                # print("log_dir: ", log_dir)
+                # log_dir = DEFAULT_PATH_LOGS + '_' + self.module_name + '.txt' # TODO ogarnąć to po ludzku
+                log_dir = os.path.join(DEFAULT_PATH_LOGS, self.module_name + '_' + self.instance_id + '.txt')
+                handler = logging.FileHandler(filename = log_dir, mode='w') # TODO zastanowić się czy mode='w' czy mode='a'
+                formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S")
+                handler.setFormatter(formatter)
+                # logging.basicConfig(level=logging.DEBUG, handlers=[handler])
+                self.log_object = logging.getLogger(name='logger4'+self.module_name)
+                self.log_object.setLevel(logging.DEBUG)
+                self.log_object.addHandler(handler)
+                self.log_object.info(f"{self.module_name} started.")
+            else:
+                self.instance_id = None
+                self.log_object = None
+        except:
+            self.instance_id = None
+            self.log_object = None
 
         self.default_config = {
             'stream_queue_limit': ['int', 100],
@@ -46,43 +64,45 @@ class Module:
             'output_queue': ['string', ""],
         }
         try:
-            print(len(argv))
+            # print(len(argv))
             if len(argv) > 1:
-                print(argv[1:])
+                # print(argv[1:])
                 with open(argv[1], "rb") as f:
                     config_file = json.load(f)
-                    if len(argv) > 2:
-                        name = argv[2]
-                    else:
-                        name = self.module_name
+                    name = self.module_name
 
                     self.config = config_file['modules'][name]
                     if self.config is None:
-                        self.log_object.info(f"config file: {argv[1]} do not contain section for {name}")    
+                        if self.instance_id is not None:
+                            self.log_object.info(f"config file: {argv[1]} do not contain section for {name}")    
                         exit()
 
-                    self.log_object.info(f"config file: {argv[1]} section {name}")
+                    if self.instance_id is not None:
+                        self.log_object.info(f"config file: {argv[1]} section {name}")
             else:
                 print("Usage: module config_file.json [instance_name]")
                 exit()  
 
-            self.stream_queue_limit = self.config.get('stream_queue_limit', 100)
-            self.task_expire_time = self.config.get('task_expire_time', 10)
-            self.stream_expire_time = self.config.get('stream_expire_time', self.task_expire_time)
+            self.stream_queue_limit = self.config.get('stream_queue_limit', self.default_config['stream_queue_limit'][1])
+            self.task_expire_time = self.config.get('task_expire_time', self.default_config['task_expire_time'][1])
+            self.stream_expire_time = self.config.get('stream_expire_time', self.task_expire_time) # TODO ???
             self.task_timeout = self.config.get('task_timeout', self.stream_expire_time)            
             self.stream_timeout = self.config.get('stream_timeout', self.stream_expire_time)            
-            self.params = self.config.get("params", {})
+            self.params = self.config.get("params", self.default_config['params'][1])
 
             if self.task_expire_time > self.task_timeout:
-                self.log_object.error("task_expire_time CANNOT be bigger than task_timeout")
+                if self.instance_id:
+                    self.log_object.error("task_expire_time CANNOT be bigger than task_timeout")
                 exit()
 
             if self.stream_expire_time > self.stream_timeout:
-                self.log_object.error("stream_expire_time CANNOT be bigger than stream_timeout")
+                if self.instance_id:
+                    self.log_object.error("stream_expire_time CANNOT be bigger than stream_timeout")
                 exit()                
 
             if self.task_expire_time > self.stream_expire_time:
-                self.log_object.error("task_expire_time CANNOT be bigger than stream_expire_time")
+                if self.instance_id:
+                    self.log_object.error("task_expire_time CANNOT be bigger than stream_expire_time")
                 exit()                
 
             self.redis = redis.Redis()
@@ -112,7 +132,8 @@ class Module:
                 self.log_object)  
 
         except Exception as e:
-            self.log_object.error(f"{self.module_name}: {str(e)}\n\n{u''.join(traceback.format_tb(e.__traceback__))}\n")
+            if self.instance_id:
+                self.log_object.error(f"{self.module_name}: {str(e)}\n\n{u''.join(traceback.format_tb(e.__traceback__))}\n")
             self.terminate = True           
 
 
