@@ -1,6 +1,5 @@
 import Navbar from "../Components/Layout/Navbar";
 import PlayerMenu from "../Components/UI/Menu-UI/PlayerMenu";
-import classes from "./PlayerPage.module.css";
 import Diagrams from "../DiagramsM";
 
 function PlayerPage() {
@@ -9,7 +8,7 @@ function PlayerPage() {
       <Navbar />
       <PlayerMenu />
       <div className="content player-content">
-        <Diagrams />
+        <Diagrams projectId="do zrobienia" />
       </div>
     </div>
   );

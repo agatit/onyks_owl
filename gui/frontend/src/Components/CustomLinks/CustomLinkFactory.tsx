@@ -3,7 +3,7 @@ import { CustomLinkModel } from "./CustomLinkModel";
 
 export class CustomLinkFactory extends DefaultLinkFactory {
   constructor() {
-    super("test");
+    super("OwlQueue");
   }
 
   generateModel() {

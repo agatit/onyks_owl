@@ -1,4 +1,4 @@
-import { NodeModel } from "../../Components/CustomDiagramNodes/NodeModel";
+import { OwlNodeModel } from "../../Components/OwlNodes/OwlNodeModel";
 
 export const nodeActionTypes = {
   SET_SELECTED_NODE: "SET_SELECTED_NODE",
@@ -12,7 +12,7 @@ const initialState = {
 
 interface nodeAction {
   type: string;
-  node: NodeModel;
+  node: OwlNodeModel;
 }
 
 export const nodesData = (state = initialState, action: nodeAction) => {

@@ -1,48 +1,35 @@
-import React from "react";
 import classses from "./Toolbar.module.css";
-import { DiagramEngine } from "@projectstorm/react-diagrams-core";
-import { NodeModel } from "../CustomDiagramNodes/NodeModel";
-import { connect } from "react-redux";
-import { store } from "../../store/store";
-import { useRef } from "react";
-import { selectedNode } from "../../store/Actions/nodeActions";
-import { TextInput } from "../UI/Inputs";
+import { connect, useSelector } from "react-redux";
+import { OwlNodeModel } from "../OwlNodes/OwlNodeModel";
+
+import { isQueueSelected } from "../../store/selectors/queueSelectors";
+import ModulePropEditor from "../UI/Menu-UI/Editors/ModulePropEditor";
+import QueuePropEdtior from "../UI/Menu-UI/Editors/QueuePropEdtior";
+
+// REFERENCJE CHYBA DO WYWALENIA!!!!!!!!!!!!!
 
 interface toolBarProps {
-  engine: DiagramEngine;
-  node: NodeModel;
+  node: OwlNodeModel;
+  projectId: string;
 }
 
 function ToolBar(props: toolBarProps) {
-  const engine = props.engine;
   const node = props.node;
-  const titleProp = "Title";
 
-  const nameInputRef = useRef<HTMLInputElement>(null);
-  const refArray = useRef<any>([]);
+  //const nameInputRef = useRef<HTMLInputElement>(null);
+  //const refArray = useRef<any>([]);
 
-  refArray.current = [];
+  //refArray.current = [];
 
-  const handlePropertyChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    propertyName: string,
-    refNum: number
-  ) => {
-    if (propertyName === titleProp) {
-      node.title = nameInputRef.current!.value;
-    } else {
-      node.params[propertyName] = refArray.current[refNum].value;
-      node.content = node.params[propertyName];
-    }
-    store.dispatch(selectedNode(node));
-    engine.repaintCanvas();
-  };
-
+  /*
   const addToRefs = (el: HTMLInputElement) => {
     if (el && !refArray.current.includes(el)) {
       refArray.current.push(el);
     }
   };
+*/
+
+  const queueSelected: boolean = useSelector(isQueueSelected);
 
   if (node === undefined) {
     return (
@@ -52,44 +39,19 @@ function ToolBar(props: toolBarProps) {
     );
   }
 
-  return (
-    <div className={classses.toolBar}>
-      <h2>{node.title ? node.title : "Brak nazwy modułu"}</h2>
-      <TextInput
-        ref={nameInputRef}
-        onChangeAction={handlePropertyChange}
-        id="name-input"
-        initValue={node.title}
-        labelText="Nazwa: "
-        propName={titleProp}
-        refNum={10}
-      />
+  {
+    if (queueSelected) {
+      return <QueuePropEdtior projectId={props.projectId} />;
+    }
+  }
 
-      {props.node.params !== undefined &&
-        Object.keys(props.node.params).map((paramKey, index) => {
-          return (
-            <TextInput
-              ref={addToRefs}
-              onChangeAction={handlePropertyChange}
-              id={node.params[paramKey] + "-" + node.module_id}
-              initValue={node.params[paramKey]}
-              labelText={
-                paramKey.charAt(0).toUpperCase() + paramKey.slice(1) + ": "
-              }
-              propName={paramKey}
-              refNum={index}
-            />
-          );
-        })}
-    </div>
-  );
+  return <ModulePropEditor projectId={props.projectId} />;
 }
 
 const mapStateToProps = (state: any) => {
   return {
     node: state.nodesData.selectedNode,
     test: state.nodesData.test,
-    engine: state.engineReducer.engine,
   };
 };
 

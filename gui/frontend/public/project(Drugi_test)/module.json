@@ -1,0 +1,14 @@
+[
+  {
+    "id": 2,
+    "name": "module_plate_detection",
+    "input_queue": "stage1",
+    "stream_queue_limit": 100,
+    "output_queue": "stage2",
+    "params": {
+      "factor": 1.1,
+      "neighbour": 4,
+      "debug": 1
+    }
+  }
+]

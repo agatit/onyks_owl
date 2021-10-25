@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faCog } from "@fortawesome/free-solid-svg-icons";
-
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 import classes from "./Navbar.module.css";
 import { Link } from "react-router-dom";
 

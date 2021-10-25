@@ -10,7 +10,6 @@
 
 .starter {
   height: 100vh;
-  align-content: center;
 }
 
 .logo {
@@ -20,17 +19,14 @@
 }
 
 .menu {
-  background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  top: 40%;
-  left: 15%;
-  height: 200px;
-  max-height: 40rem;
-  max-width: 25%;
+  max-width: 40%;
   position: absolute;
+  height: 100vh;
+  width: 30%;
   min-width: 300px;
+  background-color: rgb(38, 90, 109, 0.9);
 }
 
 .createPrjBtn {
@@ -41,7 +37,7 @@
 .createPrjBtn button {
   width: 200px;
   height: 100px;
-  background-color: rgb(33, 63, 75);
+  background-color: rgb(38, 90, 109);
   border-radius: 15px;
   font-weight: bolder;
   font-size: large;
@@ -55,11 +51,18 @@
   right: 25%;
   bottom: 45%;
   color: rgb(255, 247, 202);
-  background-color: rgba(22, 53, 71, 0.75);
+  background-color: rgba(26, 54, 70, 0.75);
   border-radius: 50%;
 }
 
-.menu li span {
-  margin-left: 2vh;
-  color: black;
+.menu ul {
+  overflow: auto;
+  max-height: 90vh;
+  padding-top: 30px;
+  opacity: 1;
+  z-index: 50;
+}
+
+.menu li {
+  background-color: rgb(203, 203, 209);
 }

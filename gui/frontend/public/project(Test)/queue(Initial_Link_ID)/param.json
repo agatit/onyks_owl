@@ -1,0 +1,10 @@
+[
+  {
+    "params_def_id": "FPS",
+    "value": "60"
+  },
+  {
+    "params_def_id": "Rozmiar kolejki",
+    "value": "100"
+  }
+]

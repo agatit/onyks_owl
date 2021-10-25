@@ -13,7 +13,6 @@ export class NodeFactory extends AbstractReactFactory<
   }
 
   generateModel(initialConfig: any) {
-    console.log("Model created - NodeFactory");
     return new NodeModel(initialConfig);
   }
 

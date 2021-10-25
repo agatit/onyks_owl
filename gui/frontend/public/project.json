@@ -1,0 +1,11 @@
+[
+  {
+    "id": "Test",
+    "name": "Test",
+    "description": "Przykladowy opis projektu"
+  },
+  {
+    "id": "Drugi_test",
+    "name": "Symulator"
+  }
+]
