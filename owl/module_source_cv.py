@@ -25,8 +25,10 @@ class Module(module_base.Module):
         'przetwarzanie strumieni'
 
         output_task_data = {}
-
-        cap = cv2.VideoCapture(self.params.get('device', 0)) # TODO odgórna weryfikacja czy plik istnieje
+        filename = self.params.get('device', 0)
+        if filename != 0:
+            filename = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../samples/camera_wisenet/train1.avi")
+        cap = cv2.VideoCapture(filename) # TODO odgórna weryfikacja czy plik istnieje
         output_task_data['source_name'] = self.params.get('source_name',self.params.get('device', "unknown"))
         with self.task_emit(output_task_data) as output_stream:
             ret,frame = cap.read()
