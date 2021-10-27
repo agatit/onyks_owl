@@ -73,6 +73,11 @@ class Engine():
         return self.projects[project_id].add_project_instance(instance_id)
     def get_project_instances(self, project_id):
         return self.projects[project_id].get_project_instances()
+    def delete_project_instance(self, project_id, instance_id):
+        return self.projects[project_id].delete_project_instance(instance_id)
+    
+    def get_instance_config(self, project_id, instance_name):
+        return self.projects[project_id].get_instance_config(instance_name)
     ### ZARZĄDZANIE PROJEKTAMI ###
     '''
     Walidacja projektu:
@@ -180,8 +185,12 @@ if __name__ == '__main__':
     # print(rd[0].decode('utf-8'), rd[1].decode('utf-8'))
     # print(x.get_modules())
     # /project({projectId})/instance
-    x.add_project_instance('perspective_transform', 'este_iksden')
+    x.add_project_instance('perspective_transform', 'erste_iksden')
+    x.add_project_instance('perspective_transform', 'zweite_iksden')
+    # while True:
+    time.sleep(30)
     print(x.get_project_instances('perspective_transform'))
+    print(x.get_project_conf('perspective_transform'))
 
 
 

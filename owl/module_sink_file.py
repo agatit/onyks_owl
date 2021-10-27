@@ -46,10 +46,11 @@ class Module(module_base.Module):
                 fourcc_str = self.params.get('fourcc', 'XVID')
                 fourcc = cv2.VideoWriter_fourcc(*fourcc_str)          
                       
-                filename = self.params.get('filename', input_task_data.get('source_name', 'noname'))
+                filename = self.params.get('filename', input_task_data.get('source_name', 'noname')) # TODO ścieżka do out'a projektu czy coś takiego
+                print("filename: " + filename)
                 if 'railtrack' in input_task_data:
                     filename += f"_{input_task_data['railtrack']}"
-                filename += datetime.now().strftime('_%Y%m%d_%H%M%S_%f.avi')
+                filename = datetime.now().strftime(filename)
                 filename = os.path.join(self.params.get('path',"."), filename)
 
                 framerate = self.params.get('framerate', 20.0)
@@ -61,6 +62,7 @@ class Module(module_base.Module):
         
         if out:
             out.release()
+            print("out_released")
         self.log_object.info(f"file {filename} writing finished")
         
 

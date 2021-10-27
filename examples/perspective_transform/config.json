@@ -5,7 +5,7 @@
             "stream_queue_limit": 10,
             "timeout": 180,
             "params": {
-                "device": "../../samples/camera_wisenet/train1.avi",
+                "device": "../samples/camera_wisenet/train1.avi",
                 "_device": 1
             }
         },
@@ -65,10 +65,12 @@
                 ]
             }
         },
-        "module_sink_win" : {   
-            "input_queue" : "stage2",
+        "module_sink_file" : {   
+            "input_queue" : "stage2",    
             "params": {
-                "window_name": "camera_view"
+                "filename": "out/test_%Y%m%d_%H%M%S_%f.avi",
+                "framerate": 25,
+                "fourcc": "XVID"
             }        
         }
     },

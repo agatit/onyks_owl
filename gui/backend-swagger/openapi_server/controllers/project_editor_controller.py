@@ -28,7 +28,8 @@ def add_instance(project_id):  # noqa: E501
 
     :rtype: Module
     """
-    return x.add_project_instance(project_id, instance_id)
+    # return x.add_project_instance(project_id, instance_id)
+    return x.add_project_instance(project_id)
 
 
 def add_module(project_id, module):  # noqa: E501
@@ -197,7 +198,7 @@ def kill_instance(project_id, instance_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return x.delete_project_instance(project_id, instance_id)
 
 
 def list_instance_modules(project_id, instance_id):  # noqa: E501

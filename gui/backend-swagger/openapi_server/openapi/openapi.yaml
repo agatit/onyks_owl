@@ -257,7 +257,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Project definition not found
-      summary: Delete instance from project TODO
+      summary: Delete instance from project
       tags:
       - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
