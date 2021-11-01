@@ -8,6 +8,7 @@ import { Provider as ReduxQueryProvider } from "redux-query-react";
 import StarterPage from "./Pages/StarterPage";
 import PlayerPage from "./Pages/PlayerPage";
 import EditorPage from "./Pages/EditorPage";
+import Navbar from "./Components/Layout/Navbar";
 
 toast.configure();
 
@@ -26,6 +27,7 @@ export default function App() {
               <PlayerPage />
             </Route>
             <Route path="/edit/:projectID" exact>
+              <Navbar />
               <EditorPage />
             </Route>
           </ReduxQueryProvider>

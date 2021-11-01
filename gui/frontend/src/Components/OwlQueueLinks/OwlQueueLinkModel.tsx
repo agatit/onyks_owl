@@ -1,4 +1,7 @@
-import { DefaultLinkModel } from "@projectstorm/react-diagrams";
+import {
+  DefaultLabelModel,
+  DefaultLinkModel,
+} from "@projectstorm/react-diagrams";
 import { deleteQueue, selectedQueue } from "../../store/Actions/queueActions";
 import {
   getCreateQueueRequest,
@@ -8,6 +11,7 @@ import { getQueueParamsRequest } from "../../store/Queries/property_editor_queri
 import { QueueParamListConfig } from "../../store/QueryConfigs/property_query_configs";
 import { Project } from "../../store/redux-query";
 import store from "../../store/store";
+import { EditableLabelModel } from "../CustomLinks/Labels/LabelModel";
 
 export interface OwlQueueLinkOptions {
   id?: string;
@@ -32,18 +36,24 @@ export class OwlQueueLinkModel extends DefaultLinkModel {
     };
     this.registerListener({
       targetPortChanged: () => {
-        if (this.sourcePort)
+        if (this.sourcePort) {
           store.dispatch(
             getCreateQueueRequest({ projectId: this.project.id, queue: this })
           );
+          //this.addLabel(new EditableLabelModel({ value: "Test" }));
+          // store.dispatch(selectedQueue(this));
+        }
       },
       entityRemoved: () => {
-        store.dispatch(
-          getDeleteQueueFromProjectRequest({
-            projectId: this.project.id,
-            moduleId: "Do_zmiany",
-          })
-        );
+        if (this.targetPort) {
+          store.dispatch(
+            getDeleteQueueFromProjectRequest({
+              projectId: this.project.id,
+              moduleId: "Do_zmiany",
+            })
+          );
+          store.dispatch(deleteQueue(this));
+        }
       },
       selectionChanged: () => {
         if (this.isSelected() && this.targetPort) {
@@ -54,8 +64,6 @@ export class OwlQueueLinkModel extends DefaultLinkModel {
             )
           );
           store.dispatch(selectedQueue(this));
-        } else {
-          store.dispatch(deleteQueue(this));
         }
       },
     });

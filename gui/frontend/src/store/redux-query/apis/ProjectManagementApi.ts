@@ -178,7 +178,7 @@ function getProjectRaw<T>(
   const { meta = {} } = requestConfig;
 
   const config: QueryConfig<T> = {
-    url: `${runtime.Configuration.basePath}/project({projectId})`.replace(
+    url: `${runtime.Configuration.basePath}/project({projectId}).json`.replace(
       `{${"projectId"}}`,
       encodeURIComponent(String(requestParameters.projectId))
     ),

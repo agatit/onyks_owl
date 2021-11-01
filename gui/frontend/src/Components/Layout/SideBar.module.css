@@ -1,14 +1,14 @@
 .sidebar {
-  width: 10%;
-  background: #e0d7d7;
+  background: #1d1b1b;
   padding-top: 20px;
   display: block;
+  flex: 1 1 15%;
   white-space: pre-line;
   overflow-y: scroll;
   overflow: auto;
   z-index: 99;
-  min-width: 150px;
-  border-right: 5px solid rgb(124, 111, 110);
+  color: rgb(190, 189, 190);
+  flex-shrink: 1;
 }
 
 ul {
@@ -22,4 +22,5 @@ li {
 
 .sidTitle {
   padding-left: 10px;
+  padding-bottom: 30px;
 }

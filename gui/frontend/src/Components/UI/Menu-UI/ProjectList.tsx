@@ -26,7 +26,6 @@ function ProjectList(props: ProjectListProps) {
   const history = useHistory();
 
   const [isPending, setIsPending] = useState(true);
-  const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -47,27 +46,23 @@ function ProjectList(props: ProjectListProps) {
     history.push(`/player/${projectId}`, { projectID: projectId });
   };
 
-  const descriptionInputBlurHandler = (project: Project) => {
-    if (descriptionTextAreaRef.current != null) {
-      const currentDesc = descriptionTextAreaRef.current.value;
-      project.description = currentDesc;
-      props.updateProject(project);
-    }
-  };
-
   const wrapListElement = (project: Project, index: number) => {
     const path = "/player/";
     return (
-      <ListGroup.Item as="li" id={classes.visible} key={index}>
-        <Button
-          variant="dark"
-          className={classes.list_util}
+      <ListGroup.Item
+        as="li"
+        id={classes.visible}
+        key={index}
+        bsPrefix={classes.test}
+      >
+        <div
+          className={classes.prjTitle}
           onClick={() => {
             projectBtnHandler(project.id);
           }}
         >
           {project.name}
-        </Button>
+        </div>
         <FontAwesomeIcon
           icon={faEdit}
           size="lg"
@@ -84,6 +79,7 @@ function ProjectList(props: ProjectListProps) {
           }}
           className={classes.list_util}
         />
+        {/*
         {project.description && (
           <textarea
             id={classes.hidden}
@@ -98,7 +94,7 @@ function ProjectList(props: ProjectListProps) {
               })
             }
           ></textarea>
-        )}
+          */}
       </ListGroup.Item>
     );
   };

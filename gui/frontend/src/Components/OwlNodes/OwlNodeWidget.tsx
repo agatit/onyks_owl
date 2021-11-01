@@ -5,6 +5,7 @@ import { OwlNodeModel } from "./OwlNodeModel";
 import store from "../../store/store";
 import { deleteNode, selectedNode } from "../../store/Actions/nodeActions";
 import { getDeleteModuleFromProjectRequest } from "../../store/Queries/project_editor_queries";
+import styled from "@emotion/styled";
 
 export interface NodeWidgetProps {
   node: OwlNodeModel;
@@ -66,17 +67,23 @@ export class OwlNodeWidget extends React.Component<NodeWidgetProps> {
   render() {
     return (
       <div className="custom-node" onClick={this.handleClick}>
-        <div
-          className="custom-node-header"
-          style={{ backgroundColor: this.props.node.color }}
-        >
-          {this.props.node.title}
-        </div>
-        <OwlNodeAbstractWidget
-          node={this.props.node}
-          engine={this.props.engine}
-        />
+        <StyledNodeWidget selected={this.props.node.isSelected()}>
+          <div
+            className="custom-node-header"
+            style={{ backgroundColor: this.props.node.color }}
+          >
+            {this.props.node.title}
+          </div>
+          <OwlNodeAbstractWidget
+            node={this.props.node}
+            engine={this.props.engine}
+          />
+        </StyledNodeWidget>
       </div>
     );
   }
 }
+
+const StyledNodeWidget = styled.div<{ selected: boolean }>`
+  ${(p) => p.selected && `border: 3px solid rgb(4, 189, 209);`}
+`;
