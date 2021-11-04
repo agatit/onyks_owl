@@ -14,10 +14,11 @@ import { connect } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { ProjectListRequestConfig } from "../../../store/QueryConfigs";
 import Backdrop from "../../Layout/Utils/Backdrop";
+import store from "../../../store/store";
 
 interface ProjectListProps {
-  projects: Project[];
-  deleteProject: (projectID: string) => void;
+  projects: Array<Project>;
+  deleteProject: (projectID: string) => any;
   getProjectList: () => void;
   updateProject: (project: Project) => void;
 }
@@ -26,7 +27,6 @@ function ProjectList(props: ProjectListProps) {
   const history = useHistory();
 
   const [isPending, setIsPending] = useState(true);
-  const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -39,35 +39,37 @@ function ProjectList(props: ProjectListProps) {
     history.push(`/edit/${projectId}`, { projectID: projectId });
   };
 
-  const deleteBtnHandler = (projectId: string) => {
-    props.deleteProject(projectId);
+  const deleteBtnHandler = (projectId: string, projectIndex: number) => {
+    props.deleteProject(projectId).then((result: any) => {
+      if (result.status !== 200) {
+        console.log("Nie udało się usunąć projetku!");
+      } else {
+        console.log("Projekt usunięty pomyślnie!");
+      }
+    });
   };
 
   const projectBtnHandler = (projectId: string) => {
     history.push(`/player/${projectId}`, { projectID: projectId });
   };
 
-  const descriptionInputBlurHandler = (project: Project) => {
-    if (descriptionTextAreaRef.current != null) {
-      const currentDesc = descriptionTextAreaRef.current.value;
-      project.description = currentDesc;
-      props.updateProject(project);
-    }
-  };
-
   const wrapListElement = (project: Project, index: number) => {
     const path = "/player/";
     return (
-      <ListGroup.Item as="li" id={classes.visible} key={index}>
-        <Button
-          variant="dark"
-          className={classes.list_util}
+      <ListGroup.Item
+        as="li"
+        id={classes.visible}
+        key={index}
+        bsPrefix={classes.test}
+      >
+        <div
+          className={classes.prjTitle}
           onClick={() => {
             projectBtnHandler(project.id);
           }}
         >
           {project.name}
-        </Button>
+        </div>
         <FontAwesomeIcon
           icon={faEdit}
           size="lg"
@@ -80,10 +82,11 @@ function ProjectList(props: ProjectListProps) {
           icon={faTrashAlt}
           size="lg"
           onClick={() => {
-            deleteBtnHandler(project.id);
+            deleteBtnHandler(project.id, index);
           }}
           className={classes.list_util}
         />
+        {/*
         {project.description && (
           <textarea
             id={classes.hidden}
@@ -98,7 +101,7 @@ function ProjectList(props: ProjectListProps) {
               })
             }
           ></textarea>
-        )}
+          */}
       </ListGroup.Item>
     );
   };
@@ -123,14 +126,14 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    deleteProject: (projectID: string) => {
-      dispatch(getDeleteProjectRequest(projectID));
-    },
     getProjectList: () => {
       dispatch(getProjectListRequest(ProjectListRequestConfig));
     },
     updateProject: (project: Project) => {
       dispatch(getUpdateProjectRequest(project));
+    },
+    deleteProject: (projectID: string): number => {
+      return dispatch(getDeleteProjectRequest(projectID));
     },
   };
 };

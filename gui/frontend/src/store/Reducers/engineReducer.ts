@@ -1,6 +1,8 @@
 import { DiagramModel } from "@projectstorm/react-diagrams-core";
 import { DiagramEngine } from "@projectstorm/react-diagrams-core";
-import createEngine from "@projectstorm/react-diagrams";
+import createEngine, {
+  DefaultDiagramState,
+} from "@projectstorm/react-diagrams";
 
 export const engineActionTypes = {
   SET_DIAGRAM_MODEL: "SET_DIAGRAM_MODEL",
@@ -18,6 +20,10 @@ function getEngineWithConfig(): DiagramEngine {
   const engine = createEngine({
     registerDefaultDeleteItemsAction: false,
   });
+  const state = engine.getStateMachine().getCurrentState();
+  if (state instanceof DefaultDiagramState) {
+    state.dragNewLink.config.allowLooseLinks = false;
+  }
   engine.maxNumberPointsPerLink = 0;
 
   return engine;

@@ -1,12 +1,14 @@
 .toolBar {
-  width: 20%;
-  background: #e0d7d7;
-  padding-top: 20px;
-  display: block;
+  background: #3b3b3b;
   white-space: pre-line;
   overflow-y: scroll;
   overflow: auto;
   z-index: 99;
-  min-width: 300px;
-  border-left: 5px solid rgb(124, 111, 110);
+  border-left: 3px solid rgb(70, 70, 70);
+  flex: 1 1 25%;
+  height: 100%;
+}
+
+.tabContent {
+  width: 100%;
 }

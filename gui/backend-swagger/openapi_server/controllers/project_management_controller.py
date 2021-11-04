@@ -31,30 +31,32 @@ def add_project(project=None):  # noqa: E501
     :rtype: Project
     """
 
-    try:
-        if connexion.request.is_json:
-            project = Project.from_dict(connexion.request.get_json())  # noqa: E501
-            project.id = slugify.slugify(project.id, lowercase=True, separator="_")
+    # try:
+    #     if connexion.request.is_json:
+    #         project = Project.from_dict(connexion.request.get_json())  # noqa: E501
+    #         project.id = slugify.slugify(project.id, lowercase=True, separator="_")
         
-            if os.path.exists(os.path.join(project_path, project.id, "config.json")):
-                raise FileExistsError
+    #         if os.path.exists(os.path.join(project_path, project.id, "config.json")):
+    #             raise FileExistsError
 
-            if not os.path.exists(os.path.join(project_path, project.id)):  
-                os.mkdir(os.path.join(project_path, project.id))
+    #         if not os.path.exists(os.path.join(project_path, project.id)):  
+    #             os.mkdir(os.path.join(project_path, project.id))
 
-            config = {}
-            config['name'] = project.name
-            config['desc'] = project.description
-            with open(os.path.join(project_path, project.id, "config.json"), 'w') as f:
-                json.dump(config, f)
-        else:
-            raise ProblemException(405, "Invalid input")
+    #         config = {}
+    #         config['name'] = project.name
+    #         config['desc'] = project.description
+    #         with open(os.path.join(project_path, project.id, "config.json"), 'w') as f:
+    #             json.dump(config, f)
+    #     else:
+    #         raise ProblemException(405, "Invalid input")
       
-    except FileExistsError as e:
-        raise ProblemException(409, "Project exists")  
+    # except FileExistsError as e:
+    #     raise ProblemException(409, "Project exists")  
 
-    return project
-
+    # return project
+    if project == None:
+        return 'Łups :((('
+    return x.create_project(project)
 
 def delete_project(project_id):  # noqa: E501
     """Deletes a Project

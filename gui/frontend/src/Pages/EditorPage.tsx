@@ -8,13 +8,10 @@ function EditorPage() {
   const { projectID }: { projectID: string } = useParams();
 
   return (
-    <div>
-      <Navbar />
-      <div className="content">
-        <SideBar projectId={projectID} />
-        <Diagrams projectId={projectID} />
-        <ToolBar projectId={projectID} />
-      </div>
+    <div className="content">
+      <SideBar projectId={projectID} />
+      <Diagrams projectId={projectID} />
+      <ToolBar projectId={projectID} />
     </div>
   );
 }

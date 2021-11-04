@@ -8,7 +8,7 @@ import {
   DeleteItemsAction,
 } from "@projectstorm/react-canvas-core";
 import { DemoCanvasWidget } from "./Components/Layout/CanvasWidget";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "./Components/Layout/Utils/Modal";
 import Backdrop from "./Components/Layout/Utils/Backdrop";
 import { connect } from "react-redux";
@@ -20,6 +20,9 @@ import { Module } from "./store/redux-query";
 import { OwlNodeModel } from "./Components/OwlNodes/OwlNodeModel";
 import { OwlNodeFactory } from "./Components/OwlNodes/OwlNodeFactory";
 import { OwlQueueLinkFactory } from "./Components/OwlQueueLinks/OwlQueueLinkFactory";
+import { useLocation } from "react-router";
+import html2canvas from "html2canvas";
+import { EditableLabelFactory } from "./Components/CustomLinks/Labels/LabelFactory";
 
 interface DiagramProps {
   engine: DiagramEngine;
@@ -34,7 +37,7 @@ const Diagrams = (props: DiagramProps) => {
     // const moduleProps = Object.keys(moduleData);
     const droppedNode = new OwlNodeModel({
       ...moduleData,
-      color: "LemonChiffon",
+      color: "#ffB730",
       title: moduleData.name,
       content: "Opis",
     });
@@ -46,6 +49,16 @@ const Diagrams = (props: DiagramProps) => {
     props.addModuleRequest(props.projectId, droppedNode);
     engine.repaintCanvas();
   }
+
+  const location = useLocation();
+  const canvaRef = useRef(null);
+
+  useEffect(() => {
+    console.log(canvaRef.current);
+    html2canvas(canvaRef.current!).then((canvas) =>
+      document.body.appendChild(canvas)
+    );
+  }, [location]);
 
   /*
   async function loadSchema() {
@@ -63,7 +76,7 @@ const Diagrams = (props: DiagramProps) => {
   const engine = props.engine;
   const [isSchemaLoading, setSchemaLoading] = useState(true);
   engine.getNodeFactories().registerFactory(new OwlNodeFactory());
-  engine.getLabelFactories().registerFactory(new DefaultLabelFactory());
+  engine.getLabelFactories().registerFactory(new EditableLabelFactory());
   engine.getLinkFactories().registerFactory(new OwlQueueLinkFactory());
 
   engine
@@ -98,6 +111,8 @@ const Diagrams = (props: DiagramProps) => {
       onDragOver={(event) => {
         event.preventDefault();
       }}
+      id="userCanva"
+      ref={canvaRef}
     >
       <DemoCanvasWidget>
         <CanvasWidget className="diagram-container" engine={engine} />
