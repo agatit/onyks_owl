@@ -44,11 +44,11 @@ def add_module(project_id, module):  # noqa: E501
 
     :rtype: Module
     """
-    if connexion.request.is_json:
-        module = Module.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # if connexion.request.is_json:
+    #     module = Module.from_dict(connexion.request.get_json())  # noqa: E501
+    # return 'do some magic!'
     # return x.add_project_module(project_id, "TODO nazwa modułu")
-    return x.add_project_module(project_id, "TODO nazwa modułu")
+    return x.add_project_module(project_id, module)
 
 
 def add_queue(project_id, queue):  # noqa: E501
@@ -138,7 +138,8 @@ def get_instance(project_id, instance_id):  # noqa: E501
 
     :rtype: Instance
     """
-    return 'do some magic!'
+    # return 'do some magic!'
+    return x.get_instance(project_id, instance_id)
 
 
 def get_module(project_id, module_id):  # noqa: E501
@@ -291,7 +292,8 @@ def list_resources(project_id):  # noqa: E501
 
     :rtype: List[ProjectResource]
     """
-    return x.get_project_conf(project_id)
+    return 'do some magic!'
+    # return x.get_project_conf(project_id)
 
 
 def run_instance(project_id):  # noqa: E501
@@ -319,9 +321,10 @@ def update_module(project_id, module):  # noqa: E501
 
     :rtype: Module
     """
-    if connexion.request.is_json:
-        module = Module.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # if connexion.request.is_json:
+    #     module = Module.from_dict(connexion.request.get_json())  # noqa: E501
+    # return 'do some magic!'
+    return x.set_project_conf(project_id, module) # TODO data?!?!?!??!?!!??!??!
 
 
 def update_queue(project_id, queue):  # noqa: E501

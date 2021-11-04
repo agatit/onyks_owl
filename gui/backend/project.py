@@ -25,40 +25,43 @@ class Project():
         # for mod in self.get_modules():
         #     self.modules[mod] = Module(os.path.join(self.modules_dir, mod + '.py'),self.config_path)
         self.load_modules()
-    def set_instance_config(self, instance_id, data=None):
-        self.instances[instance_id]['config'] = os.path.join(self.project_path, 'config_' + instance_id + ".json")
-        try:
-            # self.config_json = data
-            with open(self.instances[instance_id]['config'], 'w') as file:
-                if data is None:
-                    json.dump(self.config_json,file, ensure_ascii=False, indent=4)
-                else:
-                    json.dump(data,file, ensure_ascii=False, indent=4)
-            return 'coś'    # TODO returny
-        except:
-            return None
+    # def set_instance_config(self, instance_id, data=None):
+    #     self.instances[instance_id]['config'] = os.path.join(self.project_path, 'config_' + instance_id + ".json")
+    #     try:
+    #         # self.config_json = data
+    #         with open(self.instances[instance_id]['config'], 'w') as file:
+    #             if data is None:
+    #                 json.dump(self.config_json,file, ensure_ascii=False, indent=4)
+    #             else:
+    #                 json.dump(data,file, ensure_ascii=False, indent=4)
+    #         return 'coś'    # TODO returny
+    #     except:
+    #         return None
     def add_project_instance(self, instance_id):
         if instance_id in self.instances:
             return None
         self.instances[instance_id] = {}
-        self.set_instance_config(instance_id)
+        # self.set_instance_config(instance_id)
         for module_name in self.config_json['modules']:
-            # self.instances[instance_id][module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path, instance_id)
-            self.instances[instance_id][module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.instances[instance_id]['config'], instance_id)
+            self.instances[instance_id][module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path, instance_id)
+            # self.instances[instance_id][module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.instances[instance_id]['config'], instance_id)
     def get_project_instances(self):
         return list(self.instances.keys())
     def start_project_instance(self, instance_id):
         for module_name in self.config_json['modules']:
             self.instances[instance_id][module_name].module_start()
         print("Module ", module_name, " in ", instance_id, " started.")
-    def delete_instance(self, instance_name):
+    def delete_project_instance(self, instance_name):
         if instance_name not in self.instances:
-            return None
+            return 'Łups :('
         for module in self.instances[instance_name]:
             module.module_stop()
         del self.instances[instance_name]
+        return 'Jest git'
     def get_instance(self, instance_name):
-        pass
+        if instance_name not in self.instances:
+            return 'Łups :('
+        return instance_name + " a co więcej to nie wiem :ppp"
         # TODO suma configów modułów
     def get_instance_config(self, instance_name):
         pass
@@ -81,25 +84,29 @@ class Project():
     
     def set_config(self, data):
         try:
-            self.config_json = data
             with open(self.config_path, 'w') as file:
                 json.dump(data,file, ensure_ascii=False, indent=4)
-            return 'coś'    # TODO returny
+            self.config_json = data
+            return 'Jest git'    # TODO returny
         except:
-            return None
+            return 'Łups :('
     def add_module(self, module_name):
         self.modules[module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path)
-        # TODO if self.modules[module_name] is None: return "Łups :("
+        if self.modules[module_name] is None: 
+            return "Łups :("
         self.config_json['modules'][module_name] = self.modules[module_name].get_default_config()
-        return 'coś'
+        return 'Jest git'
 
     def get_module_data(self, module_name):
-        return self.config_json['modules'][module_name]
+        if module_name in self.config_json['modules']:
+            return self.config_json['modules'][module_name]
+        return 'Łups :('
     def get_modules(self):
         return list(self.modules.keys())
     def delete_module(self, module_name):
         del self.config_json['modules'][module_name]
         del self.modules[module_name]
+        return 'Jest git'
 
     def get_module_params(self, module_name):
         return self.modules[module_name].get_params()
