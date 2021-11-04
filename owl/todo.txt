@@ -1,0 +1,9 @@
+wydzielić funkcje budujące
+- z lini poleceń
+- ze stringu z konfiguracją
+
+Przenisć obsługę kolejek do klasy Connector
+- redis
+- multiprocesing queue
+
+Przerobić funkcję z definicją na metodę klasową

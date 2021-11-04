@@ -22,7 +22,7 @@ class Module(module_base.Module):
     last_segment = None
     last_segment_time = None
 
-    def streams_init(self): 
+    def setup(self): 
         self.input_classes = {}
         self.output_classes = {
             "color" : stream_video.Producer,
@@ -110,5 +110,5 @@ class Module(module_base.Module):
 
 
 if __name__ == "__main__":
-    module = Module(sys.argv)
+    module = Module.from_cmd(sys.argv)
     module.run()

@@ -58,5 +58,5 @@ class Module(module_base.Module):
                 output_stream.emit(output_data)     
 
 if __name__ == "__main__":
-    module = Module(sys.argv)
+    module = Module.from_cmd(sys.argv)
     module.run()

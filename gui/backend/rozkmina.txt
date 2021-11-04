@@ -1,8 +1,11 @@
 Engine <- Project <- Module
 Project <- Instance(lista obiektów modułów)
+HK> Wyobrażam sobie, że Engine posiada uruchomione projektu (instację ptojektów) i uruchomine moduły (instancję modułów) oraz tworzy własnę kolejki (instancje kolejek)
 
 Engine musi mieć dostęp do default_config'a modułów
 Czyli Module musi być importowalny przez Engine
+HK> Przemyślę układ ścieżek. Przerobimy aplikację na moduł to będzi emożna zrobić bardziej skomplikowaną architketure
+
 def __init__(self, name, project_path, module_path, config_path)
 Engine nie dostarczy project_path's i config_path'a
 
@@ -10,6 +13,13 @@ Engine nie dostarczy project_path's i config_path'a
 
 
 3) Co to są te Queue?
+HK> Queue to obiekty (w tej chwili w Redis) łączące moduły. Musimy zrobić zmianę w ich definicji w config.json aby lepiej pasowały do GUI
+
 - Dodać nazwę instancji do API
+HK> Na razie zakładamy, że każdy projekt może mieć tylko jedną instację (InstanceId możemy wywalić albo ignorować). Ważniejsze są moduły w instancji (czyli instancje modułów)
+
 - nie ma startu instancji, także zakładam że jak instancja istnieje, to od razu jest odpalona
+HK> Tak, dodanie (post) instancji ma ją ruruchamiać, zaś delete zabijać
+
 - czy jak odpalę kilka instancji to one się nie popierdolą na poziomie bazy danych?
+HK> popierdolą się, trzeba to ogarnąć

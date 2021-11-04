@@ -17,7 +17,7 @@ import module_base
 
 
 class Module(module_base.Module):
-    def streams_init(self): 
+    def setup(self): 
         self.input_classes = {
             "color" : stream_video.Consumer,
             "metrics" : stream_data.Consumer
@@ -58,5 +58,5 @@ class Module(module_base.Module):
 
 
 if __name__ == "__main__":
-    module = Module(sys.argv)
+    module = Module.from_cmd(sys.argv)
     module.run()
