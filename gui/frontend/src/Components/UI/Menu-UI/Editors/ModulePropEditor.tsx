@@ -1,4 +1,4 @@
-import { FormControl, InputGroup } from "react-bootstrap";
+import { Form, FormControl, InputGroup } from "react-bootstrap";
 
 import {
   ModuleParam,
@@ -130,6 +130,7 @@ function ModulePropEditor(props: ModulePropEditorProps) {
             );
           })}
       </div>
+      <LookPropsEditor node={node} engine={engine} />
     </div>
   );
 }
@@ -169,6 +170,43 @@ const connector = connect(
 
 export default connector;
 
+export const LookPropsEditor = (props: {
+  node: OwlNodeModel;
+  engine: DiagramEngine;
+}) => {
+  const colorInputChangeHandler = (color: string) => {
+    props.node.color = color;
+    store.dispatch(selectedNode(props.node));
+  };
+
+  return (
+    <div className={[classes.propertiesBars, classes.lookBars].join(" ")}>
+      <div className={classes.propsTitle}>Wygląd</div>
+      <Form.Label htmlFor="colorPicker" style={propLabels}>
+        Kolor nagłówka
+      </Form.Label>
+      <Form.Control
+        style={colorPickerStyle}
+        type="color"
+        id="colorPicker"
+        value={props.node.color}
+        onChange={(e) => colorInputChangeHandler(e.target.value)}
+        title="Wybierz kolor"
+      ></Form.Control>
+      <Form.Label htmlFor="colorPicker" style={propLabels}>
+        Kolor modułu
+      </Form.Label>
+      <Form.Control
+        style={colorPickerStyle}
+        type="color"
+        id="colorPicker"
+        defaultValue="#563d7c"
+        title="Wybierz kolor"
+      ></Form.Control>
+    </div>
+  );
+};
+
 // style css
 
 const propInputs = {
@@ -190,4 +228,8 @@ const propLabels = {
   border: "none",
   paddingLeft: "1rem",
   marginLeft: "auto",
+};
+
+const colorPickerStyle = {
+  display: "inline-block",
 };

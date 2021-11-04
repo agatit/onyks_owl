@@ -45,10 +45,8 @@ function ProjectEditor(props: ProjectEditorProps) {
     props.updateProject(project);
   };
 
-  console.log(project);
-
   if (isPending || !project) {
-    return <div>Loading…</div>;
+    return <div>Trwa ładowanie...</div>;
   }
 
   return (

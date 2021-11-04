@@ -6,6 +6,9 @@ import store from "../../store/store";
 import { deleteNode, selectedNode } from "../../store/Actions/nodeActions";
 import { getDeleteModuleFromProjectRequest } from "../../store/Queries/project_editor_queries";
 import styled from "@emotion/styled";
+import { ModuleParam } from "../../store/redux-query";
+
+import classes from "./OwlNodeWidget.module.css";
 
 export interface NodeWidgetProps {
   node: OwlNodeModel;
@@ -24,7 +27,7 @@ class OwlNodeAbstractWidget extends React.Component<
   }
   render() {
     return (
-      <div className={clsx("custom-node-port")}>
+      <div className={clsx("custom-node-content")}>
         {!this.props.node.source && (
           <PortWidget
             engine={this.props.engine}
@@ -34,7 +37,7 @@ class OwlNodeAbstractWidget extends React.Component<
             <div className={clsx("circle-port")} />
           </PortWidget>
         )}
-        {this.props.node.content}
+        <OwlNodeContent node={this.props.node} engine={this.props.engine} />
         <PortWidget
           engine={this.props.engine}
           port={this.props.node.outputPortModel}
@@ -46,6 +49,40 @@ class OwlNodeAbstractWidget extends React.Component<
     );
   }
 }
+
+interface OwlNodeContentProps extends NodeWidgetProps {
+  moduleParams?: Array<ModuleParam>;
+}
+const params = [
+  {
+    paramDefId: "Testowy_param",
+    value: "50",
+  },
+  {
+    paramDefId: "Inny_param",
+    value: "Lorem ipsum",
+  },
+];
+
+const OwlNodeContent = (props: OwlNodeContentProps) => {
+  return (
+    <div className={classes.parametersList}>
+      <div className={classes.parameter}>
+        <div className={classes.paramterName}>{params[0].paramDefId}</div>
+        <div className={classes.parameterValue}>{params[0].value}</div>
+      </div>
+      <div className={classes.parameter}>
+        <div className={classes.paramterName}>{params[1].paramDefId}</div>
+        <div className={classes.parameterValue}>{params[1].value}</div>
+      </div>
+      <div className={classes.otherFlex}>
+        <div className={classes.description}>
+          Przykładowy opis modułu - do uzupełnienia
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export class OwlNodeWidget extends React.Component<NodeWidgetProps> {
   constructor(props: NodeWidgetProps) {

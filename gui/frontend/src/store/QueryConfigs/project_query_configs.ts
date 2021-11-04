@@ -4,6 +4,7 @@ import { Project, TypedQueryConfig } from "../redux-query";
 export const ProjectListRequestConfig: QueryConfig = {
   url: "",
   transform: (response: Project) => {
+    console.log("W zapytaniu:" + response);
     return {
       projects: response,
     };
@@ -18,7 +19,6 @@ export const ProjectRequestConfig: TypedQueryConfig<
   Project
 > = {
   transform: (response: Project) => {
-    console.log("W zapytaniu:" + response);
     return {
       project: response,
     };

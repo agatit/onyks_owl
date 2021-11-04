@@ -28,6 +28,7 @@ export class OwlQueueLinkModel extends DefaultLinkModel {
     super({
       type: "OwlQueue",
     });
+    this.setColor("white");
     this.id = options.id || "Initial_Link_ID";
     this.name = options.name || "Initial Link Name";
     this.project = options.project || {

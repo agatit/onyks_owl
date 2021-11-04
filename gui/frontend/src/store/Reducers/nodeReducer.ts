@@ -20,7 +20,6 @@ export const nodesData = (state = initialState, action: nodeAction) => {
     case nodeActionTypes.SET_SELECTED_NODE:
       return { ...state, selectedNode: action.node, test: !state.test };
     case nodeActionTypes.ON_NODE_DELETE:
-      console.log(undefined);
       return { ...state, selectedNode: undefined, test: !state.test };
     default:
       return state;

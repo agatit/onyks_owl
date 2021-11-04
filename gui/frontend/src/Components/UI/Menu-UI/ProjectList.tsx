@@ -14,10 +14,11 @@ import { connect } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { ProjectListRequestConfig } from "../../../store/QueryConfigs";
 import Backdrop from "../../Layout/Utils/Backdrop";
+import store from "../../../store/store";
 
 interface ProjectListProps {
-  projects: Project[];
-  deleteProject: (projectID: string) => void;
+  projects: Array<Project>;
+  deleteProject: (projectID: string) => any;
   getProjectList: () => void;
   updateProject: (project: Project) => void;
 }
@@ -38,8 +39,14 @@ function ProjectList(props: ProjectListProps) {
     history.push(`/edit/${projectId}`, { projectID: projectId });
   };
 
-  const deleteBtnHandler = (projectId: string) => {
-    props.deleteProject(projectId);
+  const deleteBtnHandler = (projectId: string, projectIndex: number) => {
+    props.deleteProject(projectId).then((result: any) => {
+      if (result.status !== 200) {
+        console.log("Nie udało się usunąć projetku!");
+      } else {
+        console.log("Projekt usunięty pomyślnie!");
+      }
+    });
   };
 
   const projectBtnHandler = (projectId: string) => {
@@ -75,7 +82,7 @@ function ProjectList(props: ProjectListProps) {
           icon={faTrashAlt}
           size="lg"
           onClick={() => {
-            deleteBtnHandler(project.id);
+            deleteBtnHandler(project.id, index);
           }}
           className={classes.list_util}
         />
@@ -119,14 +126,14 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    deleteProject: (projectID: string) => {
-      dispatch(getDeleteProjectRequest(projectID));
-    },
     getProjectList: () => {
       dispatch(getProjectListRequest(ProjectListRequestConfig));
     },
     updateProject: (project: Project) => {
       dispatch(getUpdateProjectRequest(project));
+    },
+    deleteProject: (projectID: string): number => {
+      return dispatch(getDeleteProjectRequest(projectID));
     },
   };
 };

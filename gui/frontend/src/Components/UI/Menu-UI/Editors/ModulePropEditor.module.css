@@ -9,6 +9,13 @@
   margin-top: 5px;
 }
 
+.lookBars {
+  margin: auto;
+  font-size: 20px;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
 .propLabels {
   width: 35%;
   color: rgb(223, 223, 219);

@@ -37,7 +37,7 @@ const Diagrams = (props: DiagramProps) => {
     // const moduleProps = Object.keys(moduleData);
     const droppedNode = new OwlNodeModel({
       ...moduleData,
-      color: "LemonChiffon",
+      color: "#ffB730",
       title: moduleData.name,
       content: "Opis",
     });
