@@ -6,7 +6,7 @@ import {
   BaseModelOptions,
   DeserializeEvent,
 } from "@projectstorm/react-canvas-core";
-import { Project, Queue } from "../../store/redux-query";
+import { ModuleParam, Project, Queue } from "../../store/redux-query";
 import { OwlDefaultPort } from "../OwlPorts/OwlDefaultPort";
 
 export interface NodeModelOptions extends BaseModelOptions {
@@ -21,6 +21,7 @@ export interface NodeModelOptions extends BaseModelOptions {
   input?: Queue;
   output?: Queue;
   name?: string;
+  parameters?: Array<ModuleParam>;
 }
 
 export class OwlNodeModel extends StormNodeModel {
@@ -28,9 +29,9 @@ export class OwlNodeModel extends StormNodeModel {
   title: string;
   content: string | undefined;
   source: boolean;
-  params: { [key: string]: any };
   module_id: string;
   id: string;
+  params: { [key: string]: any };
   moduleDefId: string;
   project: Project;
   input: Queue;
@@ -38,6 +39,7 @@ export class OwlNodeModel extends StormNodeModel {
   name?: string;
   inputPortModel: DefaultPortModel;
   outputPortModel: DefaultPortModel;
+  parameters: Array<ModuleParam>;
 
   constructor(options: NodeModelOptions = {}) {
     super({
@@ -49,6 +51,7 @@ export class OwlNodeModel extends StormNodeModel {
     this.content = options.content || undefined;
     this.source = options.source || false;
     this.params = {};
+    this.parameters = options.parameters || []; // do usunięcia
     this.module_id = options.module_id || "node";
     this.id = options.id || "testId";
     this.moduleDefId = options.moduleDefId || "test ModuleDefId";

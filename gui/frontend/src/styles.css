@@ -1,6 +1,6 @@
 .App {
   position: relative;
-  flex-grow: 1;
+  flex: 3 3 60%;
 }
 
 .diagram-container {
@@ -12,7 +12,8 @@
 }
 
 .custom-node {
-  min-width: 150px;
+  font-size: 11px;
+  min-width: 100px;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -22,7 +23,9 @@
 .custom-node-header {
   flex-grow: 1;
   padding: 8px 24px;
-  margin-bottom: 8px;
+  border-bottom: 3px solid rgb(235, 235, 232);
+  font-weight: bold;
+  /*margin-bottom: 8px; */
 }
 .custom-node-subheader {
   flex-grow: 1;
@@ -32,6 +35,9 @@
 .custom-node-content {
   flex-grow: 1;
   padding: 0 8px 8px 8px;
+  position: relative;
+  background-color: rgb(22, 22, 22);
+  color: wheat;
 }
 .custom-node-port {
   flex-grow: 1;
@@ -50,16 +56,17 @@
   width: 16px;
   height: 16px;
   border-radius: 8px;
-  background: #ddd;
+  background: rgb(255, 183, 48);
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border: 2px solid rgb(221, 218, 218);
 }
 .circle-port:hover {
   background: #bbb;
 }
 .circle-porter {
   position: absolute;
-  top: 8px;
+  top: 30%;
 }
 .circle-porter-in {
   left: -8px;

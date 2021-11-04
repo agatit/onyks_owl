@@ -15,12 +15,11 @@ export class EditableLabelModel extends LabelModel {
     super({
       ...options,
       type: "editable-label",
-      offsetX: -600,
+      offsetX: -430,
       offsetY: -30,
     });
     this.value = options.value || "";
   }
-
   serialize() {
     return {
       ...super.serialize(),

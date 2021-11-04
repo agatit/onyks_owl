@@ -16,11 +16,17 @@ import { OwlQueueLinkModel } from "../../../OwlQueueLinks/OwlQueueLinkModel";
 import { selectedQueue } from "../../../../store/Actions/queueActions";
 
 import classes from "./QueuePropEditor.module.css";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { color } from "html2canvas/dist/types/css/types/color";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { nodeModuleNameResolver } from "typescript";
+import { OwlNodeModel } from "../../../OwlNodes/OwlNodeModel";
 
 interface QueuePropEditorProps {
   queue: OwlQueueLinkModel;
   engine: DiagramEngine;
   projectId: string;
+  node: OwlNodeModel;
   updateParamRequest: (requestParams: UpdateQueueParamRequest) => void;
   updateQueue: (requestParams: UpdateQueueRequest) => void;
 }
@@ -58,17 +64,33 @@ function QueuePropEditor(props: QueuePropEditorProps) {
 
   const propertyList: Array<QueueParam> = useSelector(selectQueueParams);
 
+  if (!queue) {
+    return (
+      <div>
+        <h2 className={classes.warning}>Brak wybranej kolejki</h2>
+        <FontAwesomeIcon
+          icon={faTimes}
+          size="5x"
+          color="gray"
+        ></FontAwesomeIcon>
+      </div>
+    );
+  }
+  if (props.node) props.node.setSelected(false);
+  queue.setSelected(true);
+
   return (
-    <div className={classes.toolBar}>
-      <h2>{queue.name ? queue.name : "Brak nazwy kolejki"}</h2>
+    <div className={classes.propertiesBars}>
+      <div className={classes.propsTitle}>Główne</div>
       <InputGroup className="mb-3">
-        <InputGroup.Text id="inputGroup-sizing-default">Nazwa</InputGroup.Text>
+        <InputGroup.Text id="inputGroup-sizing-default" style={propLabels}>
+          Nazwa
+        </InputGroup.Text>
         <FormControl
           value={queue.name}
-          aria-label="Default"
-          aria-describedby="inputGroup-sizing-default"
           onChange={(e) => handleNamePropertyChange(e.target.value)}
           onBlur={(e) => moduleNameInputBlurHandler(e.target.value)}
+          style={propInputs}
         />
       </InputGroup>
 
@@ -76,7 +98,10 @@ function QueuePropEditor(props: QueuePropEditorProps) {
         propertyList.map((paramKey: QueueParam, index: number) => {
           return (
             <InputGroup className="mb-3" key={index}>
-              <InputGroup.Text id="inputGroup-sizing-default">
+              <InputGroup.Text
+                id="inputGroup-sizing-default"
+                style={propLabels}
+              >
                 {paramKey.paramsDefId}
               </InputGroup.Text>
               <FormControl
@@ -87,6 +112,7 @@ function QueuePropEditor(props: QueuePropEditorProps) {
                 onBlur={(e) =>
                   propertyInputBlurHandler(e.target.value, paramKey)
                 }
+                style={propInputs}
               />
             </InputGroup>
           );
@@ -97,6 +123,7 @@ function QueuePropEditor(props: QueuePropEditorProps) {
 
 const mapStateToProps = (state: any) => {
   return {
+    node: state.nodesData.selectedNode,
     queue: state.queueReducer.selectedQueue,
     test: state.queueReducer.test,
     engine: state.engineReducer.engine,
@@ -115,3 +142,24 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(QueuePropEditor);
+
+const propInputs = {
+  backgroundColor: "rgb(143, 143, 143)",
+  border: "none",
+  padding: "10px",
+  marginRight: "20px",
+  fontFamily: "Arial",
+  color: "rgb(220, 220, 220)",
+  borderTopLeftRadius: "0.25rem",
+  borderBottomLeftRadius: "0.25rem",
+};
+
+const propLabels = {
+  width: "35%",
+  padding: "0.375rem 0.75rem",
+  backgroundColor: "inherit",
+  color: "rgb(180, 180, 180)",
+  border: "none",
+  paddingLeft: "1rem",
+  marginLeft: "auto",
+};

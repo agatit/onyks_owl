@@ -11,6 +11,7 @@ namespace S {
   export const Label = styled.div`
     user-select: none;
     pointer-events: auto;
+    width: 20px;
   `;
 }
 
@@ -22,6 +23,7 @@ export const EditableLabelWidget: React.FunctionComponent<FlowAliasLabelWidgetPr
       <S.Label>
         <input
           value={str}
+          style={styledInput}
           onChange={(event) => {
             const newVal = event.target.value;
             setStr(newVal);
@@ -31,3 +33,7 @@ export const EditableLabelWidget: React.FunctionComponent<FlowAliasLabelWidgetPr
       </S.Label>
     );
   };
+
+const styledInput = {
+  width: "100px",
+};

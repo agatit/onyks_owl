@@ -1,9 +1,9 @@
-import Module from "module";
 import { useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { connect } from "react-redux";
 import { getModuleListRequest } from "../../../store/Queries/project_editor_queries";
 import { ModuleListRequestConfig } from "../../../store/QueryConfigs/module_query_configs";
+import { Module } from "../../../store/redux-query";
 import {
   clearModuleList,
   selectModuleList,
