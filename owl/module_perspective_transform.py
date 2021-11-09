@@ -34,8 +34,8 @@ class Module(module_base.Module):
         self.default_config['params'][1]['mtx'] = ['list', [[1161.107086941478,0.0,948.2004474733628],[0.0,1166.8887234211986,608.8830018574113],[0.0,0.0,1.0]]]
         self.default_config['params'][1]['dist'] = ['list', [[-0.5435658832121913,0.8889895278168062,-0.017174260409137283,0.004614250484695657,-1.1537064635161052]]]
         self.default_config['params'][1]['trapezoid_coords'] = ['list', [[1125,403],[1920,201],[1126,897],[1919,1055]]]
-        self.default_config['description'] = "Deskrypszyn"
-        self.default_config['id'] = "Jakie niby ID?!?!"
+        # self.default_config['description'] = "Deskrypszyn"
+        # self.default_config['id'] = "Jakie niby ID?!?!"
 
     def streams_init(self):
         self.input_classes = {

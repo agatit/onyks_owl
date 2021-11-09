@@ -11,7 +11,7 @@ import slugify
 import os
 import shutil
 
-project_path = "../../examples"
+project_path = "../../projects"
 
 import sys
 sys.path.append('../backend')
@@ -31,32 +31,15 @@ def add_project(project=None):  # noqa: E501
     :rtype: Project
     """
 
-    # try:
-    #     if connexion.request.is_json:
-    #         project = Project.from_dict(connexion.request.get_json())  # noqa: E501
-    #         project.id = slugify.slugify(project.id, lowercase=True, separator="_")
-        
-    #         if os.path.exists(os.path.join(project_path, project.id, "config.json")):
-    #             raise FileExistsError
-
-    #         if not os.path.exists(os.path.join(project_path, project.id)):  
-    #             os.mkdir(os.path.join(project_path, project.id))
-
-    #         config = {}
-    #         config['name'] = project.name
-    #         config['desc'] = project.description
-    #         with open(os.path.join(project_path, project.id, "config.json"), 'w') as f:
-    #             json.dump(config, f)
-    #     else:
-    #         raise ProblemException(405, "Invalid input")
+    try:
+        if connexion.request.is_json:
+            return x.create_project(connexion.request.get_json())
+        else:
+            raise ProblemException(405, "Invalid input")
       
-    # except FileExistsError as e:
-    #     raise ProblemException(409, "Project exists")  
+    except FileExistsError as e:
+        raise ProblemException(409, "Project exists")  
 
-    # return project
-    if project == None:
-        return 'Łups :((('
-    return x.create_project(project)
 
 def delete_project(project_id):  # noqa: E501
     """Deletes a Project
@@ -68,6 +51,7 @@ def delete_project(project_id):  # noqa: E501
 
     :rtype: None
     """
+    return x.delete_project(project_id)
     try:
         if not os.path.exists(os.path.join(project_path, project_id, "config.json")):
             raise FileNotFoundError
@@ -115,16 +99,6 @@ def list_projects():  # noqa: E501
 
     :rtype: List[Project]
     """
-    response = []
-    pathlist = Path(project_path).glob('**/*/config.json')
-    for path in pathlist:
-        print(path.parent.name)
-        with open(path, "rb") as f:
-            config = json.load(f)
-        prj = Project(path.parent.name, config.get("name", path.parent.name), config.get("desc", "no description"))
-        response.append(prj)
-
-    return response
     return x.get_projects()
 
 def update_project(project=None):  # noqa: E501
@@ -141,18 +115,9 @@ def update_project(project=None):  # noqa: E501
     """
     try:
         if connexion.request.is_json:
-            project = Project.from_dict(connexion.request.get_json())  # noqa: E501
-        
-            with open(os.path.join(project_path, project.id, "config.json"), 'r') as f:
-                config = json.load(f)
-           
-            config['name'] = project.name
-            config['desc'] = project.description
-            with open(os.path.join(project_path, project.id, "config.json"), 'w') as f:
-                json.dump(config, f)
+            # project = Project.from_dict(connexion.request.get_json())  # noqa: E501
+            return x.update_project(connexion.request.get_json())
         else:
             return connexion.NoContent, 400    
     except FileNotFoundError as e:
         raise ProblemException(404, "Project not exists", str(e))
-
-    return project

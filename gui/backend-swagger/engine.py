@@ -5,17 +5,20 @@ import shutil
 import subprocess
 import time
 from project import Project
+# from .openapi_server.models.project import Project
+from openapi_server.models.project import Project as OPProject
 from module import Module
+from connexion.exceptions import ProblemException
 import ast
 
-DEFAULT_PATH_PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../examples")
+DEFAULT_PATH_PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../projects")
 DEFAULT_PATH_MODULES = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../owl")
 
 EMPTY_CONFIG = {
     'modules': {},
     'pipeline': {}
 }
-
+# TODO description i coś jeszcze
 class Engine():
     def __init__(self, projects_path = DEFAULT_PATH_PROJECTS, modules_path = DEFAULT_PATH_MODULES):
         self.projects_path = projects_path
@@ -32,26 +35,26 @@ class Engine():
         mod = list(filter(lambda k: '.py' in k, modules))       # pliki z '.py'
         mod2 = list(filter(lambda k: '__init__' not in k, mod)) # pliki bez __init__
         mod3 = [x.replace('.py', '') for x in mod2]
-        retval = {}
+        retval = []
         retval_mod = {}
         for module_name in mod3:
-            if module_name == 'module_base' or \
-               module_name == 'module_source_cv' or \
+            if module_name == 'module_source_cv' or \
                module_name == 'module_perspective_transform' or \
                module_name == 'module_sink_win':
-                retval[module_name] = {}
+                retval2 = {}
                 mod_data = self.get_module_data(module_name)
                 # print("mod data:" + mod_data)
                 print(mod_data)
-                retval[module_name]['description'] = mod_data.get('description', 'Default description')
-                retval[module_name]['id'] = mod_data.get('id', 'Default ID')
-                retval[module_name]['name'] = module_name
+                retval2['description'] = mod_data.get('description', 'Default description')
+                retval2['id'] = mod_data.get('id', 'Default ID')
+                retval2['name'] = module_name
                 
                 # temp_mod = Module(module_name, None, os.path.join(self.modules_path, module_name + '.py'), None)
                 # retval[module_name]['description'] = temp_mod.get_config.get('description', 'Default description')
                 # retval[module_name]['id'] = temp_mod.get_config.get('id', 'Default ID')
                 # retval[module_name]['name'] = module_name
                 # TODO nno ten kod to mocno placeholderowy jest
+                retval.append(retval2)
         return retval
 
     def get_module_data(self, module_id):
@@ -87,30 +90,56 @@ class Engine():
         - sprawdzać układ pliku 'config.json'? # TODO
     '''
     def get_projects(self):
-        return list(self.projects.keys())
-        # TODO gdzieś dodać "comment"'y
-    def add_project(self, name):
-        if not os.path.isfile(os.path.join(self.projects_path, name, 'config.json')):
-            # print(f'Project {name} nonexistent')
-            # if os.path.exists(os.path.join(self.projects_path, name)):
-            #     shutil.rmtree(os.path.join(self.projects_path, name))
-            #     print('Invalid directory removed')
-            pass
-        else:
-            # print(f'Project {name} found!')
-            if name == 'perspective_transform':
-                self.projects[name] = Project(os.path.join(self.projects_path, name), self.modules_path)
-                # print(f'Project {name} added!') # TODO if self.projects[name] is not None ?
-
-    def create_project(self, name):
+        response = []
+        for _, project in self.projects.items():
+            response.append(project.get_config())
+        return response
+    def add_project(self, id):
+        self.projects[id] = Project(os.path.join(self.projects_path, id), self.modules_path)
+    def create_project(self,data):
+        openapi_project = OPProject.from_dict(data)
         try:
-            os.mkdir(os.path.join(self.projects_path, name))
-            with open(os.path.join(self.projects_path, name, 'config.json'), 'w') as file:
-                json.dump(EMPTY_CONFIG,file, ensure_ascii=False, indent=4)
-            self.add_project(name)
-            return 'coś' # TODO returny
-        except:
-            return 'error'
+            if os.path.exists(os.path.join(self.projects_path, openapi_project.id, "config.json")):
+                raise FileExistsError
+
+            if not os.path.exists(os.path.join(self.projects_path, openapi_project.id)):  
+                os.mkdir(os.path.join(self.projects_path, openapi_project.id))
+
+            config = {}
+            config['id'] = openapi_project.id
+            config['name'] = openapi_project.name
+            config['desc'] = openapi_project.description
+            config['modules'] = {}
+            
+            with open(os.path.join(self.projects_path, openapi_project.id, "config.json"), 'w') as f:
+                json.dump(config, f, ensure_ascii=False, indent=4)
+
+            self.add_project(openapi_project.id)
+            return config # TODO albo openapi_project
+        except FileExistsError as e:
+            raise ProblemException(409, "Project exists")
+    def update_project(self, data):
+        openapi_project = OPProject.from_dict(data)
+        with open(os.path.join(self.projects_path, openapi_project.id, "config.json"), 'r') as f:
+            config = json.load(f)
+        config['name'] = openapi_project.name
+        config['desc'] = openapi_project.description
+        config['modules'] = {}
+        with open(os.path.join(self.projects_path, openapi_project.id, "config.json"), 'w') as f:
+            json.dump(config, f)
+        return config
+    def delete_project(self, project_id):
+        # TODO jakiś project_kill
+        try:
+            if not os.path.exists(os.path.join(self.projects_path, project_id, "config.json")):
+                raise FileNotFoundError
+
+            shutil.rmtree(os.path.join(self.projects_path, project_id))
+
+        except FileNotFoundError as e:
+            raise ProblemException(404, "Project not exists", str(e))
+
+        return 'Deleted', 200
 
     def get_project_conf(self, project_id):
         return self.projects[project_id].get_config()
@@ -167,6 +196,9 @@ class Engine():
 
 if __name__ == '__main__':
     x = Engine()
+    print('xd')
+    # print(x.create_project({"id": "ras", "name": "dwa", "description": "czy"}))
+    print(x.get_projects())
     # print(List.get_names())
     # print(x.get_projects())
     # print(x.get_project_conf('perspective_transform'))
@@ -185,12 +217,12 @@ if __name__ == '__main__':
     # print(rd[0].decode('utf-8'), rd[1].decode('utf-8'))
     # print(x.get_modules())
     # /project({projectId})/instance
-    x.add_project_instance('perspective_transform', 'erste_iksden')
-    x.add_project_instance('perspective_transform', 'zweite_iksden')
-    # while True:
-    time.sleep(30)
-    print(x.get_project_instances('perspective_transform'))
-    print(x.get_project_conf('perspective_transform'))
+    # x.add_project_instance('perspective_transform', 'erste_iksden')
+    # x.add_project_instance('perspective_transform', 'zweite_iksden')
+    # # while True:
+    # time.sleep(30)
+    # print(x.get_project_instances('perspective_transform'))
+    # print(x.get_project_conf('perspective_transform'))
 
 
 

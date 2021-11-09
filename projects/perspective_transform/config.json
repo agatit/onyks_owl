@@ -1,0 +1,81 @@
+{
+    "id" : "Ajdi",
+    "description" : "Deskrypszyn",
+    "name" : "Nejm",
+    "modules": {
+        "module_source_cv": {
+            "output_queue": "stage1",
+            "stream_queue_limit": 10,
+            "timeout": 180,
+            "params": {
+                "device": "../samples/camera_wisenet/train1.avi",
+                "_device": 1
+            }
+        },
+        "module_perspective_transform": {
+            "input_queue": "stage1",
+            "output_queue": "stage2",
+            "params": {
+                "camera_cal_in_dir_chessboards": "../input_images/camera_calibration/H.264/chessboard*.png",
+                "camera_cal_out_dir": "../output_images/camera_calibration/H.264",
+                "chessboard_size": [
+                    9,
+                    6
+                ],
+                "trapezoid_coords": [
+                    [
+                        1125,
+                        403
+                    ],
+                    [
+                        1920,
+                        201
+                    ],
+                    [
+                        1126,
+                        897
+                    ],
+                    [
+                        1919,
+                        1055
+                    ]
+                ],
+                "mtx": [
+                    [
+                        1161.107086941478,
+                        0.0,
+                        948.2004474733628
+                    ],
+                    [
+                        0.0,
+                        1166.8887234211986,
+                        608.8830018574113
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "dist": [
+                    [
+                        -0.5435658832121913,
+                        0.8889895278168062,
+                        -0.017174260409137283,
+                        0.004614250484695657,
+                        -1.1537064635161052
+                    ]
+                ]
+            }
+        },
+        "module_sink_file" : {   
+            "input_queue" : "stage2",    
+            "params": {
+                "filename": "out/test_%Y%m%d_%H%M%S_%f.avi",
+                "framerate": 25,
+                "fourcc": "XVID"
+            }        
+        }
+    },
+    "queues": {}
+}
