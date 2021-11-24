@@ -14,45 +14,21 @@ import task
 import traceback
 import stream_composed
 
-DEFAULT_PATH_LOGS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"logs")
-
+# DEFAULT_PATH_LOGS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"logs")
+DEFAULT_PATH_PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"..", "projects")
 class Module:
     def __init__(self, argv):
         'Czytanie konfiguracji i inicjalizacja'
+        # handler = logging.StreamHandler(sys.stdout)
+        # loggging.addHandler(handler)
         self.terminate = False
-
+        logging.basicConfig(handlers=[logging.StreamHandler(sys.stdout)])
+        
         self.module_name = self.__module__
         if self.module_name == '__main__':
             filename = sys.modules[self.__module__].__file__
             self.module_name = os.path.splitext(os.path.basename(filename))[0]        
         
-        # handler = logging.StreamHandler(sys.stdout)
-        # print("argv: ", argv)
-        try:
-            self.instance_id = argv[2] # np. perspective_transform_01
-            if self.instance_id is not None:
-                # try:
-                #     os.mkdir(log_dir)
-                # except:
-                #     pass
-                # print("log_dir: ", log_dir)
-                # log_dir = DEFAULT_PATH_LOGS + '_' + self.module_name + '.txt' # TODO ogarnąć to po ludzku
-                log_dir = os.path.join(DEFAULT_PATH_LOGS, self.module_name + '_' + self.instance_id + '.txt')
-                handler = logging.FileHandler(filename = log_dir, mode='w') # TODO zastanowić się czy mode='w' czy mode='a'
-                formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S")
-                handler.setFormatter(formatter)
-                # logging.basicConfig(level=logging.DEBUG, handlers=[handler])
-                self.log_object = logging.getLogger(name='logger4'+self.module_name)
-                self.log_object.setLevel(logging.DEBUG)
-                self.log_object.addHandler(handler)
-                self.log_object.info(f"{self.module_name} started.")
-            else:
-                self.instance_id = None
-                self.log_object = None
-        except:
-            self.instance_id = None
-            self.log_object = None
-
         self.default_config = {
             'stream_queue_limit': ['int', 100],
             'task_expire_time': ['int', 10],
@@ -63,6 +39,7 @@ class Module:
             'input_queue': ['string', ""],
             'output_queue': ['string', ""],
         }
+        # logging.StreamHandler(sys.stdout)
         try:
             # print(len(argv))
             if len(argv) > 1:
@@ -73,12 +50,10 @@ class Module:
 
                     self.config = config_file['modules'][name]
                     if self.config is None:
-                        if self.instance_id is not None:
-                            self.log_object.info(f"config file: {argv[1]} do not contain section for {name}")    
+                        logging.info(f"config file: {argv[1]} do not contain section for {name}")    
                         exit()
 
-                    if self.instance_id is not None:
-                        self.log_object.info(f"config file: {argv[1]} section {name}")
+                    logging.info(f"config file: {argv[1]} section {name}")
             else:
                 print("Usage: module config_file.json [instance_name]")
                 exit()  
@@ -91,18 +66,15 @@ class Module:
             self.params = self.config.get("params", self.default_config['params'][1])
 
             if self.task_expire_time > self.task_timeout:
-                if self.instance_id:
-                    self.log_object.error("task_expire_time CANNOT be bigger than task_timeout")
+                logging.error("task_expire_time CANNOT be bigger than task_timeout")
                 exit()
 
             if self.stream_expire_time > self.stream_timeout:
-                if self.instance_id:
-                    self.log_object.error("stream_expire_time CANNOT be bigger than stream_timeout")
+                logging.error("stream_expire_time CANNOT be bigger than stream_timeout")
                 exit()                
 
             if self.task_expire_time > self.stream_expire_time:
-                if self.instance_id:
-                    self.log_object.error("task_expire_time CANNOT be bigger than stream_expire_time")
+                logging.error("task_expire_time CANNOT be bigger than stream_expire_time")
                 exit()                
 
             self.redis = redis.Redis()
@@ -117,8 +89,7 @@ class Module:
                 self.task_expire_time,
                 self.task_timeout,
                 self.stream_expire_time,
-                self.stream_timeout,
-                self.log_object)
+                self.stream_timeout)
             producers = {name : output_class for name, output_class in self.output_classes.items()} 
             self.task_producer = task.Producer(
                 self.redis,
@@ -128,12 +99,10 @@ class Module:
                 self.task_expire_time,
                 self.task_timeout, 
                 self.stream_expire_time,
-                self.stream_timeout,
-                self.log_object)  
+                self.stream_timeout)  
 
         except Exception as e:
-            if self.instance_id:
-                self.log_object.error(f"{self.module_name}: {str(e)}\n\n{u''.join(traceback.format_tb(e.__traceback__))}\n")
+            logging.error(f"{self.module_name}: {str(e)}\n\n{u''.join(traceback.format_tb(e.__traceback__))}\n")
             self.terminate = True           
 
 
@@ -166,9 +135,9 @@ class Module:
                         self.redis.set(f"owl:module:{self.module_name}:task", json.dumps(task), ex=self.task_expire_time)
                         self.task_process(task_data, input_stream)                                
                     else:
-                        self.log_object.debug("Nothing in task queue")
+                        logging.debug("Nothing in task queue")
         except Exception as e:
-            self.log_object.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
+           logging.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
 
 
     def run(self):

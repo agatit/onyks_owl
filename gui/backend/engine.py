@@ -40,7 +40,7 @@ class Engine():
         for module_name in mod3:
             if module_name == 'module_source_cv' or \
                module_name == 'module_perspective_transform' or \
-               module_name == 'module_sink_win':
+               module_name == 'module_sink_file':
                 retval2 = {}
                 mod_data = self.get_module_data(module_name)
                 # print("mod data:" + mod_data)
@@ -68,7 +68,7 @@ class Engine():
         proc.stdin.write(bytes('print(x.get_config())', encoding='utf-8'))
         return_value = proc.communicate()[0].decode('utf-8')
         proc.kill()
-        print(module_id)
+        # print(return_value)
         r2 = ast.literal_eval(return_value)
         return r2
     
@@ -78,7 +78,8 @@ class Engine():
         return self.projects[project_id].get_project_instances()
     def delete_project_instance(self, project_id, instance_id):
         return self.projects[project_id].delete_project_instance(instance_id)
-    
+    def start_project_instance(self, project_id, instance_id):
+        return self.projects[project_id].start_project_instance(instance_id)
     def get_instance_config(self, project_id, instance_name):
         return self.projects[project_id].get_instance_config(instance_name)
     ### ZARZĄDZANIE PROJEKTAMI ###
@@ -133,19 +134,23 @@ class Engine():
         try:
             if not os.path.exists(os.path.join(self.projects_path, project_id, "config.json")):
                 raise FileNotFoundError
-
+            self.kill_project(project_id)
             shutil.rmtree(os.path.join(self.projects_path, project_id))
 
         except FileNotFoundError as e:
             raise ProblemException(404, "Project not exists", str(e))
 
         return 'Deleted', 200
-
+    def kill_project(self, project_id):
+        self.projects[project_id].stop_project()
+        del self.projects[project_id]
     def get_project_conf(self, project_id):
         return self.projects[project_id].get_config()
     def set_project_conf(self, project_id, data):
         return self.projects[project_id].set_config(data)
-        
+    
+    def get_project_resources(self, project_id):
+        return self.projects[project_id].get_resources()
     ### EDYCJA TORU PRZETWARZANIA ###
     def get_project_modules(self, project_id):
         return self.projects[project_id].get_modules()
@@ -193,12 +198,14 @@ class Engine():
     def get_module_log(self, project_id, module_id):
         pass
 
-
+import sys
 if __name__ == '__main__':
     x = Engine()
     print('xd')
     # print(x.create_project({"id": "ras", "name": "dwa", "description": "czy"}))
-    print(x.get_projects())
+    # print(x.get_projects())
+    # print(x.delete_project("ras"))
+    # print(x.get_projects())
     # print(List.get_names())
     # print(x.get_projects())
     # print(x.get_project_conf('perspective_transform'))
@@ -217,10 +224,13 @@ if __name__ == '__main__':
     # print(rd[0].decode('utf-8'), rd[1].decode('utf-8'))
     # print(x.get_modules())
     # /project({projectId})/instance
-    # x.add_project_instance('perspective_transform', 'erste_iksden')
+    x.add_project_instance('perspective_transform', 'erste_iksden')
     # x.add_project_instance('perspective_transform', 'zweite_iksden')
-    # # while True:
-    # time.sleep(30)
+    x.start_project_instance('perspective_transform', 'erste_iksden')
+    # x.start_project_instance('perspective_transform', 'zweite_iksden')
+    
+    # while True:
+    time.sleep(30)
     # print(x.get_project_instances('perspective_transform'))
     # print(x.get_project_conf('perspective_transform'))
 

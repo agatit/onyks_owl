@@ -40,7 +40,7 @@ class Module(module_base.Module):
                 output_stream.emit(data)
                 ret,frame = cap.read() 
         cap.release()
-        self.log_object.info("end of input stream")
+        logging.info("end of input stream")
 
 
 if __name__ == "__main__":

@@ -12,11 +12,9 @@ from openapi_server.models.queue import Queue  # noqa: E501
 from openapi_server import util
 
 import sys
-sys.path.append('../backend')
+from . import worker
 
-from engine import Engine
-x = Engine()
-
+x = worker.x
 
 def add_instance(project_id):  # noqa: E501
     """Add instance to project
@@ -292,7 +290,7 @@ def list_resources(project_id):  # noqa: E501
 
     :rtype: List[ProjectResource]
     """
-    return 'do some magic!'
+    return x.get_project_resources(project_id)
     # return x.get_project_conf(project_id)
 
 

@@ -55,7 +55,7 @@ class Module(module_base.Module):
 
                 framerate = self.params.get('framerate', 20.0)
                 height, width = frame.shape[0:2]
-                self.log_object.info(f"file {filename} writing started (fourcc:{fourcc_str} framerate:{framerate} size:{(width, height)})")
+                logging.info(f"file {filename} writing started (fourcc:{fourcc_str} framerate:{framerate} size:{(width, height)})")
                 out = cv2.VideoWriter(filename, fourcc, framerate, (width, height))
             out.write(frame)
             frame_no += 1  
@@ -63,7 +63,7 @@ class Module(module_base.Module):
         if out:
             out.release()
             print("out_released")
-        self.log_object.info(f"file {filename} writing finished")
+        logging.info(f"file {filename} writing finished")
         
 
 if __name__ == "__main__":
