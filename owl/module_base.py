@@ -16,7 +16,11 @@ import stream_composed
 
 DEFAULT_PATH_LOGS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"logs")
 
-class Module:    
+class Module:  
+    module_name = "module_base"
+    log_object = None
+    terminate = False
+      
     def __init__(self, config, connector):
 
         self.build_config()
@@ -97,14 +101,11 @@ class Module:
             log_object = None
 
         try:
-            print(len(argv))
             if len(argv) > 1:
-                print(argv[1])
                 with open(argv[1], "rb") as f:
-                    print("!!!!")
                     config_file = json.load(f)                
-                    config = config_file['modules'][module_name]
-                    print(config_file)
+                    #config = config_file['modules'][module_name]
+                    config = config_file[module_name]
                     if config is None:
                         if instance_id is not None:
                             log_object.info(f"config file: {argv[1]} do not contain section for {module_name}")    
@@ -113,8 +114,7 @@ class Module:
                     if instance_id is not None:
                         log_object.info(f"config file: {argv[1]} section {module_name}")
 
-                    self = cls(config, None) # TODO: obsłuzyć connector   
-                    print(self)                                     
+                    self = cls(config, None) # TODO: obsłuzyć connector                                       
                     self.module_name = module_name
                     self.log_object = log_object
                     self.terminate = False
@@ -180,23 +180,30 @@ class Module:
         # self.task_timeout = self.config.get('task_timeout', self.stream_expire_time)            
         # self.stream_timeout = self.config.get('stream_timeout', self.stream_expire_time)            
         # self.params = self.config.get("params", self.default_config['params'][1])        
-        for k, v in self.get_config().items():
-            setattr(self, k, v[1])
+        
+        config = self.get_config()
+        for k, v in config['params'].items():
+            setattr(self, k, v['value'])
+
+        self.input_classes = config['input_classes']
+        self.output_classes = config['output_classes']            
 
     @classmethod
     def get_config(cls):
-        # TODO: zastąpić tablice słownikami {type: asd, value: 123}
-        default_config = {
-            'stream_queue_limit': ['int', 100],
-            'task_expire_time': ['int', 10],
-            'stream_expire_time': ['int', 10],
-            'task_timeout': ['int', 10],
-            'stream_timeout': ['int', 10],
-            "params": ['parameters', {}],
-            'input_queue': ['string', ""],
-            'output_queue': ['string', ""],
-        }        
-        return default_config
+        config = {}
+        config['params'] = {
+            'stream_queue_limit': {'type': 'int', 'value': 100},
+            'task_expire_time': {'type': 'int', 'value': 10},
+            'stream_expire_time': {'type': 'int', 'value': 10},
+            'task_timeout': {'type': 'int', 'value': 10},
+            'stream_timeout': {'type': 'int', 'value': 10},
+            'input_queue': {'type': 'string', 'value': ""},
+            'output_queue': {'type': 'string', 'value': ""},
+        }    
+        config['input_classes'] = {}
+        config['output_classes'] = {}        
+
+        return config
 
 if __name__ == "__main__":
     print("Do not call base class!")

@@ -10,16 +10,17 @@ import stream_data
 import module_base
 
 class Module(module_base.Module):
-    def __init__(self, argv):
-        super(Module, self).__init__(argv)
-        self.default_config['params'][1]['device'] = ['string|int', 0]
-
-    def setup(self): 
-        self.input_classes = {}
-        self.output_classes = {
+    @classmethod
+    def get_config(cls):
+        config = super(Module, cls).get_config()   
+        config['params']['device'] = {'type': 'string|int', 'value': 0}
+        config['input_classes'] = {}
+        config['output_classes'] = {
             "color" : stream_video.Producer,
             "metrics" : stream_data.Producer
         }
+
+        return config      
 
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
