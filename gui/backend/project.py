@@ -50,7 +50,11 @@ class Project():
     def start_project_instance(self, instance_id):
         for module_name in self.config_json['modules']:
             self.instances[instance_id][module_name].module_start()
-        print("Module ", module_name, " in ", instance_id, " started.")
+            print("Module ", module_name, " in ", instance_id, " started.")
+    def stop_project_instance(self, instance_id):
+        for module_name in self.config_json['modules']:
+            self.instances[instance_id][module_name].module_stop()
+            print("Module ", module_name, " in ", instance_id, " started.")
     def delete_project_instance(self, instance_name):
         if instance_name not in self.instances:
             return 'Łups :('
@@ -99,15 +103,28 @@ class Project():
 
     def get_module_data(self, module_name):
         if module_name in self.config_json['modules']:
+            # response = 
             return self.config_json['modules'][module_name]
         return 'Łups :('
     def get_modules(self):
-        return list(self.modules.keys())
+        # return list(self.modules.keys())
+        response = {}
+        response["input"] = None
+        response["output"] = None
+        response["comment"] = "Skąd to wziąć? Chyba gdzieś tutaj to jest..."
+        response["id"] = "w sumie to po co to brać, spoko podbijam cały 'project'?"
+        response["name"] = "O tu, zaraz pod spodem jest..."
+        response["project"] = self.get_config()
+        for x, y in self.modules.items():
+            response[x] = y.get_params()
+        return response
     def delete_module(self, module_name):
         del self.config_json['modules'][module_name]
         del self.modules[module_name]
         return 'Jest git'
 
+    def get_resources(self):
+        return ["chwila moment", "nie tak szybko", "zrobie to bendom"]
     def get_module_params(self, module_name):
         return self.modules[module_name].get_params()
     def get_config(self):
@@ -120,6 +137,8 @@ class Project():
         for x, y in self.modules.items():
             y.module_stop()
             print(x, ' stopped')
+        for x, y in self.instances.items():
+            self.stop_project_instance(x)
     def get_logs(self):
         return_value = {}
         for x, y in self.modules.items():

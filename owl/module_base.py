@@ -163,9 +163,9 @@ class Module:
                         self.redis.set(f"owl:module:{self.module_name}:task", json.dumps(task), ex=self.task_expire_time)
                         self.task_process(task_data, input_stream)                                
                     else:
-                        self.log_object.debug("Nothing in task queue")
+                        logging.debug("Nothing in task queue")
         except Exception as e:
-            self.log_object.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
+           logging.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
 
 
     def run(self):

@@ -24,8 +24,7 @@ class Producer():
             task_expire_time: int,
             task_timeout: int,
             stream_expire_time: int,                        
-            stream_timeout: int,
-            log_object):
+            stream_timeout: int):
 
         self.redis = redis
         self.task_queue = task_queue
@@ -36,7 +35,6 @@ class Producer():
         self.task_timeout = task_timeout
         self.stream_expire_time = stream_expire_time
         self.stream_timeout = stream_timeout
-        self.log_object = log_object
         
 
     def __enter__(self):
@@ -68,7 +66,7 @@ class Producer():
             "task_data": task_data
         }
 
-        self.log_object.info(f"task emited: {task}")
+        logging.info(f"task emited: {task}")
 
         p = self.redis.pipeline()  
         p.rpush(f"owl:task_queue:{self.task_queue}", json.dumps(task))
@@ -81,8 +79,7 @@ class Producer():
             self.streams_classes,
             self.queue_limit,
             self.stream_expire_time,            
-            self.stream_timeout,
-            self.log_object)
+            self.stream_timeout)
 
 
 class Consumer():
@@ -96,8 +93,7 @@ class Consumer():
             task_expire_time:int,
             task_timeout: int,
             stream_expire_time:int,
-            stream_timeout: int,
-            log_object):
+            stream_timeout: int,):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
@@ -105,7 +101,6 @@ class Consumer():
         self.task_timeout = task_timeout
         self.stream_expire_time = stream_expire_time
         self.stream_timeout = stream_timeout
-        self.log_object = log_object
 
     def __iter__(self):
         return self
@@ -118,14 +113,13 @@ class Consumer():
             if not task_data is None:
                 task_str = task_data[1]
                 task = json.loads(task_str)
-                self.log_object.info(f"task received: {task}")
+                logging.info(f"task received: {task}")
                 return task['task_data'], stream_composed.Consumer(
                     self.redis, task['stream_names'],
                     self.streams_classes,
                     self.stream_expire_time,
-                    self.stream_timeout,
-                    self.log_object)
+                    self.stream_timeout)
             else:
                 return None, None
         else:
-            return {}, stream_composed.Consumer(self.redis, {}, {}, self.stream_expire_time, self.stream_timeout, self.log_object)
+            return {}, stream_composed.Consumer(self.redis, {}, {}, self.stream_expire_time, self.stream_timeout)

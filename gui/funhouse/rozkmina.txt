@@ -1,0 +1,39 @@
+Engine <- Project <- Module
+Project <- Instance(lista obiektów modułów)
+
+Engine musi mieć dostęp do default_config'a modułów
+Czyli Module musi być importowalny przez Engine
+def __init__(self, name, project_path, module_path, config_path)
+Engine nie dostarczy project_path's i config_path'a
+
+
+
+
+3) Co to są te Queue?
+- Dodać nazwę instancji do API
+- nie ma startu instancji, także zakładam że jak instancja istnieje, to od razu jest odpalona
+- czy jak odpalę kilka instancji to one się nie popierdolą na poziomie bazy danych?
+
+======================================
+* Jak odpalane będą instancje?(W sensie API)
+* te instancje będą nieco bardziej niezależne? będą różne video przetwarzać? potrzebne będą różne configi? (kinda logiczne, ale API tego nie przewiduje)
+
+- Podpięcie reszty tego co mam pod API
+- Przekminić resource'y
+- "module_def" bez Popen
+
+
+Resource'y:
+    - Ogólnie to rozdzielić "examples" i "projects"
+    - Projects -> Nazwa projektu -> "logs", "resources", config.json
+        - "resources" -> "in", "out" (w każdym z tych folderów '.gitkeep'[o ile robi to co myślę że robi])
+
+API:
+    - "update_project" nie kopiuje "modules", tylko je zeruje
+    
+    - do "module_base"(czy tam ogólnie do modułów) przekazać nazwę projektu, żeby logi dobrze wrzucać
+    - przy tworzeniu projektu dodawać foldery na "resource'y"
+
+    - przestudiować dokładniej "logging" żeby miał wywalone jajca, a "engine" przekierowywał dane na pliki
+        - to, albo "importlib" niech przechwytuje "stdout"
+            - kurewa te objekty loguf

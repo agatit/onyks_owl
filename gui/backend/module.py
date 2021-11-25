@@ -2,6 +2,7 @@ import os
 import multiprocessing
 import importlib.util
 import sys
+import datetime
 
 owl_path = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl'))
 
@@ -10,13 +11,15 @@ class Module():
         self.name = name
         self.project_path = project_path
         self.module_path = module_path
+        self.config = {}
         self.default_config = {}
         self.default_config_normalized = {}
         self.config_path = config_path
         self.instance_id = instance_id
-
-        self.stdout_path = os.path.join(self.project_path, 'logs', name + '.txt') # TODO zaraz zmieniam lokację, takżę ten...
-
+        if self.instance_id:
+            self.stdout_path = os.path.join(self.project_path, 'logs', self.instance_id, str(datetime.datetime.now()) + '_' + self.name + '.txt') # TODO zaraz zmieniam lokację, takżę ten...
+            if not os.path.exists(os.path.join(self.project_path, 'logs', self.instance_id)):
+                os.makedirs(os.path.join(self.project_path, 'logs', self.instance_id))
         self.process_handler = None
 
         self.import_class()
@@ -32,12 +35,15 @@ class Module():
 
     def import_default_config(self):
         self.default_config = self.module_object.get_config()
+        self.config = self.default_config.copy()
 
     def normalize_default_config(self):
         for x, y in self.default_config.items():
             self.default_config_normalized[x] = y[1]
     def module_start(self):
-        self.process_handler = multiprocessing.Process(target=self.module_object.run, daemon=True)
+        # self.process_handler = multiprocessing.Process(target=self.module_object.run, daemon=True)
+        self.process_handler = multiprocessing.Process(target=self.wrap(self.module_object.run, self.stdout_path), daemon=True)
+            # proc = multiprocessing.Process(target=wrap(task, name), name=name,)
         self.process_handler.start()
     def module_stop(self):
         self.process_handler.terminate()
@@ -64,3 +70,25 @@ class Module():
         return self.default_config
     def get_params(self):
         return self.config
+    def wrap(self, task, path):
+        def wrapper(*args, **kwargs):
+            # with open(os.path.join(path, name), 'x') as f:
+            with open(path, 'x') as f:
+                sys.stdout = f
+                sys.stderr = f
+                task(*args, **kwargs)
+        return wrapper
+# import tempfile
+# tempdir = tempfile.mkdtemp()
+
+# procs = []
+# for i in range(8):
+#     name = str(i)
+#     proc = multiprocessing.Process(target=wrap(task, name), name=name,)
+#     proc.start()
+#     procs.append(proc)
+# for proc in procs:
+#     proc.join()
+#     with open(os.path.join(tempdir, proc.name)) as f:
+#         do_stuff_with(f.read())
+# shutil.rmtree(tempdir)

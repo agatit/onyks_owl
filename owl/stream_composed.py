@@ -15,13 +15,12 @@ class Producer():
             streams_classes:[],
             queue_limit:int,
             expire_time:int,            
-            timeout:int,
-            log_object):
+            timeout:int):
         self.streams = {}
         self.streams_queues = streams_queues
         self.streams_classes = streams_classes
         for stream_name, stream_class in streams_classes.items():
-            self.streams[stream_name] = stream_class(redis, streams_queues[stream_name], queue_limit, expire_time, timeout, log_object)
+            self.streams[stream_name] = stream_class(redis, streams_queues[stream_name], queue_limit, expire_time, timeout)
 
     def __enter__(self):
         for p in self.streams.values():
@@ -49,13 +48,12 @@ class Consumer():
             streams_queues:[],
             streams_classes:[],
             expire_time:int,
-            timeout:int,
-            log_object):       
+            timeout:int):       
         self.streams_queues = streams_queues
         self.streams_classes = streams_classes
         self.streams = {}
         for stream_name, stream_class in streams_classes.items():
-            self.streams[stream_name] = stream_class(redis, f"{streams_queues[stream_name]}", expire_time, timeout, log_object)
+            self.streams[stream_name] = stream_class(redis, f"{streams_queues[stream_name]}", expire_time, timeout)
 
     def __iter__(self):
         return self
