@@ -84,8 +84,8 @@ class Module:
         try:
             instance_id = argv[2] # np. perspective_transform_01
             if instance_id is not None:
-                log_dir = os.path.join(DEFAULT_PATH_LOGS, module_name + '_' + instance_id + '.txt')
-                handler = logging.FileHandler(filename = log_dir, mode='w')
+                # log_dir = os.path.join(DEFAULT_PATH_LOGS, module_name + '_' + instance_id + '.txt')
+                handler = logging.StreamHandler(sys.stdout)
                 formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S")
                 handler.setFormatter(formatter)
                 # logging.basicConfig(level=logging.DEBUG, handlers=[handler])
@@ -105,7 +105,7 @@ class Module:
                 with open(argv[1], "rb") as f:
                     config_file = json.load(f)                
                     #config = config_file['modules'][module_name]
-                    config = config_file[module_name]
+                    config = config_file['modules'][module_name]
                     if config is None:
                         if instance_id is not None:
                             log_object.info(f"config file: {argv[1]} do not contain section for {module_name}")    
@@ -114,9 +114,10 @@ class Module:
                     if instance_id is not None:
                         log_object.info(f"config file: {argv[1]} section {module_name}")
 
+                    cls.log_object = log_object
                     self = cls(config, None) # TODO: obsłuzyć connector                                       
                     self.module_name = module_name
-                    self.log_object = log_object
+                    # self.log_object = log_object
                     self.terminate = False
             else:
                 print("Usage: module config_file.json [instance_name]")
@@ -171,7 +172,7 @@ class Module:
     def run(self):
         while not self.terminate:
             self.runOnce()
-            time.sleep(1)   
+            time.sleep(1)
 
     def build_config(self):
         # self.stream_queue_limit = self.config.get('stream_queue_limit', self.default_config['stream_queue_limit'][1])

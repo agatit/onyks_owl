@@ -31,15 +31,17 @@ class Module():
     def import_class(self):
         sys.path.append(owl_path)
         module_wrapper = importlib.import_module(self.name) # Coś do importu, wrapper na klasę
-        self.module_object = module_wrapper.Module([self.name,self.config_path, self.instance_id]) # Stricte obiekt
+        # self.module_object = module_wrapper.Module(self.config, None) # Stricte obiekt
+        self.module_object = module_wrapper.Module.from_cmd(['xd',self.config_path, self.instance_id]) # Stricte obiekt
 
     def import_default_config(self):
         self.default_config = self.module_object.get_config()
         self.config = self.default_config.copy()
 
     def normalize_default_config(self):
-        for x, y in self.default_config.items():
-            self.default_config_normalized[x] = y[1]
+        self.default_config_normalized['params'] = {}
+        for x, y in self.default_config['params'].items():
+            self.default_config_normalized['params'][x] = y['value']
     def module_start(self):
         # self.process_handler = multiprocessing.Process(target=self.module_object.run, daemon=True)
         self.process_handler = multiprocessing.Process(target=self.wrap(self.module_object.run, self.stdout_path), daemon=True)

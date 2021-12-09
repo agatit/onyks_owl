@@ -27,8 +27,8 @@ def add_instance(project_id):  # noqa: E501
     :rtype: Module
     """
     # return x.add_project_instance(project_id, instance_id)
-    return x.add_project_instance(project_id)
-
+    x.add_project_instance(project_id, 'eluwina')
+    return x.start_project_instance(project_id, 'eluwina')
 
 def add_module(project_id, module):  # noqa: E501
     """Add module to project

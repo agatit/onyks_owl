@@ -18,6 +18,11 @@ import module_base
 
 
 class Module(module_base.Module):
+    @classmethod
+    def get_config(cls):
+        config = super(Module, cls).get_config()
+        return config
+    
     def setup(self): 
         self.input_classes = {
             "color" : stream_video.Consumer,
@@ -39,12 +44,15 @@ class Module(module_base.Module):
                 fourcc = cv2.VideoWriter_fourcc(*fourcc_str)          
                       
                 filename = self.params.get('filename', input_task_data.get('source_name', 'noname')) # TODO ścieżka do out'a projektu czy coś takiego
-                print("filename: " + filename)
+                # filename = self.filename if self.filename != None else input_task_data.get('source_name', 'noname')
+                # print("filename: " + filename)
                 if 'railtrack' in input_task_data:
                     filename += f"_{input_task_data['railtrack']}"
                 filename = datetime.now().strftime(filename)
                 filename = os.path.join(self.params.get('path',"."), filename)
 
+                print("filename: " + filename)
+                print(os.path.dirname(os.path.realpath(__file__)))
                 framerate = self.params.get('framerate', 20.0)
                 height, width = frame.shape[0:2]
                 logging.info(f"file {filename} writing started (fourcc:{fourcc_str} framerate:{framerate} size:{(width, height)})")

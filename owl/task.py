@@ -24,7 +24,8 @@ class Producer():
             task_expire_time: int,
             task_timeout: int,
             stream_expire_time: int,                        
-            stream_timeout: int):
+            stream_timeout: int,
+            log_object):
 
         self.redis = redis
         self.task_queue = task_queue
@@ -35,7 +36,7 @@ class Producer():
         self.task_timeout = task_timeout
         self.stream_expire_time = stream_expire_time
         self.stream_timeout = stream_timeout
-        
+        self.log_object = log_object
 
     def __enter__(self):
         return self
@@ -66,7 +67,7 @@ class Producer():
             "task_data": task_data
         }
 
-        logging.info(f"task emited: {task}")
+        self.log_object.info(f"task emited: {task}")
 
         p = self.redis.pipeline()  
         p.rpush(f"owl:task_queue:{self.task_queue}", json.dumps(task))
@@ -93,7 +94,8 @@ class Consumer():
             task_expire_time:int,
             task_timeout: int,
             stream_expire_time:int,
-            stream_timeout: int,):
+            stream_timeout: int,
+            log_object):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
@@ -101,7 +103,7 @@ class Consumer():
         self.task_timeout = task_timeout
         self.stream_expire_time = stream_expire_time
         self.stream_timeout = stream_timeout
-
+        self.log_object = log_object
     def __iter__(self):
         return self
 

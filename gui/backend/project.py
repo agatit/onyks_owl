@@ -45,6 +45,7 @@ class Project():
         for module_name in self.config_json['modules']:
             self.instances[instance_id][module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path, instance_id)
             # self.instances[instance_id][module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.instances[instance_id]['config'], instance_id)
+        return "gitara"
     def get_project_instances(self):
         return list(self.instances.keys())
     def start_project_instance(self, instance_id):
