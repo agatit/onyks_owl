@@ -21,9 +21,10 @@ import { color } from "html2canvas/dist/types/css/types/color";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { nodeModuleNameResolver } from "typescript";
 import { OwlNodeModel } from "../../../OwlNodes/OwlNodeModel";
+import { OwlQueueModel } from "../../../OwlQueue/OwlQueueModel";
 
 interface QueuePropEditorProps {
-  queue: OwlQueueLinkModel;
+  queue: OwlQueueModel;
   engine: DiagramEngine;
   projectId: string;
   node: OwlNodeModel;

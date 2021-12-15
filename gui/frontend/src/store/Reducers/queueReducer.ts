@@ -1,4 +1,4 @@
-import { OwlQueueLinkModel } from "../../Components/OwlQueueLinks/OwlQueueLinkModel";
+import { OwlQueueModel } from "../../Components/OwlQueue/OwlQueueModel";
 
 export const queueActionTypes = {
   SET_SELECTED_QUEUE: "SET_SELECTED_QUEUE",
@@ -12,7 +12,7 @@ const initialState = {
 
 interface queueAction {
   type: string;
-  queue: OwlQueueLinkModel;
+  queue: OwlQueueModel;
 }
 
 export const queueReducer = (state = initialState, action: queueAction) => {

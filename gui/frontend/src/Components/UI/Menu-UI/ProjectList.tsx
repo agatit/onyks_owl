@@ -15,26 +15,34 @@ import { useEffect, useRef, useState } from "react";
 import { ProjectListRequestConfig } from "../../../store/QueryConfigs";
 import Backdrop from "../../Layout/Utils/Backdrop";
 import store from "../../../store/store";
+import { useRequest } from "redux-query-react";
 
 interface ProjectListProps {
   projects: Array<Project>;
   deleteProject: (projectID: string) => any;
-  getProjectList: () => void;
+  getProjectList: () => any;
   updateProject: (project: Project) => void;
 }
 
 function ProjectList(props: ProjectListProps) {
   const history = useHistory();
 
-  const [isPending, setIsPending] = useState(true);
+  //const [isPending, setIsPending] = useState(true);
 
+  const [{ isPending, status }, refresh] = useRequest(ProjectListRequestConfig);
+
+  /*
   useEffect(() => {
-    setTimeout(() => {
-      props.getProjectList();
-      setIsPending(false);
-    }, 4000);
+    props.getProjectList().then((result: any) => {
+      if (result.status !== 200) {
+        console.log("Nie udało się wczytać projektów");
+      } else {
+        console.log("Pomyślne wczytanie projektów!");
+      }
+    });
+    setIsPending(false);
   }, []);
-
+*/
   const editBtnHandler = (projectId: string) => {
     history.push(`/edit/${projectId}`, { projectID: projectId });
   };
@@ -109,6 +117,12 @@ function ProjectList(props: ProjectListProps) {
   if (isPending) {
     return <Backdrop />;
   }
+  if (typeof status === "number" && status >= 400) {
+    return <div>Coś poszło nie tak! Spróbuj odświeżyć stronę!</div>;
+  }
+  if (!props.projects) {
+    return <div>Brak utworzonych projektów</div>;
+  }
 
   return (
     <ListGroup as="ul">
@@ -126,8 +140,8 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    getProjectList: () => {
-      dispatch(getProjectListRequest(ProjectListRequestConfig));
+    getProjectList: (): number => {
+      return dispatch(getProjectListRequest(ProjectListRequestConfig));
     },
     updateProject: (project: Project) => {
       dispatch(getUpdateProjectRequest(project));

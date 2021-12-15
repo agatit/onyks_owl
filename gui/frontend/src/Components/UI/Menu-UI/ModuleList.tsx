@@ -1,11 +1,18 @@
 import { useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { connect } from "react-redux";
-import { getModuleListRequest } from "../../../store/Queries/project_editor_queries";
-import { ModuleListRequestConfig } from "../../../store/QueryConfigs/module_query_configs";
-import { Module } from "../../../store/redux-query";
+import {
+  getModuleDefinitionsListRequest,
+  getModuleListRequest,
+} from "../../../store/Queries/project_editor_queries";
+import {
+  ModuleListDefsRequestConfig,
+  ModuleListRequestConfig,
+} from "../../../store/QueryConfigs/module_query_configs";
+import { Module, ModuleDef } from "../../../store/redux-query";
 import {
   clearModuleList,
+  selectModuleDefsList,
   selectModuleList,
 } from "../../../store/selectors/moduleSelectors";
 import store from "../../../store/store";
@@ -15,8 +22,8 @@ import classes from "./ModuleList.module.css";
 
 interface ModuleListProps {
   projectId: string;
-  modules: Module[];
-  getModuleList: (projectId: string) => void;
+  modules: ModuleDef[];
+  getModuleDefList: () => void;
   clearModuleList: () => void;
 }
 
@@ -24,18 +31,22 @@ function ModuleList(props: ModuleListProps) {
   useEffect(() => {
     props.clearModuleList();
     setTimeout(() => {
-      props.getModuleList(props.projectId);
-      console.log(store.getState().entities);
+      props.getModuleDefList();
+      console.log(props.modules);
     }, 3000);
   }, []);
 
-  const wrapListElement = (module: Module, index: number) => {
+  const wrapListElement = (module: ModuleDef, index: number) => {
     return (
       <ListGroup.Item as="li" key={index} bsPrefix={classes.test}>
         <ListModule module={module} />
       </ListGroup.Item>
     );
   };
+
+  if (!props.modules) {
+    return <div>Ładowanie modułów</div>;
+  }
 
   return (
     <ListGroup as="ul">
@@ -47,14 +58,14 @@ function ModuleList(props: ModuleListProps) {
 
 const mapStateToProps = (state: any) => {
   return {
-    modules: selectModuleList(state),
+    modules: selectModuleDefsList(state),
   };
 };
 
 const mapDispatchToProps = (dispatch: any, state: any) => {
   return {
-    getModuleList: (projectId: string) => {
-      dispatch(getModuleListRequest(projectId, ModuleListRequestConfig));
+    getModuleDefList: () => {
+      dispatch(getModuleDefinitionsListRequest(ModuleListDefsRequestConfig));
     },
     clearModuleList: () => {
       clearModuleList(state);

@@ -26,7 +26,7 @@ export class OwlQueueLinkModel extends DefaultLinkModel {
 
   constructor(options: OwlQueueLinkOptions = {}) {
     super({
-      type: "OwlQueue",
+      type: "OwlQueueLink",
     });
     this.setColor("white");
     this.id = options.id || "Initial_Link_ID";
@@ -35,38 +35,38 @@ export class OwlQueueLinkModel extends DefaultLinkModel {
       id: "Test",
       name: "Initial_name",
     };
-    this.registerListener({
-      targetPortChanged: () => {
-        if (this.sourcePort) {
-          store.dispatch(
-            getCreateQueueRequest({ projectId: this.project.id, queue: this })
-          );
-          //this.addLabel(new EditableLabelModel({ value: "Test" }));
-          // store.dispatch(selectedQueue(this));
-        }
-      },
-      entityRemoved: () => {
-        if (this.targetPort) {
-          store.dispatch(
-            getDeleteQueueFromProjectRequest({
-              projectId: this.project.id,
-              moduleId: "Do_zmiany",
-            })
-          );
-          store.dispatch(deleteQueue(this));
-        }
-      },
-      selectionChanged: () => {
-        if (this.isSelected() && this.targetPort) {
-          store.dispatch(
-            getQueueParamsRequest(
-              { projectId: this.project.id, queueId: this.id },
-              QueueParamListConfig
-            )
-          );
-          store.dispatch(selectedQueue(this));
-        }
-      },
-    });
+    // this.registerListener({
+    //   targetPortChanged: () => {
+    //     if (this.sourcePort) {
+    //       store.dispatch(
+    //         getCreateQueueRequest({ projectId: this.project.id, queue: this })
+    //       );
+    //       //this.addLabel(new EditableLabelModel({ value: "Test" }));
+    //       // store.dispatch(selectedQueue(this));
+    //     }
+    //   },
+    //   // entityRemoved: () => {
+    //   //   if (this.targetPort) {
+    //   //     store.dispatch(
+    //   //       getDeleteQueueFromProjectRequest({
+    //   //         projectId: this.project.id,
+    //   //         moduleId: "Do_zmiany",
+    //   //       })
+    //   //     );
+    //   //     store.dispatch(deleteQueue(this));
+    //   //   }
+    //   // },
+    //   // selectionChanged: () => {
+    //   //   if (this.isSelected() && this.targetPort) {
+    //   //     store.dispatch(
+    //   //       getQueueParamsRequest(
+    //   //         { projectId: this.project.id, queueId: this.id },
+    //   //         QueueParamListConfig
+    //   //       )
+    //   //     );
+    //   //     store.dispatch(selectedQueue(this));
+    //   //   }
+    //   // },
+    // });
   }
 }

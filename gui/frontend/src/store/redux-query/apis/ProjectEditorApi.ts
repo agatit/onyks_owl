@@ -1223,7 +1223,7 @@ function listModuleDefRaw<T>(
   const { meta = {} } = requestConfig;
 
   const config: QueryConfig<T> = {
-    url: `${runtime.Configuration.basePath}/module_def`,
+    url: `${runtime.Configuration.basePath}/module_def.json`,
     meta,
     update: requestConfig.update,
     queryKey: requestConfig.queryKey,
@@ -1279,7 +1279,7 @@ function listModulesRaw<T>(
   const { meta = {} } = requestConfig;
 
   const config: QueryConfig<T> = {
-    url: `${runtime.Configuration.basePath}/project({projectId})/module.json`.replace(
+    url: `${runtime.Configuration.basePath}/project({projectId})/module`.replace(
       `{${"projectId"}}`,
       encodeURIComponent(String(requestParameters.projectId))
     ),

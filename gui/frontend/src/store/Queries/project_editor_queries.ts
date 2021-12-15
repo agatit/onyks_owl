@@ -48,7 +48,10 @@ export const getModuleListRequest = (
 
 // /module_def
 export const getModuleDefinitionsListRequest = (
-  config?: TypedQueryConfig<string, Array<ModuleDef>>
+  config?: TypedQueryConfig<
+    { modules_defs: Array<ModuleDef> },
+    Array<ModuleDef>
+  >
 ) => {
   return requestAsync(listModuleDef(config));
 };

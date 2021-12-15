@@ -1,33 +1,60 @@
 [
   {
-    "id": "testId",
-    "name": "module_source_youtube",
-    "output_queue": "stage1",
-    "stream_queue_limit": 100,
-    "params": {
-      "url": "https://www.youtube.com/watch?v=4z2DtNW79sQ",
-      "_stream": "normal:mp4@640x360"
-    }
-  },
-  {
     "id": "2testId",
     "name": "module_plate_detection",
-    "input_queue": "stage1",
-    "stream_queue_limit": 100,
-    "output_queue": "stage2",
-    "params": {
-      "factor": 1.1,
-      "neighbour": 4,
-      "debug": 1
-    }
+    "type": "Owl-node",
+    "x": 50,
+    "y": 300,
+    "position": {
+      "x": 50,
+      "y": 300
+    },
+    "color": "#ffB730",
+    "input": {
+      "id": "initial ID",
+      "name": "Initial name"
+    },
+    "title": "module_plate_detection",
+    "content": "Opis",
+    "source": false,
+    "output": {
+      "id": "testId1",
+      "name": "Kolejka 1"
+    },
+    "project": {
+      "id": "initial ID",
+      "name": "Initial name"
+    },
+    "moduleDefId": "test ModuleDefId",
+    "module_id": "2testId"
   },
   {
     "id": "3testId",
     "name": "module_sink_win",
-    "input_queue": "stage2",
-    "stream_queue_limit": 100,
-    "params": {
-      "window_name": "camera_view"
-    }
+    "type": "Owl-node",
+    "title": "module_sink_win",
+    "content": "Opis",
+    "color": "#ffB730",
+    "source": false,
+    "input": {
+      "id": "testId1",
+      "name": "Kolejka 1"
+    },
+    "output": {
+      "id": "testId2",
+      "name": "Kolejka 2"
+    },
+    "project": {
+      "id": "initial ID",
+      "name": "Initial name"
+    },
+    "x": 670,
+    "y": 316,
+    "position": {
+      "x": 570,
+      "y": 316
+    },
+    "moduleDefId": "test ModuleDefId",
+    "module_id": "3testId"
   }
 ]

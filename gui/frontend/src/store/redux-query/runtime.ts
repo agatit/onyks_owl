@@ -22,6 +22,7 @@ import {
 } from "redux-query";
 
 export const BASE_PATH = "http://localhost/owlapi".replace(/\/+$/, "");
+export const BASE_PATH2 = "http://192.168.1.81:8080/owlapi".replace(/\/+$/, "");
 
 export const Configuration = {
   basePath: "", // This is the value that will be prepended to all endpoints.  For compatibility with

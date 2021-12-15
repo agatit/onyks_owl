@@ -5,3 +5,4 @@ export const clearModuleList = (state: any) => {
     console.log(state.entities.modules);
   }
 };
+export const selectModuleDefsList = (state: any) => state.entities.modules_defs;

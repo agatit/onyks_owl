@@ -39,7 +39,7 @@ function ModulePropEditor(props: ModulePropEditorProps) {
   const node = props.node;
 
   useEffect(() => {
-    if (node) props.getModuleParams(props.projectId, node.id);
+    //if (node) props.getModuleParams(props.projectId, node.id);
   }, [node]);
 
   // DO POPRAWY
