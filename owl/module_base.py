@@ -18,7 +18,7 @@ DEFAULT_PATH_LOGS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"log
 
 class Module:  
     module_name = "module_base"
-    log_object = None
+    log_object = logging.Logger
     terminate = False
       
     def __init__(self, config, connector):
@@ -45,7 +45,8 @@ class Module:
                 self.log_object.error("task_expire_time CANNOT be bigger than stream_expire_time")
             exit()                
 
-        self.redis = redis.Redis()
+        #self.redis = redis.Redis("172.22.137.23", 6378)
+        self.redis = redis.Redis("127.0.0.1", 6379)
 
         self.setup()
                             

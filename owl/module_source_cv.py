@@ -10,6 +10,7 @@ import stream_data
 import module_base
 
 class Module(module_base.Module):
+
     @classmethod
     def get_config(cls):
         config = super(Module, cls).get_config()   
