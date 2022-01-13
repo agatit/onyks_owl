@@ -36,7 +36,7 @@ class Module(module_base.Module):
         frame_no = 0
         filename = ""
         out = None
-        print(input_stream)
+        # print(input_stream)
         for input_data in input_stream:
             frame = input_data['color']
             if frame_no == 0:
@@ -51,19 +51,19 @@ class Module(module_base.Module):
                 filename = datetime.now().strftime(filename)
                 filename = os.path.join(self.params.get('path',"."), filename)
 
-                print("filename: " + filename)
-                print(os.path.dirname(os.path.realpath(__file__)))
+                # print("filename: " + filename)
+                # print(os.path.dirname(os.path.realpath(__file__)))
                 framerate = self.params.get('framerate', 20.0)
                 height, width = frame.shape[0:2]
-                logging.info(f"file {filename} writing started (fourcc:{fourcc_str} framerate:{framerate} size:{(width, height)})")
+                self.log_object.info(f"file {filename} writing started (fourcc:{fourcc_str} framerate:{framerate} size:{(width, height)})")
                 out = cv2.VideoWriter(filename, fourcc, framerate, (width, height))
             out.write(frame)
             frame_no += 1  
         
         if out:
             out.release()
-            print("out_released")
-        logging.info(f"file {filename} writing finished")
+            # print("out_released")
+        self.log_object.info(f"file {filename} writing finished")
         
 
 if __name__ == "__main__":

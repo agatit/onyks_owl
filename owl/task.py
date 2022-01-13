@@ -80,7 +80,8 @@ class Producer():
             self.streams_classes,
             self.queue_limit,
             self.stream_expire_time,            
-            self.stream_timeout)
+            self.stream_timeout,
+            self.log_object)
 
 
 class Consumer():
@@ -115,13 +116,14 @@ class Consumer():
             if not task_data is None:
                 task_str = task_data[1]
                 task = json.loads(task_str)
-                logging.info(f"task received: {task}")
+                self.log_object.info(f"task received: {task}")
                 return task['task_data'], stream_composed.Consumer(
                     self.redis, task['stream_names'],
                     self.streams_classes,
                     self.stream_expire_time,
-                    self.stream_timeout)
+                    self.stream_timeout,
+                    self.log_object)
             else:
                 return None, None
         else:
-            return {}, stream_composed.Consumer(self.redis, {}, {}, self.stream_expire_time, self.stream_timeout)
+            return {}, stream_composed.Consumer(self.redis, {}, {}, self.stream_expire_time, self.stream_timeout, self.log_object)
