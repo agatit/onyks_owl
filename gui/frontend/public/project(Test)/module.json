@@ -1,7 +1,7 @@
 [
   {
     "id": "2testId",
-    "name": "module_plate_detection",
+    "name": "module plate detection",
     "type": "Owl-node",
     "x": 50,
     "y": 300,
@@ -14,7 +14,7 @@
       "id": "initial ID",
       "name": "Initial name"
     },
-    "title": "module_plate_detection",
+    "title": "module plate detection",
     "content": "Opis",
     "source": false,
     "output": {
@@ -30,7 +30,7 @@
   },
   {
     "id": "3testId",
-    "name": "module_sink_win",
+    "name": "module sink win",
     "type": "Owl-node",
     "title": "module_sink_win",
     "content": "Opis",

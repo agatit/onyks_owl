@@ -17,12 +17,17 @@ import TabContainer from "../UI/Tabs/TabContainer";
 import { useState } from "react";
 import TabContent from "../UI/Tabs/TabContent";
 import ProjectEditor from "../UI/Menu-UI/Editors/ProjectEditor";
+import AddQueueForm from "../UI/Menu-UI/AddQueueForm";
+import ProjectMenageList from "../UI/Menu-UI/ProjectMenageList";
+import { DiagramEngine } from "@projectstorm/react-diagrams";
+import { engineActionTypes } from "../../store/Reducers/engineReducer";
 
 // REFERENCJE CHYBA DO WYWALENIA!!!!!!!!!!!!!
 
 interface toolBarProps {
   node: OwlNodeModel;
   projectId: string;
+  engine: DiagramEngine;
 }
 
 function ToolBar(props: toolBarProps) {
@@ -33,6 +38,8 @@ function ToolBar(props: toolBarProps) {
   };
 
   const queueSelected: boolean = useSelector(isQueueSelected);
+
+  console.log(props.engine.getModel().getNodes());
 
   return (
     <div className={classses.toolBar}>
@@ -46,34 +53,25 @@ function ToolBar(props: toolBarProps) {
           <ModulePropEditor projectId={props.projectId} />
         </TabContent>
         <TabContent currentTab={activeTab} selectedTabValue="2">
+          <AddQueueForm />
           <QueuePropEdtior projectId={props.projectId} />
         </TabContent>
         <TabContent currentTab={activeTab} selectedTabValue="3">
+          <ProjectMenageList
+            schemaElements={props.engine.getModel().getNodes()}
+          />
           <ProjectEditor projectId={props.projectId} />
         </TabContent>
       </div>
     </div>
   );
-
-  /*
-  {
-    if (queueSelected) {
-      return <QueuePropEdtior projectId={props.projectId} />;
-    }
-  }
-
-  return (
-    <div className={classses.toolBar}>
-      
-    </div>
-  );
-  */
 }
 
 const mapStateToProps = (state: any) => {
   return {
     node: state.nodesData.selectedNode,
     test: state.nodesData.test,
+    engine: state.engineReducer.engine,
   };
 };
 
@@ -104,18 +102,3 @@ const MenuTabs: JSX.Element[] = [
     icon={faFile}
   />,
 ];
-
-//const nameInputRef = useRef<HTMLInputElement>(null);
-//const refArray = useRef<any>([]);
-
-//refArray.current = [];
-
-/*
-  const addToRefs = (el: HTMLInputElement) => {
-    if (el && !refArray.current.includes(el)) {
-      refArray.current.push(el);
-    }
-  };
-
-  
-*/

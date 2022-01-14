@@ -1,17 +1,5 @@
-import {
-  DefaultLabelModel,
-  DefaultLinkModel,
-} from "@projectstorm/react-diagrams";
-import { deleteQueue, selectedQueue } from "../../store/Actions/queueActions";
-import {
-  getCreateQueueRequest,
-  getDeleteQueueFromProjectRequest,
-} from "../../store/Queries/project_editor_queries";
-import { getQueueParamsRequest } from "../../store/Queries/property_editor_queries";
-import { QueueParamListConfig } from "../../store/QueryConfigs/property_query_configs";
+import { DefaultLinkModel } from "@projectstorm/react-diagrams";
 import { Project } from "../../store/redux-query";
-import store from "../../store/store";
-import { EditableLabelModel } from "../CustomLinks/Labels/LabelModel";
 
 export interface OwlQueueLinkOptions {
   id?: string;
