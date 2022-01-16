@@ -25,18 +25,6 @@ class Project():
         # for mod in self.get_modules():
         #     self.modules[mod] = Module(os.path.join(self.modules_dir, mod + '.py'),self.config_path)
         self.load_modules()
-    # def set_instance_config(self, instance_id, data=None):
-    #     self.instances[instance_id]['config'] = os.path.join(self.project_path, 'config_' + instance_id + ".json")
-    #     try:
-    #         # self.config_json = data
-    #         with open(self.instances[instance_id]['config'], 'w') as file:
-    #             if data is None:
-    #                 json.dump(self.config_json,file, ensure_ascii=False, indent=4)
-    #             else:
-    #                 json.dump(data,file, ensure_ascii=False, indent=4)
-    #         return 'coś'    # TODO returny
-    #     except:
-    #         return None
     def add_project_instance(self, instance_id):
         if instance_id in self.instances:
             return None
@@ -68,11 +56,6 @@ class Project():
             return 'Łups :('
         return instance_name + " a co więcej to nie wiem :ppp"
         # TODO suma configów modułów
-    def get_instance_config(self, instance_name):
-        pass
-    def get_instance_module(self, instance_name, instance_module):
-        pass
-        # TODO config jednego modułu
     def load_config(self):
         try:
             with open(self.config_path) as file:
@@ -96,17 +79,29 @@ class Project():
         except:
             return 'Łups :('
     def add_module(self, module_name):
-        self.modules[module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path)
+        owl_path = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl')) # TODO owl_path jakiś globalniejszy zrobić...
+        if not owl_path in sys.path:
+            sys.path.append(owl_path)
+            # TODO ale że tutaj to?!?!
+
+        self.modules[module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path, None)
         if self.modules[module_name] is None: 
             return "Łups :("
         self.config_json['modules'][module_name] = self.modules[module_name].get_default_config()
+        self.set_config(self.config_json)
         return 'Jest git'
 
     def get_module_data(self, module_name):
         if module_name in self.config_json['modules']:
             # response = 
-            return self.config_json['modules'][module_name]
+            # return self.config_json['modules'][module_name]
+            return self.modules[module_name].get_data()
         return 'Łups :('
+    def set_module_params(self, module_id, params):
+        self.config_json['modules'][module_id]['params'] = params
+        self.set_config(self.config_json)
+        return 'Jest git'
+
     def get_modules(self):
         # return list(self.modules.keys())
         response = {}
@@ -122,6 +117,7 @@ class Project():
     def delete_module(self, module_name):
         del self.config_json['modules'][module_name]
         del self.modules[module_name]
+        self.set_config(self.config_json)
         return 'Jest git'
 
     def get_resources(self):

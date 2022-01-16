@@ -30,7 +30,7 @@ def add_instance(project_id):  # noqa: E501
     x.add_project_instance(project_id, 'eluwina')
     return x.start_project_instance(project_id, 'eluwina')
 
-def add_module(project_id, module):  # noqa: E501
+def add_module(project_id):  # noqa: E501
     """Add module to project
 
      # noqa: E501
@@ -42,11 +42,12 @@ def add_module(project_id, module):  # noqa: E501
 
     :rtype: Module
     """
-    # if connexion.request.is_json:
-    #     module = Module.from_dict(connexion.request.get_json())  # noqa: E501
+    if connexion.request.is_json:
+        module = Module.from_dict(connexion.request.get_json())  # noqa: E501
+        module_name = module._name
     # return 'do some magic!'
     # return x.add_project_module(project_id, "TODO nazwa modułu")
-    return x.add_project_module(project_id, module)
+    return x.add_project_module(project_id, module_name)
 
 
 def add_queue(project_id, queue):  # noqa: E501
