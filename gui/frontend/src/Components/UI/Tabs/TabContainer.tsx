@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { cloneElement } from "react";
-import Tab from "./Tab";
 
 interface TabContainerProps {
   tabs: any[];

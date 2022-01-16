@@ -1,15 +1,7 @@
 import classses from "./Toolbar.module.css";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { OwlNodeModel } from "../OwlNodes/OwlNodeModel";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCube,
-  faFile,
-  faShare,
-  faShareAlt,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import { isQueueSelected } from "../../store/selectors/queueSelectors";
+import { faCube, faFile, faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import ModulePropEditor from "../UI/Menu-UI/Editors/ModulePropEditor";
 import QueuePropEdtior from "../UI/Menu-UI/Editors/QueuePropEdtior";
 import Tab from "../UI/Tabs/Tab";
@@ -20,7 +12,6 @@ import ProjectEditor from "../UI/Menu-UI/Editors/ProjectEditor";
 import AddQueueForm from "../UI/Menu-UI/AddQueueForm";
 import ProjectMenageList from "../UI/Menu-UI/ProjectMenageList";
 import { DiagramEngine } from "@projectstorm/react-diagrams";
-import { engineActionTypes } from "../../store/Reducers/engineReducer";
 
 // REFERENCJE CHYBA DO WYWALENIA!!!!!!!!!!!!!
 
@@ -37,9 +28,7 @@ function ToolBar(props: toolBarProps) {
     setActiveTab(tabValue);
   };
 
-  const queueSelected: boolean = useSelector(isQueueSelected);
-
-  console.log(props.engine.getModel().getNodes());
+  // const queueSelected: boolean = useSelector(isQueueSelected);
 
   return (
     <div className={classses.toolBar}>

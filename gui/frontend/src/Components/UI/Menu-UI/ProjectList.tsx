@@ -1,6 +1,6 @@
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, ListGroup } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { Project } from "../../../store/redux-query/models/Project";
 import { useHistory } from "react-router-dom";
 import {
@@ -11,10 +11,8 @@ import {
 import classes from "./ProjectList.module.css";
 import { selectProjectList } from "../../../store/selectors/projectSelectors";
 import { connect } from "react-redux";
-import { useEffect, useRef, useState } from "react";
 import { ProjectListRequestConfig } from "../../../store/QueryConfigs";
 import Backdrop from "../../Layout/Utils/Backdrop";
-import store from "../../../store/store";
 import { useRequest } from "redux-query-react";
 
 interface ProjectListProps {

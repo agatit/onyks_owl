@@ -1,21 +1,13 @@
 import { useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { connect } from "react-redux";
-import {
-  getModuleDefinitionsListRequest,
-  getModuleListRequest,
-} from "../../../store/Queries/project_editor_queries";
-import {
-  ModuleListDefsRequestConfig,
-  ModuleListRequestConfig,
-} from "../../../store/QueryConfigs/module_query_configs";
-import { Module, ModuleDef } from "../../../store/redux-query";
+import { getModuleDefinitionsListRequest } from "../../../store/Queries/project_editor_queries";
+import { ModuleListDefsRequestConfig } from "../../../store/QueryConfigs/module_query_configs";
+import { ModuleDef } from "../../../store/redux-query";
 import {
   clearModuleList,
   selectModuleDefsList,
-  selectModuleList,
 } from "../../../store/selectors/moduleSelectors";
-import store from "../../../store/store";
 import ListModule from "../ListModule";
 
 import classes from "./ModuleList.module.css";
@@ -32,7 +24,6 @@ function ModuleList(props: ModuleListProps) {
     props.clearModuleList();
     setTimeout(() => {
       props.getModuleDefList();
-      console.log(props.modules);
     }, 3000);
   }, []);
 

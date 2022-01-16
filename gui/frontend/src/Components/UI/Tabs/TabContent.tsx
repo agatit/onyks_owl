@@ -1,5 +1,3 @@
-import { Children } from "react";
-
 interface TabContentProps {
   currentTab: string;
   selectedTabValue: string;

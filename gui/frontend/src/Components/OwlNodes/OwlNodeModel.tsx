@@ -14,6 +14,7 @@ export interface NodeModelOptions extends BaseModelOptions {
   title?: string;
   content?: string;
   source?: boolean;
+  description?: string;
   module_id?: string;
   id?: string;
   moduleDefId?: string;
@@ -25,7 +26,8 @@ export interface NodeModelOptions extends BaseModelOptions {
 }
 
 export class OwlNodeModel extends StormNodeModel {
-  color: string;
+  headerColor: string;
+  bodyColor: string;
   title: string;
   content: string | undefined;
   source: boolean;
@@ -40,18 +42,22 @@ export class OwlNodeModel extends StormNodeModel {
   inputPortModel: DefaultPortModel;
   outputPortModel: DefaultPortModel;
   parameters: Array<ModuleParam>;
+  description: string;
 
   constructor(options: NodeModelOptions = {}) {
     super({
       ...options,
       type: "Owl-node",
     });
-    this.color = options.color || "White";
+
+    this.headerColor = options.color || "White";
+    this.bodyColor = "#141414";
     this.title = options.title || "Node";
+    this.description = options.description || "Brak opisu modułu";
     this.content = options.content || undefined;
     this.source = options.source || false;
     this.params = {};
-    this.parameters = options.parameters || []; // do usunięcia
+    this.parameters = options.parameters || [];
     this.module_id = options.module_id || "node";
     this.id = options.id || "testId";
     this.moduleDefId = options.moduleDefId || "test ModuleDefId";
@@ -80,7 +86,7 @@ export class OwlNodeModel extends StormNodeModel {
   serialize() {
     return {
       ...super.serialize(),
-      color: this.color,
+      // color: this.color,
       title: this.title,
       content: this.content,
       source: this.source,
@@ -96,7 +102,8 @@ export class OwlNodeModel extends StormNodeModel {
 
   deserialize(event: DeserializeEvent<this>): void {
     super.deserialize(event);
-    this.color = event.data.color;
+    //this.headerColor = event.data.color;
+    //this.bodyColor = event.data
     this.title = event.data.title;
     this.content = event.data.content;
     this.source = event.data.source;

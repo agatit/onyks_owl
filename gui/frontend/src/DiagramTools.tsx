@@ -45,7 +45,7 @@ export function generateLinks(nodesArr: OwlNodeModel[], engine: DiagramEngine) {
       link.setTargetPort(
         engine.getModel().getNode(nodesArr[i].input.id).getPort("Wyjście")
       );
-      console.log(link);
+      // console.log(link);
       engine.getModel().addLink(link);
     }
     if (
@@ -57,7 +57,7 @@ export function generateLinks(nodesArr: OwlNodeModel[], engine: DiagramEngine) {
       link.setTargetPort(
         engine.getModel().getNode(nodesArr[i].output.id).getPort("Wejście")
       );
-      console.log(link);
+      //console.log(link);
       engine.getModel().addLink(link);
     }
   }

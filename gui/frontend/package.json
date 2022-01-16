@@ -65,6 +65,6 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3"
+    "react-scripts": "^4.0.3"
   }
 }

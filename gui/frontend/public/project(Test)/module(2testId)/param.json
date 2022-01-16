@@ -1,10 +1,10 @@
 [
   {
-    "param_def_id": "Testowy_param",
-    "value": "50"
+    "param_def_id": "Test",
+    "value": "200"
   },
   {
-    "param_def_id": "Inny_param",
-    "value": "Lorem ipsum"
+    "param_def_id": "Quo",
+    "value": "vadis"
   }
 ]

@@ -1,15 +1,11 @@
-import { DefaultNodeModel, NodeModel } from "@projectstorm/react-diagrams";
+import { NodeModel } from "@projectstorm/react-diagrams";
 import { ListGroup } from "react-bootstrap";
-
-import classes from "./Editors/ModulePropEditor.module.css";
-
-interface schemaElement {
-  title: string;
-  id: any;
-}
+import { OwlNodeModel } from "../../OwlNodes/OwlNodeModel";
+import { OwlQueueModel } from "../../OwlQueue/OwlQueueModel";
+import TabSection from "../Tabs/TabSection";
 
 interface ProjectMenageListProps {
-  schemaElements: Array<NodeModel>;
+  schemaElements: Array<any>;
 }
 
 function ProjectMenageList(props: ProjectMenageListProps) {
@@ -17,26 +13,27 @@ function ProjectMenageList(props: ProjectMenageListProps) {
     element.setSelected(true);
   }
 
-  function wrapListElement(listElement: NodeModel) {
+  function wrapListElement(listElement: OwlNodeModel | OwlQueueModel) {
     return (
       <ListGroup.Item
         style={propInputs}
         onClick={() => {
           elementClickHandler(listElement);
         }}
-      ></ListGroup.Item>
+      >
+        {listElement.name}
+      </ListGroup.Item>
     );
   }
 
   return (
-    <div className={classes.propertiesBars}>
-      <div className={classes.propsTitle}>Lista obiektów</div>
+    <TabSection title="Lista obiektów">
       <ListGroup as="ul">
         {props.schemaElements.map((element, index) => {
           return wrapListElement(element);
         })}
       </ListGroup>
-    </div>
+    </TabSection>
   );
 }
 

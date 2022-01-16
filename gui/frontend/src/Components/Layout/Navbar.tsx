@@ -3,7 +3,7 @@ import { Navbar } from "react-bootstrap";
 
 function Nav(props: any) {
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar variant="dark" style = {navStyle}>
       <Container>
         <Navbar.Brand href="/">Onyks_owl</Navbar.Brand>
       </Container>
@@ -12,3 +12,8 @@ function Nav(props: any) {
 }
 
 export default Nav;
+
+
+const navStyle = {
+  backgroundColor: "#404040",
+};

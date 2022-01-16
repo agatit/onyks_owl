@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Form, FormControl, InputGroup } from "react-bootstrap";
+import { useRef } from "react";
+import { Form } from "react-bootstrap";
 import { connect, useSelector } from "react-redux";
 import { useRequest } from "redux-query-react";
 import {
@@ -9,6 +9,7 @@ import {
 import { ProjectRequestConfig } from "../../../../store/QueryConfigs";
 import { getProject, Project } from "../../../../store/redux-query";
 import { selectProject } from "../../../../store/selectors/projectSelectors";
+import TabSection from "../../Tabs/TabSection";
 
 import classes from "./ProjectEditor.module.css";
 
@@ -19,9 +20,9 @@ interface ProjectEditorProps {
 }
 
 function ProjectEditor(props: ProjectEditorProps) {
-  const [{ isPending, status }, refresh] = useRequest(
-    getProject({ projectId: props.projectId }, ProjectRequestConfig)
-  );
+  // const [{ isPending, status }, refresh] = useRequest(
+  //   //getProject({ projectId: props.projectId }, ProjectRequestConfig)
+  // );
 
   const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
   const prjNameInputRef = useRef<HTMLInputElement>(null);
@@ -36,21 +37,21 @@ function ProjectEditor(props: ProjectEditorProps) {
 
   const project: Project = useSelector(selectProject);
 
-  if (typeof status === "number" && status >= 400) {
-    return <div>"Coś poszło nie tak! Spróbuj ponownie!"</div>;
-  }
+  // if (typeof status === "number" && status >= 400) {
+  //   return <div>"Coś poszło nie tak! Spróbuj ponownie!"</div>;
+  // }
 
   const propertyInputBlurHandler = (newValue: string) => {
     project.name = newValue;
     props.updateProject(project);
   };
 
-  if (isPending || !project) {
-    return <div>Trwa ładowanie...</div>;
-  }
+  // if (isPending || !project) {
+  //   return <div>Trwa ładowanie...</div>;
+  // }
 
   return (
-    <div className={classes.propertiesBars}>
+    <TabSection title="Główne">
       <Form.Group className="mb-3">
         <Form.Label style={propLabels}>Nazwa</Form.Label>
         <Form.Control
@@ -67,22 +68,20 @@ function ProjectEditor(props: ProjectEditorProps) {
           Maksymalna liczba znaków dla nazwy projektu: 30
         </Form.Text>
       </Form.Group>
-      {
-        <textarea
-          rows={6}
-          defaultValue={project.description ? project.description : ""}
-          ref={descriptionTextAreaRef}
-          onBlur={() =>
-            descriptionInputBlurHandler({
-              id: project.id,
-              name: project.name,
-              description: project.description,
-            })
-          }
-          style={propInputs}
-        ></textarea>
-      }
-    </div>
+      {/* <textarea
+        rows={6}
+        defaultValue={project.description ? project.description : ""}
+        ref={descriptionTextAreaRef}
+        onBlur={() =>
+          descriptionInputBlurHandler({
+            id: project.id,
+            name: project.name,
+            description: project.description,
+          })
+        }
+        style={propInputs}
+      ></textarea> */}
+    </TabSection>
   );
 }
 

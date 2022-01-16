@@ -43,17 +43,17 @@ export class OwlQueueModel extends DefaultNodeModel {
         );
         store.dispatch(deleteQueue(this));
       },
-      // selectionChanged: () => {
-      //   if (this.isSelected()) {
-      //     store.dispatch(
-      //       getQueueParamsRequest(
-      //         { projectId: this.project.id, queueId: this.id },
-      //         QueueParamListConfig
-      //       )
-      //     );
-      //     store.dispatch(selectedQueue(this));
-      //   }
-      // },
+      selectionChanged: () => {
+        if (this.isSelected()) {
+          store.dispatch(
+            getQueueParamsRequest(
+              { projectId: this.project.id, queueId: this.id },
+              QueueParamListConfig
+            )
+          );
+          store.dispatch(selectedQueue(this));
+        }
+      },
     });
   }
 

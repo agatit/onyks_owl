@@ -3,6 +3,7 @@
     "id": "2testId",
     "name": "module plate detection",
     "type": "Owl-node",
+    "description": "Moduł wykrywający tablice rejestracyjne",
     "x": 50,
     "y": 300,
     "position": {
@@ -31,6 +32,7 @@
   {
     "id": "3testId",
     "name": "module sink win",
+    "description": "Standardowy moduł wyjściowy",
     "type": "Owl-node",
     "title": "module_sink_win",
     "content": "Opis",

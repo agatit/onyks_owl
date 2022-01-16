@@ -57,7 +57,7 @@ const Diagrams = (props: DiagramProps) => {
   useEffect(() => {
     setTimeout(() => {
       setSchemaLoading(false);
-    }, 4000);
+    }, 1000);
   }, []);
 
   if (isSchemaLoading) {
