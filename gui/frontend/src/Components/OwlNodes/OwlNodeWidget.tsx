@@ -9,6 +9,8 @@ import styled from "@emotion/styled";
 import { ModuleParam } from "../../store/redux-query";
 
 import classes from "./OwlNodeWidget.module.css";
+import { useSelector } from "react-redux";
+import { selectModuleParams } from "../../store/selectors/propertySelectors";
 
 export interface NodeWidgetProps {
   node: OwlNodeModel;
@@ -27,7 +29,10 @@ class OwlNodeAbstractWidget extends React.Component<
   }
   render() {
     return (
-      <div className={clsx("custom-node-content")}>
+      <div
+        className={clsx("custom-node-content")}
+        style={{ backgroundColor: this.props.node.bodyColor }}
+      >
         {!this.props.node.source && (
           <PortWidget
             engine={this.props.engine}
@@ -51,35 +56,28 @@ class OwlNodeAbstractWidget extends React.Component<
 }
 
 interface OwlNodeContentProps extends NodeWidgetProps {
-  moduleParams?: Array<ModuleParam>;
+  node: OwlNodeModel;
 }
-const params = [
-  {
-    paramDefId: "Testowy_param",
-    value: "50",
-  },
-  {
-    paramDefId: "Inny_param",
-    value: "Lorem ipsum",
-  },
-];
 
 const OwlNodeContent = (props: OwlNodeContentProps) => {
+  const WrapParameterListElement = (parameter: ModuleParam, index: number) => {
+    return (
+      <div className={classes.parameter} key={index}>
+        <div className={classes.paramterName}>{parameter.paramDefId}</div>
+        <div className={classes.parameterValue}>{parameter.value}</div>
+      </div>
+    );
+  };
+
+  if (!props.node.parameters) {
+    return <h1>Niestety</h1>;
+  }
   return (
     <div className={classes.parametersList}>
-      <div className={classes.parameter}>
-        <div className={classes.paramterName}>{params[0].paramDefId}</div>
-        <div className={classes.parameterValue}>{params[0].value}</div>
-      </div>
-      <div className={classes.parameter}>
-        <div className={classes.paramterName}>{params[1].paramDefId}</div>
-        <div className={classes.parameterValue}>{params[1].value}</div>
-      </div>
-      <div className={classes.otherFlex}>
-        <div className={classes.description}>
-          Przykładowy opis modułu - do uzupełnienia
-        </div>
-      </div>
+      {props.node.parameters.map((param, index) =>
+        WrapParameterListElement(param, index)
+      )}
+      <div className={classes.description}>{props.node.description}</div>
     </div>
   );
 };
@@ -107,7 +105,7 @@ export class OwlNodeWidget extends React.Component<NodeWidgetProps> {
         <StyledNodeWidget selected={this.props.node.isSelected()}>
           <div
             className="custom-node-header"
-            style={{ backgroundColor: this.props.node.color }}
+            style={{ backgroundColor: this.props.node.headerColor }}
           >
             {this.props.node.title}
           </div>

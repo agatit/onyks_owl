@@ -83,7 +83,7 @@ class Module(module_base.Module):
                 undist_frame = cv2.undistort(input_data['color'], mtx, dist, None, mtx)
                 # in_transformed = cv2.warpPerspective(input_data['color'], M, (W, H))
                 in_transformed = cv2.warpPerspective(undist_frame, M, (W, H))
-                print(f"czas wykonania: {time.time() - begin} s")
+                # print(f"czas wykonania: {time.time() - begin} s")
 
                 output_data = {
                     "color": in_transformed,

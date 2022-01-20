@@ -5,7 +5,6 @@ import createEngine, {
   DefaultLinkFactory,
 } from "@projectstorm/react-diagrams";
 import { OwlNodeFactory } from "../../Components/OwlNodes/OwlNodeFactory";
-import { EditableLabelFactory } from "../../Components/CustomLinks/Labels/LabelFactory";
 import { OwlQueueLinkFactory } from "../../Components/OwlQueueLinks/OwlQueueLinkFactory";
 import { DeleteItemsAction } from "@projectstorm/react-canvas-core";
 import { OwlQueueFactory } from "../../Components/OwlQueue/OwlQueueFactory";

@@ -1,0 +1,14 @@
+{
+    "params": {
+        "stream_queue_limit": {"type": "int", "value": 100}, 
+        "task_expire_time": {"type": "int", "value": 10}, 
+        "stream_expire_time": {"type": "int", "value": 10}, 
+        "task_timeout": {"type": "int", "value": 10}, 
+        "stream_timeout": {"type": "int", "value": 10}, 
+        "input_queue": {"type": "string", "value": ""}, 
+        "output_queue": {"type": "string", "value": ""}
+    }, 
+        "input_classes": {}, "output_classes": {}}
+{"params": {"stream_queue_limit": {"type": "int", "value": 100}, "task_expire_time": {"type": "int", "value": 10}, "stream_expire_time": {"type": "int", "value": 10}, "task_timeout": {"type": "int", "value": 10}, "stream_timeout": {"type": "int", "value": 10}, "input_queue": {"type": "string", "value": "}, "output_queue": {"type": "string", "value": "}, "device": {"type": "string|int", "value": 0}}, "input_classes": {}, "output_classes": {"color": "stream_video.Producer", "metrics": "stream_data.Producer"}}
+{"params": {"stream_queue_limit": {"type": "int", "value": 100}, "task_expire_time": {"type": "int", "value": 10}, "stream_expire_time": {"type": "int", "value": 10}, "task_timeout": {"type": "int", "value": 10}, "stream_timeout": {"type": "int", "value": 10}, "input_queue": {"type": "string", "value": "}, "output_queue": {"type": "string", "value": "}, "mtx": {"type": "list", "value": [[1161.107086941478, 0.0, 948.2004474733628], [0.0, 1166.8887234211986, 608.8830018574113], [0.0, 0.0, 1.0]]}, "dist": {"type": "list", "value": [[-0.5435658832121913, 0.8889895278168062, -0.017174260409137283, 0.004614250484695657, -1.1537064635161052]]}, "trapezoid_coords": {"type": "list", "value": [[1125, 403], [1920, 201], [1126, 897], [1919, 1055]]}}, "input_classes": {}, "output_classes": {}}
+[{"description": "Default description", "id": "Default ID", "name": "module_sink_file"}, {"description": "Default description", "id": "Default ID", "name": "module_source_cv"}, {"description": "Default description", "id": "Default ID", "name": "module_perspective_transform"}]

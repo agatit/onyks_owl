@@ -1,12 +1,7 @@
-import * as React from "react";
 import { OwlNodeModel } from "./OwlNodeModel";
 import { OwlNodeWidget } from "./OwlNodeWidget";
 import { AbstractReactFactory } from "@projectstorm/react-canvas-core";
 import { DiagramEngine } from "@projectstorm/react-diagrams-core";
-import {
-  DefaultNodeModel,
-  DefaultNodeWidget,
-} from "@projectstorm/react-diagrams";
 
 export class OwlNodeFactory extends AbstractReactFactory<
   OwlNodeModel,

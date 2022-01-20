@@ -428,7 +428,7 @@ function listModuleParamsRaw<T>(
   const { meta = {} } = requestConfig;
 
   const config: QueryConfig<T> = {
-    url: `${runtime.Configuration.basePath}/project({projectId})/module({moduleId})/param`
+    url: `${runtime.Configuration.basePath}/project({projectId})/module({moduleId})/param.json`
       .replace(
         `{${"projectId"}}`,
         encodeURIComponent(String(requestParameters.projectId))

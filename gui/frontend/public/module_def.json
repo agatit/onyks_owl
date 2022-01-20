@@ -1,7 +1,7 @@
 [
   {
     "id": "testId",
-    "name": "module_source_youtube",
+    "name": "module source youtube",
     "output_queue": "stage1",
     "stream_queue_limit": 100,
     "params": {
@@ -11,7 +11,7 @@
   },
   {
     "id": "2testId",
-    "name": "module_plate_detection",
+    "name": "module plate detection",
     "input_queue": "stage1",
     "stream_queue_limit": 100,
     "output_queue": "stage2",
@@ -23,7 +23,7 @@
   },
   {
     "id": "3testId",
-    "name": "module_sink_win",
+    "name": "module sink win",
     "input_queue": "stage2",
     "stream_queue_limit": 100,
     "params": {

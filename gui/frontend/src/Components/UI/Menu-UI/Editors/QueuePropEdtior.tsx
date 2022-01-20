@@ -12,16 +12,13 @@ import {
 import { connect, useSelector } from "react-redux";
 import { DiagramEngine } from "@projectstorm/react-diagrams-core";
 import { selectQueueParams } from "../../../../store/selectors/propertySelectors";
-import { OwlQueueLinkModel } from "../../../OwlQueueLinks/OwlQueueLinkModel";
 import { selectedQueue } from "../../../../store/Actions/queueActions";
-
 import classes from "./QueuePropEditor.module.css";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { color } from "html2canvas/dist/types/css/types/color";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { nodeModuleNameResolver } from "typescript";
 import { OwlNodeModel } from "../../../OwlNodes/OwlNodeModel";
 import { OwlQueueModel } from "../../../OwlQueue/OwlQueueModel";
+import TabSection from "../../Tabs/TabSection";
 
 interface QueuePropEditorProps {
   queue: OwlQueueModel;
@@ -69,6 +66,7 @@ function QueuePropEditor(props: QueuePropEditorProps) {
     return (
       <div>
         <h2 className={classes.warning}>Brak wybranej kolejki</h2>
+
         <FontAwesomeIcon
           icon={faTimes}
           size="5x"
@@ -81,8 +79,7 @@ function QueuePropEditor(props: QueuePropEditorProps) {
   queue.setSelected(true);
 
   return (
-    <div className={classes.propertiesBars}>
-      <div className={classes.propsTitle}>Główne</div>
+    <TabSection title="Główne">
       <InputGroup className="mb-3">
         <InputGroup.Text id="inputGroup-sizing-default" style={propLabels}>
           Nazwa
@@ -118,7 +115,7 @@ function QueuePropEditor(props: QueuePropEditorProps) {
             </InputGroup>
           );
         })}
-    </div>
+    </TabSection>
   );
 }
 

@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import Navbar from "../Components/Layout/Navbar";
 import SideBar from "../Components/Layout/SideBar";
 import ToolBar from "../Components/Layout/ToolBar";
 import Diagrams from "../DiagramsM";

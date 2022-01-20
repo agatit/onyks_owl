@@ -44,17 +44,12 @@ const Diagrams = (props: DiagramProps) => {
   const canvaRef = useRef(null);
 
   useEffect(() => {
-    console.log(canvaRef.current);
+    //console.log(canvaRef.current);
+    loadSchema(engine);
     // html2canvas(canvaRef.current!).then((canvas) =>
     //   document.body.appendChild(canvas)
     // );
   }, [location]);
-
-  // const link1 = new OwlQueueLinkModel();
-  // link1.setSourcePort(nodesArr[0].getPort("Wejście"));
-  // link1.setTargetPort(nodesArr[1].getPort("Wyjście"));
-  // engine.getModel().addLink(link1);
-  // console.log(engine.getModel().getLinks());
 
   const engine = props.engine;
   const [isSchemaLoading, setSchemaLoading] = useState(true);
@@ -62,13 +57,8 @@ const Diagrams = (props: DiagramProps) => {
   useEffect(() => {
     setTimeout(() => {
       setSchemaLoading(false);
-    }, 4000);
+    }, 1000);
   }, []);
-
-  function serializeHandler() {
-    //console.log(engine.getModel().serialize());
-    loadSchema(engine);
-  }
 
   if (isSchemaLoading) {
     const testModel = new DiagramModel();
@@ -96,7 +86,6 @@ const Diagrams = (props: DiagramProps) => {
       id="userCanva"
       ref={canvaRef}
     >
-      <button onClick={serializeHandler}>Załaduj schemat</button>
       <DemoCanvasWidget>
         <CanvasWidget className="diagram-container" engine={engine} />
       </DemoCanvasWidget>

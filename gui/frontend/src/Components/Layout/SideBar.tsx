@@ -1,6 +1,5 @@
 import ModuleList from "../UI/Menu-UI/ModuleList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import classes from "./SideBar.module.css";
 import { faCubes } from "@fortawesome/free-solid-svg-icons";
 

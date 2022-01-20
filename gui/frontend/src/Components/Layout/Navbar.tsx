@@ -1,17 +1,19 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog } from "@fortawesome/free-solid-svg-icons";
-import classes from "./Navbar.module.css";
-import { Link } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import { Navbar } from "react-bootstrap";
 
-function Navbar(props: any) {
+function Nav(props: any) {
   return (
-    <header className={classes.navbar}>
-      <Link to="/" style={{ textDecoration: "none" }}>
-        <div className={classes.logo}> Onyks_owl</div>
-      </Link>
-      <FontAwesomeIcon icon={faCog} color="grey" size="2x" />
-    </header>
+    <Navbar variant="dark" style = {navStyle}>
+      <Container>
+        <Navbar.Brand href="/">Onyks_owl</Navbar.Brand>
+      </Container>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default Nav;
+
+
+const navStyle = {
+  backgroundColor: "#404040",
+};

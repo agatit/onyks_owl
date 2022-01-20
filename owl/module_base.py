@@ -20,7 +20,8 @@ class Module:
     module_name = "module_base"
     log_object = logging.Logger
     terminate = False
-      
+    instance_id = None
+    
     def __init__(self, config, connector):
 
         self.build_config()
@@ -59,7 +60,7 @@ class Module:
             self.task_timeout,
             self.stream_expire_time,
             self.stream_timeout,
-            self.log_object)
+            log_object = self.log_object)
         producers = {name : output_class for name, output_class in self.output_classes.items()} 
         self.task_producer = task.Producer(
             self.redis,
@@ -70,7 +71,7 @@ class Module:
             self.task_timeout, 
             self.stream_expire_time,
             self.stream_timeout,
-            self.log_object)  
+            log_object = self.log_object)  
 
     @classmethod
     def from_cmd(cls, argv):
@@ -85,15 +86,10 @@ class Module:
         try:
             instance_id = argv[2] # np. perspective_transform_01
             if instance_id is not None:
-                # log_dir = os.path.join(DEFAULT_PATH_LOGS, module_name + '_' + instance_id + '.txt')
-                handler = logging.StreamHandler(sys.stdout)
-                formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S")
-                handler.setFormatter(formatter)
-                # logging.basicConfig(level=logging.DEBUG, handlers=[handler])
-                log_object = logging.getLogger(name='logger4'+module_name)
-                log_object.setLevel(logging.DEBUG)
-                log_object.addHandler(handler)
-                log_object.info(f"{module_name} started.")
+                log_object = logging.getLogger(name='owl_' + instance_id + "_" + module_name)
+                print('owl_' + instance_id + "_" + module_name)
+                log_object.warning(f"{module_name} started.")
+                print(f"{module_name} started.")
             else:
                 instance_id = None
                 log_object = None
@@ -165,9 +161,10 @@ class Module:
                         self.redis.set(f"owl:module:{self.module_name}:task", json.dumps(task), ex=self.task_expire_time)
                         self.task_process(task_data, input_stream)                                
                     else:
-                        logging.debug("Nothing in task queue")
+                        self.log_object.debug("Nothing in task queue")
         except Exception as e:
-           logging.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
+            if self.log_object:
+                self.log_object.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
 
 
     def run(self):
@@ -178,7 +175,7 @@ class Module:
     def build_config(self):
         # self.stream_queue_limit = self.config.get('stream_queue_limit', self.default_config['stream_queue_limit'][1])
         # self.task_expire_time = self.config.get('task_expire_time', self.default_config['task_expire_time'][1])
-        # self.stream_expire_time = self.config.get('stream_expire_time', self.task_expire_time) # TODO ???
+        # self.stream_expire_time = self.config.get('stream_expire_time', self.task_expire_time)
         # self.task_timeout = self.config.get('task_timeout', self.stream_expire_time)            
         # self.stream_timeout = self.config.get('stream_timeout', self.stream_expire_time)            
         # self.params = self.config.get("params", self.default_config['params'][1])        

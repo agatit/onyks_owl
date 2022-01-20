@@ -1,7 +1,7 @@
 import { Form, FormControl, InputGroup } from "react-bootstrap";
-
 import {
   ModuleParam,
+  ModuleParamFromJSON,
   UpdateModuleParamRequest,
   UpdateModuleRequest,
 } from "../../../../store/redux-query";
@@ -23,13 +23,20 @@ import { selectModuleParams } from "../../../../store/selectors/propertySelector
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { OwlQueueLinkModel } from "../../../OwlQueueLinks/OwlQueueLinkModel";
+import TabSection from "../../Tabs/TabSection";
+import { engineReducer } from "../../../../store/Reducers/engineReducer";
+import { repaintCanvas } from "../../../../store/Actions/engineActions";
 
 interface ModulePropEditorProps {
   queue: OwlQueueLinkModel;
   node: OwlNodeModel;
   engine: DiagramEngine;
   projectId: string;
-  getModuleParams: (projectId: string, moduleId: string) => void;
+  getModuleParams: (
+    projectId: string,
+    moduleId: string,
+    node: OwlNodeModel
+  ) => void;
   updateParamRequest: (requestParams: UpdateModuleParamRequest) => void;
   updateModule: (requestParams: UpdateModuleRequest) => void;
 }
@@ -39,7 +46,8 @@ function ModulePropEditor(props: ModulePropEditorProps) {
   const node = props.node;
 
   useEffect(() => {
-    //if (node) props.getModuleParams(props.projectId, node.id);
+    var prjId = props.projectId[0].toUpperCase() + props.projectId.slice(1);
+    if (node) props.getModuleParams(prjId, node.id, node);
   }, [node]);
 
   // DO POPRAWY
@@ -87,51 +95,46 @@ function ModulePropEditor(props: ModulePropEditorProps) {
   node.setSelected(true);
 
   return (
-    <div>
-      <div className={classes.propertiesBars}>
-        <div className={classes.propsTitle}>Główne</div>
-        <InputGroup className="mb-3">
-          <InputGroup.Text id="inputGroup-sizing-default" style={propLabels}>
-            Nazwa
-          </InputGroup.Text>
-          <FormControl
-            value={node.title}
-            aria-label="Default"
-            aria-describedby="inputGroup-sizing-default"
-            onChange={(e) => handleNamePropertyChange(e.target.value)}
-            onBlur={(e) => moduleNameInputBlurHandler(e.target.value)}
-            style={propInputs}
-          />
-        </InputGroup>
+    <TabSection title="Główne">
+      <InputGroup className="mb-3">
+        <InputGroup.Text id="inputGroup-sizing-default" style={propLabels}>
+          Nazwa
+        </InputGroup.Text>
+        <FormControl
+          style={propInputs}
+          value={node.title}
+          aria-label="Default"
+          aria-describedby="inputGroup-sizing-default"
+          onChange={(e) => handleNamePropertyChange(e.target.value)}
+          onBlur={(e) => moduleNameInputBlurHandler(e.target.value)}
+        />
+      </InputGroup>
 
-        {propertyList !== undefined &&
-          propertyList.map((paramKey: ModuleParam, index: number) => {
-            return (
-              <InputGroup className="mb-3" key={index}>
-                <InputGroup.Text
-                  id="inputGroup-sizing-default"
-                  style={propLabels}
-                >
-                  {paramKey.paramDefId}
-                </InputGroup.Text>
-                <FormControl
-                  style={propInputs}
-                  value={paramKey.value}
-                  aria-label="Default"
-                  aria-describedby="inputGroup-sizing-default"
-                  onChange={(e) =>
-                    handlePropertyChange(e.target.value, paramKey)
-                  }
-                  onBlur={(e) =>
-                    propertyInputBlurHandler(e.target.value, paramKey)
-                  }
-                />
-              </InputGroup>
-            );
-          })}
-      </div>
+      {node.parameters.length !== 0 &&
+        node.parameters.map((paramKey: ModuleParam, index: number) => {
+          return (
+            <InputGroup className="mb-3" key={index}>
+              <InputGroup.Text
+                id="inputGroup-sizing-default"
+                style={propLabels}
+              >
+                {paramKey.paramDefId}
+              </InputGroup.Text>
+              <FormControl
+                style={propInputs}
+                value={paramKey.value}
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                onChange={(e) => handlePropertyChange(e.target.value, paramKey)}
+                onBlur={(e) =>
+                  propertyInputBlurHandler(e.target.value, paramKey)
+                }
+              />
+            </InputGroup>
+          );
+        })}
       <LookPropsEditor node={node} engine={engine} />
-    </div>
+    </TabSection>
   );
 }
 
@@ -146,13 +149,20 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    getModuleParams: (projectId: string, moduleId: string) => {
+    getModuleParams: (
+      projectId: string,
+      moduleId: string,
+      node: OwlNodeModel
+    ) => {
       dispatch(
         getModuleParamsRequest(
           { projectId: projectId, moduleId: moduleId },
           ModuleParamListConfig
         )
-      );
+      ).then((result: any) => {
+        node.parameters = result.body.map(ModuleParamFromJSON);
+        store.dispatch(selectedNode(node));
+      });
     },
     updateParamRequest: (requestParams: UpdateModuleParamRequest) => {
       dispatch(getUpdateModuleParamRequest(requestParams));
@@ -174,14 +184,18 @@ export const LookPropsEditor = (props: {
   node: OwlNodeModel;
   engine: DiagramEngine;
 }) => {
-  const colorInputChangeHandler = (color: string) => {
-    props.node.color = color;
-    store.dispatch(selectedNode(props.node));
+  const headerColorChangeHandler = (color: string) => {
+    props.node.headerColor = color;
+    store.dispatch(repaintCanvas());
+  };
+
+  const bodyColorChangeHandler = (color: string) => {
+    props.node.bodyColor = color;
+    store.dispatch(repaintCanvas());
   };
 
   return (
-    <div className={[classes.propertiesBars, classes.lookBars].join(" ")}>
-      <div className={classes.propsTitle}>Wygląd</div>
+    <TabSection title="Wygląd">
       <Form.Label htmlFor="colorPicker" style={propLabels}>
         Kolor nagłówka
       </Form.Label>
@@ -189,8 +203,8 @@ export const LookPropsEditor = (props: {
         style={colorPickerStyle}
         type="color"
         id="colorPicker"
-        value={props.node.color}
-        onChange={(e) => colorInputChangeHandler(e.target.value)}
+        value={props.node.headerColor}
+        onChange={(e) => headerColorChangeHandler(e.target.value)}
         title="Wybierz kolor"
       ></Form.Control>
       <Form.Label htmlFor="colorPicker" style={propLabels}>
@@ -200,10 +214,11 @@ export const LookPropsEditor = (props: {
         style={colorPickerStyle}
         type="color"
         id="colorPicker"
-        defaultValue="#563d7c"
+        value={props.node.bodyColor}
+        onChange={(e) => bodyColorChangeHandler(e.target.value)}
         title="Wybierz kolor"
       ></Form.Control>
-    </div>
+    </TabSection>
   );
 };
 

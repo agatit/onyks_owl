@@ -10,17 +10,26 @@ from openapi_server.models.project import Project as OPProject
 from module import Module
 from connexion.exceptions import ProblemException
 import ast
+import sys
+import importlib.util
+import logging
+
+owl_path = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl'))
+
+if not owl_path in sys.path:
+    sys.path.append(owl_path)
 
 DEFAULT_PATH_PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../projects")
 DEFAULT_PATH_MODULES = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../owl")
 
-EMPTY_CONFIG = {
-    'modules': {},
-    'pipeline': {}
-}
-# TODO description i coś jeszcze
+# EMPTY_CONFIG = { # TODO do hasioka
+#     'modules': {},
+#     'pipeline': {}
+# }
+
 class Engine():
     def __init__(self, projects_path = DEFAULT_PATH_PROJECTS, modules_path = DEFAULT_PATH_MODULES):
+        logging.root.setLevel(logging.NOTSET)
         self.projects_path = projects_path
         self.modules_path = modules_path
         # TODO czasem 'dir', czasem 'path', nieno, ujednolicić to!
@@ -44,32 +53,16 @@ class Engine():
                 retval2 = {}
                 mod_data = self.get_module_data(module_name)
                 # print("mod data:" + mod_data)
-                print(mod_data)
+                # print(mod_data)
                 retval2['description'] = mod_data.get('description', 'Default description')
                 retval2['id'] = mod_data.get('id', 'Default ID')
                 retval2['name'] = module_name
-                
-                # temp_mod = Module(module_name, None, os.path.join(self.modules_path, module_name + '.py'), None)
-                # retval[module_name]['description'] = temp_mod.get_config.get('description', 'Default description')
-                # retval[module_name]['id'] = temp_mod.get_config.get('id', 'Default ID')
-                # retval[module_name]['name'] = module_name
-                # TODO nno ten kod to mocno placeholderowy jest
                 retval.append(retval2)
         return retval
 
     def get_module_data(self, module_id):
-        # TODO kaman, mogę już ten subproces wywalić...
-        proc = subprocess.Popen(['python3'], stdin=subprocess.PIPE ,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        proc.stdin.write(bytes('import os\n', encoding='utf-8'))
-        proc.stdin.write(bytes('os.chdir("' + DEFAULT_PATH_MODULES + '")\n', encoding='utf-8'))
-        # proc.stdin.write(bytes('print(os.getcwd())\n', encoding='utf-8'))
-        proc.stdin.write(bytes('from ' + module_id + ' import Module\n', encoding='utf-8'))
-        # proc.stdin.write(bytes("x = Module(['" + module_id + "', '" + DEFAULT_PATH_PROJECTS + "/" + module_id + "/config.json', 'None'])\n", encoding='utf-8')) # TODO czy tutaj się nie rypnie bez "os.path.join()" ?
-        proc.stdin.write(bytes('print(Module.get_config())', encoding='utf-8'))
-        return_value = proc.communicate()[0].decode('utf-8')
-        proc.kill()
-        # print(return_value)
-        r2 = ast.literal_eval(return_value)
+        module_wrapper = importlib.import_module(module_id) # Coś do importu, wrapper na klasę
+        r2 = module_wrapper.Module.get_config()
         return r2
     
     def add_project_instance(self, project_id, instance_id):
@@ -171,11 +164,14 @@ class Engine():
         config = self.get_project_conf(project_id)
         param = config['modules'][module_id]['params'][parameter]
         return param
-    def set_module_parameter(self, project_id, module_id, parameter, value):
-        config = self.get_project_conf(project_id)
-        config['modules'][module_id]['params'][parameter] = value
-        return self.set_project_conf(project_id,config)
+    # def set_module_parameter(self, project_id, module_id, parameter, value):
+    #     config = self.get_project_conf(project_id)
+    #     config['modules'][module_id]['params'][parameter] = value
+    #     return self.set_project_conf(project_id,config)
 
+    def set_module_params(self, project_id, module_id, params):
+        return self.projects[project_id].set_module_params(module_id, params)
+    
     ### URUCHOMIENIE/DEBUG ###
     def get_module_state(self, project_id, module_id):
         config = self.get_project_conf(project_id)
@@ -209,7 +205,7 @@ if __name__ == '__main__':
     # print(List.get_names())
     # print(x.get_projects())
     # print(x.get_project_conf('perspective_transform'))
-    # print(x.get_modules())
+    print(x.get_modules())
     # print(x.get_project_modules('perspective_transform'))
     # print(x.delete_project_module('perspective_transform','module_sink_file'))
     # print(x.get_project_modules('perspective_transform'))
@@ -224,13 +220,13 @@ if __name__ == '__main__':
     # print(rd[0].decode('utf-8'), rd[1].decode('utf-8'))
     # print(x.get_modules())
     # /project({projectId})/instance
-    x.add_project_instance('perspective_transform', 'erste_iksden')
+    # x.add_project_instance('perspective_transform', 'erste_iksden')
     # x.add_project_instance('perspective_transform', 'zweite_iksden')
-    x.start_project_instance('perspective_transform', 'erste_iksden')
+    # x.start_project_instance('perspective_transform', 'erste_iksden')
     # x.start_project_instance('perspective_transform', 'zweite_iksden')
     
-    while True:
-        time.sleep(30)
+    # while True:
+        # time.sleep(30)
     # print(x.get_project_instances('perspective_transform'))
     # print(x.get_project_conf('perspective_transform'))
 

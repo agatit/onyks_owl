@@ -1,15 +1,7 @@
 import classses from "./Toolbar.module.css";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { OwlNodeModel } from "../OwlNodes/OwlNodeModel";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCube,
-  faFile,
-  faShare,
-  faShareAlt,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import { isQueueSelected } from "../../store/selectors/queueSelectors";
+import { faCube, faFile, faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import ModulePropEditor from "../UI/Menu-UI/Editors/ModulePropEditor";
 import QueuePropEdtior from "../UI/Menu-UI/Editors/QueuePropEdtior";
 import Tab from "../UI/Tabs/Tab";
@@ -17,12 +9,16 @@ import TabContainer from "../UI/Tabs/TabContainer";
 import { useState } from "react";
 import TabContent from "../UI/Tabs/TabContent";
 import ProjectEditor from "../UI/Menu-UI/Editors/ProjectEditor";
+import AddQueueForm from "../UI/Menu-UI/AddQueueForm";
+import ProjectMenageList from "../UI/Menu-UI/ProjectMenageList";
+import { DiagramEngine } from "@projectstorm/react-diagrams";
 
 // REFERENCJE CHYBA DO WYWALENIA!!!!!!!!!!!!!
 
 interface toolBarProps {
   node: OwlNodeModel;
   projectId: string;
+  engine: DiagramEngine;
 }
 
 function ToolBar(props: toolBarProps) {
@@ -32,7 +28,7 @@ function ToolBar(props: toolBarProps) {
     setActiveTab(tabValue);
   };
 
-  const queueSelected: boolean = useSelector(isQueueSelected);
+  // const queueSelected: boolean = useSelector(isQueueSelected);
 
   return (
     <div className={classses.toolBar}>
@@ -46,34 +42,25 @@ function ToolBar(props: toolBarProps) {
           <ModulePropEditor projectId={props.projectId} />
         </TabContent>
         <TabContent currentTab={activeTab} selectedTabValue="2">
+          <AddQueueForm />
           <QueuePropEdtior projectId={props.projectId} />
         </TabContent>
         <TabContent currentTab={activeTab} selectedTabValue="3">
+          <ProjectMenageList
+            schemaElements={props.engine.getModel().getNodes()}
+          />
           <ProjectEditor projectId={props.projectId} />
         </TabContent>
       </div>
     </div>
   );
-
-  /*
-  {
-    if (queueSelected) {
-      return <QueuePropEdtior projectId={props.projectId} />;
-    }
-  }
-
-  return (
-    <div className={classses.toolBar}>
-      
-    </div>
-  );
-  */
 }
 
 const mapStateToProps = (state: any) => {
   return {
     node: state.nodesData.selectedNode,
     test: state.nodesData.test,
+    engine: state.engineReducer.engine,
   };
 };
 
@@ -104,18 +91,3 @@ const MenuTabs: JSX.Element[] = [
     icon={faFile}
   />,
 ];
-
-//const nameInputRef = useRef<HTMLInputElement>(null);
-//const refArray = useRef<any>([]);
-
-//refArray.current = [];
-
-/*
-  const addToRefs = (el: HTMLInputElement) => {
-    if (el && !refArray.current.includes(el)) {
-      refArray.current.push(el);
-    }
-  };
-
-  
-*/
