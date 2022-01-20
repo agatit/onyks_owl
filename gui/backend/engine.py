@@ -64,8 +64,8 @@ class Engine():
         proc.stdin.write(bytes('os.chdir("' + DEFAULT_PATH_MODULES + '")\n', encoding='utf-8'))
         # proc.stdin.write(bytes('print(os.getcwd())\n', encoding='utf-8'))
         proc.stdin.write(bytes('from ' + module_id + ' import Module\n', encoding='utf-8'))
-        proc.stdin.write(bytes("x = Module(['" + module_id + "', '" + DEFAULT_PATH_PROJECTS + "/" + module_id + "/config.json', 'None'])\n", encoding='utf-8')) # TODO czy tutaj się nie rypnie bez "os.path.join()" ?
-        proc.stdin.write(bytes('print(x.get_config())', encoding='utf-8'))
+        # proc.stdin.write(bytes("x = Module(['" + module_id + "', '" + DEFAULT_PATH_PROJECTS + "/" + module_id + "/config.json', 'None'])\n", encoding='utf-8')) # TODO czy tutaj się nie rypnie bez "os.path.join()" ?
+        proc.stdin.write(bytes('print(Module.get_config())', encoding='utf-8'))
         return_value = proc.communicate()[0].decode('utf-8')
         proc.kill()
         # print(return_value)
@@ -229,8 +229,8 @@ if __name__ == '__main__':
     x.start_project_instance('perspective_transform', 'erste_iksden')
     # x.start_project_instance('perspective_transform', 'zweite_iksden')
     
-    # while True:
-    time.sleep(30)
+    while True:
+        time.sleep(30)
     # print(x.get_project_instances('perspective_transform'))
     # print(x.get_project_conf('perspective_transform'))
 

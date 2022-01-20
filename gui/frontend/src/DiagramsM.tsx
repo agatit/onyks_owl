@@ -1,12 +1,5 @@
-import {
-  DefaultLabelFactory,
-  DiagramEngine,
-  DiagramModel,
-} from "@projectstorm/react-diagrams";
-import {
-  CanvasWidget,
-  DeleteItemsAction,
-} from "@projectstorm/react-canvas-core";
+import { DiagramEngine, DiagramModel } from "@projectstorm/react-diagrams";
+import { CanvasWidget } from "@projectstorm/react-canvas-core";
 import { DemoCanvasWidget } from "./Components/Layout/CanvasWidget";
 import { useEffect, useRef, useState } from "react";
 import Modal from "./Components/Layout/Utils/Modal";
@@ -18,11 +11,8 @@ import {
 } from "./store/Queries/project_editor_queries";
 import { Module } from "./store/redux-query";
 import { OwlNodeModel } from "./Components/OwlNodes/OwlNodeModel";
-import { OwlNodeFactory } from "./Components/OwlNodes/OwlNodeFactory";
-import { OwlQueueLinkFactory } from "./Components/OwlQueueLinks/OwlQueueLinkFactory";
 import { useLocation } from "react-router";
-import html2canvas from "html2canvas";
-import { EditableLabelFactory } from "./Components/CustomLinks/Labels/LabelFactory";
+import { loadSchema } from "./DiagramTools";
 
 interface DiagramProps {
   engine: DiagramEngine;
@@ -55,33 +45,19 @@ const Diagrams = (props: DiagramProps) => {
 
   useEffect(() => {
     console.log(canvaRef.current);
-    html2canvas(canvaRef.current!).then((canvas) =>
-      document.body.appendChild(canvas)
-    );
+    // html2canvas(canvaRef.current!).then((canvas) =>
+    //   document.body.appendChild(canvas)
+    // );
   }, [location]);
 
-  /*
-  async function loadSchema() {
-    const url = "../testSchema3.json";
-    const resp = await fetch(url);
-    const data = await resp.json();
+  // const link1 = new OwlQueueLinkModel();
+  // link1.setSourcePort(nodesArr[0].getPort("Wejście"));
+  // link1.setTargetPort(nodesArr[1].getPort("Wyjście"));
+  // engine.getModel().addLink(link1);
+  // console.log(engine.getModel().getLinks());
 
-    var newModel = new DiagramModel();
-    var modelString = JSON.stringify(data);
-    newModel.deserializeModel(JSON.parse(modelString), engine);
-    engine.setModel(newModel);
-    setSchemaLoading(false);
-  }
-*/
   const engine = props.engine;
   const [isSchemaLoading, setSchemaLoading] = useState(true);
-  engine.getNodeFactories().registerFactory(new OwlNodeFactory());
-  engine.getLabelFactories().registerFactory(new EditableLabelFactory());
-  engine.getLinkFactories().registerFactory(new OwlQueueLinkFactory());
-
-  engine
-    .getActionEventBus()
-    .registerAction(new DeleteItemsAction({ keyCodes: [46] }));
 
   useEffect(() => {
     setTimeout(() => {
@@ -89,8 +65,14 @@ const Diagrams = (props: DiagramProps) => {
     }, 4000);
   }, []);
 
+  function serializeHandler() {
+    //console.log(engine.getModel().serialize());
+    loadSchema(engine);
+  }
+
   if (isSchemaLoading) {
-    engine.setModel(new DiagramModel());
+    const testModel = new DiagramModel();
+    engine.setModel(testModel);
     return (
       <div className="App">
         <DemoCanvasWidget>
@@ -114,6 +96,7 @@ const Diagrams = (props: DiagramProps) => {
       id="userCanva"
       ref={canvaRef}
     >
+      <button onClick={serializeHandler}>Załaduj schemat</button>
       <DemoCanvasWidget>
         <CanvasWidget className="diagram-container" engine={engine} />
       </DemoCanvasWidget>

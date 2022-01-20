@@ -1,0 +1,17 @@
+{
+    "params": {
+        "stream_queue_limit": {"type": "int", "value": 100}, 
+        "task_expire_time": {"type": "int", "value": 10}, 
+        "stream_expire_time": {"type": "int", "value": 10}, 
+        "task_timeout": {"type": "int", "value": 10}, 
+        "stream_timeout": {"type": "int", "value": 10}, 
+        "input_queue": {"type": "string", "value": ""}, 
+        "output_queue": {"type": "string", "value": ""}, 
+        "device": {"type": "string|int", "value": 0}
+    },
+    "input_classes": {},
+    "output_classes": {
+        "color": <class "stream_video.Producer">,
+        "metrics": <class "stream_data.Producer">
+        }
+}

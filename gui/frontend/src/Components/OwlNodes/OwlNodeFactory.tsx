@@ -3,6 +3,10 @@ import { OwlNodeModel } from "./OwlNodeModel";
 import { OwlNodeWidget } from "./OwlNodeWidget";
 import { AbstractReactFactory } from "@projectstorm/react-canvas-core";
 import { DiagramEngine } from "@projectstorm/react-diagrams-core";
+import {
+  DefaultNodeModel,
+  DefaultNodeWidget,
+} from "@projectstorm/react-diagrams";
 
 export class OwlNodeFactory extends AbstractReactFactory<
   OwlNodeModel,
@@ -18,6 +22,7 @@ export class OwlNodeFactory extends AbstractReactFactory<
 
   generateReactWidget(event: { model: OwlNodeModel }): JSX.Element {
     return (
+      // <DefaultNodeWidget node={event.model} engine={this.engine} />
       <OwlNodeWidget engine={this.engine as DiagramEngine} node={event.model} />
     );
   }

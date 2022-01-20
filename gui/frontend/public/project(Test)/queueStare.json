@@ -1,0 +1,58 @@
+[
+  {
+    "id": "71e1006b-a3d0-4ec2-89a5-e70486c103d6",
+    "type": "OwlQueue",
+    "selected": false,
+    "source": "testId",
+    "sourcePort": "5e8c35ba-551b-40dc-9a8c-0ff451349405",
+    "target": "2testId",
+    "targetPort": "14110dac-8b8c-4bac-98e6-5c0fc842b792",
+    "points": [
+      {
+        "id": "9061bcb7-ae02-4215-8b38-8ad4f179d9d9",
+        "type": "point",
+        "x": 408,
+        "y": 260.296875
+      },
+      {
+        "id": "c59a7424-b77b-43b1-92d9-1fe6f6433ccc",
+        "type": "point",
+        "x": 670,
+        "y": 415.296875
+      }
+    ],
+    "labels": [],
+    "width": 3,
+    "color": "white",
+    "curvyness": 50,
+    "selectedColor": "rgb(0,192,255)"
+  },
+  {
+    "id": "2b419356-95cf-441c-9f02-f9b0311e5be9",
+    "type": "OwlQueue",
+    "selected": false,
+    "source": "2testId",
+    "sourcePort": "cce2b591-2dbf-4362-a9b3-ef0b27670328",
+    "target": "3testId",
+    "targetPort": "bf4bec6e-4385-4496-80ae-738832f0fde5",
+    "points": [
+      {
+        "id": "6912eba5-9b87-4872-9f9a-99a3f36c4311",
+        "type": "point",
+        "x": 866,
+        "y": 415.296875
+      },
+      {
+        "id": "e9b2b494-6782-4940-87ef-b5f8eefb7418",
+        "type": "point",
+        "x": 1114,
+        "y": 562.296875
+      }
+    ],
+    "labels": [],
+    "width": 3,
+    "color": "white",
+    "curvyness": 50,
+    "selectedColor": "rgb(0,192,255)"
+  }
+]

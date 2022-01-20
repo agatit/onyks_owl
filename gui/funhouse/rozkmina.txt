@@ -37,3 +37,17 @@ API:
     - przestudiować dokładniej "logging" żeby miał wywalone jajca, a "engine" przekierowywał dane na pliki
         - to, albo "importlib" niech przechwytuje "stdout"
             - kurewa te objekty loguf
+
+    - zrobić "from_dict"
+    
+    + "from_cmd" wygląda jaby było dostosowane pod 'podproces'
+        + robi 'loggera'
+        + ładuje config
+        + hmm... "build_config" jest w '__init__'
+        + czej, jest jakieś "get_config"!
+        + o, toto to jest ciekawe, może zadziałać
+    - podpiąć branie configu pod "get_config"
+        - jeszcze nie wiem jak to wywołać z "engine'a", ale fajny "get_config" jest, cnie?
+
+    - zmienić nazwę loggera na bardziej powiązaną z instancją
+    
