@@ -20,48 +20,34 @@ class Module(module_base.Module):
         config['params']['device'] = {'type': 'string|int', 'value': 0}
         config['input_classes'] = {}
         config['output_classes'] = {
-            "color" : "stream_video.Producer",
-            "metrics" : "stream_data.Producer"
+            "color" : stream_video.Producer,
+            "metrics" : stream_data.Producer
         }
-
         return config
 
-    def streams_init(self): 
-        self.input_classes = {}
-        self.output_classes = {
-            "color" : stream_video.Producer,
-            "metrics" : stream_data.Producer
-        }
-    def setup(self): 
-        self.input_classes = {}
-        self.output_classes = {
-            "color" : stream_video.Producer,
-            "metrics" : stream_data.Producer
-        }
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'
         # self.output_classes['color'] = 
         # self.output_classes['metrics'] = 
-        
+        os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0"
+
         output_task_data = {}
         filename = self.params['device']
-        if filename != 0:
-            filename = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../samples/camera_wisenet/train1.avi")
-        cap = cv2.VideoCapture(filename) # TODO odgórna weryfikacja czy plik istnieje
-        # output_task_data['source_name'] = self.params.get('source_name',self.params.get('device', "unknown"))
-        # output_task_data['source_name'] = self.source_name if self.source_name != None else self.device if self.device != 0 else "unknown" 
-        output_task_data['source_name'] = self.params['device'] if self.params['device'] != 0 else "unknown" 
-        with self.task_emit(output_task_data) as output_stream:
-            ret,frame = cap.read()
-            while(not frame is None): 
-                data = {
-                    'color' : frame,
-                    'metrics' : {"name": "asddas"}
-                }
-                output_stream.emit(data)
-                ret,frame = cap.read() 
-        cap.release()
-        self.log_object.info("end of input stream")
+        cap = cv2.VideoCapture(filename)
+        try:
+            output_task_data['source_name'] = self.params['device'] if self.params['device'] != 0 else "unknown" 
+            with self.task_emit(output_task_data) as output_stream:
+                ret,frame = cap.read()
+                while(not frame is None): 
+                    data = {
+                        'color' : frame,
+                        'metrics' : {"name": "asddas"}
+                    }
+                    output_stream.emit(data)
+                    ret,frame = cap.read() 
+            self.log_object.info("end of input stream")
+        finally:
+            cap.release()            
 
 
 if __name__ == "__main__":

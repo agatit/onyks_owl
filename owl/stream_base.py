@@ -5,6 +5,7 @@
 """Moduł obsługujący strumieni danych"""
 import json
 import time
+from cv2 import log
 import redis
 import logging
 
@@ -18,7 +19,7 @@ class Producer:
             queue_limit:int,
             expire_time:int,            
             timeout:int,
-            log_object):
+            log_object: logging.Logger):
         self.id = id
         self.redis = redis
         self.stream_queue = stream_queue
@@ -72,7 +73,7 @@ class Consumer:
             stream_queue: str,
             expire_time:int,
             timeout:int,
-            log_object):
+            log_object: logging.Logger):
         self.redis = redis
         self.stream_queue = stream_queue
         self.timeout = timeout     

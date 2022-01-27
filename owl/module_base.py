@@ -13,23 +13,24 @@ import redis
 import task
 import traceback
 import stream_composed
+import connector_base
 
 DEFAULT_PATH_LOGS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"logs")
 
 class Module:  
-    module_name = "module_base"
-    log_object = logging.Logger
+    module_name = "module_base"    
     terminate = False
     instance_id = None
     
-    def __init__(self, config, connector):
+    def __init__(self, config: dict, connector: connector_base.Connector, log_object = logging.Logger):
 
-        self.build_config()
-        self.config = config
-        for k, v in config.items():
-            setattr(self, k, v)
+        self.log_object = log_object
 
-        self.connector = connector        
+        self.build_config(config)
+
+        self.connector = connector   
+
+        #TODO: budowanie interfejsów kolejek     
 
         if self.task_expire_time > self.task_timeout:
             if self.instance_id:
@@ -47,25 +48,24 @@ class Module:
             exit()                
 
         #self.redis = redis.Redis("172.22.137.23", 6378)
-        self.redis = redis.Redis("127.0.0.1", 6379)
-
-        self.setup()
+        self.redis = redis.Redis("127.0.0.1", 6379)        
                             
-        consumers = {name : input_class for name, input_class in self.input_classes.items()}        
+        self.task_setup()
+      
         self.task_consumer = task.Consumer(
-            self.redis,
-            self.config.get('input_queue', ""),
-            consumers,
+            self.redis,            
+            self.input_queues[0] if len(self.input_queues) > 0 else "",
+            {name : input_class for name, input_class in self.input_classes.items()},
             self.task_expire_time,
             self.task_timeout,
             self.stream_expire_time,
             self.stream_timeout,
             log_object = self.log_object)
-        producers = {name : output_class for name, output_class in self.output_classes.items()} 
+
         self.task_producer = task.Producer(
             self.redis,
-            self.config.get('output_queue',""),
-            producers,
+            self.output_queues[0] if len(self.output_queues) > 0 else "",
+            {name : output_class for name, output_class in self.output_classes.items()},
             self.stream_queue_limit, 
             self.task_expire_time,
             self.task_timeout, 
@@ -74,7 +74,8 @@ class Module:
             log_object = self.log_object)  
 
     @classmethod
-    def from_cmd(cls, argv):
+    def from_cmd(cls, argv: list[str]):    
+
         'Czytanie konfiguracji i inicjalizacja'
         self = None
 
@@ -82,40 +83,43 @@ class Module:
         if module_name == '__main__':
             filename = sys.modules[cls.__module__].__file__
             module_name = os.path.splitext(os.path.basename(filename))[0]
+
+        log_object = logging.getLogger()
+        log_object.setLevel(logging.DEBUG)
+
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter(f'%(asctime)s - {module_name} - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        log_object.addHandler(handler)              
         
         try:
-            instance_id = argv[2] # np. perspective_transform_01
-            if instance_id is not None:
-                log_object = logging.getLogger(name='owl_' + instance_id + "_" + module_name)
-                print('owl_' + instance_id + "_" + module_name)
-                log_object.warning(f"{module_name} started.")
-                print(f"{module_name} started.")
+            if len(argv) > 2:
+                instance_id = argv[2] # np. perspective_transform_01
             else:
-                instance_id = None
-                log_object = None
+                instance_id = module_name
         except:
-            instance_id = None
-            log_object = None
+            instance_id = module_name
 
         try:
             if len(argv) > 1:
                 with open(argv[1], "rb") as f:
                     config_file = json.load(f)                
-                    #config = config_file['modules'][module_name]
-                    config = config_file['modules'][module_name]
+                    config = config_file['modules'][instance_id]
                     if config is None:
-                        if instance_id is not None:
-                            log_object.info(f"config file: {argv[1]} do not contain section for {module_name}")    
+                        log_object.info(f"config file: {argv[1]} do not contain section for {instance_id}")
                         exit()
 
-                    if instance_id is not None:
-                        log_object.info(f"config file: {argv[1]} section {module_name}")
+                    log_object.info(f"config file: section {instance_id} read from {argv[1]}")
 
-                    cls.log_object = log_object
-                    self = cls(config, None) # TODO: obsłuzyć connector                                       
-                    self.module_name = module_name
-                    # self.log_object = log_object
-                    self.terminate = False
+                    try:
+                        self = cls(config, None, log_object) # TODO: obsłuzyć connector
+                        self.module_name = module_name
+                        self.terminate = False                        
+                    except Exception as e:
+                        log_object.info(str(e))
+
+                    return self
             else:
                 print("Usage: module config_file.json [instance_name]")
                 exit()  
@@ -132,10 +136,8 @@ class Module:
     def from_dict(cls, instance_name, config):
         pass
 
-    def setup(self):
-        self.input_classes = {}
-        self.output_classes = {}
-
+    def task_setup(self):
+        pass
 
     def task_process(self, input_task_data: dict, input_stream: stream_composed.Consumer):
         pass
@@ -162,6 +164,9 @@ class Module:
                         self.task_process(task_data, input_stream)                                
                     else:
                         self.log_object.debug("Nothing in task queue")
+        except TimeoutError as e:
+            if self.log_object:
+                self.log_object.error(f"{self.module_name} runOnce error: {str(e)}")
         except Exception as e:
             if self.log_object:
                 self.log_object.error(f"{self.module_name} runOnce error: {str(e)}\n{u''.join(traceback.format_tb(e.__traceback__))}")
@@ -172,23 +177,39 @@ class Module:
             self.runOnce()
             time.sleep(1)
 
-    def build_config(self):
-        # self.stream_queue_limit = self.config.get('stream_queue_limit', self.default_config['stream_queue_limit'][1])
-        # self.task_expire_time = self.config.get('task_expire_time', self.default_config['task_expire_time'][1])
-        # self.stream_expire_time = self.config.get('stream_expire_time', self.task_expire_time)
-        # self.task_timeout = self.config.get('task_timeout', self.stream_expire_time)            
-        # self.stream_timeout = self.config.get('stream_timeout', self.stream_expire_time)            
-        # self.params = self.config.get("params", self.default_config['params'][1])        
-        
-        config = self.get_config()
-        for k, v in config['params'].items():
-            setattr(self, k, v['value'])
+    def build_config(self, config: dict):   
+        ''' Fills configuration variables based on configuration and defualt values'''                           
 
-        self.input_classes = config['input_classes']
-        self.output_classes = config['output_classes']            
+        self.input_queues = config.get("input_queues", [])
+        self.output_queues = config.get("output_queues", [])
+
+        default_config = self.get_config()
+
+        self.params = {}
+        for k, v in default_config['params'].items():
+            self.params[k] = v['value']
+        for k, v in config['params'].items():
+            self.params[k] = v
+
+        self.input_classes = {}
+        for k, v in default_config['input_classes'].items():
+            self.input_classes[k] = v
+
+        self.output_classes = {}
+        for k, v in default_config['output_classes'].items():
+            self.output_classes[k] = v
+
+        # TODO: do przeniesienia do Queue
+        self.stream_queue_limit = self.params['stream_queue_limit']
+        self.task_expire_time = self.params['task_expire_time']
+        self.stream_expire_time = self.params['stream_expire_time']
+        self.task_timeout = self.params['task_timeout']
+        self.stream_timeout = self.params['stream_timeout'] 
 
     @classmethod
     def get_config(cls):
+        ''' Returns module configuration definition.'''
+
         config = {}
         config['params'] = {
             'stream_queue_limit': {'type': 'int', 'value': 100},
@@ -199,7 +220,7 @@ class Module:
             'input_queue': {'type': 'string', 'value': ""},
             'output_queue': {'type': 'string', 'value': ""},
         }    
-        config['input_classes'] = {}
+        config['input_classes'] = {} # Zawiera słownik klas - przy odczycie trzeba użyć __class__.__name__
         config['output_classes'] = {}        
 
         return config

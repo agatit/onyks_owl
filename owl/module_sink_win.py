@@ -17,17 +17,17 @@ import module_base
 
 
 class Module(module_base.Module):
-    def __init__(self, argv):
-        super(Module, self).__init__(argv)
-        self.default_config['params'][1]['window_name'] = ['string', 'noname']
 
-    def setup(self): 
-        self.input_classes = {
+    @classmethod
+    def get_config(cls):
+        config = super(Module, cls).get_config()   
+        config['params']['window_name'] = {'type': 'string', 'value': 'video'}
+        config['input_classes'] = {
             "color" : stream_video.Consumer,
             "metrics" : stream_data.Consumer
-        }   
-        self.output_classes = {}
-
+        }
+        config['output_classes'] = {}
+        return config
 
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'

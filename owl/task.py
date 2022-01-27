@@ -15,8 +15,6 @@ from typing import Tuple
 class Producer():
     """Producent zdarzeń. Tworzy zdarzenia i umieszcza je w kolejach (kilku), zarządza powiązanymi strumieniami"""
 
-    log_object = logging.Logger
-
     def __init__(
             self,
             redis: redis.Redis,
@@ -27,7 +25,7 @@ class Producer():
             task_timeout: int,
             stream_expire_time: int,                        
             stream_timeout: int,
-            log_object):
+            log_object = logging.Logger):
 
         self.redis = redis
         self.task_queue = task_queue
@@ -89,8 +87,6 @@ class Producer():
 class Consumer():
     """Konsument zdarzeń. Odczytuje zdarzenia z kojejki (jednej) i podłącza powiązane strumienie"""
 
-    log_object = logging.Logger
-
     def __init__(
             self,
             redis: redis.Redis,
@@ -100,7 +96,7 @@ class Consumer():
             task_timeout: int,
             stream_expire_time:int,
             stream_timeout: int,
-            log_object):
+            log_object: logging.Logger = logging.Logger):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes

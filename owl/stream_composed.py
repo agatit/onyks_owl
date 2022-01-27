@@ -4,6 +4,7 @@
 # Created on: python 3.8.7
 """Moduł obsługujący połączone strumienie redis"""
 import redis
+import logging
 
 
 class Producer():
@@ -11,12 +12,12 @@ class Producer():
     def __init__(
             self,
             redis: redis.Redis,
-            streams_queues:[],
-            streams_classes:[],
-            queue_limit:int,
-            expire_time:int,            
-            timeout:int,
-            log_object):
+            streams_queues: [],
+            streams_classes: [],
+            queue_limit: int,
+            expire_time: int,            
+            timeout: int,
+            log_object: logging.Logger):
         self.streams = {}
         self.streams_queues = streams_queues
         self.streams_classes = streams_classes
@@ -47,11 +48,11 @@ class Consumer():
     def __init__(
             self,
             redis: redis.Redis,
-            streams_queues:[],
-            streams_classes:[],
-            expire_time:int,
-            timeout:int,
-            log_object):       
+            streams_queues: [],
+            streams_classes: [],
+            expire_time: int,
+            timeout: int,
+            log_object: logging.Logger):       
         self.streams_queues = streams_queues
         self.streams_classes = streams_classes
         self.streams = {}

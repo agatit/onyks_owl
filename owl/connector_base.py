@@ -1,6 +1,9 @@
 
 
 class Connector:
+
+    def __init__(self, config: dict):
+        pass
     
     def task_get(self, queue):
         pass
