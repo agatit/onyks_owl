@@ -1,6 +1,8 @@
 import { useEffect } from "react";
-import { ListGroup } from "react-bootstrap";
+import { ListGroup, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
+import { useRequest } from "redux-query-react";
 import { getModuleDefinitionsListRequest } from "../../../store/Queries/project_editor_queries";
 import { ModuleListDefsRequestConfig } from "../../../store/QueryConfigs/module_query_configs";
 import { ModuleDef } from "../../../store/redux-query";
@@ -15,17 +17,13 @@ import classes from "./ModuleList.module.css";
 interface ModuleListProps {
   projectId: string;
   modules: ModuleDef[];
-  getModuleDefList: () => void;
   clearModuleList: () => void;
 }
 
 function ModuleList(props: ModuleListProps) {
-  useEffect(() => {
-    props.clearModuleList();
-    setTimeout(() => {
-      props.getModuleDefList();
-    }, 3000);
-  }, []);
+  const [{ isPending, status }, refresh] = useRequest(
+    ModuleListDefsRequestConfig
+  );
 
   const wrapListElement = (module: ModuleDef, index: number) => {
     return (
@@ -35,8 +33,20 @@ function ModuleList(props: ModuleListProps) {
     );
   };
 
-  if (!props.modules) {
-    return <div>Ładowanie modułów</div>;
+  if (isPending) {
+    return (
+      <>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        <h4>Trwa ładowanie modułów!</h4>
+      </>
+    );
+  }
+
+  if (typeof status === "number" && (status >= 400 || status < 200)) {
+    toast.error("Brak połączenia z serwerem!");
+    return <h6>Brak połączenia, spróbuj odświeżyć stronę!</h6>;
   }
 
   return (
@@ -55,9 +65,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any, state: any) => {
   return {
-    getModuleDefList: () => {
-      dispatch(getModuleDefinitionsListRequest(ModuleListDefsRequestConfig));
-    },
     clearModuleList: () => {
       clearModuleList(state);
     },

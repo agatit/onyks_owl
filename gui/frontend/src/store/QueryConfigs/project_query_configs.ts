@@ -4,7 +4,6 @@ import { Configuration, Project, TypedQueryConfig } from "../redux-query";
 export const ProjectListRequestConfig: QueryConfig = {
   url: `${Configuration.basePath}/project`,
   transform: (response: Project) => {
-    console.log("W zapytaniu:" + response);
     return {
       projects: response,
     };

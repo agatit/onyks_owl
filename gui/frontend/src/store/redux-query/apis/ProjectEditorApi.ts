@@ -1223,7 +1223,7 @@ function listModuleDefRaw<T>(
   const { meta = {} } = requestConfig;
 
   const config: QueryConfig<T> = {
-    url: `${runtime.Configuration.basePath}/module_def.json`,
+    url: `${runtime.Configuration.basePath}/module_def`,
     meta,
     update: requestConfig.update,
     queryKey: requestConfig.queryKey,

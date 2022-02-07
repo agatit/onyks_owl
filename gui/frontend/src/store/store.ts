@@ -4,6 +4,7 @@ import superagentInterface from "redux-query-interface-superagent";
 import { nodesData } from "./Reducers/nodeReducer";
 import { engineReducer } from "./Reducers/engineReducer";
 import { queueReducer } from "./Reducers/queueReducer";
+import { nodesList } from "./Reducers/nodesListReducer";
 
 export const getQueries = (state: any) => state.queries;
 export const getEntities = (state: any) => state.entities;
@@ -12,6 +13,7 @@ const reducer = combineReducers({
   nodesData,
   engineReducer,
   queueReducer,
+  nodesList,
   entities: entitiesReducer,
   queries: queriesReducer,
 });

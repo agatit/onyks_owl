@@ -1,5 +1,7 @@
 import { NodeModel } from "@projectstorm/react-diagrams";
+import { useState } from "react";
 import { ListGroup } from "react-bootstrap";
+import { connect } from "react-redux";
 import { OwlNodeModel } from "../../OwlNodes/OwlNodeModel";
 import { OwlQueueModel } from "../../OwlQueue/OwlQueueModel";
 import TabSection from "../Tabs/TabSection";
@@ -12,6 +14,8 @@ function ProjectMenageList(props: ProjectMenageListProps) {
   function elementClickHandler(element: NodeModel) {
     element.setSelected(true);
   }
+
+  const [elementsList, setElementsList] = useState(props.schemaElements);
 
   function wrapListElement(listElement: OwlNodeModel | OwlQueueModel) {
     return (
@@ -37,7 +41,13 @@ function ProjectMenageList(props: ProjectMenageListProps) {
   );
 }
 
-export default ProjectMenageList;
+const mapStateToProps = (state: any) => {
+  return {
+    schemaElements: state.nodesList.schemaElements,
+  };
+};
+
+export default connect(mapStateToProps)(ProjectMenageList);
 
 const propInputs = {
   backgroundColor: "rgb(143, 143, 143)",

@@ -4,7 +4,7 @@ import { DemoCanvasWidget } from "./Components/Layout/CanvasWidget";
 import { useEffect, useRef, useState } from "react";
 import Modal from "./Components/Layout/Utils/Modal";
 import Backdrop from "./Components/Layout/Utils/Backdrop";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import {
   getCreateModuleRequest,
   getDeleteModuleFromProjectRequest,
@@ -12,7 +12,8 @@ import {
 import { Module } from "./store/redux-query";
 import { OwlNodeModel } from "./Components/OwlNodes/OwlNodeModel";
 import { useLocation } from "react-router";
-import { loadSchema } from "./DiagramTools";
+import { OwlQueueModel } from "./Components/OwlQueue/OwlQueueModel";
+import { addNode } from "./store/Actions/nodeListActions";
 
 interface DiagramProps {
   engine: DiagramEngine;
@@ -22,21 +23,28 @@ interface DiagramProps {
 }
 
 const Diagrams = (props: DiagramProps) => {
+  const dispatch = useDispatch();
+
   function onNodeDrop(event: React.DragEvent<HTMLDivElement>) {
-    var moduleData = JSON.parse(event.dataTransfer.getData("diagram-node"));
-    // const moduleProps = Object.keys(moduleData);
-    const droppedNode = new OwlNodeModel({
-      ...moduleData,
-      color: "#ffB730",
-      title: moduleData.name,
-      content: "Opis",
-    });
-    droppedNode.params = moduleData["params"];
-    droppedNode.module_id = moduleData["id"];
-    console.log(droppedNode.id);
+    var droppedNode;
+    if (event.dataTransfer.types[0] === "diagram-node") {
+      var moduleData = JSON.parse(event.dataTransfer.getData("diagram-node"));
+      droppedNode = new OwlNodeModel({
+        ...moduleData,
+        color: "#ffB730",
+        title: moduleData.name,
+        content: "Opis",
+      });
+      droppedNode.params = moduleData["params"];
+      droppedNode.module_id = moduleData["id"];
+      props.addModuleRequest(props.projectId, droppedNode);
+    } else {
+      droppedNode = new OwlQueueModel({});
+    }
     droppedNode.setPosition(engine.getRelativeMousePoint(event));
+    dispatch(addNode(droppedNode));
     engine.getModel().addNode(droppedNode);
-    props.addModuleRequest(props.projectId, droppedNode);
+
     engine.repaintCanvas();
   }
 
@@ -45,7 +53,7 @@ const Diagrams = (props: DiagramProps) => {
 
   useEffect(() => {
     //console.log(canvaRef.current);
-    loadSchema(engine);
+    //loadSchema(engine);
     // html2canvas(canvaRef.current!).then((canvas) =>
     //   document.body.appendChild(canvas)
     // );

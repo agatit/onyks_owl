@@ -2,6 +2,7 @@ import ModuleList from "../UI/Menu-UI/ModuleList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./SideBar.module.css";
 import { faCubes } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer } from "react-toastify";
 
 function SideBar(props: any) {
   return (
@@ -10,6 +11,7 @@ function SideBar(props: any) {
         <FontAwesomeIcon icon={faCubes} size="3x" />
       </div>
       <ModuleList projectId={props.projectId} />
+      <ToastContainer />
     </div>
   );
 }

@@ -46,9 +46,7 @@ function ToolBar(props: toolBarProps) {
           <QueuePropEdtior projectId={props.projectId} />
         </TabContent>
         <TabContent currentTab={activeTab} selectedTabValue="3">
-          <ProjectMenageList
-            schemaElements={props.engine.getModel().getNodes()}
-          />
+          <ProjectMenageList />
           <ProjectEditor projectId={props.projectId} />
         </TabContent>
       </div>

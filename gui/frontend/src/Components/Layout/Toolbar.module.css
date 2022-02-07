@@ -3,7 +3,6 @@
   white-space: pre-line;
   overflow-y: scroll;
   overflow: auto;
-  z-index: 99;
   border-left: 3px solid rgb(70, 70, 70);
   flex: 1 1 25%;
   height: 100%;

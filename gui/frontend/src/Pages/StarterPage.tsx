@@ -5,6 +5,7 @@ import { useState } from "react";
 import Backdrop from "../Components/Layout/Utils/Backdrop";
 import ProjectList from "../Components/UI/Menu-UI/ProjectList";
 import CreateProjectForm from "../Components/UI/CreateProjectForm";
+import { ToastContainer } from "react-toastify";
 
 function StarterPage() {
   const [modalIsOpen, setModalOpen] = useState(false);
@@ -36,6 +37,7 @@ function StarterPage() {
       </div>
       {modalIsOpen && <CreateProjectForm closeModalFunc={closeModalHandler} />}
       {modalIsOpen && <Backdrop action={closeModalHandler} />}
+      <ToastContainer />
     </div>
   );
 }

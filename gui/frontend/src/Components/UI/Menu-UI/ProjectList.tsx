@@ -1,6 +1,6 @@
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ListGroup } from "react-bootstrap";
+import { ListGroup, Spinner } from "react-bootstrap";
 import { Project } from "../../../store/redux-query/models/Project";
 import { useHistory } from "react-router-dom";
 import {
@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import { ProjectListRequestConfig } from "../../../store/QueryConfigs";
 import Backdrop from "../../Layout/Utils/Backdrop";
 import { useRequest } from "redux-query-react";
+import { toast, ToastContainer } from "react-toastify";
 
 interface ProjectListProps {
   projects: Array<Project>;
@@ -25,22 +26,24 @@ interface ProjectListProps {
 function ProjectList(props: ProjectListProps) {
   const history = useHistory();
 
-  //const [isPending, setIsPending] = useState(true);
-
   const [{ isPending, status }, refresh] = useRequest(ProjectListRequestConfig);
 
-  /*
-  useEffect(() => {
-    props.getProjectList().then((result: any) => {
-      if (result.status !== 200) {
-        console.log("Nie udało się wczytać projektów");
-      } else {
-        console.log("Pomyślne wczytanie projektów!");
-      }
-    });
-    setIsPending(false);
-  }, []);
-*/
+  if (isPending) {
+    return (
+      <>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        <h4>Trwa ładowanie projektów!</h4>
+      </>
+    );
+  }
+
+  if (typeof status === "number" && (status >= 400 || status < 200)) {
+    toast.error("Brak połączenia z serwerem!");
+    return <h6>Brak połączenia, spróbuj odświeżyć stronę!</h6>;
+  }
+
   const editBtnHandler = (projectId: string) => {
     history.push(`/edit/${projectId}`, { projectID: projectId });
   };
@@ -48,9 +51,9 @@ function ProjectList(props: ProjectListProps) {
   const deleteBtnHandler = (projectId: string, projectIndex: number) => {
     props.deleteProject(projectId).then((result: any) => {
       if (result.status !== 200) {
-        console.log("Nie udało się usunąć projetku!");
+        toast.error("Nie udało się usunąć projetku!");
       } else {
-        console.log("Projekt usunięty pomyślnie!");
+        toast.success("Projekt usunięty pomyślnie!");
       }
     });
   };
@@ -62,37 +65,38 @@ function ProjectList(props: ProjectListProps) {
   const wrapListElement = (project: Project, index: number) => {
     const path = "/player/";
     return (
-      <ListGroup.Item
-        as="li"
-        id={classes.visible}
-        key={index}
-        bsPrefix={classes.test}
-      >
-        <div
-          className={classes.prjTitle}
-          onClick={() => {
-            projectBtnHandler(project.id);
-          }}
+      <>
+        <ListGroup.Item
+          as="li"
+          id={classes.visible}
+          key={index}
+          bsPrefix={classes.test}
         >
-          {project.name}
-        </div>
-        <FontAwesomeIcon
-          icon={faEdit}
-          size="lg"
-          className={classes.list_util}
-          onClick={() => {
-            editBtnHandler(project.id);
-          }}
-        />
-        <FontAwesomeIcon
-          icon={faTrashAlt}
-          size="lg"
-          onClick={() => {
-            deleteBtnHandler(project.id, index);
-          }}
-          className={classes.list_util}
-        />
-        {/*
+          <div
+            className={classes.prjTitle}
+            onClick={() => {
+              projectBtnHandler(project.id);
+            }}
+          >
+            {project.name}
+          </div>
+          <FontAwesomeIcon
+            icon={faEdit}
+            size="lg"
+            className={classes.list_util}
+            onClick={() => {
+              editBtnHandler(project.id);
+            }}
+          />
+          <FontAwesomeIcon
+            icon={faTrashAlt}
+            size="lg"
+            onClick={() => {
+              deleteBtnHandler(project.id, index);
+            }}
+            className={classes.list_util}
+          />
+          {/*
         {project.description && (
           <textarea
             id={classes.hidden}
@@ -108,7 +112,8 @@ function ProjectList(props: ProjectListProps) {
             }
           ></textarea>
           */}
-      </ListGroup.Item>
+        </ListGroup.Item>
+      </>
     );
   };
 

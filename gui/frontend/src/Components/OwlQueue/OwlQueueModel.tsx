@@ -1,4 +1,5 @@
 import { DefaultNodeModel } from "@projectstorm/react-diagrams";
+import { deleteNode } from "../../store/Actions/nodeListActions";
 import { deleteQueue, selectedQueue } from "../../store/Actions/queueActions";
 import { getDeleteQueueFromProjectRequest } from "../../store/Queries/project_editor_queries";
 import { getQueueParamsRequest } from "../../store/Queries/property_editor_queries";
@@ -42,6 +43,7 @@ export class OwlQueueModel extends DefaultNodeModel {
           })
         );
         store.dispatch(deleteQueue(this));
+        store.dispatch(deleteNode(this));
       },
       selectionChanged: () => {
         if (this.isSelected()) {

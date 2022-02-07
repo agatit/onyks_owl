@@ -19,14 +19,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OwlNodeModel } from "../../../OwlNodes/OwlNodeModel";
 import { OwlQueueModel } from "../../../OwlQueue/OwlQueueModel";
 import TabSection from "../../Tabs/TabSection";
+import { toast } from "react-toastify";
 
 interface QueuePropEditorProps {
   queue: OwlQueueModel;
   engine: DiagramEngine;
   projectId: string;
   node: OwlNodeModel;
-  updateParamRequest: (requestParams: UpdateQueueParamRequest) => void;
-  updateQueue: (requestParams: UpdateQueueRequest) => void;
+  updateParamRequest: (requestParams: UpdateQueueParamRequest) => any;
+  updateQueue: (requestParams: UpdateQueueRequest) => any;
 }
 
 function QueuePropEditor(props: QueuePropEditorProps) {
@@ -42,7 +43,13 @@ function QueuePropEditor(props: QueuePropEditorProps) {
 
   const moduleNameInputBlurHandler = (newValue: string) => {
     queue.name = newValue;
-    props.updateQueue({ projectId: props.projectId, queue: queue });
+    props
+      .updateQueue({ projectId: props.projectId, queue: queue })
+      .then((result: any) => {
+        if (result.status !== 200) {
+          toast.error("Błąd przy aktualizowaniu kolejki");
+        }
+      });
   };
 
   const handlePropertyChange = (newValue: string, param: QueueParam) => {
@@ -53,11 +60,17 @@ function QueuePropEditor(props: QueuePropEditorProps) {
 
   const propertyInputBlurHandler = (newValue: string, param: QueueParam) => {
     param.value = newValue;
-    props.updateParamRequest({
-      projectId: props.projectId,
-      queueId: queue.id,
-      queueParam: param,
-    });
+    props
+      .updateParamRequest({
+        projectId: props.projectId,
+        queueId: queue.id,
+        queueParam: param,
+      })
+      .then((result: any) => {
+        if (result.status !== 200) {
+          toast.error("Błąd przy aktualizowaniu kolejki");
+        }
+      });
   };
 
   const propertyList: Array<QueueParam> = useSelector(selectQueueParams);
@@ -131,10 +144,10 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     updateParamRequest: (requestParams: UpdateQueueParamRequest) => {
-      dispatch(getUpdateQueueParamRequest(requestParams));
+      return dispatch(getUpdateQueueParamRequest(requestParams));
     },
     updateQueue: (requestParams: UpdateQueueRequest) => {
-      dispatch(getUpdateQueueRequest(requestParams));
+      return dispatch(getUpdateQueueRequest(requestParams));
     },
   };
 };

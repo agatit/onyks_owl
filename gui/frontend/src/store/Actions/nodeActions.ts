@@ -1,4 +1,5 @@
 import { OwlNodeModel } from "../../Components/OwlNodes/OwlNodeModel";
+import { OwlQueueModel } from "../../Components/OwlQueue/OwlQueueModel";
 import { nodeActionTypes } from "../Reducers/nodeReducer";
 
 export const selectedNode = (node: OwlNodeModel) => ({

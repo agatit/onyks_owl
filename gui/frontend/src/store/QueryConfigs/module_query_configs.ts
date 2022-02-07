@@ -1,4 +1,10 @@
-import { Module, ModuleDef, TypedQueryConfig } from "../redux-query";
+import { QueryConfig } from "redux-query";
+import {
+  Configuration,
+  Module,
+  ModuleDef,
+  TypedQueryConfig,
+} from "../redux-query";
 
 export const ModuleListRequestConfig: TypedQueryConfig<
   { modules: Array<Module> },
@@ -15,10 +21,8 @@ export const ModuleListRequestConfig: TypedQueryConfig<
   force: true,
 };
 
-export const ModuleListDefsRequestConfig: TypedQueryConfig<
-  { modules_defs: Array<ModuleDef> },
-  Array<ModuleDef>
-> = {
+export const ModuleListDefsRequestConfig: QueryConfig = {
+  url: `${Configuration.basePath}/module_def`,
   transform: (response: Array<ModuleDef>) => {
     return {
       modules_defs: response,
