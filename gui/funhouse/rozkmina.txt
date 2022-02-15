@@ -51,3 +51,14 @@ API:
 
     - zmienić nazwę loggera na bardziej powiązaną z instancją
     
+
+# TODO mniej hardkodowa ścieżka do pliku w "module_sink_file"
+# TODO mądra ścieżka do pliku - nazwa projektu, nazwa modułu, etc.
+# TODO poprawić specyfikę endpointa do robienia instancji
+
+
+To jak te endpointy:
+- "add instance" ma "request body" w którym jest "Instance schema"
+    - podobnie "update instance"
+    
+- config z DEBUG'a i Queues nareszcie

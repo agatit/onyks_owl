@@ -60,13 +60,13 @@ class Module(module_base.Module):
         """przetwarzanie strumieni"""
 
         # tc = self.params.get('trapezoid_coords', self.default_config['params'][1]['trapezoid_coords'][1])
-        tc = self.trapezoid_coords if self.trapezoid_coords != None else self.default_config['params'][1]['trapezoid_coords'][1]
+        tc = self.params['trapezoid_coords'] if self.params['trapezoid_coords'] != None else self.default_config['params'][1]['trapezoid_coords'][1]
         trapezoid_coords = np.array(tc)
         # trapezoid_coords = self.params.get('trapezoid_coords_CUSTNAME')
 
         """get parameters for Wisenet camera calibration"""
-        mtx_list = self.mtx if self.mtx != None else self.default_config['params'][1]['mtx'][1]
-        dist_list = self.dist if self.dist != None else self.default_config['params'][1]['dist'][1]
+        mtx_list = self.params['mtx'] if self.params['mtx'] != None else self.default_config['params'][1]['mtx'][1]
+        dist_list = self.params['dist'] if self.params['dist'] != None else self.default_config['params'][1]['dist'][1]
         mtx = np.array(mtx_list)
         dist = np.array(dist_list)
 

@@ -168,7 +168,8 @@ def get_queue(project_id, module_id):  # noqa: E501
 
     :rtype: Queue
     """
-    return 'do some magic!'
+    # return 'do some magic!'
+    return x.get_queue(project_id, module_id)
 
 
 def get_resource(project_id, resource_id):  # noqa: E501
@@ -278,7 +279,8 @@ def list_queues(project_id):  # noqa: E501
 
     :rtype: List[Queue]
     """
-    return 'do some magic!'
+    return x.list_queues(project_id)
+    # return 'do some magic!'
 
 
 def list_resources(project_id):  # noqa: E501

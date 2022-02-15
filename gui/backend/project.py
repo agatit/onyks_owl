@@ -4,6 +4,8 @@ import time
 import json
 import sys
 from module import Module
+from openapi_server.models.queue import Queue as OPQueue
+# from queue import Queue
 
 EXAMPLES = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../owl")
 PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../examples")
@@ -16,6 +18,7 @@ class Project():
         self.modules_path = modules_path
         self.modules = {} # Nazwy modułów bez '.py'
         self.instances = {}
+        self.queues = {}
         """
         Instancja - lista modułów
         self.instances = {instance_id: {module_id: module_object}}
@@ -25,6 +28,7 @@ class Project():
         # for mod in self.get_modules():
         #     self.modules[mod] = Module(os.path.join(self.modules_dir, mod + '.py'),self.config_path)
         self.load_modules()
+        self.load_queues()
     def add_project_instance(self, instance_id):
         if instance_id in self.instances:
             return None
@@ -69,7 +73,10 @@ class Project():
     def load_modules(self):
         for mod in self.config_json['modules']:
             self.modules[mod] = Module(mod, self.project_path, os.path.join(self.modules_path, mod + '.py'), self.config_path, None)
-    
+    def load_queues(self):
+        for q in self.config_json['queues']:    
+            # self.queues[q] = Queue(q)
+            pass
     def set_config(self, data):
         try:
             with open(self.config_path, 'w') as file:
@@ -142,3 +149,42 @@ class Project():
             return_value[x] = y.module_log()
             print(x, ' log acquired')
         return return_value
+    
+    def list_queues(self):
+        return self.config_json['queues']
+    def get_queue(self, module_id):
+        # return self.modules[module_id].get_queue()
+        retval = {'input_queues': [],
+                    'output_queues': []}
+                
+        iq = self.config_json['modules'][module_id].get('input_queues')
+        if iq is not None:
+            for q in iq:
+                data = self.config_json['queues'].get(q)
+                task_queue_limit = data.get('task_queue_limit')
+                stream_queue_limit = data.get('stream_queue_limit')
+                task_queue_timeout = data.get('task_queue_timeout')
+                stream_queue_timeout = data.get('stream_queue_timeout')
+                temp = OPQueue(self.get_project(), iq, task_queue_limit, stream_queue_limit, task_queue_timeout, stream_queue_timeout)
+                retval['input_queues'].append(temp)
+                
+        oq = self.config_json['modules'][module_id].get('output_queues')
+        if oq is not None:
+            for q in oq:
+                data = self.config_json['queues'].get(q)
+                task_queue_limit = data.get('task_queue_limit')
+                stream_queue_limit = data.get('stream_queue_limit')
+                task_queue_timeout = data.get('task_queue_timeout')
+                stream_queue_timeout = data.get('stream_queue_timeout')
+                temp = OPQueue(self.get_project(), oq, task_queue_limit, stream_queue_limit, task_queue_timeout, stream_queue_timeout)
+                retval['output_queues'].append(temp)
+
+        return retval
+        
+    def get_project(self):
+        retval = {
+        "description": self.config_json.get('description'),
+        "id": self.config_json.get('id'),
+        "name": self.config_json.get('name')
+        }
+        return retval

@@ -31,7 +31,6 @@ class Module():
         # print(self.default_config_normalized)
 
     def create_logger(self):
-        # handler = logging.StreamHandler(sys.stdout)
         handler = logging.FileHandler(self.stdout_path, mode = 'x')
         handler.setLevel(logging.NOTSET)
         formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S")
@@ -40,7 +39,6 @@ class Module():
         self.log_object = logging.getLogger(name='owl_' + self.instance_id + "_" + self.name)
         # log_object.setLevel(logging.DEBUG)
         self.log_object.addHandler(handler)
-        self.log_object.setLevel(logging.NOTSET)
         self.log_object.info(f"Logger {'owl_' + self.instance_id + '_' + self.name} created")
         print(f"Logger {'owl_' + self.instance_id + '_' + self.name} created")
 
@@ -103,6 +101,8 @@ class Module():
                 sys.stderr = f
                 task(*args, **kwargs)
         return wrapper
+    def get_queue(self):
+        print(self.config)
 # import tempfile
 # tempdir = tempfile.mkdtemp()
 

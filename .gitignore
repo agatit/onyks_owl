@@ -14,3 +14,4 @@ __pycache__
 
 /out/*
 /projects/*/logs
+/projects/*/out

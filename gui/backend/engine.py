@@ -7,6 +7,7 @@ import time
 from project import Project
 # from .openapi_server.models.project import Project
 from openapi_server.models.project import Project as OPProject
+from openapi_server.models.queue import Queue as OPQueue
 from module import Module
 from connexion.exceptions import ProblemException
 import ast
@@ -193,11 +194,28 @@ class Engine():
         pass
     def get_module_log(self, project_id, module_id):
         pass
+    
+    def list_queues(self, project_id):
+        queues = self.projects[project_id].list_queues()
+        retval = []
+        for name, vals in queues.items():
+            task_queue_limit = vals.get('task_queue_limit')
+            stream_queue_limit = vals.get('stream_queue_limit')
+            task_queue_timeout = vals.get('task_queue_timeout')
+            stream_queue_timeout = vals.get('stream_queue_timeout')
+            project = self.projects[project_id].get_project()
+            q = OPQueue(project, name, task_queue_limit, stream_queue_limit, task_queue_timeout, stream_queue_timeout)
+            retval.append(q)
+        return retval
+    def get_queue(self, project_id, module_id):
+        return self.projects[project_id].get_queue(module_id)
 
 import sys
 if __name__ == '__main__':
     x = Engine()
     print('xd')
+    # print(x.list_queues('debug'))
+    print(x.get_queue('debug2', 'module_source_cv'))
     # print(x.create_project({"id": "ras", "name": "dwa", "description": "czy"}))
     # print(x.get_projects())
     # print(x.delete_project("ras"))
@@ -205,7 +223,7 @@ if __name__ == '__main__':
     # print(List.get_names())
     # print(x.get_projects())
     # print(x.get_project_conf('perspective_transform'))
-    print(x.get_modules())
+    # print(x.get_modules())
     # print(x.get_project_modules('perspective_transform'))
     # print(x.delete_project_module('perspective_transform','module_sink_file'))
     # print(x.get_project_modules('perspective_transform'))

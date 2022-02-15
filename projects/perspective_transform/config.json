@@ -71,9 +71,11 @@
         "module_sink_file" : {   
             "input_queue" : "stage2",    
             "params": {
-                "filename": "out/test_%Y%m%d_%H%M%S_%f.avi",
+                "filename_backup": "out/test_%Y%m%d_%H%M%S_%f.avi",
+                "filename": "projects/perspective_transform/out/eluwina/test_%Y%m%d_%H%M%S_%f.avi",
                 "framerate": 25,
-                "fourcc": "XVID"
+                "fourcc": "XVID",
+                "path": "../../"
             }        
         }
     },

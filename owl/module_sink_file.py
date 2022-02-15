@@ -38,7 +38,7 @@ class Module(module_base.Module):
         out = None
         # print(input_stream)
         for input_data in input_stream:
-            frame = input_data['color']
+            frame = input_data.get('color')
             if frame_no == 0:
                 fourcc_str = self.params.get('fourcc', 'XVID')
                 fourcc = cv2.VideoWriter_fourcc(*fourcc_str)          
@@ -46,6 +46,8 @@ class Module(module_base.Module):
                 filename = self.params.get('filename', input_task_data.get('source_name', 'noname')) # TODO ścieżka do out'a projektu czy coś takiego
                 # filename = self.filename if self.filename != None else input_task_data.get('source_name', 'noname')
                 # print("filename: " + filename)
+                if os.path.exists(os.path.dirname(filename)) == False:
+                    os.makedirs(os.path.dirname(filename))
                 if 'railtrack' in input_task_data:
                     filename += f"_{input_task_data['railtrack']}"
                 filename = datetime.now().strftime(filename)

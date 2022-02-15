@@ -21,7 +21,8 @@ class Module:
     module_name = "module_base"    
     terminate = False
     instance_id = None
-    
+
+
     def __init__(self, config: dict, connector: connector_base.Connector, log_object = logging.Logger):
 
         self.log_object = log_object
@@ -83,16 +84,6 @@ class Module:
         if module_name == '__main__':
             filename = sys.modules[cls.__module__].__file__
             module_name = os.path.splitext(os.path.basename(filename))[0]
-
-        log_object = logging.getLogger()
-        log_object.setLevel(logging.DEBUG)
-
-        handler = logging.StreamHandler(sys.stdout)
-        handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter(f'%(asctime)s - {module_name} - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        log_object.addHandler(handler)              
-        
         try:
             if len(argv) > 2:
                 instance_id = argv[2] # np. perspective_transform_01
@@ -100,12 +91,22 @@ class Module:
                 instance_id = module_name
         except:
             instance_id = module_name
+        # log_object = logging.getLogger()
+        log_object = logging.getLogger(name='owl_' + instance_id + "_" + module_name)
+        log_object.setLevel(logging.DEBUG)
 
+        # handler = logging.StreamHandler(sys.stdout)
+        # handler.setLevel(logging.DEBUG)
+        # formatter = logging.Formatter(f'%(asctime)s - {module_name} - %(levelname)s - %(message)s')
+        # handler.setFormatter(formatter)
+        # log_object.addHandler(handler)              
+        
         try:
             if len(argv) > 1:
                 with open(argv[1], "rb") as f:
                     config_file = json.load(f)                
-                    config = config_file['modules'][instance_id]
+                    # config = config_file['modules'][instance_id]
+                    config = config_file['modules'][module_name]
                     if config is None:
                         log_object.info(f"config file: {argv[1]} do not contain section for {instance_id}")
                         exit()

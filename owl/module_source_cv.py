@@ -33,6 +33,9 @@ class Module(module_base.Module):
 
         output_task_data = {}
         filename = self.params['device']
+        # filename = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../samples/camera_wisenet/train1.avi")
+        filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), str(filename)) # TODO hmm...
+        # print(filename)
         cap = cv2.VideoCapture(filename)
         try:
             output_task_data['source_name'] = self.params['device'] if self.params['device'] != 0 else "unknown" 
