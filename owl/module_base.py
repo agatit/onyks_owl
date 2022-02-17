@@ -52,7 +52,7 @@ class Module:
         self.redis = redis.Redis("127.0.0.1", 6379)        
                             
         self.task_setup()
-      
+        
         self.task_consumer = task.Consumer(
             self.redis,            
             self.input_queues[0] if len(self.input_queues) > 0 else "",

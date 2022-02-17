@@ -92,7 +92,14 @@ class Module():
         return self.default_config_normalized['params']
     
     def get_params(self):
-        return self.config
+        retval = self.config.copy()
+        for x, y in retval['output_classes'].items():
+            # print(x, y.__module__, y.__name__)
+            retval['output_classes'][x] = f"{y.__module__}.{y.__name__}"
+        for x, y in retval['input_classes'].items():
+            # print(x, y.__module__, y.__name__)
+            retval['input_classes'][x] = f"{y.__module__}.{y.__name__}"
+        return retval
     def wrap(self, task, path):
         def wrapper(*args, **kwargs):
             # with open(os.path.join(path, name), 'x') as f:

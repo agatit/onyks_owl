@@ -21,6 +21,10 @@ class Module(module_base.Module):
     @classmethod
     def get_config(cls):
         config = super(Module, cls).get_config()
+        config['input_classes'] = {
+            "color" : stream_video.Consumer,
+            "metrics" : stream_data.Consumer
+        }
         return config
     
     def setup(self): 
@@ -38,12 +42,13 @@ class Module(module_base.Module):
         out = None
         # print(input_stream)
         for input_data in input_stream:
-            frame = input_data.get('color')
+            frame = input_data['color']
             if frame_no == 0:
                 fourcc_str = self.params.get('fourcc', 'XVID')
                 fourcc = cv2.VideoWriter_fourcc(*fourcc_str)          
                       
                 filename = self.params.get('filename', input_task_data.get('source_name', 'noname')) # TODO ścieżka do out'a projektu czy coś takiego
+                filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), str(filename)) # TODO hmm...
                 # filename = self.filename if self.filename != None else input_task_data.get('source_name', 'noname')
                 # print("filename: " + filename)
                 if os.path.exists(os.path.dirname(filename)) == False:
@@ -51,9 +56,9 @@ class Module(module_base.Module):
                 if 'railtrack' in input_task_data:
                     filename += f"_{input_task_data['railtrack']}"
                 filename = datetime.now().strftime(filename)
-                filename = os.path.join(self.params.get('path',"."), filename)
+                # filename = os.path.join(self.params.get('path',"."), filename)
 
-                # print("filename: " + filename)
+                print("filename: " + filename)
                 # print(os.path.dirname(os.path.realpath(__file__)))
                 framerate = self.params.get('framerate', 20.0)
                 height, width = frame.shape[0:2]

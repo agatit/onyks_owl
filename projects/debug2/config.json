@@ -6,17 +6,17 @@
         "module_source_cv" : {   
             "output_queues" : ["stage1"],            
             "params": {
-                "device": 0
+                "device": "../samples/camera_wisenet/train1.avi"
             }
         },
         "module_sink_file" : {   
             "input_queues" : ["stage1"],    
             "params": {
                 "filename_backup": "out/test_%Y%m%d_%H%M%S_%f.avi",
-                "filename": "projects/debug2/out/eluwina/test_%Y%m%d_%H%M%S_%f.avi",
+                "filename_backup_v2": "projects/debug2/out/eluwina/test_%Y%m%d_%H%M%S_%f.avi",
+                "filename": "../projects/debug2/out/eluwina/test_%Y%m%d_%H%M%S_%f.avi",
                 "framerate": 25,
-                "fourcc": "XVID",
-                "path": "../../"
+                "fourcc": "XVID"
             }
         }
     },
