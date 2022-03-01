@@ -18,7 +18,8 @@ class Project():
         self.modules_path = modules_path
         self.modules = {} # Nazwy modułów bez '.py'
         self.instances = {}
-        self.queues = {}
+        self.queues = {} # TODO hasiok
+        self.instance_helper = 0
         """
         Instancja - lista modułów
         self.instances = {instance_id: {module_id: module_object}}
@@ -28,8 +29,8 @@ class Project():
         # for mod in self.get_modules():
         #     self.modules[mod] = Module(os.path.join(self.modules_dir, mod + '.py'),self.config_path)
         self.load_modules()
-        self.load_queues()
-    def add_project_instance(self, instance_id):
+    def add_project_instance(self):
+        instance_id = 'nazwa_projektu' + '_' + f'{self.instance_helper:02d}'
         if instance_id in self.instances:
             return None
         self.instances[instance_id] = {}
@@ -37,6 +38,8 @@ class Project():
         for module_name in self.config_json['modules']:
             self.instances[instance_id][module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path, instance_id)
             # self.instances[instance_id][module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.instances[instance_id]['config'], instance_id)
+        self.instance_helper += 1
+        self.start_project_instance(instance_id)
         return "gitara"
     def get_project_instances(self):
         return list(self.instances.keys())
@@ -73,11 +76,7 @@ class Project():
     def load_modules(self):
         for mod in self.config_json['modules']:
             self.modules[mod] = Module(mod, self.project_path, os.path.join(self.modules_path, mod + '.py'), self.config_path, None)
-    def load_queues(self):
-        for q in self.config_json['queues']:    
-            # self.queues[q] = Queue(q)
-            pass
-    def set_config(self, data):
+    def set_config(self, data):# def add_project_instance(self, project_id, instance_id):
         try:
             with open(self.config_path, 'w') as file:
                 json.dump(data,file, ensure_ascii=False, indent=4)
@@ -101,11 +100,11 @@ class Project():
     def get_module_data(self, module_name):
         if module_name in self.config_json['modules']:
             # response = 
-            # return self.config_json['modules'][module_name]
-            return self.modules[module_name].get_data()
+            return self.config_json['modules'][module_name]
+            # return self.modules[module_name].get_data()
         return 'Łups :('
     def set_module_params(self, module_id, params):
-        self.config_json['modules'][module_id]['params'] = params
+        self.config_json['modules'][module_id] = params
         self.set_config(self.config_json)
         return 'Jest git'
 
@@ -152,6 +151,22 @@ class Project():
     
     def list_queues(self):
         return self.config_json['queues']
+    def add_queue(self, queue):
+        name = queue.name
+        self.config_json['queues'][name] = {}
+        self.config_json['queues'][name]['task_queue_limit'] = queue.task_queue_limit
+        self.config_json['queues'][name]['task_queue_timeout'] = queue.task_queue_timeout
+        self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit
+        self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout
+        self.set_config(self.config_json)
+    def modify_queue(self, queue):
+        name = queue.name
+        self.config_json['queues'][name] = {}
+        self.config_json['queues'][name]['task_queue_limit'] = queue.task_queue_limit
+        self.config_json['queues'][name]['task_queue_timeout'] = queue.task_queue_timeout
+        self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit
+        self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout
+        self.set_config(self.config_json)
     def get_queue(self, module_id):
         # return self.modules[module_id].get_queue()
         retval = {'input_queues': [],
@@ -180,7 +195,22 @@ class Project():
                 retval['output_queues'].append(temp)
 
         return retval
-        
+    
+    def delete_queue(self, queue_id):
+        try:
+            del self.config_json['queues'][queue_id]
+        except:
+            pass
+        for mod in self.config_json['modules']:
+            try:
+                self.config_json['modules'][mod]['input_queues'].remove(queue_id)
+            except:
+                pass
+            try:
+                self.config_json['modules'][mod]['output_queues'].remove(queue_id)
+            except:
+                pass
+        self.set_config(self.config_json)
     def get_project(self):
         retval = {
         "description": self.config_json.get('description'),

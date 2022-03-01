@@ -23,6 +23,7 @@ class Module(module_base.Module):
             "color" : stream_video.Producer,
             "metrics" : stream_data.Producer
         }
+        config["params"]["device"] = {"type": "str", "value": "../samples/camera_wisenet/train1.avi"}
         return config
 
     def task_process(self, input_task_data, input_stream):

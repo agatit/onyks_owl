@@ -25,6 +25,7 @@ class Module(module_base.Module):
             "color" : stream_video.Consumer,
             "metrics" : stream_data.Consumer
         }
+        config['params']['filename'] = {"type": "str", "value": "../projects/%prid/out/%iid/test_%Y%m%d_%H%M%S_%f.avi"}
         return config
     
     def setup(self): 
@@ -49,13 +50,15 @@ class Module(module_base.Module):
                       
                 filename = self.params.get('filename', input_task_data.get('source_name', 'noname')) # TODO ścieżka do out'a projektu czy coś takiego
                 filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), str(filename)) # TODO hmm...
+                filename = filename.replace('%iid', self.instance_id)
+                filename = filename.replace('%prid', self.project_id)
+                filename = datetime.now().strftime(filename)
                 # filename = self.filename if self.filename != None else input_task_data.get('source_name', 'noname')
                 # print("filename: " + filename)
                 if os.path.exists(os.path.dirname(filename)) == False:
                     os.makedirs(os.path.dirname(filename))
                 if 'railtrack' in input_task_data:
                     filename += f"_{input_task_data['railtrack']}"
-                filename = datetime.now().strftime(filename)
                 # filename = os.path.join(self.params.get('path',"."), filename)
 
                 print("filename: " + filename)

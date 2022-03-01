@@ -13,11 +13,9 @@ import shutil
 
 project_path = "../../projects"
 
-import sys
-sys.path.append('../backend')
+from . import worker
 
-from engine import Engine
-x = Engine()
+# x = worker.x
 
 
 def add_project(project=None):  # noqa: E501
@@ -33,7 +31,7 @@ def add_project(project=None):  # noqa: E501
 
     try:
         if connexion.request.is_json:
-            return x.create_project(connexion.request.get_json())
+            return worker.x.create_project(connexion.request.get_json())
         else:
             raise ProblemException(405, "Invalid input")
       
@@ -51,7 +49,7 @@ def delete_project(project_id):  # noqa: E501
 
     :rtype: None
     """
-    return x.delete_project(project_id)
+    return worker.x.delete_project(project_id)
     try:
         if not os.path.exists(os.path.join(project_path, project_id, "config.json")):
             raise FileNotFoundError
@@ -99,7 +97,7 @@ def list_projects():  # noqa: E501
 
     :rtype: List[Project]
     """
-    return x.get_projects()
+    return worker.x.get_projects()
 
 def update_project(project=None):  # noqa: E501
     """Updates a Project
@@ -116,7 +114,7 @@ def update_project(project=None):  # noqa: E501
     try:
         if connexion.request.is_json:
             # project = Project.from_dict(connexion.request.get_json())  # noqa: E501
-            return x.update_project(connexion.request.get_json())
+            return worker.x.update_project(connexion.request.get_json())
         else:
             return connexion.NoContent, 400    
     except FileNotFoundError as e:

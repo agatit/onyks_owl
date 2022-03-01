@@ -116,7 +116,9 @@ class Module:
                     try:
                         self = cls(config, None, log_object) # TODO: obsłuzyć connector
                         self.module_name = module_name
-                        self.terminate = False                        
+                        self.terminate = False
+                        self.instance_id = instance_id
+                        self.project_id = config_file['name']
                     except Exception as e:
                         log_object.info(str(e))
 

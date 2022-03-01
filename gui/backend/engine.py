@@ -56,7 +56,7 @@ class Engine():
                 # print("mod data:" + mod_data)
                 # print(mod_data)
                 retval2['description'] = mod_data.get('description', 'Default description')
-                retval2['id'] = mod_data.get('id', 'Default ID')
+                retval2['id'] = mod_data.get('id', module_name)
                 retval2['name'] = module_name
                 retval.append(retval2)
         return retval
@@ -66,8 +66,10 @@ class Engine():
         r2 = module_wrapper.Module.get_config()
         return r2
     
-    def add_project_instance(self, project_id, instance_id):
-        return self.projects[project_id].add_project_instance(instance_id)
+    # def add_project_instance(self, project_id, instance_id):
+    #     return self.projects[project_id].add_project_instance(instance_id)
+    def add_project_instance(self, project_id):
+        return self.projects[project_id].add_project_instance()
     def get_project_instances(self, project_id):
         return self.projects[project_id].get_project_instances()
     def delete_project_instance(self, project_id, instance_id):
@@ -89,8 +91,8 @@ class Engine():
         for _, project in self.projects.items():
             response.append(project.get_config())
         return response
-    def add_project(self, id):
-        self.projects[id] = Project(os.path.join(self.projects_path, id), self.modules_path)
+    def add_project(self, project_id):
+        self.projects[project_id] = Project(os.path.join(self.projects_path, project_id), self.modules_path)
     def create_project(self,data):
         openapi_project = OPProject.from_dict(data)
         try:
@@ -105,6 +107,7 @@ class Engine():
             config['name'] = openapi_project.name
             config['desc'] = openapi_project.description
             config['modules'] = {}
+            config['queues'] = {}
             
             with open(os.path.join(self.projects_path, openapi_project.id, "config.json"), 'w') as f:
                 json.dump(config, f, ensure_ascii=False, indent=4)
@@ -209,6 +212,12 @@ class Engine():
         return retval
     def get_queue(self, project_id, module_id):
         return self.projects[project_id].get_queue(module_id)
+    def add_project_queue(self, project_id, queue):
+        return self.projects[project_id].add_queue(queue)
+    def modify_project_queue(self, project_id, queue):
+        return self.projects[project_id].modify_queue(queue)
+    def delete_project_queue(self, project_id, queue_id):
+        return self.projects[project_id].delete_queue(queue_id)
 
 import sys
 if __name__ == '__main__':
