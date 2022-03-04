@@ -4,6 +4,7 @@ import importlib.util
 import sys
 import datetime
 import logging
+from copy import deepcopy
 
 owl_path = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl'))
 
@@ -65,9 +66,12 @@ class Module():
             # proc = multiprocessing.Process(target=wrap(task, name), name=name,)
         self.process_handler.start()
     def module_stop(self):
-        self.process_handler.terminate()
-        self.process_handler.join()
-        self.process_handler = None
+        try:
+            self.process_handler.terminate()
+            self.process_handler.join()
+            self.process_handler = None
+        except:
+            pass
     def module_restart(self):
         if self.process_handler is not None:
             self.module_stop()
@@ -92,7 +96,9 @@ class Module():
         return self.default_config_normalized['params']
     
     def get_params(self):
-        retval = self.config.copy()
+        # retval = self.config.deepcopy()
+        # retval = {key: value for key, value in self.config.items()}
+        retval = deepcopy(self.config)
         for x, y in retval['output_classes'].items():
             # print(x, y.__module__, y.__name__)
             retval['output_classes'][x] = f"{y.__module__}.{y.__name__}"

@@ -92,7 +92,10 @@ class Engine():
             response.append(project.get_config())
         return response
     def add_project(self, project_id):
-        self.projects[project_id] = Project(os.path.join(self.projects_path, project_id), self.modules_path)
+        if os.path.isfile(os.path.join(self.projects_path, project_id, "config.json")):
+            self.projects[project_id] = Project(os.path.join(self.projects_path, project_id), self.modules_path)
+        else:
+            print(f'*ACHTUNG* Katalog {os.path.join(self.projects_path, project_id)} nie zawiera pliku "config.json".')
     def create_project(self,data):
         openapi_project = OPProject.from_dict(data)
         try:
@@ -144,8 +147,19 @@ class Engine():
     def get_project_conf(self, project_id):
         return self.projects[project_id].get_config()
     def set_project_conf(self, project_id, data):
-        return self.projects[project_id].set_config(data)
-    
+        retval = self.projects[project_id].set_config(data)
+        if project_id != data.id:
+            self.change_project_name(self, project_id, data.id)
+        return retval
+    def change_project_name(self, project_id, new_project_id):
+        # usuń projekt z obiektów
+        self.kill_project(project_id)
+        # zmień nazwę folderu
+        old_path = os.path.join(self.projects_path, project_id)
+        new_path = os.path.join(self.projects_path, new_project_id)
+        os.rename(old_path, new_path)
+        # stwórz obiekt projektu
+        self.add_project(new_project_id)
     def get_project_resources(self, project_id):
         return self.projects[project_id].get_resources()
     ### EDYCJA TORU PRZETWARZANIA ###
@@ -218,13 +232,14 @@ class Engine():
         return self.projects[project_id].modify_queue(queue)
     def delete_project_queue(self, project_id, queue_id):
         return self.projects[project_id].delete_queue(queue_id)
-
+    def get_project_queue_params(self, project_id, queue_id):
+        return self.projects[project_id].get_project_queue(queue_id)
 import sys
 if __name__ == '__main__':
     x = Engine()
     print('xd')
     # print(x.list_queues('debug'))
-    print(x.get_queue('debug2', 'module_source_cv'))
+    # print(x.get_queue('debug2', 'module_source_cv'))
     # print(x.create_project({"id": "ras", "name": "dwa", "description": "czy"}))
     # print(x.get_projects())
     # print(x.delete_project("ras"))
@@ -242,7 +257,7 @@ if __name__ == '__main__':
     # print(x.create_project('xddd'))
     # print(x.get_projects())
     # print(x.get_module_params('perspective_transform', 'module_sink_file'))
-    # print(x.get_module_data('module_source_cv'))
+    print(x.get_module_data('module_source_cv'))
     # rd = x.get_module_data('perspective_transform')
     # print(rd[0].decode('utf-8'), rd[1].decode('utf-8'))
     # print(x.get_modules())

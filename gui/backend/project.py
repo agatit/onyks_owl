@@ -57,7 +57,7 @@ class Project():
         for module in self.instances[instance_name]:
             module.module_stop()
         del self.instances[instance_name]
-        return 'Jest git'
+        return self.instances
     def get_instance(self, instance_name):
         if instance_name not in self.instances:
             return 'Łups :('
@@ -74,14 +74,21 @@ class Project():
             # TODO Nnnnnnnnno chcę porobić te try/catche, ale pewnie da się to jeszcze nieco ulepszyć
 
     def load_modules(self):
-        for mod in self.config_json['modules']:
-            self.modules[mod] = Module(mod, self.project_path, os.path.join(self.modules_path, mod + '.py'), self.config_path, None)
+        for mod in self.config_json['modules']: #TODO tutaj wyjebywać delimiter(?:p)
+            if '#' in mod:
+                name = mod[:mod.find("#")]
+            else:
+                name = mod
+            self.modules[mod] = Module(name, self.project_path, os.path.join(self.modules_path, name + '.py'), self.config_path, None)
     def set_config(self, data):# def add_project_instance(self, project_id, instance_id):
+        ### ZMIANA NAZWY PROJEKTU ###
+        print('lol')
+        # if self.config_json != da
         try:
             with open(self.config_path, 'w') as file:
                 json.dump(data,file, ensure_ascii=False, indent=4)
             self.config_json = data
-            return 'Jest git'    # TODO returny
+            return self.config_json
         except:
             return 'Łups :('
     def add_module(self, module_name):
@@ -89,13 +96,17 @@ class Project():
         if not owl_path in sys.path:
             sys.path.append(owl_path)
             # TODO ale że tutaj to?!?!
-
-        self.modules[module_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path, None)
-        if self.modules[module_name] is None: 
+        module_local_name = module_name
+        name_helper = 0
+        while module_local_name in self.modules:
+            name_helper += 1
+            module_local_name = module_name + '#' + str(name_helper)
+        self.modules[module_local_name] = Module(module_name, self.project_path, os.path.join(self.modules_path, module_name + '.py'), self.config_path, None)
+        if self.modules[module_local_name] is None: 
             return "Łups :("
-        self.config_json['modules'][module_name] = self.modules[module_name].get_default_config()
+        self.config_json['modules'][module_local_name] = self.modules[module_local_name].get_default_config()
         self.set_config(self.config_json)
-        return 'Jest git'
+        return self.config_json['modules'][module_local_name]
 
     def get_module_data(self, module_name):
         if module_name in self.config_json['modules']:
@@ -106,7 +117,7 @@ class Project():
     def set_module_params(self, module_id, params):
         self.config_json['modules'][module_id] = params
         self.set_config(self.config_json)
-        return 'Jest git'
+        return self.config_json['modules'][module_id]
 
     def get_modules(self):
         # return list(self.modules.keys())
@@ -124,7 +135,7 @@ class Project():
         del self.config_json['modules'][module_name]
         del self.modules[module_name]
         self.set_config(self.config_json)
-        return 'Jest git'
+        return self.config_json['modules']
 
     def get_resources(self):
         return ["chwila moment", "nie tak szybko", "zrobie to bendom"]
@@ -153,12 +164,17 @@ class Project():
         return self.config_json['queues']
     def add_queue(self, queue):
         name = queue.name
+        name_helper = 0
+        while name in self.config_json['queues']:
+            name_helper += 1
+            name = queue.name + '#' + str(name_helper)
         self.config_json['queues'][name] = {}
         self.config_json['queues'][name]['task_queue_limit'] = queue.task_queue_limit
         self.config_json['queues'][name]['task_queue_timeout'] = queue.task_queue_timeout
         self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit
         self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout
         self.set_config(self.config_json)
+        return self.config_json['queues'][name]
     def modify_queue(self, queue):
         name = queue.name
         self.config_json['queues'][name] = {}
@@ -167,6 +183,7 @@ class Project():
         self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit
         self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout
         self.set_config(self.config_json)
+        return self.config_json['queues'][name]
     def get_queue(self, module_id):
         # return self.modules[module_id].get_queue()
         retval = {'input_queues': [],
@@ -195,6 +212,9 @@ class Project():
                 retval['output_queues'].append(temp)
 
         return retval
+    def get_project_queue(self, queue_id):
+        retval = self.config_json['queues'][queue_id]
+        return retval
     
     def delete_queue(self, queue_id):
         try:
@@ -211,6 +231,7 @@ class Project():
             except:
                 pass
         self.set_config(self.config_json)
+        return self.config_json['queues']
     def get_project(self):
         retval = {
         "description": self.config_json.get('description'),

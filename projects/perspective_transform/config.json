@@ -1,45 +1,29 @@
 {
-    "id" : "Ajdi",
-    "description" : "Deskrypszyn",
-    "name" : "Nejm",
+    "id": "perspective_transform",
+    "description": "Deskrypszyn",
+    "name": "perspective_transform",
     "modules": {
         "module_source_cv": {
-            "output_queues": ["stage1"],
-            "stream_queue_limit": 10,
-            "timeout": 180,
             "params": {
-                "device": "../samples/camera_wisenet/train1.avi",
-                "_device": 1
+                "stream_queue_limit": 100,
+                "task_expire_time": 10,
+                "stream_expire_time": 10,
+                "task_timeout": 10,
+                "stream_timeout": 10,
+                "input_queue": "",
+                "output_queue": "",
+                "device": "../samples/camera_wisenet/train1.avi"
             }
         },
         "module_perspective_transform": {
-            "input_queues": ["stage1"],
-            "output_queues": ["stage2"],
             "params": {
-                "camera_cal_in_dir_chessboards": "../input_images/camera_calibration/H.264/chessboard*.png",
-                "camera_cal_out_dir": "../output_images/camera_calibration/H.264",
-                "chessboard_size": [
-                    9,
-                    6
-                ],
-                "trapezoid_coords": [
-                    [
-                        1125,
-                        403
-                    ],
-                    [
-                        1920,
-                        201
-                    ],
-                    [
-                        1126,
-                        897
-                    ],
-                    [
-                        1919,
-                        1055
-                    ]
-                ],
+                "stream_queue_limit": 100,
+                "task_expire_time": 10,
+                "stream_expire_time": 10,
+                "task_timeout": 10,
+                "stream_timeout": 10,
+                "input_queue": "",
+                "output_queue": "",
                 "mtx": [
                     [
                         1161.107086941478,
@@ -65,26 +49,119 @@
                         0.004614250484695657,
                         -1.1537064635161052
                     ]
+                ],
+                "trapezoid_coords": [
+                    [
+                        1125,
+                        403
+                    ],
+                    [
+                        1920,
+                        201
+                    ],
+                    [
+                        1126,
+                        897
+                    ],
+                    [
+                        1919,
+                        1055
+                    ]
                 ]
             }
         },
-        "module_sink_file" : {   
-            "input_queues" : ["stage2"],    
+        "module_sink_file": {
             "params": {
-                "filename_backup": "out/test_%Y%m%d_%H%M%S_%f.avi",
-                "filename": "projects/perspective_transform/out/eluwina/test_%Y%m%d_%H%M%S_%f.avi",
-                "framerate": 25,
-                "fourcc": "XVID",
-                "path": "../../"
-            }        
+                "stream_queue_limit": 100,
+                "task_expire_time": 10,
+                "stream_expire_time": 10,
+                "task_timeout": 10,
+                "stream_timeout": 10,
+                "input_queue": "",
+                "output_queue": "",
+                "filename": "../projects/%prid/out/%iid/test_%Y%m%d_%H%M%S_%f.avi"
+            }
+        },
+        "module_source_cv#1": {
+            "params": {
+                "stream_queue_limit": 100,
+                "task_expire_time": 10,
+                "stream_expire_time": 10,
+                "task_timeout": 10,
+                "stream_timeout": 10,
+                "input_queue": "",
+                "output_queue": "",
+                "device": "../samples/camera_wisenet/train1.avi"
+            }
+        },
+        "module_perspective_transform#1": {
+            "params": {
+                "stream_queue_limit": 100,
+                "task_expire_time": 10,
+                "stream_expire_time": 10,
+                "task_timeout": 10,
+                "stream_timeout": 10,
+                "input_queue": "",
+                "output_queue": "",
+                "mtx": [
+                    [
+                        1161.107086941478,
+                        0.0,
+                        948.2004474733628
+                    ],
+                    [
+                        0.0,
+                        1166.8887234211986,
+                        608.8830018574113
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "dist": [
+                    [
+                        -0.5435658832121913,
+                        0.8889895278168062,
+                        -0.017174260409137283,
+                        0.004614250484695657,
+                        -1.1537064635161052
+                    ]
+                ],
+                "trapezoid_coords": [
+                    [
+                        1125,
+                        403
+                    ],
+                    [
+                        1920,
+                        201
+                    ],
+                    [
+                        1126,
+                        897
+                    ],
+                    [
+                        1919,
+                        1055
+                    ]
+                ]
+            }
         }
     },
     "queues": {
-        "stage1" : {
-            "stream_queue_limit" : 100
+        "stage1": {
+            "stream_queue_limit": 100
         },
-        "stage2" : {
-            "stream_queue_limit" : 100
+        "stage2": {
+            "stream_queue_limit": 100
+        },
+        "Initial Queue Name": {
+            "task_queue_limit": null,
+            "task_queue_timeout": null,
+            "stream_queue_limit": null,
+            "stream_queue_timeout": null
         }
-}
+    }
 }

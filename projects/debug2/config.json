@@ -1,29 +1,42 @@
 {
-    "id" : "Debug4",
-    "description" : "Debug5",
-    "name" : "Debug6",
-    "modules" : {
+    "id": "debug2",
+    "description": "Debug5",
+    "name": "debug2",
+    "modules": {
         "module_source_cv" : {   
             "output_queues" : ["stage1"],            
             "params": {
                 "device": "../samples/camera_wisenet/train1.avi"
             }
         },
-        "module_sink_file" : {   
-            "input_queues" : ["stage1"],    
+        "module_sink_file": {
+            "input_queues": [
+                "stage1"
+            ],
             "params": {
                 "filename_backup": "out/test_%Y%m%d_%H%M%S_%f.avi",
                 "filename_backup_v2": "projects/debug2/out/eluwina/test_%Y%m%d_%H%M%S_%f.avi",
-                "filename": "../projects/debug2/out/eluwina/test_%Y%m%d_%H%M%S_%f.avi",
+                "filename": "../projects/%prid/out/%iid/test_%Y%m%d_%H%M%S_%f.avi",
                 "framerate": 25,
                 "fourcc": "XVID"
             }
         }
     },
-
     "queues": {
-        "stage1" : {
-            "stream_queue_limit" : 100
+        "stage1": {
+            "stream_queue_limit": 100
+        },
+        "nameasdfg": {
+            "task_queue_limit": 0,
+            "task_queue_timeout": 1,
+            "stream_queue_limit": 6,
+            "stream_queue_timeout": 5
+        },
+        "stage1_1": {
+            "task_queue_limit": 0,
+            "task_queue_timeout": 1,
+            "stream_queue_limit": 6,
+            "stream_queue_timeout": 5
         }
     }
 }

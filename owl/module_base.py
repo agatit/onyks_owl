@@ -220,8 +220,8 @@ class Module:
             'stream_expire_time': {'type': 'int', 'value': 10},
             'task_timeout': {'type': 'int', 'value': 10},
             'stream_timeout': {'type': 'int', 'value': 10},
-            'input_queue': {'type': 'string', 'value': ""},
-            'output_queue': {'type': 'string', 'value': ""},
+            'input_queues': {'type': 'list', 'value': "[]"},
+            'output_queues': {'type': 'list', 'value': "[]"},
         }    
         config['input_classes'] = {} # Zawiera słownik klas - przy odczycie trzeba użyć __class__.__name__
         config['output_classes'] = {}        

@@ -10,7 +10,7 @@ from openapi_server import util
 import sys
 from . import worker
 
-x = worker.x
+# x = worker.x
 
 def clean_queue(project_id, instance_id):  # noqa: E501
     """Cleans queue
@@ -86,7 +86,7 @@ def list_module_params(project_id, module_id):  # noqa: E501
 
     :rtype: List[ModuleParam]
     """
-    return x.get_project_module_data(project_id, module_id)
+    return worker.x.get_project_module_data(project_id, module_id)
 
 
 def list_queue_params(project_id, queue_id):  # noqa: E501
@@ -101,7 +101,7 @@ def list_queue_params(project_id, queue_id):  # noqa: E501
 
     :rtype: List[QueueParam]
     """
-    return 'do some magic!'
+    return worker.x.get_project_queue_params(project_id, queue_id)
 
 
 def reset_instance_module(project_id, instance_id, instance_module_id):  # noqa: E501
@@ -139,7 +139,7 @@ def update_module_param(project_id, module_id, module_param=None):  # noqa: E501
         # module_param = ModuleParam.from_dict(connexion.request.get_json())  # noqa: E501
         module_param = connexion.request.get_json()
     # return 'do some magic!'
-    return x.set_module_params(project_id, module_id, module_param)
+    return worker.x.set_module_params(project_id, module_id, module_param)
 
 
 def update_queue_param(project_id, queue_id, queue_param=None):  # noqa: E501
