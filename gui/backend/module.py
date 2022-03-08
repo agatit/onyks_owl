@@ -105,6 +105,7 @@ class Module():
         for x, y in retval['input_classes'].items():
             # print(x, y.__module__, y.__name__)
             retval['input_classes'][x] = f"{y.__module__}.{y.__name__}"
+        retval['id'] = self.name
         return retval
     def wrap(self, task, path):
         def wrapper(*args, **kwargs):

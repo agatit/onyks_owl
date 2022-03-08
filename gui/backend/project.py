@@ -130,7 +130,8 @@ class Project():
         response["project"] = self.get_config()
         for x, y in self.modules.items():
             response[x] = y.get_params()
-        return response
+        response2 = [response]
+        return response2
     def delete_module(self, module_name):
         del self.config_json['modules'][module_name]
         del self.modules[module_name]
