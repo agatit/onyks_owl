@@ -1,11 +1,10 @@
-import Logo from "./Logo";
-import { Button } from "react-bootstrap";
-import classes from "./StarterPage.module.css";
 import { useState } from "react";
+import { Button, Stack } from "react-bootstrap";
 import Backdrop from "../Components/Layout/Utils/Backdrop";
-import ProjectList from "../Components/UI/Menu-UI/ProjectList";
 import CreateProjectForm from "../Components/UI/CreateProjectForm";
-import { ToastContainer } from "react-toastify";
+import ProjectList from "../Components/UI/Menu-UI/ProjectList";
+import StarterFooter from "../Components/UI/StarterFooter";
+import StarterNavbar from "../Components/UI/StarterNavbar";
 
 function StarterPage() {
   const [modalIsOpen, setModalOpen] = useState(false);
@@ -19,27 +18,22 @@ function StarterPage() {
   }
 
   return (
-    <div className={classes.starter}>
-      <div className={classes.bgimg}>
-        <div className={classes.title}>
-          <h1>Onyks owl </h1>
-        </div>
-        <div className={classes.logo}>
-          <Logo />
-        </div>
-        <div className={classes.menu}>
-          <h4>Wybierz projekt lub utwórz nowy!</h4>
-          <ProjectList />
-        </div>
-        <div className={classes.createPrjBtn}>
-          <Button onClick={openModalHandler}>Stwórz projekt</Button>
-        </div>
-      </div>
+    <Stack gap={3} style={stackStyle}>
+      <StarterNavbar />
+      <ProjectList />
+      <StarterFooter>
+        <Button variant="success" onClick={openModalHandler}>
+          Stwórz projekt
+        </Button>
+      </StarterFooter>
       {modalIsOpen && <CreateProjectForm closeModalFunc={closeModalHandler} />}
       {modalIsOpen && <Backdrop action={closeModalHandler} />}
-      <ToastContainer />
-    </div>
+    </Stack>
   );
 }
 
 export default StarterPage;
+
+const stackStyle = {
+  backgroundColor: "rgb(180,180,180)",
+};

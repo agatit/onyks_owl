@@ -2,9 +2,11 @@ import { DiagramEngine, DiagramModel } from "@projectstorm/react-diagrams";
 import { OwlNodeModel } from "./Components/OwlNodes/OwlNodeModel";
 import { OwlQueueModel } from "./Components/OwlQueue/OwlQueueModel";
 import { OwlQueueLinkModel } from "./Components/OwlQueueLinks/OwlQueueLinkModel";
+import { BASE_PATH } from "./store/redux-query";
 
-export async function loadQueues(engine: DiagramEngine) {
-  const url = "../project(Test)/queue.json";
+export async function loadQueues(engine: DiagramEngine, projectId: string) {
+  const url = BASE_PATH + `/project(${projectId})/queue`;
+  //const url = "../project(Test)/queue.json";
   const resp = await fetch(url);
   const data = await resp.json();
 
@@ -13,11 +15,12 @@ export async function loadQueues(engine: DiagramEngine) {
     engine.getModel().addNode(newQueue);
   }
   engine.repaintCanvas();
-  loadNodes(engine);
+  loadNodes(engine, projectId);
 }
 
-export async function loadNodes(engine: DiagramEngine) {
-  const url = "../project(Test)/module.json";
+export async function loadNodes(engine: DiagramEngine, projectId: string) {
+  const url = BASE_PATH + `/project(${projectId})/module`;
+  //const url = "../project(Test)/module.json";
   const resp = await fetch(url);
   const data = await resp.json();
 
@@ -41,6 +44,7 @@ export function generateLinks(nodesArr: OwlNodeModel[], engine: DiagramEngine) {
       engine.getModel().getNode(nodesArr[i].input.id) !== undefined
     ) {
       const link = new OwlQueueLinkModel();
+
       link.setSourcePort(nodesArr[i].inputPortModel);
       link.setTargetPort(
         engine.getModel().getNode(nodesArr[i].input.id).getPort("Wyjście")
@@ -64,7 +68,7 @@ export function generateLinks(nodesArr: OwlNodeModel[], engine: DiagramEngine) {
   engine.repaintCanvas();
 }
 
-export function loadSchema(engine: DiagramEngine) {
+export function loadSchema(engine: DiagramEngine, projectId: string) {
   engine.setModel(new DiagramModel());
-  loadQueues(engine);
+  loadQueues(engine, projectId);
 }

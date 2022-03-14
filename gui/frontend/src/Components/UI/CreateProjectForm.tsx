@@ -2,12 +2,13 @@ import { FormEvent, useRef } from "react";
 import { Button, FloatingLabel, Form } from "react-bootstrap";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getCreateProjectRequest } from "../../store/Queries";
 import { Project } from "../../store/redux-query";
 import Modal from "../Layout/Utils/Modal";
 
 interface CreateProjectFormProps {
-  addProject: (project: Project) => void;
+  addProject: (project: Project) => any;
   closeModalFunc: () => void;
 }
 
@@ -25,9 +26,15 @@ function CreateProjectForm(props: CreateProjectFormProps) {
       name: prjName,
       description: prjDescription,
     };
-    props.addProject(prj);
-    props.closeModalFunc();
-    history.push(`/edit/${prj.id}`, { projectID: prj.id });
+    props.addProject(prj).then((result: any) => {
+      if (result.status !== 201) {
+        toast.error("Nie udało się utworzyć projektu!");
+        props.closeModalFunc();
+      } else {
+        props.closeModalFunc();
+        history.push(`/edit/${prj.id}`, { projectID: prj.id });
+      }
+    });
   }
 
   return (
@@ -70,7 +77,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     addProject: (project: Project) => {
-      dispatch(getCreateProjectRequest(project));
+      return dispatch(getCreateProjectRequest(project));
     },
   };
 };

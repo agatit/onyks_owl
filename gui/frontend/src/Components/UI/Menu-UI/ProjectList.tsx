@@ -1,6 +1,14 @@
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ListGroup, Spinner } from "react-bootstrap";
+import {
+  Container,
+  ListGroup,
+  Spinner,
+  Col,
+  Row,
+  Stack,
+  Card,
+} from "react-bootstrap";
 import { Project } from "../../../store/redux-query/models/Project";
 import { useHistory } from "react-router-dom";
 import {
@@ -15,6 +23,7 @@ import { ProjectListRequestConfig } from "../../../store/QueryConfigs";
 import Backdrop from "../../Layout/Utils/Backdrop";
 import { useRequest } from "redux-query-react";
 import { toast, ToastContainer } from "react-toastify";
+import { useRef } from "react";
 
 interface ProjectListProps {
   projects: Array<Project>;
@@ -30,12 +39,12 @@ function ProjectList(props: ProjectListProps) {
 
   if (isPending) {
     return (
-      <>
+      <Container fluid>
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
         <h4>Trwa ładowanie projektów!</h4>
-      </>
+      </Container>
     );
   }
 
@@ -54,6 +63,7 @@ function ProjectList(props: ProjectListProps) {
         toast.error("Nie udało się usunąć projetku!");
       } else {
         toast.success("Projekt usunięty pomyślnie!");
+        refresh();
       }
     });
   };
@@ -62,24 +72,43 @@ function ProjectList(props: ProjectListProps) {
     history.push(`/player/${projectId}`, { projectID: projectId });
   };
 
-  const wrapListElement = (project: Project, index: number) => {
-    const path = "/player/";
+  const createColumn = (colElement: Project, index: number) => {
+    return <Col>{createTableElement(colElement, index)}</Col>;
+  };
+
+  const createRow = (rowElements: Array<Project>) => {
     return (
-      <>
-        <ListGroup.Item
-          as="li"
-          id={classes.visible}
-          key={index}
-          bsPrefix={classes.test}
+      <Row sm={3} md={3} xs={3} lg={3}>
+        {rowElements &&
+          rowElements.map((project, index) => {
+            return createColumn(project, index);
+          })}
+      </Row>
+    );
+  };
+
+  const createProjectTable = (projects: Array<Project>) => {
+    return (
+      <Container fluid className="h-100">
+        {createRow(projects)}
+      </Container>
+    );
+  };
+
+  const createTableElement = (project: Project, index: number) => {
+    return (
+      <Card>
+        <Card.Header
+          onClick={() => {
+            projectBtnHandler(project.id);
+          }}
         >
-          <div
-            className={classes.prjTitle}
-            onClick={() => {
-              projectBtnHandler(project.id);
-            }}
-          >
-            {project.name}
-          </div>
+          {project.name}
+        </Card.Header>
+        <Card.Body>
+          <Card.Text>
+            {project.description ? project.description : "Brak opisu projektu"}
+          </Card.Text>
           <FontAwesomeIcon
             icon={faEdit}
             size="lg"
@@ -96,24 +125,8 @@ function ProjectList(props: ProjectListProps) {
             }}
             className={classes.list_util}
           />
-          {/*
-        {project.description && (
-          <textarea
-            id={classes.hidden}
-            rows={3}
-            defaultValue={project.description}
-            ref={descriptionTextAreaRef}
-            onBlur={() =>
-              descriptionInputBlurHandler({
-                id: project.id,
-                name: project.name,
-                description: project.description,
-              })
-            }
-          ></textarea>
-          */}
-        </ListGroup.Item>
-      </>
+        </Card.Body>
+      </Card>
     );
   };
 
@@ -127,12 +140,7 @@ function ProjectList(props: ProjectListProps) {
     return <div>Brak utworzonych projektów</div>;
   }
 
-  return (
-    <ListGroup as="ul">
-      {props.projects &&
-        props.projects.map((project, index) => wrapListElement(project, index))}
-    </ListGroup>
-  );
+  return createProjectTable(props.projects);
 }
 
 const mapStateToProps = (state: any) => {

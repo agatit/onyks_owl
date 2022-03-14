@@ -50,24 +50,24 @@ export class OwlNodeModel extends StormNodeModel {
       type: "Owl-node",
     });
 
-    this.headerColor = options.color || "White";
+    this.headerColor = options?.color || "White";
     this.bodyColor = "#141414";
-    this.title = options.title || "Node";
-    this.description = options.description || "Brak opisu modułu";
-    this.content = options.content || undefined;
-    this.source = options.source || false;
+    this.title = options?.title || "Node";
+    this.description = options?.description || "Brak opisu modułu";
+    this.content = options?.content || "Testowy content";
+    this.source = options?.source || false;
     this.params = {};
-    this.parameters = options.parameters || [];
-    this.module_id = options.module_id || "node";
-    this.id = options.id || "testId";
-    this.moduleDefId = options.moduleDefId || "test ModuleDefId";
-    this.project = options.project || {
+    this.parameters = options?.parameters || [];
+    this.module_id = options?.module_id || "node";
+    this.id = options?.id || "testId";
+    this.moduleDefId = options?.moduleDefId || "test ModuleDefId";
+    this.project = options?.project || {
       id: "initial ID",
       name: "Initial name",
     };
-    this.input = options.input || { id: "initial ID", name: "Initial name" };
-    this.output = options.output || { id: "initial ID", name: "Initial name" };
-    this.name = options.name || "Initial module name";
+    this.input = options?.input || { id: "initial ID", name: "Initial name" };
+    this.output = options?.output || { id: "initial ID", name: "Initial name" };
+    this.name = options?.name || "Initial module name";
     this.inputPortModel = new OwlDefaultPort({
       in: true,
       name: "In",
@@ -77,7 +77,7 @@ export class OwlNodeModel extends StormNodeModel {
       name: "Out",
     });
 
-    if (this.content && !this.source) {
+    if (!this.source) {
       this.addPort(this.inputPortModel);
     }
     this.addPort(this.outputPortModel);

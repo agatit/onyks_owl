@@ -7,17 +7,21 @@ import Backdrop from "./Components/Layout/Utils/Backdrop";
 import { connect, useDispatch } from "react-redux";
 import {
   getCreateModuleRequest,
+  getCreateQueueRequest,
   getDeleteModuleFromProjectRequest,
 } from "./store/Queries/project_editor_queries";
-import { Module } from "./store/redux-query";
+import { Module, Queue } from "./store/redux-query";
 import { OwlNodeModel } from "./Components/OwlNodes/OwlNodeModel";
 import { useLocation } from "react-router";
 import { OwlQueueModel } from "./Components/OwlQueue/OwlQueueModel";
 import { addNode } from "./store/Actions/nodeListActions";
+import { toast } from "react-toastify";
+import { loadSchema } from "./DiagramTools";
 
 interface DiagramProps {
   engine: DiagramEngine;
-  addModuleRequest: (projectId: string, module: Module) => void;
+  addModuleRequest: (projectId: string, module: Module) => any;
+  addQueueRequest: (projectId: string, queue: Queue) => any;
   projectId: string;
   deleteNodeRequest: (projectId: string, moduleId: string) => void;
 }
@@ -26,7 +30,8 @@ const Diagrams = (props: DiagramProps) => {
   const dispatch = useDispatch();
 
   function onNodeDrop(event: React.DragEvent<HTMLDivElement>) {
-    var droppedNode;
+    var droppedNode: OwlNodeModel | OwlQueueModel;
+
     if (event.dataTransfer.types[0] === "diagram-node") {
       var moduleData = JSON.parse(event.dataTransfer.getData("diagram-node"));
       droppedNode = new OwlNodeModel({
@@ -35,17 +40,36 @@ const Diagrams = (props: DiagramProps) => {
         title: moduleData.name,
         content: "Opis",
       });
+
       droppedNode.params = moduleData["params"];
       droppedNode.module_id = moduleData["id"];
-      props.addModuleRequest(props.projectId, droppedNode);
+      props
+        .addModuleRequest(props.projectId, droppedNode)
+        .then((result: any) => {
+          if (result.status !== 200) {
+            toast.error("Nie udało się dodać modułu!");
+          } else {
+            droppedNode.setPosition(engine.getRelativeMousePoint(event));
+            dispatch(addNode(droppedNode));
+            engine.getModel().addNode(droppedNode);
+            engine.repaintCanvas();
+          }
+        });
     } else {
       droppedNode = new OwlQueueModel({});
+      props
+        .addQueueRequest(props.projectId, droppedNode)
+        .then((result: any) => {
+          if (result.status !== 200) {
+            toast.error("Nie udało się dodać kolejki!");
+          } else {
+            droppedNode.setPosition(engine.getRelativeMousePoint(event));
+            dispatch(addNode(droppedNode));
+            engine.getModel().addNode(droppedNode);
+            engine.repaintCanvas();
+          }
+        });
     }
-    droppedNode.setPosition(engine.getRelativeMousePoint(event));
-    dispatch(addNode(droppedNode));
-    engine.getModel().addNode(droppedNode);
-
-    engine.repaintCanvas();
   }
 
   const location = useLocation();
@@ -63,6 +87,7 @@ const Diagrams = (props: DiagramProps) => {
   const [isSchemaLoading, setSchemaLoading] = useState(true);
 
   useEffect(() => {
+    loadSchema(engine, props.projectId);
     setTimeout(() => {
       setSchemaLoading(false);
     }, 1000);
@@ -108,7 +133,12 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     addModuleRequest: (projectId: string, module: Module) => {
-      dispatch(getCreateModuleRequest(projectId, module));
+      return dispatch(getCreateModuleRequest(projectId, module));
+    },
+    addQueueRequest: (projectId: string, queue: Queue) => {
+      return dispatch(
+        getCreateQueueRequest({ projectId: projectId, queue: queue })
+      );
     },
     deleteNodeRequest: (projectId: string, moduleId: string) => {
       dispatch(getDeleteModuleFromProjectRequest(projectId, moduleId));

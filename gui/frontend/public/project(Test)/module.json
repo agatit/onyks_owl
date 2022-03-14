@@ -4,8 +4,6 @@
     "name": "module plate detection",
     "type": "Owl-node",
     "description": "Moduł wykrywający tablice rejestracyjne",
-    "x": 50,
-    "y": 300,
     "position": {
       "x": 50,
       "y": 300
@@ -16,7 +14,6 @@
       "name": "Initial name"
     },
     "title": "module plate detection",
-    "content": "Opis",
     "source": false,
     "output": {
       "id": "testId1",
@@ -50,8 +47,6 @@
       "id": "initial ID",
       "name": "Initial name"
     },
-    "x": 670,
-    "y": 316,
     "position": {
       "x": 570,
       "y": 316

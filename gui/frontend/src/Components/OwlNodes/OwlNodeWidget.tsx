@@ -90,7 +90,10 @@ export class OwlNodeWidget extends React.Component<NodeWidgetProps> {
       entityRemoved: ({ entity }: any) => {
         store.dispatch(deleteNode(this.props.node));
         store.dispatch(
-          getDeleteModuleFromProjectRequest("Test", this.props.node.id)
+          getDeleteModuleFromProjectRequest(
+            this.props.node.project.id,
+            this.props.node.id
+          )
         );
       },
     });

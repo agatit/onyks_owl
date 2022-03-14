@@ -1,27 +1,15 @@
 .list_util {
-  margin: 0.5rem;
   cursor: pointer;
+}
+
+.listitem {
+  background-color: rgb(79, 95, 95);
 }
 
 .prjTitle {
-  width: 70%;
-  float: left;
-  height: 100%;
-  background-color: rgb(47, 71, 88);
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
-  font-weight: bold;
-  color: rgb(221, 216, 216);
-  display: flex;
-  vertical-align: middle;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+  background-color: rgb(60, 60, 60);
 }
 
 .test {
-  padding: 0;
-  border: 1px solid rgb(36, 35, 35);
-  background-color: rgb(51, 49, 49);
-  height: 2.5rem;
+  height: 100%;
 }

@@ -20,9 +20,9 @@ interface ProjectEditorProps {
 }
 
 function ProjectEditor(props: ProjectEditorProps) {
-  // const [{ isPending, status }, refresh] = useRequest(
-  //   //getProject({ projectId: props.projectId }, ProjectRequestConfig)
-  // );
+  const [{ isPending, status }, refresh] = useRequest(
+    getProject({ projectId: props.projectId }, ProjectRequestConfig)
+  );
 
   const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
   const prjNameInputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +63,7 @@ function ProjectEditor(props: ProjectEditorProps) {
           maxLength={30}
           ref={prjNameInputRef}
           style={propInputs}
+          defaultValue={props.projectId}
         />
         <Form.Text className="text-muted">
           Maksymalna liczba znaków dla nazwy projektu: 30
