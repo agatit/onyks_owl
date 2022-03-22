@@ -105,6 +105,7 @@ class Project():
         if self.modules[module_local_name] is None: 
             return "Łups :("
         self.config_json['modules'][module_local_name] = self.modules[module_local_name].get_default_config()
+        self.config_json['modules'][module_local_name]['id'] = module_name
         self.set_config(self.config_json)
         return self.config_json['modules'][module_local_name]
 
@@ -122,12 +123,12 @@ class Project():
     def get_modules(self):
         # return list(self.modules.keys())
         response = {}
-        response["input"] = None
-        response["output"] = None
-        response["comment"] = "Skąd to wziąć? Chyba gdzieś tutaj to jest..."
-        response["id"] = "w sumie to po co to brać, spoko podbijam cały 'project'?"
-        response["name"] = "O tu, zaraz pod spodem jest..."
-        response["project"] = self.get_config()
+        # response["input"] = None
+        # response["output"] = None
+        # response["comment"] = "Skąd to wziąć? Chyba gdzieś tutaj to jest..."
+        # response["id"] = "w sumie to po co to brać, spoko podbijam cały 'project'?"
+        # response["name"] = "O tu, zaraz pod spodem jest..."
+        # response["project"] = self.get_config()
         for x, y in self.modules.items():
             response[x] = y.get_params()
         response2 = [response]
