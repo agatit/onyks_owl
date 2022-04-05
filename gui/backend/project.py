@@ -122,7 +122,8 @@ class Project():
 
     def get_modules(self):
         # return list(self.modules.keys())
-        response = {}
+        # response = {}
+        response = []
         # response["input"] = None
         # response["output"] = None
         # response["comment"] = "Skąd to wziąć? Chyba gdzieś tutaj to jest..."
@@ -130,9 +131,15 @@ class Project():
         # response["name"] = "O tu, zaraz pod spodem jest..."
         # response["project"] = self.get_config()
         for x, y in self.modules.items():
-            response[x] = y.get_params()
-        response2 = [response]
-        return response2
+            # response[x] = y.get_params()
+            # response.append(y.get_params())
+            config = y.get_default_config()
+            config['id'] = x
+            config['name'] = y.name
+            # y['id'] = x
+            response.append(y.get_default_config())
+        # response2 = [response]
+        return response
     def delete_module(self, module_name):
         del self.config_json['modules'][module_name]
         del self.modules[module_name]
@@ -171,10 +178,10 @@ class Project():
             name_helper += 1
             name = queue.name + '#' + str(name_helper)
         self.config_json['queues'][name] = {}
-        self.config_json['queues'][name]['task_queue_limit'] = queue.task_queue_limit
-        self.config_json['queues'][name]['task_queue_timeout'] = queue.task_queue_timeout
-        self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit
-        self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout
+        self.config_json['queues'][name]['task_queue_limit'] = queue.task_queue_limit if queue.task_queue_limit != None else 6
+        self.config_json['queues'][name]['task_queue_timeout'] = queue.task_queue_timeout if queue.task_queue_timeout != None else 5
+        self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit if queue.stream_queue_limit != None else 0
+        self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout if queue.stream_queue_timeout != None else 1
         self.set_config(self.config_json)
         return self.config_json['queues'][name]
     def modify_queue(self, queue):

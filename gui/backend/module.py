@@ -4,6 +4,7 @@ import importlib.util
 import sys
 import datetime
 import logging
+import json
 from copy import deepcopy
 
 owl_path = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl'))
@@ -14,6 +15,7 @@ class Module():
         self.project_path = project_path
         self.module_path = module_path
         self.config = {}
+        self.config_json = {}
         self.default_config = {}
         self.default_config_normalized = {}
         self.config_path = config_path
@@ -25,6 +27,7 @@ class Module():
                 os.makedirs(os.path.join(self.project_path, 'logs', self.instance_id))
         self.process_handler = None
 
+        self.import_config_json()
         self.import_default_config()
         self.normalize_default_config()
         # self.import_class()
@@ -49,6 +52,13 @@ class Module():
         # self.module_object = module_wrapper.Module(self.config, None) # Stricte obiekt
         self.module_object = module_wrapper.Module.from_cmd(['xd',self.config_path, self.instance_id]) # Stricte obiekt
 
+    def import_config_json(self):
+        try:
+            with open(self.config_path) as file:
+                config = json.load(file)
+                self.config_json = config
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
     def import_default_config(self):
         # self.default_config = self.module_object.get_config()
         self.default_config = importlib.import_module(self.name).Module.get_config()
@@ -58,6 +68,19 @@ class Module():
         self.default_config_normalized['params'] = {}
         for x, y in self.default_config['params'].items():
             self.default_config_normalized['params'][x] = y['value']
+        if 'output_queues' in self.config_json['modules'][self.name]:
+            self.default_config_normalized['params']['output_queues'] = self.config_json['modules'][self.name]['output_queues']
+        if 'input_queues' in self.config_json['modules'][self.name]:
+            self.default_config_normalized['params']['input_queues'] = self.config_json['modules'][self.name]['input_queues']
+        
+        # for x, y in self.default_config['output_classes'].items():
+        #     # print(x, y.__module__, y.__name__)
+        #     # self.default_config_normalized['params']['output_queues'][x] = f"{y.__module__}.{y.__name__}"
+        #     self.default_config_normalized['params']['output_queues'].append(x)
+        # for x, y in self.default_config['input_classes'].items():
+        #     # print(x, y.__module__, y.__name__)
+        #     # self.default_config_normalized['params']['input_queues'][x] = f"{y.__module__}.{y.__name__}"
+        #     self.default_config_normalized['params']['input_queues'].append(x)
     def module_start(self):
         self.create_logger()
         self.import_class()

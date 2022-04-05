@@ -116,7 +116,7 @@ class Engine():
                 json.dump(config, f, ensure_ascii=False, indent=4)
 
             self.add_project(openapi_project.id)
-            return config # TODO albo openapi_project
+            return [{}], 201 # TODO albo openapi_project
         except FileExistsError as e:
             raise ProblemException(409, "Project exists")
     def update_project(self, data):
