@@ -3,8 +3,10 @@
     "description": "Debug5",
     "name": "debug2",
     "modules": {
-        "module_source_cv" : {   
-            "output_queues" : ["stage1"],            
+        "module_source_cv": {
+            "output_queues": [
+                "stage1"
+            ],
             "params": {
                 "device": "../samples/camera_wisenet/train1.avi"
             }
@@ -37,6 +39,18 @@
             "task_queue_timeout": 1,
             "stream_queue_limit": 6,
             "stream_queue_timeout": 5
+        },
+        "name": {
+            "task_queue_limit": 0,
+            "task_queue_timeout": 1,
+            "stream_queue_limit": 6,
+            "stream_queue_timeout": 5
+        },
+        "name#1": {
+            "task_queue_limit": 6,
+            "task_queue_timeout": 5,
+            "stream_queue_limit": 0,
+            "stream_queue_timeout": 1
         }
     }
 }

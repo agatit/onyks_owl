@@ -1,26 +1,43 @@
 {
-    "id" : "Debug1",
-    "description" : "Debug2",
-    "name" : "Debug3",
-    "modules" : {
-        "module_source_cv" : {   
-            "output_queues" : ["stage1"],            
+    "id": "Debug1",
+    "description": "Debug2",
+    "name": "Debug3",
+    "modules": {
+        "module_source_cv": {
+            "output_queues": [
+                "stage1"
+            ],
             "params": {
                 "device": 0
             }
         },
-
-        "module_sink_win" : {   
-            "input_queues" : ["stage1"],    
+        "module_sink_win": {
+            "input_queues": [
+                "stage1"
+            ],
             "params": {
                 "window_name": "camera_view"
-            }        
+            }
+        },
+        "module_source_cv#1": {
+            "params": {
+                "stream_queue_limit": 100,
+                "task_expire_time": 10,
+                "stream_expire_time": 10,
+                "task_timeout": 10,
+                "stream_timeout": 10,
+                "input_queues": "[]",
+                "output_queues": [
+                    "stage1"
+                ],
+                "device": "../samples/camera_wisenet/train1.avi"
+            },
+            "id": "module_source_cv"
         }
     },
-
     "queues": {
-        "stage1" : {
-            "stream_queue_limit" : 100
+        "stage1": {
+            "stream_queue_limit": 100
         }
     }
 }

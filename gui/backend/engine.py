@@ -23,11 +23,6 @@ if not owl_path in sys.path:
 DEFAULT_PATH_PROJECTS = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../projects")
 DEFAULT_PATH_MODULES = os.path.join(os.path.abspath(os.path.dirname(__file__)),"../../owl")
 
-# EMPTY_CONFIG = { # TODO do hasioka
-#     'modules': {},
-#     'pipeline': {}
-# }
-
 class Engine():
     def __init__(self, projects_path = DEFAULT_PATH_PROJECTS, modules_path = DEFAULT_PATH_MODULES):
         logging.root.setLevel(logging.NOTSET)
@@ -123,11 +118,14 @@ class Engine():
         openapi_project = OPProject.from_dict(data)
         with open(os.path.join(self.projects_path, openapi_project.id, "config.json"), 'r') as f:
             config = json.load(f)
+        if config['name'] != data['name']:
+            self.change_project_name(config['name'], data['name'])
         config['name'] = openapi_project.name
         config['desc'] = openapi_project.description
         config['modules'] = {}
         with open(os.path.join(self.projects_path, openapi_project.id, "config.json"), 'w') as f:
             json.dump(config, f)
+
         return config
     def delete_project(self, project_id):
         # TODO jakiś project_kill
@@ -149,7 +147,7 @@ class Engine():
     def set_project_conf(self, project_id, data):
         retval = self.projects[project_id].set_config(data)
         if project_id != data.id:
-            self.change_project_name(self, project_id, data.id)
+            self.change_project_name(project_id, data.id)
         return retval
     def change_project_name(self, project_id, new_project_id):
         # usuń projekt z obiektów
@@ -168,7 +166,8 @@ class Engine():
         
     def add_project_module(self, project_id, module_name):
         return self.projects[project_id].add_module(module_name)
-        
+    def update_project_module(self, project_id, module_data):
+        return self.projects[project_id].update_module(module_data)
     def get_project_module_data(self, project_id, module_id):
         return self.projects[project_id].get_module_data(module_id)
 

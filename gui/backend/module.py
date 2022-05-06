@@ -68,10 +68,11 @@ class Module():
         self.default_config_normalized['params'] = {}
         for x, y in self.default_config['params'].items():
             self.default_config_normalized['params'][x] = y['value']
-        if 'output_queues' in self.config_json['modules'][self.name]:
-            self.default_config_normalized['params']['output_queues'] = self.config_json['modules'][self.name]['output_queues']
-        if 'input_queues' in self.config_json['modules'][self.name]:
-            self.default_config_normalized['params']['input_queues'] = self.config_json['modules'][self.name]['input_queues']
+        if self.name in self.config_json['modules']:
+            if 'output_queues' in self.config_json['modules'][self.name]:
+                self.default_config_normalized['params']['output_queues'] = self.config_json['modules'][self.name]['output_queues']
+            if 'input_queues' in self.config_json['modules'][self.name]:
+                self.default_config_normalized['params']['input_queues'] = self.config_json['modules'][self.name]['input_queues']
         
         # for x, y in self.default_config['output_classes'].items():
         #     # print(x, y.__module__, y.__name__)

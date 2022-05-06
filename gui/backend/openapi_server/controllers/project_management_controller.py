@@ -72,6 +72,7 @@ def get_project(project_id):  # noqa: E501
 
     :rtype: Project
     """
+    return worker.x.get_project_conf(project_id)
     try:
         response = []
         pathlist = list(Path(project_path).glob(f'**/{project_id}/config.json'))
@@ -86,7 +87,7 @@ def get_project(project_id):  # noqa: E501
         raise ProblemException(404, "Project not exists", str(e))
         
     return 'Deleted', 200            
-    # TODO na pewno nie "config"
+
     # return x.get_project_conf(project_id)
 
 def list_projects():  # noqa: E501

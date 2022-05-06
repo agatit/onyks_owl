@@ -311,7 +311,7 @@ def run_instance(project_id):  # noqa: E501
     return 'do some magic!'
 
 
-def update_module(project_id, module):  # noqa: E501
+def update_module(project_id):  # noqa: E501
     """Add module to project
 
      # noqa: E501
@@ -323,10 +323,14 @@ def update_module(project_id, module):  # noqa: E501
 
     :rtype: Module
     """
-    # if connexion.request.is_json:
-    #     module = Module.from_dict(connexion.request.get_json())  # noqa: E501
+    if connexion.request.is_json:
+        data = connexion.request.get_json()
+        module = Module.from_dict(data)  # noqa: E501
     # return 'do some magic!'
-    return worker.x.set_project_conf(project_id, module) # TODO data?!?!?!??!?!!??!??!
+    # return worker.x.set_project_conf(project_id, module)
+    # return worker.x.update_project_module(project_id, module)
+    # TODO to służy do zmiany nazwy modułu. Trza sprawdzać "name", podmienić je jako klucz w configu, a potem w ogóle spojrzeć na obiekty...
+    return worker.x.set_module_params(project_id, module.id, data)
 
 
 def update_queue(project_id):  # noqa: E501

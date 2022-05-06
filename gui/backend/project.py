@@ -18,7 +18,7 @@ class Project():
         self.modules_path = modules_path
         self.modules = {} # Nazwy modułów bez '.py'
         self.instances = {}
-        self.queues = {} # TODO hasiok
+        self.queues = {}
         self.instance_helper = 0
         """
         Instancja - lista modułów
@@ -74,7 +74,7 @@ class Project():
             # TODO Nnnnnnnnno chcę porobić te try/catche, ale pewnie da się to jeszcze nieco ulepszyć
 
     def load_modules(self):
-        for mod in self.config_json['modules']: #TODO tutaj wyjebywać delimiter(?:p)
+        for mod in self.config_json['modules']:
             if '#' in mod:
                 name = mod[:mod.find("#")]
             else:
@@ -95,7 +95,6 @@ class Project():
         owl_path = os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../owl')) # TODO owl_path jakiś globalniejszy zrobić...
         if not owl_path in sys.path:
             sys.path.append(owl_path)
-            # TODO ale że tutaj to?!?!
         module_local_name = module_name
         name_helper = 0
         while module_local_name in self.modules:
@@ -108,7 +107,10 @@ class Project():
         self.config_json['modules'][module_local_name]['id'] = module_name
         self.set_config(self.config_json)
         return self.config_json['modules'][module_local_name]
-
+    def update_module(self, module):
+        
+        x = 2
+        pass
     def get_module_data(self, module_name):
         if module_name in self.config_json['modules']:
             # response = 

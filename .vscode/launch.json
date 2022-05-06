@@ -34,6 +34,26 @@
                 "${cwd}/examples/perspective_transform/config.json"
             ],
             "console": "internalConsole"
-        }
+        },
+        {
+            "name": "Python: Swagger",
+            "type": "python",
+            "request": "launch",
+            // "program": "${file}",
+            "program": "${cwd}/gui/backend-swagger/openapi_server",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceRoot}/gui/backend-swagger"
+            }
+        },
+        {
+            "name": "Python: Swagger, but better",
+            "type": "python",
+            "request": "launch",
+            // "program": "${file}",
+            "program": "${cwd}/gui/backend/openapi_server",
+            "console": "integratedTerminal",
+            "env": { "PYTHONPATH": "${workspaceRoot}/gui/backend"}
+        },
     ]
 }

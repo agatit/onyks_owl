@@ -18,25 +18,15 @@ Engine nie dostarczy project_path's i config_path'a
 * Jak odpalane będą instancje?(W sensie API)
 * te instancje będą nieco bardziej niezależne? będą różne video przetwarzać? potrzebne będą różne configi? (kinda logiczne, ale API tego nie przewiduje)
 
-- Podpięcie reszty tego co mam pod API
-- Przekminić resource'y
-- "module_def" bez Popen
-
 
 Resource'y:
-    - Ogólnie to rozdzielić "examples" i "projects"
     - Projects -> Nazwa projektu -> "logs", "resources", config.json
         - "resources" -> "in", "out" (w każdym z tych folderów '.gitkeep'[o ile robi to co myślę że robi])
 
 API:
     - "update_project" nie kopiuje "modules", tylko je zeruje
     
-    - do "module_base"(czy tam ogólnie do modułów) przekazać nazwę projektu, żeby logi dobrze wrzucać
     - przy tworzeniu projektu dodawać foldery na "resource'y"
-
-    - przestudiować dokładniej "logging" żeby miał wywalone jajca, a "engine" przekierowywał dane na pliki
-        - to, albo "importlib" niech przechwytuje "stdout"
-            - kurewa te objekty loguf
 
     - zrobić "from_dict"
     
@@ -52,13 +42,59 @@ API:
     - zmienić nazwę loggera na bardziej powiązaną z instancją
     
 
-# TODO mniej hardkodowa ścieżka do pliku w "module_sink_file"
-# TODO mądra ścieżka do pliku - nazwa projektu, nazwa modułu, etc.
 # TODO poprawić specyfikę endpointa do robienia instancji
 
 
 To jak te endpointy:
 - "add instance" ma "request body" w którym jest "Instance schema"
     - podobnie "update instance"
-    
-- config z DEBUG'a i Queues nareszcie
+
+- Czekać na Michała aż obsługę kolejek zrobi u siebie
+    - czy czekać czy samemu przy okazji "default_config'i" ogarnąć z tego?!?!
+- Tia, todo kolejki i ich modyfikacja
+
+- moduły ich name czy id
+
+01032022:
+    - [v]"perspective_transform" -> "Ajdi" WTF?!?!
+    - [x]"create_project"
+    - [x]"delete_module"
+    - [x]całe queues'y
+    - [x]project delete
+    - [x]property_editor też coś nie ten tegies widzi nazwy/idki projektów
+    - []"gui" do configu
+
+- "perspective_transform" małymi z łaski swojej
+    - wrrrć, nazwy projektów małymi z łaski swojej
+- Nno i ogólnie to po wczytaniu configu to nic się nie rysuje natychmiastowo
+
+    - [x]delete project wywala się przy kasowaniu instancji
+    - [x]czemu chce wczytać folder bez "config.json"
+    - [x]property_editor_controller linijka 104
+    - [x]zmiana nazwy projektu niech zmienia nazwę folderu
+        - [] Michał PLZ daj zmianę nazwy projektu do menu, będzie nam obu łatwiej, bo będę cały obiekt pewnie kasował i tworzył nowy
+    - [x]kasowanie modułu z projektu
+    - [x]"Jest git" zmienić
+    - [x]nazwy modułów i kolejek(duplikaty)
+    - [x]moduł jakoś się chujowo dodaje
+    - [x] ten skrin ze stacjonarki
+    - [x] "problem z modułami bo z serwera dostaję duży obiekt zamiast tablicy obiektów"
+    - [] zrobić normalne id przy tworzeniu projektu
+    - [x] "list of project modules" bez tych kretyństw po bokach, same moduły
+    - [x] "list of project modules" moduł niech ma "id"
+    - [x] to_lower
+        - nie to_lower, tylko mam projekty zjebane
+        - pokasować te wadliwe
+    - [x] project, linijka ~134 - dostosować strukturę pod to co Michał wysłał na doiscordzie 
+        - [x] nno prawie, tylko czemu się kolejki nie wysyłajo?!?!
+    - [x] project, linijka ~174 - defaultowe parametry
+    - [x] module, linijka 74
+    - [] queue, wysyłanie id queue
+        - [] do tego uwaga na duplikaty
+    - [x] przy "add_module" sprawdzić czy się odsyła jak należy(tak jak przy GET)
+
+    - [] zmieniając nazwę projektu, czy muszę zmieniać nazwę folderu, skoro mam "id" oraz "name"?!?!?
+
+    Panie Michale...
+        - "delete_project_module" - "initial ID" jak w edytorze nazwy modułu wcisnę "delete" a nie "backspace"
+        - tam mi gdzieś jeszcze inne "initial'e" wyskakują...
