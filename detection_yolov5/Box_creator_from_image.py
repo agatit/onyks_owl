@@ -1,7 +1,10 @@
 """
-Program do tworzenia zbiorów do nauki w formacie yolov5 z zdjęć rzeczywistych bez masek. 
+Program do tworzenia zbiorów do nauki w formacie yolov5 z zdjęć rzeczywistych bez masek. Po odpaleniu programu, wyświetlą się dwa okna jedno z zdjęciem
+i wskazaniu odpowiedniego obszaru, okno ROI z barami które pozwalają ustawić odpowiedni obszar, gdy odpowiedni obszar zostanie oznaczony klikamy cyfrę
+odpowiedniego labela, a gdy zaznaczymy wszystko należy nacisnąć "q" aby przejść do kolejnego
 
 Do poprawnego działania potrzebna możliwość wyświetlania zdjęć i folder z zdjęciami.
+
 
 
 Efektem pracy programu jest:
@@ -33,6 +36,8 @@ label_dict =   ["vertical_text",                                        #lista l
                 "label_0"]
 
 TVT_ratio = [70,20,10]                                                  #stosunek podziału odpowiednich zdjęć      
+
+####### Tworzenie folderów
 
 dirName = os.path.join(folder, "results")
     
@@ -74,11 +79,13 @@ try:
 except FileExistsError:
     print("Directory " , dirName ,  " already exists")  
 
+####### 
+
 a = 0 
 def none(a):
     pass
 
-
+###### Iterecja po zdjeciach w folderze
 for file in os.listdir(folder):
     img = cv.imread(os.path.join(folder, file))
     label = []
@@ -88,6 +95,8 @@ for file in os.listdir(folder):
     height = []
 
     w_0, h_0, ch_0 = img.shape
+    
+    #### Reset barów do następnego zdjecia 
     if a ==0:
         cv.namedWindow("ROI")
         cv.createTrackbar("vertical_left", "ROI", 0, h_0, none)
@@ -113,6 +122,8 @@ for file in os.listdir(folder):
 
         cv.imshow("img", frame)
         k = cv.waitKey(1)
+        
+        ##### przypisanie labeli
         if k == ord("1"):
             label.append(0)
             x1 = cv.getTrackbarPos("vertical_left", "ROI")
@@ -226,6 +237,7 @@ for file in os.listdir(folder):
         if k == ord("q"):
             break
     
+    ####### Zapisywanie plików 
     cv.imwrite(os.path.join(folder, "results", "images", file), img)
     cv.imwrite(os.path.join(folder, "used", file), img)
     os.remove(os.path.join(folder, file))
