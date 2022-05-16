@@ -1,0 +1,10 @@
+0 - vetical_text_box
+1 - horizontal_text_box
+2 - contener_corner
+3 -
+4 -
+5 - railcar_bogie 
+6 - railcar_text
+7 -
+8 -
+10 -
