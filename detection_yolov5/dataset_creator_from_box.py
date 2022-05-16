@@ -5,7 +5,7 @@ Plik do poprawnego działania potrzebuje mieć obok siebie folder "Data" i w nim
 składającymi się z litery I lub M kolejno dla zdjęć lub boxów, i numeru dopełnionego zerami do 4 cyfr. 
 
 Efektem pracy programu jest
-  -folder "results" z trzema podfolderami "test", "train", "validation", gdzie w każdym znajdują się dwa podfodery "images" i "labels" zawierające kolejno zdjęcia
+  -folder "results" z trzema podfolderami "test", "train", "valid", gdzie w każdym znajdują się dwa podfodery "images" i "labels" zawierające kolejno zdjęcia
    i annotacie opisujące położenie interesującego nas obiektu w formacie yolo (label, center_x, center_y, with, height) przy czym infromacje te są zapisywane
    w postaci (wartość / maksymalna_wartość_dla_zdjecia np. center_x = położenie_srodka_obiektu_w_osi_x_w_pixelach / cała_szerokość_obrazu).
   -plikiem "data.yaml" zawierający listę labeli, ilość labeli, ścieżki do folderu ze zdjęciami do treningu i validacji. 
@@ -24,7 +24,7 @@ img_list = []
 box_list = []
 checked_elements_list = []  
 debug = True              #Gdy True program zapisze w folderze 
-TVT_ratio = [70,20,10]          #wspołczynnik odpowiedzialny za podział zdjęć na train, validation, test w odpowiednich proporcjach 
+TVT_ratio = [70,20,10]          #wspołczynnik odpowiedzialny za podział zdjęć na train, valid, test w odpowiednich proporcjach 
                                 # SUMA MUSI WYNOSIC 100, zalecane 70,20,10
 
     #pobranie nazw plików
@@ -126,8 +126,8 @@ if debug:
     print(annotation_dict)
 
 
- ### podział na train, validation, test
-for name in ["train", "validation", "test"]:
+ ### podział na train, valid, test
+for name in ["train", "valid", "test"]:
     dirName = os.path.join("Data", name_of_folder, "results", name)
     # Create target directory & all intermediate directories if don't exists
     try:
@@ -151,11 +151,11 @@ for name in ["train", "validation", "test"]:
                 print("Directory " , dirName ,  " already exists")    
 
 train_len = round(len(checked_elements_list)*TVT_ratio[0]/100)
-validation_len = round(len(checked_elements_list)*TVT_ratio[1]/100)
+valid_len = round(len(checked_elements_list)*TVT_ratio[1]/100)
 test_len = round(len(checked_elements_list)*TVT_ratio[2]/100)
 
 print(train_len)
-print(validation_len)
+print(valid_len)
 print(test_len)
 
 ################# Zapis wyników do odpowiednich folderów ################
@@ -168,12 +168,12 @@ for count, element in enumerate(checked_elements_list):
         file = open(os.path.join("Data", name_of_folder, "results", "train", "labels",str("I"+element[:-4]+".txt")), 'w')
         file.write(f"{annotation[0]} {annotation[1]} {annotation[2]} {annotation[3]} {annotation[4]}")
         file.close()
-    if count < train_len+validation_len and count > train_len:
-        cv.imwrite(os.path.join("Data", name_of_folder, "results", "validation", "images", str("I"+element)), img)
-        file = open(os.path.join("Data", name_of_folder, "results", "validation", "labels",str("I"+element[:-4]+".txt")), 'w')
+    if count < train_len+valid_len and count > train_len:
+        cv.imwrite(os.path.join("Data", name_of_folder, "results", "valid", "images", str("I"+element)), img)
+        file = open(os.path.join("Data", name_of_folder, "results", "valid", "labels",str("I"+element[:-4]+".txt")), 'w')
         file.write(f"{annotation[0]} {annotation[1]} {annotation[2]} {annotation[3]} {annotation[4]}")
         file.close()
-    if count < train_len+validation_len+test_len and count > train_len+validation_len:
+    if count < train_len+valid_len+test_len and count > train_len+valid_len:
         cv.imwrite(os.path.join("Data", name_of_folder, "results", "test", "images", str("I"+element)), img)
         file = open(os.path.join("Data", name_of_folder, "results", "test", "labels",str("I"+element[:-4]+".txt")), 'w')
         file.write(f"{annotation[0]} {annotation[1]} {annotation[2]} {annotation[3]} {annotation[4]}")
