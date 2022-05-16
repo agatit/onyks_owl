@@ -6,3 +6,5 @@ pliki zdatne do odpalenia bez wyświetlania (server):
   -dateset_creator_from_box.py
 pliki które potrzebują wyświetlania/kamery/itp (komputer):
   -Box_creator_from_image.py
+  
+  Folder yolov5 nie działa, jest sklonowane ropo yolo
