@@ -7,4 +7,5 @@ pliki zdatne do odpalenia bez wyświetlania (server):
 pliki które potrzebują wyświetlania/kamery/itp (komputer):
   -Box_creator_from_image.py
   
-  Folder yolov5 nie działa, jest sklonowane ropo yolo
+  Folder yolov5 nie działa, aby pozyskać działąjący trzeba skopiować z repo yolo tutorial 
+  interesują nas tam dla pliki train i detect (train służy do trenowania, a z detect staram się wyeksportować moduł wyszukujący)
