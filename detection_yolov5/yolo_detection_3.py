@@ -1,3 +1,12 @@
+"""
+Program do wykrywania elementów przy pomocy customowego modelu yolov5 z filmów
+
+Efektem pracy programu jest
+  -film z zanaczonymi elementami
+ 
+Położenie oryginału: /home/mbak/Yolo5/yolo_detection_3.py
+"""
+
 import torch
 import numpy as np
 import cv2 as cv
