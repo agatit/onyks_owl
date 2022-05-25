@@ -4,6 +4,7 @@ Folder plików używanych do detekcji, treningu i tworzenia zbiorów do nauki
 
 pliki zdatne do odpalenia bez wyświetlania (server):
   -dateset_creator_from_box.py
+  -yolo_detection_3.py
 pliki które potrzebują wyświetlania/kamery/itp (komputer):
   -
   -Box_creator_from_image.py
