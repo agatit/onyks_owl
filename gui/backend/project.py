@@ -106,7 +106,7 @@ class Project():
         self.config_json['modules'][module_local_name] = self.modules[module_local_name].get_default_config()
         self.config_json['modules'][module_local_name]['id'] = module_name
         self.set_config(self.config_json)
-        return self.config_json['modules'][module_local_name]
+        return {module_local_name:self.config_json['modules'][module_local_name]}
     def update_module(self, module):
         
         x = 2
@@ -185,7 +185,7 @@ class Project():
         self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit if queue.stream_queue_limit != None else 0
         self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout if queue.stream_queue_timeout != None else 1
         self.set_config(self.config_json)
-        return self.config_json['queues'][name]
+        return {name:self.config_json['queues'][name]}
     def modify_queue(self, queue):
         name = queue.name
         self.config_json['queues'][name] = {}
