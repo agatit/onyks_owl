@@ -16,7 +16,6 @@ import { selectedQueue } from "../../../../store/Actions/queueActions";
 import classes from "./QueuePropEditor.module.css";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OwlNodeModel } from "../../../OwlNodes/OwlNodeModel";
 import { OwlQueueModel } from "../../../OwlQueue/OwlQueueModel";
 import TabSection from "../../Tabs/TabSection";
 import { toast } from "react-toastify";
@@ -25,7 +24,6 @@ interface QueuePropEditorProps {
   queue: OwlQueueModel;
   engine: DiagramEngine;
   projectId: string;
-  node: OwlNodeModel;
   updateParamRequest: (requestParams: UpdateQueueParamRequest) => any;
   updateQueue: (requestParams: UpdateQueueRequest) => any;
 }
@@ -88,8 +86,6 @@ function QueuePropEditor(props: QueuePropEditorProps) {
       </div>
     );
   }
-  if (props.node) props.node.setSelected(false);
-  queue.setSelected(true);
 
   return (
     <TabSection title="Główne">
@@ -134,7 +130,6 @@ function QueuePropEditor(props: QueuePropEditorProps) {
 
 const mapStateToProps = (state: any) => {
   return {
-    node: state.nodesData.selectedNode,
     queue: state.queueReducer.selectedQueue,
     test: state.queueReducer.test,
     engine: state.engineReducer.engine,

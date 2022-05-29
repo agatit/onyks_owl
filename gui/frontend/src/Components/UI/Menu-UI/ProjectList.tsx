@@ -1,14 +1,6 @@
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Container,
-  ListGroup,
-  Spinner,
-  Col,
-  Row,
-  Stack,
-  Card,
-} from "react-bootstrap";
+import { Container, Spinner, Col, Row, Card } from "react-bootstrap";
 import { Project } from "../../../store/redux-query/models/Project";
 import { useHistory } from "react-router-dom";
 import {
@@ -22,8 +14,7 @@ import { connect } from "react-redux";
 import { ProjectListRequestConfig } from "../../../store/QueryConfigs";
 import Backdrop from "../../Layout/Utils/Backdrop";
 import { useRequest } from "redux-query-react";
-import { toast, ToastContainer } from "react-toastify";
-import { useRef } from "react";
+import { toast } from "react-toastify";
 
 interface ProjectListProps {
   projects: Array<Project>;
@@ -41,7 +32,7 @@ function ProjectList(props: ProjectListProps) {
     return (
       <Container fluid>
         <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">Ładowanie...</span>
         </Spinner>
         <h4>Trwa ładowanie projektów!</h4>
       </Container>
@@ -97,7 +88,7 @@ function ProjectList(props: ProjectListProps) {
 
   const createTableElement = (project: Project, index: number) => {
     return (
-      <Card>
+      <Card style={projectCardsStyle}>
         <Card.Header
           onClick={() => {
             projectBtnHandler(project.id);
@@ -164,3 +155,7 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectList);
+
+const projectCardsStyle = {
+  margin: "5px",
+};

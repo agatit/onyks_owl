@@ -5,13 +5,13 @@ import { OwlQueueLinkModel } from "./Components/OwlQueueLinks/OwlQueueLinkModel"
 import { BASE_PATH } from "./store/redux-query";
 
 export async function loadQueues(engine: DiagramEngine, projectId: string) {
-  const url = BASE_PATH + `/project(${projectId})/queue`;
-  //const url = "../project(Test)/queue.json";
-  const resp = await fetch(url);
-  const data = await resp.json();
+  const queuesUrl = BASE_PATH + `/project(${projectId})/queue`;
+  const url = "../project(Test)/queue.json"; //url testowe
+  const resp = await fetch(queuesUrl);
+  const queuesFromResponse = await resp.json();
 
-  for (let i in data) {
-    var newQueue = new OwlQueueModel(data[i]);
+  for (let i in queuesFromResponse) {
+    var newQueue = new OwlQueueModel(queuesFromResponse[i]);
     engine.getModel().addNode(newQueue);
   }
   engine.repaintCanvas();
@@ -19,15 +19,17 @@ export async function loadQueues(engine: DiagramEngine, projectId: string) {
 }
 
 export async function loadNodes(engine: DiagramEngine, projectId: string) {
-  const url = BASE_PATH + `/project(${projectId})/module`;
-  //const url = "../project(Test)/module.json";
-  const resp = await fetch(url);
+  const nodesUrl = BASE_PATH + `/project(${projectId})/module`;
+
+  const url = "../project(Test)/module.json"; //url testowe
+  const resp = await fetch(nodesUrl);
   const data = await resp.json();
 
   const nodesArray: OwlNodeModel[] = [];
 
   for (let i in data) {
     var newNode = new OwlNodeModel(data[i]);
+    console.log(newNode);
     nodesArray.push(newNode);
     engine.getModel().addNode(newNode);
   }
@@ -48,8 +50,9 @@ export function generateLinks(nodesArr: OwlNodeModel[], engine: DiagramEngine) {
       link.setSourcePort(nodesArr[i].inputPortModel);
       link.setTargetPort(
         engine.getModel().getNode(nodesArr[i].input.id).getPort("Wyjście")
+        // Do ewentualnej zmiany z racji hardcode,
+        //  ale nie jest to istotne w obecnej implementacji kolejek
       );
-      // console.log(link);
       engine.getModel().addLink(link);
     }
     if (
@@ -60,8 +63,9 @@ export function generateLinks(nodesArr: OwlNodeModel[], engine: DiagramEngine) {
       link.setSourcePort(nodesArr[i].outputPortModel);
       link.setTargetPort(
         engine.getModel().getNode(nodesArr[i].output.id).getPort("Wejście")
+        // Do ewentualnej zmiany z racji hardcode,
+        //  ale nie jest to istotne w obecnej implementacji kolejek
       );
-      //console.log(link);
       engine.getModel().addLink(link);
     }
   }

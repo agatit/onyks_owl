@@ -6,11 +6,11 @@ import { OwlNodeModel } from "../../OwlNodes/OwlNodeModel";
 import { OwlQueueModel } from "../../OwlQueue/OwlQueueModel";
 import TabSection from "../Tabs/TabSection";
 
-interface ProjectMenageListProps {
+interface DiagramObjectMenageListProps {
   schemaElements: Array<any>;
 }
 
-function ProjectMenageList(props: ProjectMenageListProps) {
+function DiagramObjectMenageList(props: DiagramObjectMenageListProps) {
   function elementClickHandler(element: NodeModel) {
     element.setSelected(true);
   }
@@ -47,7 +47,7 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps)(ProjectMenageList);
+export default connect(mapStateToProps)(DiagramObjectMenageList);
 
 const propInputs = {
   backgroundColor: "rgb(143, 143, 143)",

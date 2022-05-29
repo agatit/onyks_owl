@@ -11,20 +11,13 @@
  * Do not edit the class manually.
  */
 
-import {
-  HttpMethods,
-  QueryConfig,
-  ResponseBody,
-  ResponseText,
-} from "redux-query";
+import { QueryConfig, ResponseBody } from "redux-query";
 import * as runtime from "../runtime";
 import {
   InstanceModule,
   InstanceModuleFromJSON,
-  InstanceModuleToJSON,
   InstanceQueue,
   InstanceQueueFromJSON,
-  InstanceQueueToJSON,
   ModuleParam,
   ModuleParamFromJSON,
   ModuleParamToJSON,

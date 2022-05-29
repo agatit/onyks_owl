@@ -1,16 +1,22 @@
+import { ModuleDef } from "../../store/redux-query";
 import calsses from "./ListModule.module.css";
 
-function ListModule(props: any) {
+export const moduleTransferName = "diagram-node";
+
+interface ListModuleProps {
+  module: ModuleDef;
+}
+
+function ListModule(props: ListModuleProps) {
   return (
     <div
       className={calsses.module}
       draggable="true"
       onDragStart={(event) => {
         event.dataTransfer.setData(
-          "diagram-node",
+          moduleTransferName,
           JSON.stringify(props.module)
         );
-        console.log(JSON.stringify(props.module));
       }}
     >
       {props.module.name}

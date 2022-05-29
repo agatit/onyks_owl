@@ -9,8 +9,6 @@ import styled from "@emotion/styled";
 import { ModuleParam } from "../../store/redux-query";
 
 import classes from "./OwlNodeWidget.module.css";
-import { useSelector } from "react-redux";
-import { selectModuleParams } from "../../store/selectors/propertySelectors";
 
 export interface NodeWidgetProps {
   node: OwlNodeModel;
@@ -69,9 +67,6 @@ const OwlNodeContent = (props: OwlNodeContentProps) => {
     );
   };
 
-  if (!props.node.parameters) {
-    return <h1>Niestety</h1>;
-  }
   return (
     <div className={classes.parametersList}>
       {props.node.parameters.map((param, index) =>
@@ -110,7 +105,7 @@ export class OwlNodeWidget extends React.Component<NodeWidgetProps> {
             className="custom-node-header"
             style={{ backgroundColor: this.props.node.headerColor }}
           >
-            {this.props.node.title}
+            {this.props.node.name}
           </div>
           <OwlNodeAbstractWidget
             node={this.props.node}

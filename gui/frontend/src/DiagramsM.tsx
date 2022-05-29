@@ -10,7 +10,7 @@ import {
   getCreateQueueRequest,
   getDeleteModuleFromProjectRequest,
 } from "./store/Queries/project_editor_queries";
-import { Module, Queue } from "./store/redux-query";
+import { Module, Project, Queue } from "./store/redux-query";
 import { OwlNodeModel } from "./Components/OwlNodes/OwlNodeModel";
 import { useLocation } from "react-router";
 import { OwlQueueModel } from "./Components/OwlQueue/OwlQueueModel";
@@ -22,6 +22,7 @@ interface DiagramProps {
   engine: DiagramEngine;
   addModuleRequest: (projectId: string, module: Module) => any;
   addQueueRequest: (projectId: string, queue: Queue) => any;
+  projectInfo?: Project;
   projectId: string;
   deleteNodeRequest: (projectId: string, moduleId: string) => void;
 }
@@ -29,20 +30,20 @@ interface DiagramProps {
 const Diagrams = (props: DiagramProps) => {
   const dispatch = useDispatch();
 
+  const canvaRef = useRef(null);
+  const engine = props.engine;
+  const [isSchemaLoading, setSchemaLoading] = useState(true);
+
   function onNodeDrop(event: React.DragEvent<HTMLDivElement>) {
     var droppedNode: OwlNodeModel | OwlQueueModel;
-
     if (event.dataTransfer.types[0] === "diagram-node") {
       var moduleData = JSON.parse(event.dataTransfer.getData("diagram-node"));
       droppedNode = new OwlNodeModel({
         ...moduleData,
-        color: "#ffB730",
-        title: moduleData.name,
-        content: "Opis",
+        project: props.projectInfo,
       });
+      console.log(props.projectInfo);
 
-      droppedNode.params = moduleData["params"];
-      droppedNode.module_id = moduleData["id"];
       props
         .addModuleRequest(props.projectId, droppedNode)
         .then((result: any) => {
@@ -56,13 +57,14 @@ const Diagrams = (props: DiagramProps) => {
           }
         });
     } else {
-      droppedNode = new OwlQueueModel({});
+      droppedNode = new OwlQueueModel({ project: props.projectInfo });
       props
         .addQueueRequest(props.projectId, droppedNode)
         .then((result: any) => {
           if (result.status !== 200) {
             toast.error("Nie udało się dodać kolejki!");
           } else {
+            // Po implementacji zwrotu Id w metodzie POST przez serwer - przypisać tutaj id z odpowiedzi
             droppedNode.setPosition(engine.getRelativeMousePoint(event));
             dispatch(addNode(droppedNode));
             engine.getModel().addNode(droppedNode);
@@ -71,20 +73,6 @@ const Diagrams = (props: DiagramProps) => {
         });
     }
   }
-
-  const location = useLocation();
-  const canvaRef = useRef(null);
-
-  useEffect(() => {
-    //console.log(canvaRef.current);
-    //loadSchema(engine);
-    // html2canvas(canvaRef.current!).then((canvas) =>
-    //   document.body.appendChild(canvas)
-    // );
-  }, [location]);
-
-  const engine = props.engine;
-  const [isSchemaLoading, setSchemaLoading] = useState(true);
 
   useEffect(() => {
     loadSchema(engine, props.projectId);

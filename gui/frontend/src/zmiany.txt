@@ -1,0 +1,32 @@
+
+
+Propozycje itp.
+
+- Dodanie rangi/typu dla danego parametru (podział w edytorze na Główne, Widok itd.) Obecne pole typ tyczy się charakteru samej zmiennej.
+- Dodanie endpoint'a służącego do wczytywania schematu bez dodatkowych zapytań - obecnie scieżka do wczytania schematu wygląda tak:
+
+Zapytanie o kolejki -> Zapytanie o moduły -> Zapytanie o parametry każdego z modułów(ModuleParam i ModuleParamDef??) -> Połączenie ich linkami
+
+Co prawda schemat wczytywamy domyślnie raz na starcie pracy użytkownika, ale trochę tych zapytań jest(nie wiem czy ostatecznie to będzie w czymś przeszkadzało, ale to sugestia)
+
+
+
+Do poprawy:
+
+Po wczytaniu modułu widoczne są na nim puste parametry i pola ich wartości - niezgodna zawartość odpowiedzi na zapytanie o parametry względem dokumentacji.
+Aby naprawić później zapis parametrów do modułu - usunąć samą metodę pomocniczą z OwlNodeModel.
+
+Niektóre endpoint'y nie zwracają wartości zgodnych z dokumentacją api np. /param dla modułów i kolejek itd. przez co ui może nie działać/zawieszać się.
+
+Poprawić przekazywanie danych dotyczących projektu w dół hierarchii komponentów. - zamiast przechowywania danych w module - globalne przykazywanie poprzez projectInfo
+
+W zapytaniach dotyczących kolejek wysyłany jest Initial_ID, który przypisywany jest domyślnie w konstruktorze. Jest to związane z brakiem otrzymywania ID ze strony serwera
+po wykonaniu zapytania POST.
+
+Do wyjaśnienia sprawa portów - w zamyśle było rozważane kilka różnych typów portów (jednokierunkowe lub przyjmujące jeden typ danych itd.) - jest to troche rozgrzebane w modelach modułów.
+
+
+
+
+
+

@@ -22,13 +22,10 @@ import classes from "./ModulePropEditor.module.css";
 import { selectModuleParams } from "../../../../store/selectors/propertySelectors";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { OwlQueueLinkModel } from "../../../OwlQueueLinks/OwlQueueLinkModel";
 import TabSection from "../../Tabs/TabSection";
-import { engineReducer } from "../../../../store/Reducers/engineReducer";
 import { repaintCanvas } from "../../../../store/Actions/engineActions";
 
 interface ModulePropEditorProps {
-  queue: OwlQueueLinkModel;
   node: OwlNodeModel;
   engine: DiagramEngine;
   projectId: string;
@@ -50,9 +47,8 @@ function ModulePropEditor(props: ModulePropEditorProps) {
     if (node) props.getModuleParams(prjId, node.id, node);
   }, [node]);
 
-  // DO POPRAWY
   const handleNamePropertyChange = (newValue: string) => {
-    node.title = newValue;
+    node.name = newValue;
     store.dispatch(selectedNode(node));
     engine.repaintCanvas();
   };
@@ -91,18 +87,16 @@ function ModulePropEditor(props: ModulePropEditorProps) {
       </div>
     );
   }
-  if (props.queue) props.queue.setSelected(false);
-  node.setSelected(true);
 
   return (
     <TabSection title="Główne">
       <InputGroup className="mb-3">
-        <InputGroup.Text id="inputGroup-sizing-default" style={propLabels}>
+        <InputGroup.Text id="inputGroup-sizing-default" style={propLabelsStyle}>
           Nazwa
         </InputGroup.Text>
         <FormControl
-          style={propInputs}
-          value={node.title}
+          style={propInputsStyle}
+          value={node.name}
           aria-label="Default"
           aria-describedby="inputGroup-sizing-default"
           onChange={(e) => handleNamePropertyChange(e.target.value)}
@@ -116,12 +110,12 @@ function ModulePropEditor(props: ModulePropEditorProps) {
             <InputGroup className="mb-3" key={index}>
               <InputGroup.Text
                 id="inputGroup-sizing-default"
-                style={propLabels}
+                style={propLabelsStyle}
               >
                 {paramKey.paramDefId}
               </InputGroup.Text>
               <FormControl
-                style={propInputs}
+                style={propInputsStyle}
                 value={paramKey.value}
                 aria-label="Default"
                 aria-describedby="inputGroup-sizing-default"
@@ -140,11 +134,52 @@ function ModulePropEditor(props: ModulePropEditorProps) {
 
 const mapStateToProps = (state: any) => {
   return {
-    queue: state.queueReducer.selectedQueue,
     node: state.nodesData.selectedNode,
     test: state.nodesData.test,
     engine: state.engineReducer.engine,
   };
+};
+
+export const LookPropsEditor = (props: {
+  node: OwlNodeModel;
+  engine: DiagramEngine;
+}) => {
+  const headerColorChangeHandler = (color: string) => {
+    props.node.headerColor = color;
+    store.dispatch(repaintCanvas());
+  };
+
+  const bodyColorChangeHandler = (color: string) => {
+    props.node.bodyColor = color;
+    store.dispatch(repaintCanvas());
+  };
+
+  return (
+    <TabSection title="Wygląd">
+      <Form.Label htmlFor="colorPicker" style={propLabelsStyle}>
+        Kolor nagłówka
+      </Form.Label>
+      <Form.Control
+        style={colorPickerStyle}
+        type="color"
+        id="colorPicker"
+        defaultValue={props.node.headerColor}
+        onChange={(e) => headerColorChangeHandler(e.target.value)}
+        title="Wybierz kolor"
+      ></Form.Control>
+      <Form.Label htmlFor="colorPicker" style={propLabelsStyle}>
+        Kolor modułu
+      </Form.Label>
+      <Form.Control
+        style={colorPickerStyle}
+        type="color"
+        id="colorPicker"
+        defaultValue={props.node.bodyColor}
+        onChange={(e) => bodyColorChangeHandler(e.target.value)}
+        title="Wybierz kolor"
+      ></Form.Control>
+    </TabSection>
+  );
 };
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -180,51 +215,9 @@ const connector = connect(
 
 export default connector;
 
-export const LookPropsEditor = (props: {
-  node: OwlNodeModel;
-  engine: DiagramEngine;
-}) => {
-  const headerColorChangeHandler = (color: string) => {
-    props.node.headerColor = color;
-    store.dispatch(repaintCanvas());
-  };
-
-  const bodyColorChangeHandler = (color: string) => {
-    props.node.bodyColor = color;
-    store.dispatch(repaintCanvas());
-  };
-
-  return (
-    <TabSection title="Wygląd">
-      <Form.Label htmlFor="colorPicker" style={propLabels}>
-        Kolor nagłówka
-      </Form.Label>
-      <Form.Control
-        style={colorPickerStyle}
-        type="color"
-        id="colorPicker"
-        value={props.node.headerColor}
-        onChange={(e) => headerColorChangeHandler(e.target.value)}
-        title="Wybierz kolor"
-      ></Form.Control>
-      <Form.Label htmlFor="colorPicker" style={propLabels}>
-        Kolor modułu
-      </Form.Label>
-      <Form.Control
-        style={colorPickerStyle}
-        type="color"
-        id="colorPicker"
-        value={props.node.bodyColor}
-        onChange={(e) => bodyColorChangeHandler(e.target.value)}
-        title="Wybierz kolor"
-      ></Form.Control>
-    </TabSection>
-  );
-};
-
 // style css
 
-const propInputs = {
+const propInputsStyle = {
   backgroundColor: "rgb(143, 143, 143)",
   border: "none",
   padding: "10px",
@@ -235,7 +228,7 @@ const propInputs = {
   borderBottomLeftRadius: "0.25rem",
 };
 
-const propLabels = {
+const propLabelsStyle = {
   width: "35%",
   padding: "0.375rem 0.75rem",
   backgroundColor: "inherit",

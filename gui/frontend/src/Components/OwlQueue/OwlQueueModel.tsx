@@ -23,7 +23,6 @@ export class OwlQueueModel extends DefaultNodeModel {
     super({
       ...options,
       type: "OwlQueue",
-      name: "Kolejka",
       color: "gray",
     });
     this.id = options.id || "Initial_Queue_ID";
@@ -32,14 +31,14 @@ export class OwlQueueModel extends DefaultNodeModel {
       id: "Test",
       name: "Initial_name",
     };
-    this.addInPort("Wejście");
+    this.addInPort("Wejście"); // hardcodowana nazwa - porty w kolejkach nie są tak znaczące jak w modułach, dlatego taka różnica
     this.addOutPort("Wyjście");
     this.registerListener({
       entityRemoved: () => {
         store.dispatch(
           getDeleteQueueFromProjectRequest({
             projectId: this.project.id,
-            moduleId: "Do_zmiany",
+            moduleId: this.id,
           })
         );
         store.dispatch(deleteQueue(this));

@@ -2,29 +2,26 @@
   {
     "id": "2testId",
     "name": "module plate detection",
-    "type": "Owl-node",
     "description": "Moduł wykrywający tablice rejestracyjne",
     "position": {
       "x": 50,
       "y": 300
     },
     "color": "#ffB730",
-    "input": {
-      "id": "initial ID",
-      "name": "Initial name"
-    },
-    "title": "module plate detection",
-    "source": false,
-    "output": {
-      "id": "testId1",
-      "name": "Kolejka 1"
-    },
     "project": {
       "id": "initial ID",
       "name": "Initial name"
     },
-    "moduleDefId": "test ModuleDefId",
-    "module_id": "2testId"
+    "params": [
+      {
+        "paramDefId": "FPS",
+        "value": "60"
+      },
+      {
+        "paramDefId": "Rozmiar kolejki",
+        "value": "100"
+      }
+    ]
   },
   {
     "id": "3testId",
@@ -51,7 +48,6 @@
       "x": 570,
       "y": 316
     },
-    "moduleDefId": "test ModuleDefId",
-    "module_id": "3testId"
+    "moduleDefId": "test ModuleDefId"
   }
 ]

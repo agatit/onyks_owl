@@ -3,7 +3,7 @@ info:
   title: Onyks Wagon Location API
   version: 1.0.0
 servers:
-- url: http://localhost/owlapi
+  - url: http://localhost/owlapi
 paths:
   /module_def:
     get:
@@ -14,7 +14,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/ModuleDef'
+                  $ref: "#/components/schemas/ModuleDef"
                 type: array
           description: OK
         "400":
@@ -23,7 +23,7 @@ paths:
           description: Module definition not found
       summary: Get list of module definitions
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
   /project:
     get:
@@ -34,14 +34,14 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Project'
+                  $ref: "#/components/schemas/Project"
                 type: array
           description: OK
         "500":
           description: Internal error
       summary: Get list of projects
       tags:
-      - project_management
+        - project_management
       x-openapi-router-controller: openapi_server.controllers.project_management_controller
     post:
       operationId: add_project
@@ -49,14 +49,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Project'
+              $ref: "#/components/schemas/Project"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: "#/components/schemas/Project"
           description: OK
         "400":
           description: Invalid input
@@ -66,7 +66,7 @@ paths:
           description: Internal error
       summary: Adding new project
       tags:
-      - project_management
+        - project_management
       x-openapi-router-controller: openapi_server.controllers.project_management_controller
     put:
       operationId: update_project
@@ -74,14 +74,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Project'
+              $ref: "#/components/schemas/Project"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: "#/components/schemas/Project"
           description: OK
         "400":
           description: Invalid input
@@ -91,20 +91,20 @@ paths:
           description: Internal error
       summary: Updates a Project
       tags:
-      - project_management
+        - project_management
       x-openapi-router-controller: openapi_server.controllers.project_management_controller
   /project({projectId}):
     delete:
       operationId: delete_project
       parameters:
-      - description: Project id to delete
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: Project id to delete
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "400":
           description: Invalid input
@@ -114,26 +114,26 @@ paths:
           description: Delete error
       summary: Deletes a Project
       tags:
-      - project_management
+        - project_management
       x-openapi-router-controller: openapi_server.controllers.project_management_controller
     get:
       description: Returns a single project
       operationId: get_project
       parameters:
-      - description: ID of project to return
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of project to return
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: "#/components/schemas/Project"
           description: OK
         "400":
           description: Invalid input
@@ -143,27 +143,27 @@ paths:
           description: Intrenal error
       summary: Find Project by ID
       tags:
-      - project_management
+        - project_management
       x-openapi-router-controller: openapi_server.controllers.project_management_controller
   /project({projectId})/instance:
     get:
       operationId: list_instances
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Instance'
+                  $ref: "#/components/schemas/Instance"
                 type: array
           description: OK
         "400":
@@ -172,25 +172,25 @@ paths:
           description: Project definition not found
       summary: Get list of project instances
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     post:
       operationId: add_instance
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Module'
+                $ref: "#/components/schemas/Module"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -200,25 +200,25 @@ paths:
           description: Validation exception
       summary: Add instance to project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     put:
       operationId: run_instance
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Module'
+                $ref: "#/components/schemas/Module"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -228,28 +228,28 @@ paths:
           description: Validation exception
       summary: Update instance to project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
   /project({projectId})/instance({instanceId}):
     delete:
       operationId: kill_instance
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           description: OK
@@ -259,33 +259,33 @@ paths:
           description: Project definition not found
       summary: Delete instance from project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     get:
       operationId: get_instance
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Instance'
+                $ref: "#/components/schemas/Instance"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -293,158 +293,35 @@ paths:
           description: Project definition not found
       summary: Get specified of project instance
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
   /project({projectId})/instance({instanceId})/module:
     get:
       operationId: list_instance_modules
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/InstanceModule'
-                type: array
-          description: OK
-        "400":
-          description: Invalid ID supplied
-        "404":
-          description: Instance definition not found
-      summary: Get specified project instance 
-      tags:
-      - project_editor
-      x-openapi-router-controller: openapi_server.controllers.project_editor_controller
-  /project({projectId})/instance({instanceId})/module({instanceModuleId}):
-    get:
-      operationId: get_instance_module
-      parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceModuleId
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstanceModule'
-          description: OK
-        "400":
-          description: Invalid ID
-        "404":
-          description: Project or instance not found
-      summary: Get list of instance modules
-      tags:
-      - property_editor
-      x-openapi-router-controller: openapi_server.controllers.property_editor_controller
-  /project({projectId})/instance({instanceId})/module({instanceModuleId})/reset:
-    get:
-      operationId: reset_instance_module
-      parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceModuleId
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstanceModule'
-          description: OK
-        "400":
-          description: Invalid ID
-        "404":
-          description: Project or instance not found
-      summary: Reset instance module 
-      tags:
-      - property_editor
-      x-openapi-router-controller: openapi_server.controllers.property_editor_controller
-  /project({projectId})/instance({instanceId})/queue:
-    get:
-      operationId: list_instance_queues
-      parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/InstanceQueue'
+                  $ref: "#/components/schemas/InstanceModule"
                 type: array
           description: OK
         "400":
@@ -453,34 +330,157 @@ paths:
           description: Instance definition not found
       summary: Get specified project instance
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
-  /project({projectId})/instance({instanceId})/queue(instanceQueueId):
+  /project({projectId})/instance({instanceId})/module({instanceModuleId}):
     get:
-      operationId: get_instance_queue
+      operationId: get_instance_module
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceModuleId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstanceQueue'
+                $ref: "#/components/schemas/InstanceModule"
+          description: OK
+        "400":
+          description: Invalid ID
+        "404":
+          description: Project or instance not found
+      summary: Get list of instance modules
+      tags:
+        - property_editor
+      x-openapi-router-controller: openapi_server.controllers.property_editor_controller
+  /project({projectId})/instance({instanceId})/module({instanceModuleId})/reset:
+    get:
+      operationId: reset_instance_module
+      parameters:
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceModuleId
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstanceModule"
+          description: OK
+        "400":
+          description: Invalid ID
+        "404":
+          description: Project or instance not found
+      summary: Reset instance module
+      tags:
+        - property_editor
+      x-openapi-router-controller: openapi_server.controllers.property_editor_controller
+  /project({projectId})/instance({instanceId})/queue:
+    get:
+      operationId: list_instance_queues
+      parameters:
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/InstanceQueue"
+                type: array
+          description: OK
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Instance definition not found
+      summary: Get specified project instance
+      tags:
+        - project_editor
+      x-openapi-router-controller: openapi_server.controllers.project_editor_controller
+  /project({projectId})/instance({instanceId})/queue(instanceQueueId):
+    get:
+      operationId: get_instance_queue
+      parameters:
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstanceQueue"
           description: OK
         "400":
           description: Invalid ID
@@ -488,28 +488,28 @@ paths:
           description: Project or instance not found
       summary: Get list of instance queues
       tags:
-      - property_editor
+        - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
   /project({projectId})/instance({instanceId})/queue(instanceQueueId)/clean:
     post:
       operationId: clean_queue
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
@@ -523,28 +523,28 @@ paths:
           description: Project or instance not found
       summary: Cleans queue
       tags:
-      - property_editor
+        - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
   /project({projectId})/instance({instanceId})/queue(instanceQueueId)/current_image:
     get:
       operationId: get_queue_current_image
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Instance
-        explode: false
-        in: path
-        name: instanceId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Instance
+          explode: false
+          in: path
+          name: instanceId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
@@ -558,27 +558,27 @@ paths:
           description: Project or instance not found
       summary: Get list of instance queues
       tags:
-      - property_editor
+        - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
   /project({projectId})/module:
     get:
       operationId: list_modules
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Module'
+                  $ref: "#/components/schemas/Module"
                 type: array
           description: OK
         "400":
@@ -587,31 +587,31 @@ paths:
           description: Module definition not found
       summary: Get list of project modules
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     post:
       operationId: add_module
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Module'
+              $ref: "#/components/schemas/Module"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Module'
+                $ref: "#/components/schemas/Module"
           description: OK
         "400":
           description: Invalid ProjectID supplied
@@ -621,31 +621,31 @@ paths:
           description: Validation exception
       summary: Add module to project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     put:
       operationId: update_module
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Module'
+              $ref: "#/components/schemas/Module"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Module'
+                $ref: "#/components/schemas/Module"
           description: OK
         "400":
           description: Invalid ProjectID supplied
@@ -655,28 +655,28 @@ paths:
           description: Validation exception
       summary: Add module to project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
   /project({projectId})/module({moduleId}):
     delete:
       operationId: delete_module
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: moduleId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: moduleId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           description: OK
@@ -686,33 +686,33 @@ paths:
           description: Module definition not found
       summary: Delete module from project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     get:
       operationId: get_module
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: moduleId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: moduleId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Module'
+                $ref: "#/components/schemas/Module"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -720,35 +720,35 @@ paths:
           description: Module definition not found
       summary: Get specified project module
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
   /project({projectId})/module({moduleId})/param:
     get:
       operationId: list_module_params
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: moduleId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: moduleId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/ModuleParam'
+                  $ref: "#/components/schemas/ModuleParam"
                 type: array
           description: OK
         "400":
@@ -757,38 +757,38 @@ paths:
           description: Project or module not found
       summary: Get list of module params
       tags:
-      - property_editor
+        - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
     put:
       operationId: update_module_param
       parameters:
-      - description: ID of Project that needs to be updated
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: moduleId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project that needs to be updated
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: moduleId
+          required: true
+          schema:
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ModuleParam'
+              $ref: "#/components/schemas/ModuleParam"
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModuleParam'
+                $ref: "#/components/schemas/ModuleParam"
           description: OK
         "404":
           description: Project or Module or Param not found
@@ -796,27 +796,27 @@ paths:
           description: Invalid input
       summary: Updates module param
       tags:
-      - property_editor
+        - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
   /project({projectId})/queue:
     get:
       operationId: list_queues
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Queue'
+                  $ref: "#/components/schemas/Queue"
                 type: array
           description: OK
         "400":
@@ -825,31 +825,31 @@ paths:
           description: Project definition not found
       summary: Get list of project queues
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     post:
       operationId: add_queue
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Queue'
+              $ref: "#/components/schemas/Queue"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Queue'
+                $ref: "#/components/schemas/Queue"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -859,31 +859,31 @@ paths:
           description: Validation exception
       summary: Add queue to project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     put:
       operationId: update_queue
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Queue'
+              $ref: "#/components/schemas/Queue"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Queue'
+                $ref: "#/components/schemas/Queue"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -893,28 +893,28 @@ paths:
           description: Validation exception
       summary: Update queue to project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
   /project({projectId})/queue({moduleId}):
     delete:
       operationId: delete_queue
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: moduleId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: moduleId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           description: OK
@@ -924,33 +924,33 @@ paths:
           description: Project definition not found
       summary: Delete queue from project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     get:
       operationId: get_queue
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: moduleId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: moduleId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Queue'
+                $ref: "#/components/schemas/Queue"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -958,35 +958,35 @@ paths:
           description: Project definition not found
       summary: Get specified of project queue
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
   /project({projectId})/queue({queueId})/param:
     get:
       operationId: list_queue_params
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Queue
-        explode: false
-        in: path
-        name: queueId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Queue
+          explode: false
+          in: path
+          name: queueId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/QueueParam'
+                  $ref: "#/components/schemas/QueueParam"
                 type: array
           description: OK
         "400":
@@ -995,38 +995,38 @@ paths:
           description: Project or queue not found
       summary: Get list of queue params
       tags:
-      - property_editor
+        - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
     put:
       operationId: update_queue_param
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Queue
-        explode: false
-        in: path
-        name: queueId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Queue
+          explode: false
+          in: path
+          name: queueId
+          required: true
+          schema:
+            type: string
+          style: simple
       requestBody:
         content:
-          '*/*':
+          "*/*":
             schema:
-              $ref: '#/components/schemas/QueueParam'
+              $ref: "#/components/schemas/QueueParam"
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueueParam'
+                $ref: "#/components/schemas/QueueParam"
           description: OK
         "404":
           description: Project or queue or param not found
@@ -1034,27 +1034,27 @@ paths:
           description: Invalid input
       summary: Updates queue param
       tags:
-      - property_editor
+        - property_editor
       x-openapi-router-controller: openapi_server.controllers.property_editor_controller
   /project({projectId})/resource:
     get:
       operationId: list_resources
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/ProjectResource'
+                  $ref: "#/components/schemas/ProjectResource"
                 type: array
           description: OK
         "400":
@@ -1063,25 +1063,25 @@ paths:
           description: Project definition not found
       summary: Get list of project resources
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     post:
       operationId: add_resource
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectResource'
+                $ref: "#/components/schemas/ProjectResource"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -1091,25 +1091,25 @@ paths:
           description: Validation exception
       summary: Add resource to project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     put:
       operationId: update_resource
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Module'
+                $ref: "#/components/schemas/Module"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -1119,28 +1119,28 @@ paths:
           description: Validation exception
       summary: Update resource to project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
   /project({projectId})/resource({resourceId}):
     delete:
       operationId: delete_resource
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: resourceId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           description: OK
@@ -1150,33 +1150,33 @@ paths:
           description: Project definition not found
       summary: Delete resource from project
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
     get:
       operationId: get_resource
       parameters:
-      - description: ID of Project
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of Module
-        explode: false
-        in: path
-        name: resourceId
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: ID of Project
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of Module
+          explode: false
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectResource'
+                $ref: "#/components/schemas/ProjectResource"
           description: OK
         "400":
           description: Invalid ID supplied
@@ -1184,7 +1184,7 @@ paths:
           description: Project definition not found
       summary: Get specified of project resource
       tags:
-      - project_editor
+        - project_editor
       x-openapi-router-controller: openapi_server.controllers.project_editor_controller
 components:
   schemas:
@@ -1205,7 +1205,7 @@ components:
           title: description
           type: string
       required:
-      - id
+        - id
       title: ModuleDef
       type: object
     ModuleParamDef:
@@ -1220,7 +1220,7 @@ components:
         type: string
       properties:
         module_def:
-          $ref: '#/components/schemas/ModuleDef'
+          $ref: "#/components/schemas/ModuleDef"
         id:
           title: id
           type: string
@@ -1230,18 +1230,18 @@ components:
         type:
           description: Każdy typ powinien mieć dedykowany edytor w property managerze
           enum:
-          - string
-          - float
-          - integer
-          - quad
-          - region
-          - region_list
-          - resource
+            - string
+            - float
+            - integer
+            - quad
+            - region
+            - region_list
+            - resource
           title: type
           type: string
       required:
-      - id
-      - type
+        - id
+        - type
       title: ModuleParamDef
       type: object
     QueueParamDef:
@@ -1252,23 +1252,25 @@ components:
         description:
           type: string
         type:
-          description: 'TODO: Każdy typ powinien mieć dedykowany edytor w property
-            managerze'
+          description:
+            "TODO: Każdy typ powinien mieć dedykowany edytor w property
+            managerze"
           enum:
-          - string
-          - float
-          - integer
-          - quad
-          - region
-          - region_list
-          - resource
+            - string
+            - float
+            - integer
+            - quad
+            - region
+            - region_list
+            - resource
           type: string
       required:
-      - id
-      - type
+        - id
+        - type
       type: object
     Project:
-      description: List of directories containing config.json with data from that
+      description:
+        List of directories containing config.json with data from that
         files
       example:
         name: name
@@ -1287,8 +1289,8 @@ components:
           title: description
           type: string
       required:
-      - id
-      - name
+        - id
+        - name
       title: Project
       type: object
     Module:
@@ -1324,19 +1326,24 @@ components:
           description: description
           id: id
         comment: comment
+        gui_properties:
+          position:
+            X: 50
+            Y: 50
+          color: yellow
         id: id
       properties:
         id:
           title: id
           type: string
         module_def:
-          $ref: '#/components/schemas/ModuleDef'
+          $ref: "#/components/schemas/ModuleDef"
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: "#/components/schemas/Project"
         input:
-          $ref: '#/components/schemas/Queue'
+          $ref: "#/components/schemas/Queue"
         output:
-          $ref: '#/components/schemas/Queue'
+          $ref: "#/components/schemas/Queue"
         name:
           title: name
           type: string
@@ -1344,12 +1351,15 @@ components:
           readOnly: true
           title: comment
           type: string
+        gui_properties:
+          $ref: "#/components/schemas/GuiProperties"
       required:
-      - id
+        - id
       title: Module
       type: object
     ModuleParam:
-      description: List of all parameters availaible for module filled with values
+      description:
+        List of all parameters availaible for module filled with values
         from specified config.json or default values
       example:
         module:
@@ -1395,9 +1405,9 @@ components:
         value: value
       properties:
         module:
-          $ref: '#/components/schemas/Module'
+          $ref: "#/components/schemas/Module"
         param_def:
-          $ref: '#/components/schemas/ModuleParamDef'
+          $ref: "#/components/schemas/ModuleParamDef"
         value:
           title: value
           type: string
@@ -1408,6 +1418,11 @@ components:
         stream_queue_limit: 6
         stream_queue_timeout: 5
         name: name
+        gui_properties:
+          position:
+            X: 50
+            Y: 50
+          color: yellow
         task_queue_timeout: 1
         project:
           name: name
@@ -1416,10 +1431,12 @@ components:
         task_queue_limit: 0
       properties:
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: "#/components/schemas/Project"
         name:
           title: name
           type: string
+        gui_properties:
+          $ref: "#/components/schemas/GuiProperties"
         task_queue_limit:
           title: task_queue_limit
           type: integer
@@ -1457,9 +1474,9 @@ components:
         value: value
       properties:
         module:
-          $ref: '#/components/schemas/Queue'
+          $ref: "#/components/schemas/Queue"
         param_def:
-          $ref: '#/components/schemas/ModuleParamDef'
+          $ref: "#/components/schemas/ModuleParamDef"
         value:
           title: value
           type: string
@@ -1477,7 +1494,7 @@ components:
           title: id
           type: string
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: "#/components/schemas/Project"
       title: Instance
       type: object
     InstanceModule:
@@ -1526,9 +1543,9 @@ components:
           title: id
           type: string
         project_instance:
-          $ref: '#/components/schemas/Instance'
+          $ref: "#/components/schemas/Instance"
         module:
-          $ref: '#/components/schemas/Module'
+          $ref: "#/components/schemas/Module"
       title: InstanceModule
       type: object
     InstanceQueue:
@@ -1555,9 +1572,9 @@ components:
           title: id
           type: string
         project_instance:
-          $ref: '#/components/schemas/Instance'
+          $ref: "#/components/schemas/Instance"
         queue:
-          $ref: '#/components/schemas/Queue'
+          $ref: "#/components/schemas/Queue"
       title: InstanceQueue
       type: object
     ProjectResource:
@@ -1597,10 +1614,22 @@ components:
         url: ""
       properties:
         project:
-          $ref: '#/components/schemas/Module'
+          $ref: "#/components/schemas/Module"
         url:
           format: binary
           title: url
           type: string
       title: ProjectResource
       type: object
+    GuiProperties:
+      type: object
+      properties:
+        position:
+          properties:
+            X:
+              type: number
+            Y:
+              type: number
+
+        color:
+          type: string

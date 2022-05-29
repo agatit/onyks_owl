@@ -10,10 +10,8 @@ import { useState } from "react";
 import TabContent from "../UI/Tabs/TabContent";
 import ProjectEditor from "../UI/Menu-UI/Editors/ProjectEditor";
 import AddQueueForm from "../UI/Menu-UI/AddQueueForm";
-import ProjectMenageList from "../UI/Menu-UI/ProjectMenageList";
+import DiagramObjectMenageList from "../UI/Menu-UI/DiagramObjectMenageList";
 import { DiagramEngine } from "@projectstorm/react-diagrams";
-
-// REFERENCJE CHYBA DO WYWALENIA!!!!!!!!!!!!!
 
 interface toolBarProps {
   node: OwlNodeModel;
@@ -24,11 +22,13 @@ interface toolBarProps {
 function ToolBar(props: toolBarProps) {
   const [activeTab, setActiveTab] = useState("1");
 
+  const moduleEditorTabSelectValue = "1";
+  const queueEditorTabSelectValue = "2";
+  const projectEditorTabSelectValue = "3";
+
   const handleTabChange = (tabValue: string) => {
     setActiveTab(tabValue);
   };
-
-  // const queueSelected: boolean = useSelector(isQueueSelected);
 
   return (
     <div className={classses.toolBar}>
@@ -38,15 +38,24 @@ function ToolBar(props: toolBarProps) {
         currentTab={activeTab}
       />
       <div className={classses.tabContent}>
-        <TabContent currentTab={activeTab} selectedTabValue="1">
+        <TabContent
+          currentTab={activeTab}
+          selectedTabValue={moduleEditorTabSelectValue}
+        >
           <ModulePropEditor projectId={props.projectId} />
         </TabContent>
-        <TabContent currentTab={activeTab} selectedTabValue="2">
+        <TabContent
+          currentTab={activeTab}
+          selectedTabValue={queueEditorTabSelectValue}
+        >
           <AddQueueForm />
           <QueuePropEdtior projectId={props.projectId} />
         </TabContent>
-        <TabContent currentTab={activeTab} selectedTabValue="3">
-          <ProjectMenageList />
+        <TabContent
+          currentTab={activeTab}
+          selectedTabValue={projectEditorTabSelectValue}
+        >
+          <DiagramObjectMenageList />
           <ProjectEditor projectId={props.projectId} />
         </TabContent>
       </div>

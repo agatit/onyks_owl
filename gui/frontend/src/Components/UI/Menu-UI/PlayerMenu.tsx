@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faExpand } from "@fortawesome/free-solid-svg-icons";
-
 import classes from "./PlayerMenu.module.css";
 import { useState } from "react";
 import { engineActionTypes } from "../../../store/Reducers/engineReducer";

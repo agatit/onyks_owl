@@ -1,9 +1,7 @@
-import { useEffect } from "react";
 import { ListGroup, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
 import { useRequest } from "redux-query-react";
-import { getModuleDefinitionsListRequest } from "../../../store/Queries/project_editor_queries";
 import { ModuleListDefsRequestConfig } from "../../../store/QueryConfigs/module_query_configs";
 import { ModuleDef } from "../../../store/redux-query";
 import {
@@ -27,7 +25,7 @@ function ModuleList(props: ModuleListProps) {
 
   const wrapListElement = (module: ModuleDef, index: number) => {
     return (
-      <ListGroup.Item as="li" key={index} bsPrefix={classes.test}>
+      <ListGroup.Item as="li" key={index} bsPrefix={classes.moduleList}>
         <ListModule module={module} />
       </ListGroup.Item>
     );

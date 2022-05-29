@@ -33,7 +33,6 @@ function getEngineWithConfig(): DiagramEngine {
   engine.getNodeFactories().registerFactory(new OwlNodeFactory());
   engine.getLinkFactories().registerFactory(new OwlQueueLinkFactory());
   engine.getNodeFactories().registerFactory(new OwlQueueFactory());
-  //engine.getLinkFactories().registerFactory(new DefaultLinkFactory());
   engine
     .getActionEventBus()
     .registerAction(new DeleteItemsAction({ keyCodes: [46] }));

@@ -9,9 +9,8 @@ import {
 import { ProjectRequestConfig } from "../../../../store/QueryConfigs";
 import { getProject, Project } from "../../../../store/redux-query";
 import { selectProject } from "../../../../store/selectors/projectSelectors";
+import { maxProjectNameLength } from "../../CreateProjectForm";
 import TabSection from "../../Tabs/TabSection";
-
-import classes from "./ProjectEditor.module.css";
 
 interface ProjectEditorProps {
   projectId: string;
@@ -66,7 +65,7 @@ function ProjectEditor(props: ProjectEditorProps) {
           defaultValue={props.projectId}
         />
         <Form.Text className="text-muted">
-          Maksymalna liczba znaków dla nazwy projektu: 30
+          Maksymalna liczba znaków dla nazwy projektu: {maxProjectNameLength}
         </Form.Text>
       </Form.Group>
       {/* <textarea

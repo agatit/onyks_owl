@@ -12,6 +12,8 @@ interface CreateProjectFormProps {
   closeModalFunc: () => void;
 }
 
+export const maxProjectNameLength = 30;
+
 function CreateProjectForm(props: CreateProjectFormProps) {
   const prjNameInputRef = useRef<HTMLInputElement>(null);
   const prjDecriptionInputRef = useRef<HTMLTextAreaElement>(null);
@@ -45,11 +47,11 @@ function CreateProjectForm(props: CreateProjectFormProps) {
           <Form.Control
             type="text"
             required
-            maxLength={30}
+            maxLength={maxProjectNameLength}
             ref={prjNameInputRef}
           />
           <Form.Text className="text-muted">
-            Maksymalna liczba znaków dla nazwy projektu: 30
+            Maksymalna liczba znaków dla nazwy projektu: {maxProjectNameLength}
           </Form.Text>
         </Form.Group>
         <Form.Group>

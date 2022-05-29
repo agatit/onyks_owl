@@ -9,9 +9,7 @@ servers:
   - url: http://localhost/owlapi
 
 paths:
-
   /project:
-
     get:
       tags:
         - "project_management"
@@ -22,7 +20,7 @@ paths:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: array
                 items:
@@ -39,69 +37,68 @@ paths:
       requestBody:
         required: true
         content:
-          'application/json':
+          "application/json":
             schema:
               $ref: "#/components/schemas/Project"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
-              schema: 
+            "application/json":
+              schema:
                 "$ref": "#/components/schemas/Project"
         "400":
           description: "Invalid input"
         "409":
           description: "Alredy exists"
         "500":
-          description: "Internal error"          
+          description: "Internal error"
 
     put:
       tags:
-      - "project_management"
+        - "project_management"
       summary: "Updates a Project"
       description: ""
       operationId: "updateProject"
       requestBody:
         required: true
         content:
-          'application/json':
+          "application/json":
             schema:
-              $ref: '#/components/schemas/Project' 
+              $ref: "#/components/schemas/Project"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 $ref: "#/components/schemas/Project"
         "400":
-          description: "Invalid input"                
+          description: "Invalid input"
         "404":
-          description: "Project not found"              
+          description: "Project not found"
         "500":
-          description: "Internal error"       
+          description: "Internal error"
 
   /project({projectId}):
-
     get:
       tags:
-      - "project_management"
+        - "project_management"
       summary: "Find Project by ID"
       description: "Returns a single project"
       operationId: "getProject"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of project to return"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of project to return"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 $ref: "#/components/schemas/Project"
         "400":
@@ -113,17 +110,17 @@ paths:
 
     delete:
       tags:
-      - "project_management"
+        - "project_management"
       summary: "Deletes a Project"
       description: ""
       operationId: "deleteProject"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "Project id to delete"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "Project id to delete"
+          required: true
+          schema:
+            type: "string"
       responses:
         "400":
           description: "Invalid input"
@@ -131,7 +128,7 @@ paths:
           description: "Project not found"
         "500":
           description: "Delete error"
-      
+
   /module_def:
     get:
       tags:
@@ -143,7 +140,7 @@ paths:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: array
                 items:
@@ -151,7 +148,7 @@ paths:
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Module definition not found"    
+          description: "Module definition not found"
 
   /project({projectId})/module:
     get:
@@ -161,17 +158,17 @@ paths:
       description: ""
       operationId: "listModules"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: array
                 items:
@@ -183,68 +180,68 @@ paths:
 
     post:
       tags:
-        - "project_editor"  
+        - "project_editor"
       summary: "Add module to project"
       operationId: "addModule"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"   
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       requestBody:
         required: true
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/Module"      
+              $ref: "#/components/schemas/Module"
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/Module"          
+                $ref: "#/components/schemas/Module"
         "400":
-          description: "Invalid ProjectID supplied"   
+          description: "Invalid ProjectID supplied"
         "404":
-          description: "Project definition not found"                   
+          description: "Project definition not found"
         "405":
-          description: "Validation exception" 
-          
+          description: "Validation exception"
+
     put:
       tags:
-        - "project_editor"  
+        - "project_editor"
       summary: "Add module to project"
       operationId: "updateModule"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"   
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       requestBody:
         required: true
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/Module"      
+              $ref: "#/components/schemas/Module"
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/Module"          
+                $ref: "#/components/schemas/Module"
         "400":
-          description: "Invalid ProjectID supplied"   
+          description: "Invalid ProjectID supplied"
         "404":
-          description: "Project definition not found"                   
+          description: "Project definition not found"
         "405":
-          description: "Validation exception"           
-  
+          description: "Validation exception"
+
   /project({projectId})/module({moduleId}):
     get:
       tags:
@@ -253,55 +250,55 @@ paths:
       description: ""
       operationId: "getModule"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "moduleId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "moduleId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 $ref: "#/components/schemas/Module"
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Module definition not found"    
-    
+          description: "Module definition not found"
+
     delete:
       tags:
         - "project_editor"
       summary: "Delete module from project"
       operationId: "deleteModule"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "moduleId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"      
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "moduleId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
-        '200':
+        "200":
           description: OK
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Module definition not found" 
+          description: "Module definition not found"
 
   /project({projectId})/module({moduleId})/param:
     get:
@@ -310,67 +307,66 @@ paths:
       summary: "Get list of module params"
       operationId: "listModuleParams"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "moduleId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "moduleId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: array
                 items:
-                  $ref:  "#/components/schemas/ModuleParam"
+                  $ref: "#/components/schemas/ModuleParam"
         "400":
           description: "Invalid ID"
         "404":
-          description: "Project or module not found"  
+          description: "Project or module not found"
 
     put:
       tags:
-      - "property_editor"
+        - "property_editor"
       summary: "Updates module param"
       operationId: "updateModuleParam"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project that needs to be updated"
-        required: true
-        schema:
-          type: "string"
-      - name: "moduleId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project that needs to be updated"
+          required: true
+          schema:
+            type: "string"
+        - name: "moduleId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       requestBody:
         content:
-          'application/json':
+          "application/json":
             schema:
-              $ref:  "#/components/schemas/ModuleParam" 
+              $ref: "#/components/schemas/ModuleParam"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 $ref: "#/components/schemas/ModuleParam"
         "404":
-          description: "Project or Module or Param not found"              
+          description: "Project or Module or Param not found"
         "405":
           description: "Invalid input"
-
 
   /project({projectId})/queue:
     get:
@@ -380,17 +376,17 @@ paths:
       description: ""
       operationId: "listQueues"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"      
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: array
                 items:
@@ -402,70 +398,69 @@ paths:
 
     post:
       tags:
-        - "project_editor"  
+        - "project_editor"
       summary: "Add queue to project"
       operationId: "addQueue"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       requestBody:
         required: true
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/Queue"           
+              $ref: "#/components/schemas/Queue"
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/Queue"          
+                $ref: "#/components/schemas/Queue"
         "400":
-          description: "Invalid ID supplied"   
+          description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"                   
+          description: "Project definition not found"
         "405":
           description: "Validation exception"
 
     put:
       tags:
-        - "project_editor"  
+        - "project_editor"
       summary: "Update queue to project"
       operationId: "updateQueue"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       requestBody:
         required: true
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/Queue"            
+              $ref: "#/components/schemas/Queue"
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/Queue"          
+                $ref: "#/components/schemas/Queue"
         "400":
-          description: "Invalid ID supplied"   
+          description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"                   
+          description: "Project definition not found"
         "405":
-          description: "Validation exception"           
+          description: "Validation exception"
 
   /project({projectId})/queue({moduleId}):
-
     get:
       tags:
         - "project_editor"
@@ -473,23 +468,23 @@ paths:
       description: ""
       operationId: "getQueue"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "moduleId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "moduleId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 $ref: "#/components/schemas/Queue"
         "400":
@@ -503,25 +498,25 @@ paths:
       summary: "Delete queue from project"
       operationId: "deleteQueue"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "moduleId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"        
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "moduleId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
-        '200':
+        "200":
           description: OK
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"                     
+          description: "Project definition not found"
 
   /project({projectId})/queue({queueId})/param:
     get:
@@ -530,27 +525,27 @@ paths:
       summary: "Get list of queue params"
       operationId: "listQueueParams"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "queueId"
-        in: "path"
-        description: "ID of Queue"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "queueId"
+          in: "path"
+          description: "ID of Queue"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: array
                 items:
-                  $ref:  "#/components/schemas/QueueParam"
+                  $ref: "#/components/schemas/QueueParam"
         "400":
           description: "Invalid ID"
         "404":
@@ -558,32 +553,32 @@ paths:
 
     put:
       tags:
-      - "property_editor"
+        - "property_editor"
       summary: "Updates queue param"
       operationId: "updateQueueParam"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "queueId"
-        in: "path"
-        description: "ID of Queue"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "queueId"
+          in: "path"
+          description: "ID of Queue"
+          required: true
+          schema:
+            type: "string"
       requestBody:
         content:
-          '*/*':
+          "*/*":
             schema:
-              $ref: '#/components/schemas/QueueParam'
+              $ref: "#/components/schemas/QueueParam"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 $ref: "#/components/schemas/QueueParam"
         "404":
@@ -599,17 +594,17 @@ paths:
       description: ""
       operationId: "listResources"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"      
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: array
                 items:
@@ -621,58 +616,57 @@ paths:
 
     post:
       tags:
-        - "project_editor"  
+        - "project_editor"
       summary: "Add resource to project"
       operationId: "addResource"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/ProjectResource"          
+                $ref: "#/components/schemas/ProjectResource"
         "400":
-          description: "Invalid ID supplied"   
+          description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"                   
+          description: "Project definition not found"
         "405":
           description: "Validation exception"
 
     put:
       tags:
-        - "project_editor"  
+        - "project_editor"
       summary: "Update resource to project"
       operationId: "updateResource"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/Module"          
+                $ref: "#/components/schemas/Module"
         "400":
-          description: "Invalid ID supplied"   
+          description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"                   
+          description: "Project definition not found"
         "405":
-          description: "Validation exception"           
+          description: "Validation exception"
 
   /project({projectId})/resource({resourceId}):
-
     get:
       tags:
         - "project_editor"
@@ -680,23 +674,23 @@ paths:
       description: ""
       operationId: "getResource"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "resourceId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "resourceId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 $ref: "#/components/schemas/ProjectResource"
         "400":
@@ -710,25 +704,25 @@ paths:
       summary: "Delete resource from project"
       operationId: "deleteResource"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "resourceId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"        
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "resourceId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
-        '200':
+        "200":
           description: OK
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"   
+          description: "Project definition not found"
 
   /project({projectId})/instance:
     get:
@@ -738,17 +732,17 @@ paths:
       description: ""
       operationId: "listInstances"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"      
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: array
                 items:
@@ -760,58 +754,57 @@ paths:
 
     post:
       tags:
-        - "project_editor"  
+        - "project_editor"
       summary: "Add instance to project"
       operationId: "addInstance"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/Module"          
+                $ref: "#/components/schemas/Module"
         "400":
-          description: "Invalid ID supplied"   
+          description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"                   
+          description: "Project definition not found"
         "405":
           description: "Validation exception"
 
     put:
       tags:
-        - "project_editor"  
+        - "project_editor"
       summary: "Update instance to project"
       operationId: "runInstance"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/Module"          
+                $ref: "#/components/schemas/Module"
         "400":
-          description: "Invalid ID supplied"   
+          description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"                   
+          description: "Project definition not found"
         "405":
-          description: "Validation exception"           
+          description: "Validation exception"
 
   /project({projectId})/instance({instanceId}):
-
     get:
       tags:
         - "project_editor"
@@ -819,23 +812,23 @@ paths:
       description: ""
       operationId: "getInstance"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 $ref: "#/components/schemas/Instance"
         "400":
@@ -849,25 +842,25 @@ paths:
       summary: "Delete instance from project"
       operationId: "killInstance"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Module"
-        required: true
-        schema:
-          type: "string"        
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Module"
+          required: true
+          schema:
+            type: "string"
       responses:
-        '200':
+        "200":
           description: OK
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Project definition not found"     
+          description: "Project definition not found"
 
   /project({projectId})/instance({instanceId})/module:
     get:
@@ -877,23 +870,23 @@ paths:
       description: ""
       operationId: "listInstanceModules"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: "array"
                 items:
@@ -901,7 +894,7 @@ paths:
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Instance definition not found"    
+          description: "Instance definition not found"
 
   /project({projectId})/instance({instanceId})/module({instanceModuleId}):
     get:
@@ -910,35 +903,35 @@ paths:
       summary: "Get list of instance modules"
       operationId: "getInstanceModule"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceModuleId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"        
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceModuleId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/InstanceModule"           
+                $ref: "#/components/schemas/InstanceModule"
         "400":
           description: "Invalid ID"
         "404":
-          description: "Project or instance not found" 
+          description: "Project or instance not found"
 
   /project({projectId})/instance({instanceId})/module({instanceModuleId})/reset:
     get:
@@ -947,35 +940,35 @@ paths:
       summary: "Reset instance module"
       operationId: "resetInstanceModule"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceModuleId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"        
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceModuleId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/InstanceModule"           
+                $ref: "#/components/schemas/InstanceModule"
         "400":
           description: "Invalid ID"
         "404":
-          description: "Project or instance not found" 
+          description: "Project or instance not found"
 
   /project({projectId})/instance({instanceId})/queue:
     get:
@@ -985,23 +978,23 @@ paths:
       description: ""
       operationId: "listInstanceQueues"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: "array"
                 items:
@@ -1009,7 +1002,7 @@ paths:
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Instance definition not found"    
+          description: "Instance definition not found"
 
   /project({projectId})/instance({instanceId})/queue(instanceQueueId):
     get:
@@ -1018,29 +1011,29 @@ paths:
       summary: "Get list of instance queues"
       operationId: "getInstanceQueue"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: "#/components/schemas/InstanceQueue"           
+                $ref: "#/components/schemas/InstanceQueue"
         "400":
           description: "Invalid ID"
         "404":
-          description: "Project or instance not found" 
+          description: "Project or instance not found"
 
   /project({projectId})/instance({instanceId})/queue(instanceQueueId)/current_image:
     get:
@@ -1049,29 +1042,29 @@ paths:
       summary: "Get list of instance queues"
       operationId: "getQueueCurrentImage"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
-                type: integer            
+                type: integer
         "400":
           description: "Invalid ID"
         "404":
-          description: "Project or instance not found" 
+          description: "Project or instance not found"
 
   /project({projectId})/instance({instanceId})/queue(instanceQueueId)/clean:
     post:
@@ -1080,37 +1073,35 @@ paths:
       summary: "Cleans queue"
       operationId: "cleanQueue"
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of Project"
-        required: true
-        schema:
-          type: "string"
-      - name: "instanceId"
-        in: "path"
-        description: "ID of Instance"
-        required: true
-        schema:
-          type: "string"
+        - name: "projectId"
+          in: "path"
+          description: "ID of Project"
+          required: true
+          schema:
+            type: "string"
+        - name: "instanceId"
+          in: "path"
+          description: "ID of Instance"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "OK"
           content:
-            'application/json':
+            "application/json":
               schema:
-                type: integer            
+                type: integer
         "400":
           description: "Invalid ID"
         "404":
-          description: "Project or instance not found"           
+          description: "Project or instance not found"
 
 components:
-
   schemas:
-
     ModuleDef:
       type: "object"
-      description: "List of module files in owl folder defining BaseModule descendant" 
+      description: "List of module files in owl folder defining BaseModule descendant"
       required:
         - "id"
       properties:
@@ -1123,7 +1114,7 @@ components:
 
     ModuleParamDef:
       type: "object"
-      description: "List of parameters aquired by calling module's class method ...." 
+      description: "List of parameters aquired by calling module's class method ...."
       required:
         - "id"
         - "type"
@@ -1138,13 +1129,13 @@ components:
           type: "string"
           description: "Każdy typ powinien mieć dedykowany edytor w property managerze"
           enum:
-          - "string"
-          - "float"
-          - "integer"
-          - "quad"
-          - "region"
-          - "region_list"
-          - "resource"    
+            - "string"
+            - "float"
+            - "integer"
+            - "quad"
+            - "region"
+            - "region_list"
+            - "resource"
 
     QueueParamDef:
       type: "object"
@@ -1161,17 +1152,17 @@ components:
           type: "string"
           description: "TODO: Każdy typ powinien mieć dedykowany edytor w property managerze"
           enum:
-          - "string"
-          - "float"
-          - "integer"
-          - "quad"
-          - "region"
-          - "region_list"
-          - "resource" 
+            - "string"
+            - "float"
+            - "integer"
+            - "quad"
+            - "region"
+            - "region_list"
+            - "resource"
 
     Project:
       type: "object"
-      description: "List of directories containing config.json with data from that files"    
+      description: "List of directories containing config.json with data from that files"
       required:
         - "id"
         - "name"
@@ -1195,8 +1186,8 @@ components:
         id:
           type: "string"
         module_def_id:
-          type: "string"     
-        name: 
+          type: "string"
+        name:
           type: "string"
         comment:
           type: "string"
@@ -1207,8 +1198,9 @@ components:
         input:
           $ref: "#/components/schemas/Queue"
         output:
-          $ref: "#/components/schemas/Queue"             
-  
+          $ref: "#/components/schemas/Queue"
+        gui_properties:
+          $ref: "#/components/schemas/GuiProperties"
 
     ModuleParam:
       type: "object"
@@ -1217,13 +1209,13 @@ components:
         - "param_def_id"
       properties:
         param_def_id:
-          type: "string"      
+          type: "string"
         value:
           type: "string"
         module:
           $ref: "#/components/schemas/Module"
         param_def:
-          $ref: "#/components/schemas/ModuleParamDef"          
+          $ref: "#/components/schemas/ModuleParamDef"
 
     Queue:
       type: "object"
@@ -1236,19 +1228,19 @@ components:
         name:
           type: "string"
         project:
-          $ref: "#/components/schemas/Project"          
-          
+          $ref: "#/components/schemas/Project"
+
     QueueParam:
       type: "object"
       required:
         - "params_def_id"
       properties:
         params_def_id:
-          type: "string"     
+          type: "string"
         value:
-          type: "string"           
+          type: "string"
         module:
-          $ref: "#/components/schemas/Queue"    
+          $ref: "#/components/schemas/Queue"
         param_def:
           $ref: "#/components/schemas/QueueParamDef"
 
@@ -1259,32 +1251,38 @@ components:
           type: "string"
         project:
           $ref: "#/components/schemas/Project"
-      
+
     InstanceModule:
       type: "object"
       properties:
         id:
           type: "string"
         project_instance:
-          $ref: "#/components/schemas/Instance"   
+          $ref: "#/components/schemas/Instance"
         module:
-          $ref: "#/components/schemas/Module" 
-      
+          $ref: "#/components/schemas/Module"
+
     InstanceQueue:
-      type: "object" 
+      type: "object"
       properties:
         id:
           type: "string"
         project_instance:
-          $ref: "#/components/schemas/Instance"   
+          $ref: "#/components/schemas/Instance"
         queue:
-          $ref: "#/components/schemas/Queue"       
+          $ref: "#/components/schemas/Queue"
 
     ProjectResource:
-      type: "object" 
+      type: "object"
       properties:
         project:
           $ref: "#/components/schemas/Module"
         url:
           type: "string"
           format: "binary"
+
+    GuiProperties:
+      position:
+        x: "number"
+        y: "number"
+      color: "string"
