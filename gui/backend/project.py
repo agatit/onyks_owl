@@ -175,26 +175,30 @@ class Project():
         return self.config_json['queues']
     def add_queue(self, queue):
         name = queue.name
-        name_helper = 0
-        while name in self.config_json['queues']:
-            name_helper += 1
-            name = queue.name + '#' + str(name_helper)
-        self.config_json['queues'][name] = {}
-        self.config_json['queues'][name]['task_queue_limit'] = queue.task_queue_limit if queue.task_queue_limit != None else 6
-        self.config_json['queues'][name]['task_queue_timeout'] = queue.task_queue_timeout if queue.task_queue_timeout != None else 5
-        self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit if queue.stream_queue_limit != None else 0
-        self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout if queue.stream_queue_timeout != None else 1
+        id = queue._id
+        id_helper = 0
+        while id in self.config_json['queues']:
+            id_helper += 1
+            id = queue._id + '#' + str(id_helper)
+        self.config_json['queues'][id] = {}
+        self.config_json['queues'][id]['name'] = name
+        self.config_json['queues'][id]['task_queue_limit'] = queue.task_queue_limit if queue.task_queue_limit != None else 6
+        self.config_json['queues'][id]['task_queue_timeout'] = queue.task_queue_timeout if queue.task_queue_timeout != None else 5
+        self.config_json['queues'][id]['stream_queue_limit'] = queue.stream_queue_limit if queue.stream_queue_limit != None else 0
+        self.config_json['queues'][id]['stream_queue_timeout'] = queue.stream_queue_timeout if queue.stream_queue_timeout != None else 1
         self.set_config(self.config_json)
-        return {name:self.config_json['queues'][name]}
+        return {id:self.config_json['queues'][id]}
     def modify_queue(self, queue):
         name = queue.name
-        self.config_json['queues'][name] = {}
-        self.config_json['queues'][name]['task_queue_limit'] = queue.task_queue_limit
-        self.config_json['queues'][name]['task_queue_timeout'] = queue.task_queue_timeout
-        self.config_json['queues'][name]['stream_queue_limit'] = queue.stream_queue_limit
-        self.config_json['queues'][name]['stream_queue_timeout'] = queue.stream_queue_timeout
+        id = queue._id
+        self.config_json['queues'][id] = {}
+        self.config_json['queues'][id]['name'] = name
+        self.config_json['queues'][id]['task_queue_limit'] = queue.task_queue_limit
+        self.config_json['queues'][id]['task_queue_timeout'] = queue.task_queue_timeout
+        self.config_json['queues'][id]['stream_queue_limit'] = queue.stream_queue_limit
+        self.config_json['queues'][id]['stream_queue_timeout'] = queue.stream_queue_timeout
         self.set_config(self.config_json)
-        return self.config_json['queues'][name]
+        return self.config_json['queues'][id]
     def get_queue(self, module_id):
         # return self.modules[module_id].get_queue()
         retval = {'input_queues': [],

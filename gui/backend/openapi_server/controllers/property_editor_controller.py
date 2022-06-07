@@ -86,7 +86,8 @@ def list_module_params(project_id, module_id):  # noqa: E501
 
     :rtype: List[ModuleParam]
     """
-    return worker.x.get_project_module_data(project_id, module_id)
+    
+    return worker.x.get_project_module_data(project_id.lower(), module_id)
 
 
 def list_queue_params(project_id, queue_id):  # noqa: E501

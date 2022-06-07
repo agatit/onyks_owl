@@ -64,6 +64,7 @@ def add_queue(project_id):  # noqa: E501
     """
     if connexion.request.is_json:
         queue = Queue.from_dict(connexion.request.get_json())  # noqa: E501
+        queue._id = connexion.request.get_json()['id']
     return worker.x.add_project_queue(project_id, queue)
     # return 'do some magic!'
 
