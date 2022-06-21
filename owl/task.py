@@ -18,9 +18,9 @@ class Producer():
             redis: redis.Redis,
             task_queue: str,
             streams_classes: dict,
-            expire_time: int = 120,
-            queue_limit: int = 0,
-            timeout: int = 120):
+            expire_time: int,
+            queue_limit: int,
+            timeout: int):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
@@ -72,7 +72,7 @@ class Consumer():
             redis: redis.Redis,
             task_queue: str,
             streams_classes: dict,
-            timeout: int = 10):
+            timeout: int):
         self.redis = redis
         self.task_queue = task_queue
         self.streams_classes = streams_classes
@@ -95,4 +95,4 @@ class Consumer():
             else:
                 return None, None
         else:
-            return {}, stream_composed.Consumer(self.redis, {}, {})
+            return {}, stream_composed.Consumer(self.redis, {}, {}, self.timeout)

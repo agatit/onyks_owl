@@ -9,8 +9,6 @@ import stream_video
 import stream_data
 import module_base
 
-
-
 class Module(module_base.Module):
 
     def streams_init(self): 
@@ -19,7 +17,6 @@ class Module(module_base.Module):
             "color" : stream_video.Producer,
             "metrics" : stream_data.Producer
         }
-
 
     def task_process(self, input_task_data, input_stream):
         'przetwarzanie strumieni'

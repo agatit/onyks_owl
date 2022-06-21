@@ -50,8 +50,8 @@ class Module:
                 exit()  
 
             self.expire_time = self.config.get('expire_time', 120)
-            self.timeout = self.config.get('timeout', 10)  
-            self.stream_queue_limit = self.config.get('stream_queue_limit', 0)
+            self.timeout = self.config.get('timeout', 1)  
+            self.stream_queue_limit = self.config.get('stream_queue_limit', 100)
             self.params = self.config.get("params", {})
 
             self.redis = redis.Redis()
@@ -61,7 +61,7 @@ class Module:
             consumers = {name : input_class for name, input_class in self.input_classes.items()}        
             self.task_consumer = task.Consumer(self.redis, self.config.get('input_queue', ""), consumers, self.timeout)
             producers = {name : output_class for name, output_class in self.output_classes.items()} 
-            self.task_producer = task.Producer(self.redis, self.config.get('output_queue',""), producers, self.expire_time, self.stream_queue_limit,  self.timeout)  
+            self.task_producer = task.Producer(self.redis, self.config.get('output_queue',""), producers, self.expire_time, self.stream_queue_limit,  2*self.timeout)  
 
         except Exception as e:
             logging.error(f"{self.module_name}: {str(e)}\n\n{''.join(traceback.format_tb(e.__traceback__))}\n")
@@ -89,7 +89,6 @@ class Module:
         try:
             with self.task_producer:
                 for task_data, input_stream in self.task_consumer:
-                    print(f"asd {task_data} {input_stream}")
                     if not task_data is None:
                         task = {
                             "stream_names" : input_stream.streams_queues,

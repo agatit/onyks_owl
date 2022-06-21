@@ -1,5 +1,11 @@
 __pycache__
 *.log
 *.pid
-/samples
+/samples/*
+!/samples/README.md
+/examples/*/out/*
+!/examples/*/out/.gitkeep
+/examples/*/tmp/*
+!/examples/*/tmp/.gitkeep
 .vscode
+/.vscode/*

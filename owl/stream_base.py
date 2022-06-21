@@ -15,9 +15,9 @@ class Producer:
             self,
             redis: redis.Redis,
             stream_queue: str,
-            expire_time:int = 120,
-            queue_limit:int = 0,
-            timeout:int = 120):
+            expire_time:int,
+            queue_limit:int,
+            timeout:int):
         self.id = id
         self.redis = redis
         self.stream_queue = stream_queue
@@ -39,8 +39,7 @@ class Producer:
             len = self.redis.llen(f"owl:stream_queue:{self.stream_queue}")
             self.queue_space = self.queue_limit - len
             if self.queue_space <= 0:
-                time.sleep(0.1)
-            logging.info(f"time left: {end_time - time.time()}")
+                time.sleep(0.1)        
             if time.time() > end_time:
                 raise TimeoutError("Output stream queue is full")
         self.redis.rpush(f"owl:stream_queue:{self.stream_queue}", data)
@@ -57,7 +56,7 @@ class Consumer:
             self,
             redis: redis.Redis,
             stream_queue: str,
-            timeout:int = 120):
+            timeout:int):
         self.redis = redis
         self.stream_queue = stream_queue
         self.timeout = timeout     
