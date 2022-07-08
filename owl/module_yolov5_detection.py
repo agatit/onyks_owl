@@ -32,11 +32,11 @@ class Module(module_base.Module):
     def task_process(self, input_task_data, input_stream ):
         "Wykrywanie obiektów na obrazie"
 
-        # weights_path = self.params.get("weights_path", "C:\\Users\\Marcin\\Agat_IT\\onyks_owl\\examples\\yolov5_detection\\weights\\best.pt")
+        weights_path = self.params.get("weights_path", "weights\\yolov5s.pt")
         debug = self.params.get("debug", 0)
 
         first_frame = 0 
-        model = torch.hub.load('ultralytics/yolov5', 'custom', 'C:\\Users\\Marcin\\Agat_IT\\onyks_owl\\examples\\yolov5_detection\\weights\\best.pt')
+        model = torch.hub.load('ultralytics/yolov5', 'custom', weights_path)
         classes = model.names
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
