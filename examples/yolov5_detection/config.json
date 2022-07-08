@@ -1,0 +1,37 @@
+{
+    "module_source_cv" : {   
+        "output_queue" : ["stage1"],
+        "stream_queue_limit" : 100,
+        "params": {
+            "device": 0
+        }
+    },
+
+    "module_sifter" : { 
+        "input_queue" : ["stage1"],   
+        "stream_queue_limit" : 100, 
+        "output_queue" : ["stage2"],  
+        "params": {
+            "ratio" : 20,
+            "debug" : 1             
+        }
+    },
+
+    "module_yolov5_detection" : { 
+        "input_queue" : ["stage2"],   
+        "stream_queue_limit" : 100, 
+        "output_queue" : ["stage3"],  
+        "params": {
+            "weights_path" : "C:\\Users\\Marcin\\Agat_IT\\onyks_owl\\examples\\yolov5_detection\\weights\\best.pt",
+            "debug" : 1             
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : ["stage3"],
+        "stream_queue_limit" : 100,
+        "params": {
+            "window_name" : "camera_view"
+        }        
+    }
+}
