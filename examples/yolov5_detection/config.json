@@ -22,7 +22,7 @@
         "stream_queue_limit" : 100, 
         "output_queue" : ["stage3"],  
         "params": {
-            "weights_path" : "C:\\Users\\Marcin\\Agat_IT\\onyks_owl\\examples\\yolov5_detection\\weights\\best.pt",
+            "weights_path" : "weights\\best.pt",
             "debug" : 1             
         }
     },
