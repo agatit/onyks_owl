@@ -1,0 +1,27 @@
+{
+    "module_source_cv" : {   
+        "output_queue" : ["stage1"],
+        "stream_queue_limit" : 100,
+        "params": {
+            "device": 0
+        }
+    },
+
+    "module_sifter" : { 
+        "input_queue" : ["stage1"],   
+        "stream_queue_limit" : 100, 
+        "output_queue" : ["stage2"],  
+        "params": {
+            "ratio" : 20,
+            "debug" : 1             
+        }
+    },
+
+    "module_sink_win" : {   
+        "input_queue" : ["stage2"],
+        "stream_queue_limit" : 100,
+        "params": {
+            "window_name" : "camera_view"
+        }        
+    }
+}
