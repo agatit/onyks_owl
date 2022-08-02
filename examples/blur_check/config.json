@@ -7,28 +7,18 @@
         }
     },
 
-    "module_sifter" : { 
+    "module_blur_check" : { 
         "input_queue" : ["stage1"],   
         "stream_queue_limit" : 100, 
         "output_queue" : ["stage2"],  
         "params": {
-            "ratio" : 20,
-            "debug" : 1             
-        }
-    },
-
-    "module_yolov5_detection" : { 
-        "input_queue" : ["stage2"],   
-        "stream_queue_limit" : 100, 
-        "output_queue" : ["stage3"],  
-        "params": {
-            "weights_path" : "weights\\best.pt",
+            "blur_threshold" : 100,
             "debug" : 1             
         }
     },
 
     "module_sink_win" : {   
-        "input_queue" : ["stage3"],
+        "input_queue" : ["stage2"],
         "stream_queue_limit" : 100,
         "params": {
             "window_name" : "camera_view"

@@ -8,27 +8,37 @@
     },
 
     "module_sifter" : { 
-        "input_queue" : ["stage1"],   
+        "input_queue" : ["stage1"],  
         "stream_queue_limit" : 100, 
         "output_queue" : ["stage2"],  
         "params": {
-            "ratio" : 20,
+            "ratio" : 50,
             "debug" : 1             
         }
     },
 
-    "module_yolov5_detection" : { 
+    "module_blur_check" : { 
         "input_queue" : ["stage2"],   
         "stream_queue_limit" : 100, 
-        "output_queue" : ["stage3"],  
+        "output_queue" : ["stage3"],
         "params": {
-            "weights_path" : "weights\\best.pt",
+            "blur_threshold" : 100,
             "debug" : 1             
         }
     },
 
+    "module_save_photos" : { 
+        "input_queue" : ["stage3"],   
+        "stream_queue_limit" : 100, 
+        "output_queue" : ["stage4"],  
+        "params":{
+            "emit" : 1,
+            "folder" : "C:\\Users\\Marcin\\Agat_IT\\results_saving_photos_for_relearning"
+        }
+    },     
+
     "module_sink_win" : {   
-        "input_queue" : ["stage3"],
+        "input_queue" : ["stage4"],
         "stream_queue_limit" : 100,
         "params": {
             "window_name" : "camera_view"

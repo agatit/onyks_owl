@@ -17,17 +17,17 @@
         }
     },
 
-    "module_yolov5_detection" : { 
+    "module_save_photos" : { 
         "input_queue" : ["stage2"],   
         "stream_queue_limit" : 100, 
         "output_queue" : ["stage3"],  
-        "params": {
-            "weights_path" : "weights\\best.pt",
-            "debug" : 1             
+        "params":{
+            "emit" : 1,
+            "folder" : "C:\\Users\\Marcin\\Agat_IT\\results_saving_photos_for_relearning"
         }
-    },
+    },    
 
-    "module_sink_win" : {   
+    "module_sink_win" : {  
         "input_queue" : ["stage3"],
         "stream_queue_limit" : 100,
         "params": {
