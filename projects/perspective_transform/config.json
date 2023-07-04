@@ -148,6 +148,32 @@
                     ]
                 ]
             }
+        },
+        "module_sink_file#1": {
+            "params": {
+                "stream_queue_limit": 100,
+                "task_expire_time": 10,
+                "stream_expire_time": 10,
+                "task_timeout": 10,
+                "stream_timeout": 10,
+                "input_queues": "[]",
+                "output_queues": "[]",
+                "filename": "../projects/%prid/out/%iid/test_%Y%m%d_%H%M%S_%f.avi"
+            },
+            "id": "module_sink_file"
+        },
+        "module_source_cv#2": {
+            "params": {
+                "stream_queue_limit": 100,
+                "task_expire_time": 10,
+                "stream_expire_time": 10,
+                "task_timeout": 10,
+                "stream_timeout": 10,
+                "input_queues": "[]",
+                "output_queues": "[]",
+                "device": "../samples/camera_wisenet/train1.avi"
+            },
+            "id": "module_source_cv"
         }
     },
     "queues": {
@@ -158,6 +184,12 @@
             "stream_queue_limit": 100
         },
         "Initial Queue Name": {
+            "task_queue_limit": null,
+            "task_queue_timeout": null,
+            "stream_queue_limit": null,
+            "stream_queue_timeout": null
+        },
+        "Initial Queue Name#1": {
             "task_queue_limit": null,
             "task_queue_timeout": null,
             "stream_queue_limit": null,
