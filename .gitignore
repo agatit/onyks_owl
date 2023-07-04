@@ -9,3 +9,5 @@ __pycache__
 !/examples/*/tmp/.gitkeep
 .vscode
 .idea
+.venv
+node_modules
