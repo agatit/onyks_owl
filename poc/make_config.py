@@ -108,7 +108,7 @@ def init_args_parser():
 def main():
     init_args_parser()
 
-    cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
+    cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_AUTOSIZE)
 
     view_scale = args.scale
     img = cv2.imread(args.image_file)
