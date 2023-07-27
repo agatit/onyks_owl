@@ -1,4 +1,7 @@
 import os
+
+import click
+
 import rectify
 import cv2
 import json
@@ -9,83 +12,92 @@ from deblur import Deblur
 
 show_scale = 1
 
-pause = False
-video_path = 'samples/choiny2022/gora/6.mp4'
-path, filename = os.path.split(os.path.abspath(video_path))
-basename, extension = os.path.splitext(filename)
+frame_size = (1920, 1080)
+motion_roi = (200, 300, 200, 100)  # 300:-100,500:-500 # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
+stitch_roi = (1100, 0, 400, 0)
 
-with open("samples/choiny2022/gora/gora.json") as f:
-    rectify.calc_maps(json.load(f), 1920, 1080)
+@click.command()
+@click.argument("video_path")
+@click.argument("config_json")
+def main(video_path, config_json):
+    pause = False
+    path, filename = os.path.split(os.path.abspath(video_path))
+    basename, extension = os.path.splitext(filename)
 
-cap = cv2.VideoCapture(video_path)
- 
-if (cap.isOpened()== False): 
-  print("Error opening video stream or file")
+    with open(config_json) as f:
+        rectify.calc_maps(json.load(f), 1920, 1080)
 
-frame_size = (1920,1080)
-motion_roi = (200,300,200,100) #300:-100,500:-500 # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
-stich_roi = (1100,0,400,0)
+    cap = cv2.VideoCapture(video_path)
 
-meter = CarSpeedEstimator()
-# stitcher = CarStitcherDelayed(roi_size=stich_roi, delay=50)
-stitcher = CarStitcherRoi(roi_size=stich_roi)
-deblur = Deblur(51)
-deblur.set_speed(120, 0, 1, 1.2)
+    if (cap.isOpened() == False):
+        print("Error opening video stream or file")
 
-frame_no = 0
+    meter = CarSpeedEstimator()
+    # stitcher = CarStitcherDelayed(roi_size=stich_roi, delay=50)
+    stitcher = CarStitcherRoi(roi_size=stitch_roi)
+    deblur = Deblur(51)
+    deblur.set_speed(120, 0, 1, 1.2)
 
-while(cap.isOpened()):
+    frame_no = 0
 
-  frame_no += 1
-  
-  ret, frame = cap.read()
+    while (cap.isOpened()):
 
-  if ret == True:
-   
-    # prespektywa
-    rectified = rectify.rectify(frame)
+        frame_no += 1
 
-    # usunięcie rozmycia
-    # rectified = deblur.next(rectified)
+        ret, frame = cap.read()
 
-    # crop
-    # cropped = rectified[300:-100,500:-500]
-    cropped = rectified[motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]]
+        if ret == True:
 
-    # pomiar prędkości
-    debug = np.zeros_like(cropped)
-    velocity, debug = meter.next(cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY), debug=debug)
-    print(f"velocity={velocity}")
-    cropped = cv2.add(cropped,debug)
-    
-    # sklejanie
-    result = stitcher.next(rectified, velocity)
+            # prespektywa
+            rectified = rectify.rectify(frame)
 
-    # wyświetlanie :)
-    if result is not None:
-      areas = np.zeros_like(result)
-      areas = cv2.rectangle(areas, (motion_roi[0],motion_roi[1]), (frame_size[0]-motion_roi[2],frame_size[1]-motion_roi[3]), (255,0,0), 1)
-      areas = cv2.rectangle(areas, (stich_roi[0],stich_roi[1]), (frame_size[0]-stich_roi[2],frame_size[1]-stich_roi[3]), (0,255,0), 1)      
-      result = cv2.add(result, areas)
-      result = cv2.resize(result, (int(result.shape[1]*show_scale), int(result.shape[0]*show_scale)))
-      cv2.imshow('result',result)
+            # usunięcie rozmycia
+            # rectified = deblur.next(rectified)
 
-    cropped = cv2.resize(cropped, (int(cropped.shape[1]*show_scale), int(cropped.shape[0]*show_scale)))    
-    cv2.imshow('cropped',cropped)
+            # crop
+            # cropped = rectified[300:-100,500:-500]
+            cropped = rectified[motion_roi[1]:-motion_roi[3], motion_roi[0]:-motion_roi[2]]
 
-    if pause:
-      c = cv2.waitKey(-1)
-    else:
-      c = cv2.waitKey(1)
-    if c & 0xFF == ord('q'):
-      break
-    if c & 0xFF == ord('s'):
-      cv2.imwrite(os.path.join(path, f"{basename}_{frame_no}.png"), rectified)
-    elif c & 0xFF == ord(' '):
-      pause = not pause
+            # pomiar prędkości
+            debug = np.zeros_like(cropped)
+            velocity, debug = meter.next(cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY), debug=debug)
+            print(f"velocity={velocity}")
+            cropped = cv2.add(cropped, debug)
 
-  else: 
-    break
+            # sklejanie
+            result = stitcher.next(rectified, velocity)
 
-cap.release()
-cv2.destroyAllWindows()
+            # wyświetlanie :)
+            if result is not None:
+                areas = np.zeros_like(result)
+                areas = cv2.rectangle(areas, (motion_roi[0], motion_roi[1]),
+                                      (frame_size[0] - motion_roi[2], frame_size[1] - motion_roi[3]), (255, 0, 0), 1)
+                areas = cv2.rectangle(areas, (stitch_roi[0], stitch_roi[1]),
+                                      (frame_size[0] - stitch_roi[2], frame_size[1] - stitch_roi[3]), (0, 255, 0), 1)
+                result = cv2.add(result, areas)
+                result = cv2.resize(result, (int(result.shape[1] * show_scale), int(result.shape[0] * show_scale)))
+                cv2.imshow('result', result)
+
+            cropped = cv2.resize(cropped, (int(cropped.shape[1] * show_scale), int(cropped.shape[0] * show_scale)))
+            cv2.imshow('cropped', cropped)
+
+            if pause:
+                c = cv2.waitKey(-1)
+            else:
+                c = cv2.waitKey(1)
+            if c & 0xFF == ord('q'):
+                break
+            if c & 0xFF == ord('s'):
+                cv2.imwrite(os.path.join(path, f"{basename}_{frame_no}.png"), rectified)
+            elif c & 0xFF == ord(' '):
+                pause = not pause
+
+        else:
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    main()
