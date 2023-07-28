@@ -1,5 +1,6 @@
 import csv
 import time
+from dataclasses import dataclass
 
 import click
 import numpy as np
@@ -23,13 +24,20 @@ color = (255, 0, 0)
 thickness = 1
 
 
-def save_to_csv_file(headers, measurements, output_csv):
-    with open(output_csv, 'w') as file:
-        writer = csv.writer(file)
-        writer.writerow(headers)
+@dataclass
+class Measurement:
+    frame: int
+    avg_velocity: tuple
+    raw_velocity: list
 
-        for measurement in measurements:
-            writer.writerow(measurement)
+
+def save_to_csv_file_avg_velocity(file, headers, measurements):
+    writer = csv.writer(file)
+    writer.writerow(headers)
+
+    for measurement in measurements:
+        data_to_store = (measurement.frame,) + measurement.avg_velocity
+        writer.writerow(data_to_store)
 
 
 def display_frame(frame, cropped, dots):
@@ -61,19 +69,19 @@ def main(input_movie, output_csv, display):
     print(f"started {input_movie} processing")
 
     count = 0
-    measurements = []  # TODO zmiana stuktury danych
+    measurements = []
+
     while input_cam.isOpened():
         ret, frame = input_cam.read()
         if ret:
             cropped_frame = frame[motion_roi[1]:-motion_roi[3], motion_roi[0]:-motion_roi[2]]
             dots = np.zeros_like(cropped_frame)
-            velocity, dots = meter.next(cv2.cvtColor(cropped_frame, cv2.COLOR_BGR2GRAY), debug=dots)
+            avg_velocity, dots, raw_velocity = meter.next(cv2.cvtColor(cropped_frame, cv2.COLOR_BGR2GRAY), debug=dots)
 
             if display:
                 display_frame(frame, cropped_frame, dots)
 
-            x, y = velocity
-            measurements.append((count, x, y))
+            measurements.append(Measurement(count, avg_velocity, list(raw_velocity)))
 
             if count % 50 == 0:
                 print(f"rendered: {count} frames")
@@ -86,7 +94,8 @@ def main(input_movie, output_csv, display):
     cv2.destroyAllWindows()
 
     headers = ["frame", 'x', 'y']
-    save_to_csv_file(headers, measurements, output_csv)
+    with open(output_csv, 'w') as file:
+        save_to_csv_file_avg_velocity(file, headers, measurements)
 
 
 if __name__ == '__main__':

@@ -60,7 +60,7 @@ def main(video_path, config_json):
 
             # pomiar prędkości
             debug = np.zeros_like(cropped)
-            velocity, debug = meter.next(cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY), debug=debug)
+            velocity, debug, _ = meter.next(cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY), debug=debug)
             print(f"velocity={velocity}")
             cropped = cv2.add(cropped, debug)
 

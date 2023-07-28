@@ -1,3 +1,5 @@
+import copy
+
 import cv2
 import time
 import logging
@@ -39,7 +41,7 @@ class CarSpeedEstimator:
         # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         if self.old_frame is None:
             self.old_frame = frame
-            return (0,0), debug
+            return (0,0), debug, np.array([(0,0)])
 
         points0 = cv2.goodFeaturesToTrack(self.old_frame, mask = None, **self.feature_params)
         points1, status, err = cv2.calcOpticalFlowPyrLK(self.old_frame, frame, points0, None, **self.lk_params)
@@ -57,6 +59,7 @@ class CarSpeedEstimator:
             & (np.abs(velocities[:,0]) > self.x_min_velocity)       
 
         velocities = velocities[status]
+        raw_velocities = copy.deepcopy(velocities)
 
         # debug
         if debug is not None:
@@ -103,6 +106,6 @@ class CarSpeedEstimator:
             velocity_avg_x = 0  
             velocity_avg_y = 0
         
-        return (velocity_avg_x, velocity_avg_y), debug
+        return (velocity_avg_x, velocity_avg_y), debug, raw_velocities
           
         
