@@ -1,6 +1,9 @@
 import csv
+import os
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
+from enum import Enum
+from pathlib import Path
 
 import click
 import numpy as np
@@ -31,13 +34,13 @@ class Measurement:
     raw_velocity: list
 
 
-def save_to_csv_file_avg_velocity(file, headers, measurements):
+def save_to_csv(file, measurements):
     writer = csv.writer(file)
-    writer.writerow(headers)
 
     for measurement in measurements:
-        data_to_store = (measurement.frame,) + measurement.avg_velocity
-        writer.writerow(data_to_store)
+        for raw_vel in measurement.raw_velocity:
+            data_to_store = (measurement.frame,) + measurement.avg_velocity + tuple(raw_vel)
+            writer.writerow(data_to_store)
 
 
 def display_frame(frame, cropped, dots):
@@ -57,9 +60,9 @@ def display_frame(frame, cropped, dots):
 
 @click.command()
 @click.argument("input_movie")
-@click.argument("output_csv")
-@click.option("--display", is_flag=True)
-def main(input_movie, output_csv, display):
+@click.argument("output_file")
+@click.option("-d", "--display", "display", is_flag=True, show_default=True)
+def main(input_movie, output_file, display):
     input_cam = cv2.VideoCapture(input_movie)
     if not input_cam.isOpened():
         print("Error opening video stream or file")
@@ -93,9 +96,8 @@ def main(input_movie, output_csv, display):
     input_cam.release()
     cv2.destroyAllWindows()
 
-    headers = ["frame", 'x', 'y']
-    with open(output_csv, 'w') as file:
-        save_to_csv_file_avg_velocity(file, headers, measurements)
+    with open(output_file, 'w') as file:
+        save_to_csv(file, measurements)
 
 
 if __name__ == '__main__':
