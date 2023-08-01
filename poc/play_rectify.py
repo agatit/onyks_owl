@@ -6,17 +6,26 @@ import json
 import numpy as np
 
 
-def show_rectified_image(image_path):
+def scale_image(image, scale):
+    width = int(image.shape[1] * scale / 100)
+    height = int(image.shape[0] * scale / 100)
+    dim = (width, height)
+
+    return cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
+
+
+def show_rectified_image(image_path, scale_percent):
     image = cv2.imread(image_path)
 
-    frame = rectify.rectify(image)
+    image = rectify.rectify(image)
 
-    cv2.imshow('Frame', frame)
+    image = scale_image(image, scale_percent)
+    cv2.imshow('Frame', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 
-def show_rectified_video(video_path):
+def show_rectified_video(video_path, scale_percent):
     cap = cv2.VideoCapture(video_path)
 
     if not cap.isOpened():
@@ -28,6 +37,7 @@ def show_rectified_video(video_path):
         if ret:
 
             frame = rectify.rectify(frame)
+            frame = scale_image(frame, scale_percent)
             cv2.imshow('Frame', frame)
 
             if cv2.waitKey(25) & 0xFF == ord('q'):
@@ -35,6 +45,7 @@ def show_rectified_video(video_path):
 
         else:
             break
+
     cv2.destroyAllWindows()
     cap.release()
 
@@ -42,9 +53,10 @@ def show_rectified_video(video_path):
 @click.command()
 @click.argument("input_source")
 @click.argument("config_json")
-@click.option('--image', "action", flag_value="image")
-@click.option('--video', "action", flag_value="video")
-def main(input_source, config_json, action):
+@click.option('--image', "action", flag_value="image", help="Input file type flag")
+@click.option('--video', "action", flag_value="video", help="Input file type flag")
+@click.option('-sp', '--scale_percent', "scale", default=50)
+def main(input_source, config_json, action, scale):
     actions = {
         "image": show_rectified_image,
         "video": show_rectified_video
@@ -54,7 +66,7 @@ def main(input_source, config_json, action):
         rectify.calc_maps(json.load(f), 1920, 1080)
 
     callback = actions[action]
-    callback(input_source)
+    callback(input_source, scale)
 
 
 if __name__ == '__main__':
