@@ -1,38 +1,28 @@
 import click
 import cv2
 
-image = None
-WINDOW_NAME = "image"
-
-
-def mouse_click(event, x, y, flags, param):
-    if event == cv2.EVENT_LBUTTONDOWN:
-        put_text_kwargs = {
-            "img": image,
-            "text": f"left:{(x, y)}",
-            "org": (x, y),
-            "fontFace": cv2.FONT_HERSHEY_SIMPLEX,
-            "fontScale": 2,
-            "color": (255, 0, 0)
-        }
-
-        cv2.putText(**put_text_kwargs)
-        cv2.imshow(WINDOW_NAME, image)
-
-    # if event == cv2.EVENT_RBUTTONDOWN:
-    #     cv2.imshow(WINDOW_NAME, image)
+from image_event_handler import ImageEventHandler
 
 
 @click.command()
 @click.argument("file_path")
 def main(file_path):
-    global image
     image = cv2.imread(file_path)
+    window_name = "image"
+    image_event_handler = ImageEventHandler(image, window_name)
 
-    cv2.imshow(WINDOW_NAME, image)
-    cv2.setMouseCallback('image', mouse_click)
+    cv2.imshow(window_name, image)
+    cv2.setMouseCallback('image', image_event_handler.mouse_callback())
 
-    cv2.waitKey(0)
+    while True:
+        key = cv2.waitKey(0)
+
+        if key == 32:
+            image_event_handler.reload_image()
+
+        if key == 27:
+            break
+
     cv2.destroyAllWindows()
 
 
