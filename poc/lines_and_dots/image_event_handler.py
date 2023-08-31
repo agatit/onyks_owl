@@ -1,3 +1,4 @@
+from itertools import cycle
 
 import cv2
 
@@ -7,8 +8,10 @@ class ImageEventHandler:
         self.image = image
         self.window_name = window_name
         self.line_types = line_types
+        self.line_types_cycle = cycle(line_types)
 
-        self.current_line_type = self.line_types[0]
+        self.current_line_type = next(self.line_types_cycle)
+
         self.dots = []
         self.image_copy = self.image.copy()
 
@@ -29,13 +32,16 @@ class ImageEventHandler:
                 cv2.imshow(self.window_name, self.image)
 
             if event == cv2.EVENT_RBUTTONDOWN:
-                pass
+                self.current_line_type = next(self.line_types_cycle)
+
+                self.reload()
+                self.display_current_line_type()
 
         return wrapper
 
     def save_current_dots(self):
         self.current_line_type.lines.append(self.dots)
-        self.dots = []
+        self.reload()
 
     def display_current_line_type(self):
         put_text_kwargs = {
@@ -51,6 +57,6 @@ class ImageEventHandler:
         cv2.putText(**put_text_kwargs)
         cv2.imshow(self.window_name, self.image)
 
-    def reload_image(self):
+    def reload(self):
         self.image = self.image_copy.copy()
-        cv2.imshow(self.window_name, self.image)
+        self.dots = []
