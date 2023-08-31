@@ -1,3 +1,4 @@
+import json
 from dataclasses import dataclass
 from enum import Enum
 
@@ -29,7 +30,8 @@ def scale_image_by_percent(image, percent):
 
 @click.command()
 @click.argument("file_path")
-def main(file_path):
+@click.option("-o", "--output", "output_file", default="lines.json")
+def main(file_path, output_file):
     image = cv2.imread(file_path)
     window_name = "image"
     resize_percent = {
@@ -93,6 +95,13 @@ def main(file_path):
             cv2.imshow('original', img)
 
     cv2.destroyAllWindows()
+
+    with open(output_file, "w") as file:
+        dicts = []
+        for line_type in image_event_handler.line_types:
+            dicts.append(vars(line_type))
+
+        json.dump(dicts, file)
 
 
 if __name__ == '__main__':
