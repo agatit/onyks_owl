@@ -18,6 +18,7 @@ class PressedKey(Enum):
     escape = 27
     space = 32
     enter = 13
+    tab = 9
 
 
 def scale_image_by_percent(image, percent):
@@ -58,10 +59,10 @@ def main(file_path, output_file):
         if not cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE):
             break
 
-        if key == PressedKey.escape.value:
+        if key == PressedKey.enter.value:
             break
 
-        if key == PressedKey.enter.value:
+        if key == PressedKey.space.value:
             image_event_handler.save_current_dots()
             image_event_handler.display_current_line_type()
 
@@ -70,7 +71,7 @@ def main(file_path, output_file):
             for line_type in line_types:
                 print(f"{line_type.type}: {line_type.lines}")
 
-        if key == PressedKey.space.value:
+        if key == PressedKey.tab.value:
             img = original_image.copy()
             dots = image_event_handler.dots
 
