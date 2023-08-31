@@ -52,6 +52,7 @@ def main(file_path, output_file):
 
     image_event_handler.display_current_line_type()
 
+    check_if_save = False
     while True:
         key = cv2.waitKey(0)
 
@@ -59,7 +60,11 @@ def main(file_path, output_file):
         if not cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE):
             break
 
+        if key == PressedKey.escape.value:
+            break
+
         if key == PressedKey.enter.value:
+            check_if_save = True
             break
 
         if key == PressedKey.space.value:
@@ -97,12 +102,13 @@ def main(file_path, output_file):
 
     cv2.destroyAllWindows()
 
-    with open(output_file, "w") as file:
-        dicts = []
-        for line_type in image_event_handler.line_types:
-            dicts.append(vars(line_type))
+    if check_if_save:
+        with open(output_file, "w") as file:
+            dicts = []
+            for line_type in image_event_handler.line_types:
+                dicts.append(vars(line_type))
 
-        json.dump(dicts, file)
+            json.dump(dicts, file)
 
 
 if __name__ == '__main__':
