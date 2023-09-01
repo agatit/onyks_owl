@@ -11,6 +11,7 @@ from image_event_handler import ImageEventHandler
 @dataclass
 class LineType:
     type: str
+    max_dots_number: int
     lines: list
 
 
@@ -30,10 +31,11 @@ def scale_image_by_percent(image, percent):
 
 
 @click.command()
-@click.argument("file_path")
-@click.option("-o", "--output", "output_file", default="lines.json")
-def main(file_path, output_file):
-    image = cv2.imread(file_path)
+@click.argument("input_file")
+@click.option("-o", "--output", "output_file", default="lines.json", help="output json file")
+@click.option("-dn", "--dots_number", "max_dots_number", default=-1, help="number of output line dots")
+def main(input_file, output_file, max_dots_number):
+    image = cv2.imread(input_file)
     window_name = "image"
     resize_percent = {
         "scale_down": 75,
@@ -43,14 +45,14 @@ def main(file_path, output_file):
     original_image = image.copy()
     image = scale_image_by_percent(image, resize_percent["scale_down"])
 
-    horizontal_lines = LineType("horizontal", [])
-    vertical_lines = LineType("vertical", [])
+    horizontal_lines = LineType("horizontal", max_dots_number, [])
+    vertical_lines = LineType("vertical", max_dots_number, [])
     image_event_handler = ImageEventHandler(image, window_name, horizontal_lines, vertical_lines)
 
     cv2.imshow(window_name, image)
     cv2.setMouseCallback(window_name, image_event_handler.mouse_callback())
 
-    image_event_handler.display_current_line_type()
+    image_event_handler.display_line_type_state()
 
     check_if_save = False
     while True:
@@ -69,7 +71,7 @@ def main(file_path, output_file):
 
         if key == PressedKey.space.value:
             image_event_handler.save_current_dots()
-            image_event_handler.display_current_line_type()
+            image_event_handler.display_line_type_state()
 
             line_types = image_event_handler.line_types
             print()
