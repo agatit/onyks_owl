@@ -22,12 +22,16 @@ class PressedKey(Enum):
     tab = 9
 
 
-def scale_image_by_percent(image, percent):
-    width = int(image.shape[1] * percent / 100)
-    height = int(image.shape[0] * percent / 100)
-    dim = (width, height)
+def scale_shape_by_percent(shape, percent):
+    width = int(shape[1] * percent / 100)
+    height = int(shape[0] * percent / 100)
+    return width, height
 
-    return cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
+
+def scale_point_by_percent(point, percent):
+    y = int(point[1] * percent / 100)
+    x = int(point[0] * percent / 100)
+    return x, y
 
 
 @click.command()
@@ -43,7 +47,8 @@ def main(input_file, output_file, max_dots_number):
     }
 
     original_image = image.copy()
-    image = scale_image_by_percent(image, resize_percent["scale_down"])
+    down_scaled_dim = scale_shape_by_percent(image.shape, resize_percent["scale_down"])
+    image = cv2.resize(image, down_scaled_dim, interpolation=cv2.INTER_AREA)
 
     horizontal_lines = LineType("horizontal", max_dots_number, [])
     vertical_lines = LineType("vertical", max_dots_number, [])
@@ -83,21 +88,14 @@ def main(input_file, output_file, max_dots_number):
             dots = image_event_handler.dots
 
             for dot in dots:
-                x, y = dot
-
-                scale_up = resize_percent["scale_up"]
-                width = int(x * scale_up / 100)
-                height = int(y * scale_up / 100)
-                dim = (width, height)
-
+                scaled_dot = scale_point_by_percent(dot, resize_percent["scale_up"])
                 circle_kwargs = {
                     "img": img,
-                    "center": dim,
+                    "center": scaled_dot,
                     "radius": 5,
                     "thickness": -1,
-                    "color": (0, 255, 255)
+                    "color": (0, 0, 255)
                 }
-
                 cv2.circle(**circle_kwargs)
 
             cv2.imshow('original', img)
@@ -105,6 +103,13 @@ def main(input_file, output_file, max_dots_number):
     cv2.destroyAllWindows()
 
     if check_if_save:
+        # scale up to input size
+        resize_map = lambda x: scale_point_by_percent(x, resize_percent["scale_up"])
+
+        for line_type in image_event_handler.line_types:
+            for i in range(len(line_type.lines)):
+                line_type.lines[i] = list(map(resize_map, line_type.lines[i]))
+
         with open(output_file, "w") as file:
             dicts = []
             for line_type in image_event_handler.line_types:
