@@ -1,49 +1,54 @@
 import csv
-import os
-import time
-from dataclasses import dataclass, fields
-from enum import Enum
-from pathlib import Path
+from dataclasses import dataclass
 
 import click
-import numpy as np
-
-import rectify
 import cv2
-import json
+import numpy as np
 
 from speed import CarSpeedEstimator
 
 show_scale = 0.6
 
 frame_size = (1920, 1080)
-motion_roi = (200, 300, 200, 100)  # 300:-100,500:-500 # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
+motion_roi = (200, 100, 200, 200)  # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
 stitch_roi = (1100, 0, 400, 0)
+
+# motion_roi_margin = {
+#     "top": motion_roi[0],
+#     "right": motion_roi[0],
+#     "bottom": motion_roi[0],
+#     "left": motion_roi[0]
+# }
 
 # TODO zmienić na strukturę danych
 start_point = (motion_roi[0], motion_roi[1])
 end_point = (frame_size[0] - motion_roi[2], frame_size[1] - motion_roi[3])
-color = (255, 0, 0)
+color = (0, 0, 255)
 thickness = 1
 
 
 @dataclass
 class Measurement:
     frame: int
-    avg_velocity: tuple
-    raw_velocity: list
+    velocity: np.ndarray
 
 
-def save_to_csv(file, measurements):
+def save_to_csv(file, headers, measurements):
     writer = csv.writer(file)
 
+    writer.writerow(headers)
     for measurement in measurements:
-        for raw_vel in measurement.raw_velocity:
-            data_to_store = (measurement.frame,) + measurement.avg_velocity + tuple(raw_vel)
+        for velocity in measurement.velocity:
+            data_to_store = (measurement.frame,) + tuple(velocity)
             writer.writerow(data_to_store)
 
 
 def display_frame(frame, cropped, dots):
+    start_point = (motion_roi[0], motion_roi[1])
+    end_point = (frame_size[0] - motion_roi[2], frame_size[1] - motion_roi[3])
+    color = (0, 0, 255)
+    thickness = 1
+
     areas = np.zeros_like(frame)
     areas = cv2.rectangle(areas, start_point, end_point, color, thickness)
     frame = cv2.add(frame, areas)
@@ -72,6 +77,7 @@ def main(input_movie, output_file, display):
     print(f"started {input_movie} processing")
 
     count = 0
+    headers = ["frame", "x", "y", "status"]
     measurements = []
 
     while input_cam.isOpened():
@@ -84,7 +90,7 @@ def main(input_movie, output_file, display):
             if display:
                 display_frame(frame, cropped_frame, dots)
 
-            measurements.append(Measurement(count, avg_velocity, list(raw_velocity)))
+            measurements.append(Measurement(count, raw_velocity))
 
             if count % 50 == 0:
                 print(f"rendered: {count} frames")
@@ -97,7 +103,7 @@ def main(input_movie, output_file, display):
     cv2.destroyAllWindows()
 
     with open(output_file, 'w') as file:
-        save_to_csv(file, measurements)
+        save_to_csv(file, headers, measurements)
 
 
 if __name__ == '__main__':
