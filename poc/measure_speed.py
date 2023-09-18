@@ -5,7 +5,7 @@ import click
 import cv2
 import numpy as np
 
-from stitch.speed import CarSpeedEstimator
+from stitch.speed.CarSpeedEstimator import CarSpeedEstimator
 
 show_scale = 0.6
 

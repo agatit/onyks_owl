@@ -1,10 +1,12 @@
 import click
 
-from stitch.rectify import rectify
 import cv2
 import json
 
+from stitch.rectify.FrameRectifier import FrameRectifier
+
 frame_size = (1920, 1080)
+
 
 # TODO usunąć redundancję
 def scale_image(image, scale):
@@ -20,6 +22,7 @@ def display_frame(frame):
     cv2.imshow('Frame', frame)
     cv2.waitKey(1)
 
+
 def resize_image(image, new_dim):
     return cv2.resize(image, new_dim, interpolation=cv2.INTER_AREA)
 
@@ -32,9 +35,12 @@ def resize_image(image, new_dim):
 def main(input_movie, output_movie, config_json, display):
     with open(config_json) as f:
         config = json.load(f)
-        rectify.calc_maps(config, 1920, 1080)
 
-        resolution_scale = config['scale']
+    frame_size = (1920, 1080)
+    frame_rectifier = FrameRectifier(config, *frame_size)
+    frame_rectifier.calc_maps()
+
+    resolution_scale = config['scale']
 
     input_cam = cv2.VideoCapture(input_movie)
     if not input_cam.isOpened():
@@ -52,7 +58,7 @@ def main(input_movie, output_movie, config_json, display):
     while input_cam.isOpened():
         ret, frame = input_cam.read()
         if ret:
-            frame = rectify.rectify(frame)
+            frame = frame_rectifier.rectify(frame)
 
             frame = resize_image(frame, frame_size)
             video_writer.write(frame)

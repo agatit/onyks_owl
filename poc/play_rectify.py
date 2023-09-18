@@ -1,8 +1,9 @@
 import click
 
-from stitch.rectify import rectify
 import cv2
 import json
+
+from stitch.rectify.FrameRectifier import FrameRectifier
 
 
 def scale_image(image, scale):
@@ -13,10 +14,10 @@ def scale_image(image, scale):
     return cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
 
 
-def show_rectified_image(image_path, scale_percent):
+def show_rectified_image(image_path, frame_rectifier, scale_percent):
     image = cv2.imread(image_path)
 
-    image = rectify.rectify(image)
+    image = frame_rectifier.rectify(image)
 
     image = scale_image(image, scale_percent)
     cv2.imshow('Frame', image)
@@ -24,18 +25,17 @@ def show_rectified_image(image_path, scale_percent):
     cv2.destroyAllWindows()
 
 
-def show_rectified_video(video_path, scale_percent):
+def show_rectified_video(video_path, frame_rectifier, scale_percent):
     cap = cv2.VideoCapture(video_path)
 
     if not cap.isOpened():
         print("Error opening video stream or file")
 
     while cap.isOpened():
-
         ret, frame = cap.read()
         if ret:
 
-            frame = rectify.rectify(frame)
+            frame = frame_rectifier.rectify(frame)
             frame = scale_image(frame, scale_percent)
             cv2.imshow('Frame', frame)
 
@@ -62,10 +62,14 @@ def main(input_source, config_json, action, scale):
     }
 
     with open(config_json) as f:
-        rectify.calc_maps(json.load(f), 1920, 1080)
+        config = json.load(f)
+
+    frame_size = (1920, 1080)
+    frame_rectifier = FrameRectifier(config, *frame_size)
+    frame_rectifier.calc_maps()
 
     callback = actions[action]
-    callback(input_source, scale)
+    callback(input_source, frame_rectifier, scale)
 
 
 if __name__ == '__main__':
