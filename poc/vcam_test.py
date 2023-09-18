@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import math
-from vcam import vcam,meshGen
+from vcam.vcam import vcam,meshGen
 import time
 
 def nothing(x):
@@ -32,7 +32,7 @@ scale = 2
 #vid = cv2.VideoCapture("rtsp://admin:Kartofel_1410@192.168.1.44:554")
 # vid = cv2.VideoCapture(0)
 # ret, img = vid.read()
-img = cv2.imread("25_32.png")
+img = cv2.imread("resources/wagony_klatki/25_32.png")
 
 H,W = img.shape[:2]
 print(img.shape)

@@ -114,3 +114,40 @@ class CarSpeedEstimator:
 
         return (velocity_avg_x, velocity_avg_y), debug, raw_velocities
 
+
+# class RegressionModel:
+#     def __init__(self):
+#         self.params = [0, 0]
+#         self.arg_format = [0, 1]
+#
+#     def fit(self, x, y):
+#         n = len(x)
+#         M = x.reshape(n, 1) ** self.arg_format
+#         self.params = lstsq(M, y)[0]
+#
+#     def predict(self, x):
+#         return fit_fun(self.params, x)
+#
+#     # y = p0*x0 + p1+x1 + ...
+#     def fit_fun(self, p, x):
+#         _x = x * self.arg_format
+#         return np.dot(p, _x)
+#
+#
+# class VelocityEstimator:
+#     def __init__(self, window_size, window_step):
+#         self.window_size = window_size
+#         self.window_step = window_step
+#
+#         self.regression_model = RegressionModel()
+#
+#         self.moved_frames_counter = 0
+#
+#     def prepare_model(self, frames):
+#         pass
+#
+#     def get_velocity(x):
+#         pass
+#
+#     def update():
+#         pass

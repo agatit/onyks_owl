@@ -20,9 +20,15 @@ def calc_maps(config, W, H):
     focus = config['focus']
     dist = config['dist']
 
-    Rx = np.array([[1, 0, 0], [0, math.cos(alpha), -math.sin(alpha)], [0, math.sin(alpha), math.cos(alpha)]])
-    Ry = np.array([[math.cos(beta), 0, -math.sin(beta)], [0, 1, 0], [math.sin(beta), 0, math.cos(beta)]])
-    Rz = np.array([[math.cos(gamma), -math.sin(gamma), 0], [math.sin(gamma), math.cos(gamma), 0], [0, 0, 1]])
+    Rx = np.array([[1, 0, 0],
+                   [0, math.cos(alpha), -math.sin(alpha)],
+                   [0, math.sin(alpha), math.cos(alpha)]])
+    Ry = np.array([[math.cos(beta), 0, -math.sin(beta)],
+                   [0, 1, 0],
+                   [math.sin(beta), 0, math.cos(beta)]])
+    Rz = np.array([[math.cos(gamma), -math.sin(gamma), 0],
+                   [math.sin(gamma), math.cos(gamma), 0],
+                   [0, 0, 1]])
     R = np.matmul(Rx, np.matmul(Ry, Rz))
     # T = np.array([[1,0,0,-X],[0,1,0,-Y],[0,0,1,-Z]])
     # RT = np.matmul(R,T)	

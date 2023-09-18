@@ -9,7 +9,7 @@ from skimage import color, io, restoration
 show_window = "deconv"
 ctrl_window = "ctrl"
 
-img = color.rgb2gray(io.imread('23_24_1698.png'))
+img = color.rgb2gray(io.imread('../resources/wagony_klatki/23_24_1698.png'))
 # img = img[355:470, 1301:1450]
 
 kernel_len = 51

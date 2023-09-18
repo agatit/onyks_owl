@@ -5,7 +5,7 @@ from enum import Enum
 import click
 import cv2
 
-from image_event_handler import ImageEventHandler
+from lines_and_dots.image_event_handler import ImageEventHandler
 
 
 @dataclass

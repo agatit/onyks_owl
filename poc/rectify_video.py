@@ -1,6 +1,6 @@
 import click
 
-import rectify
+from stitch.rectify import rectify
 import cv2
 import json
 

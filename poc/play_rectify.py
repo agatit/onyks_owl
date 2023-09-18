@@ -1,9 +1,8 @@
 import click
 
-import rectify
+from stitch.rectify import rectify
 import cv2
 import json
-import numpy as np
 
 
 def scale_image(image, scale):

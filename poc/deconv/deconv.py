@@ -8,7 +8,7 @@ from skimage import color, io, restoration
 
 title_window = "deconv"
 
-img = color.rgb2gray(io.imread('25_32.png'))
+img = color.rgb2gray(io.imread('../resources/wagony_klatki/25_32.png'))
 img = img[355:470, 1301:1450]
 
 show_zoom = 8
