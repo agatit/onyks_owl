@@ -6,25 +6,12 @@ import cv2
 import numpy as np
 
 from stitch.speed.CarSpeedEstimator import CarSpeedEstimator
+from stitch.RegionOfInterest import RegionOfInterest
 
 show_scale = 0.6
 
 frame_size = (1920, 1080)
-motion_roi = (200, 100, 200, 200)  # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
-stitch_roi = (1100, 0, 400, 0)
-
-# motion_roi_margin = {
-#     "top": motion_roi[0],
-#     "right": motion_roi[0],
-#     "bottom": motion_roi[0],
-#     "left": motion_roi[0]
-# }
-
-# TODO zmienić na strukturę danych
-start_point = (motion_roi[0], motion_roi[1])
-end_point = (frame_size[0] - motion_roi[2], frame_size[1] - motion_roi[3])
-color = (0, 0, 255)
-thickness = 1
+motion_roi = RegionOfInterest.from_margin_px(frame_size, *(50, 100, 200, 200))  # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
 
 
 @dataclass
@@ -43,11 +30,11 @@ def save_to_csv(file, headers, measurements):
             writer.writerow(data_to_store)
 
 
-def display_frame(frame, cropped, dots):
-    start_point = (motion_roi[0], motion_roi[1])
-    end_point = (frame_size[0] - motion_roi[2], frame_size[1] - motion_roi[3])
+def display_frame(frame, cropped, dots, delay):
+    start_point = motion_roi.p1
+    end_point = motion_roi.p2
     color = (0, 0, 255)
-    thickness = 1
+    thickness = 5
 
     areas = np.zeros_like(frame)
     areas = cv2.rectangle(areas, start_point, end_point, color, thickness)
@@ -60,13 +47,13 @@ def display_frame(frame, cropped, dots):
     frame = cv2.resize(frame, (int(frame.shape[1] * show_scale), int(frame.shape[0] * show_scale)))
     cv2.imshow('result', frame)
 
-    cv2.waitKey(1)
+    cv2.waitKey(delay)
 
 
 @click.command()
 @click.argument("input_movie")
 @click.argument("output_file")
-@click.option("-d", "--display", "display", is_flag=True, show_default=True)
+@click.option("-d", "--display", "display", default=0, show_default=True)
 def main(input_movie, output_file, display):
     input_cam = cv2.VideoCapture(input_movie)
     if not input_cam.isOpened():
@@ -83,12 +70,12 @@ def main(input_movie, output_file, display):
     while input_cam.isOpened():
         ret, frame = input_cam.read()
         if ret:
-            cropped_frame = frame[motion_roi[1]:-motion_roi[3], motion_roi[0]:-motion_roi[2]]
+            cropped_frame = motion_roi.crop_numpy_array(frame)
             dots = np.zeros_like(cropped_frame)
             avg_velocity, dots, raw_velocity = meter.next(cv2.cvtColor(cropped_frame, cv2.COLOR_BGR2GRAY), debug=dots)
 
-            if display:
-                display_frame(frame, cropped_frame, dots)
+            if display > 0:
+                display_frame(frame, cropped_frame, dots, display)
 
             measurements.append(Measurement(count, raw_velocity))
 

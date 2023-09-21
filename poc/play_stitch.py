@@ -1,20 +1,27 @@
 import os
+from dataclasses import astuple
 
 import click
 
-import rectify
 import cv2
 import json
 import numpy as np
-from speed import CarSpeedEstimator
-from stitch import CarStitcherFullFrame, CarStitcherRoi, CarStitcherDelayed
-from deblur import Deblur
 
-show_scale = 1
+from RegionOfInterest import RegionOfInterest
+from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.speed.CarSpeedEstimator import CarSpeedEstimator
+from stitch.CarStitcherRoi import CarStitcherRoi
+from stitch.speed.VelocityEstimator import VelocityEstimator
 
-frame_size = (1920, 1080)
-motion_roi = (200, 300, 200, 100)  # 300:-100,500:-500 # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
-stitch_roi = (1100, 0, 400, 0)
+show_scale = 0.7
+
+# frame_size = (1920, 1080)
+# motion_roi = (200, 300, 200, 100)  # 300:-100,500:-500 # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
+# stitch_roi = (1100, 0, 400, 0)
+
+# test = (0, 0, 500, 600)
+# test_roi = RegionOfInterest.from_margin_px(frame_size, *(0, 0, 500, 600))
+# motion_roi =
 
 @click.command()
 @click.argument("video_path")
@@ -25,43 +32,56 @@ def main(video_path, config_json):
     basename, extension = os.path.splitext(filename)
 
     with open(config_json) as f:
-        rectify.calc_maps(json.load(f), 1920, 1080)
+        config = json.load(f)
+
+    frame_size = (1920, 1080)
+    frame_rectifier = FrameRectifier(config, *frame_size)
+    frame_rectifier.calc_maps()
+
+    motion_roi = RegionOfInterest.from_margin_px(frame_size, *(40, 0, 100, 0))
+    stitch_roi = RegionOfInterest.from_margin_px(frame_size, *(0, 0, 0, 1100))
 
     cap = cv2.VideoCapture(video_path)
 
-    if (cap.isOpened() == False):
+    if not cap.isOpened():
         print("Error opening video stream or file")
 
     meter = CarSpeedEstimator()
+    velocity_estimator = VelocityEstimator()
     # stitcher = CarStitcherDelayed(roi_size=stich_roi, delay=50)
-    stitcher = CarStitcherRoi(roi_size=stitch_roi)
-    deblur = Deblur(51)
-    deblur.set_speed(120, 0, 1, 1.2)
+
+    roi_size = (1100, 0, 400, 0)
+    stitcher = CarStitcherRoi(roi_size=roi_size)
+    # deblur = Deblur(51)
+    # deblur.set_speed(120, 0, 1, 1.2)
 
     frame_no = 0
 
-    while (cap.isOpened()):
+    while cap.isOpened():
 
-        frame_no += 1
+        frame_no = frame_no + 1
 
         ret, frame = cap.read()
 
-        if ret == True:
+        if ret:
 
             # prespektywa
-            rectified = rectify.rectify(frame)
+            rectified = frame_rectifier.rectify(frame)
+            # rectified = frame
 
             # usunięcie rozmycia
             # rectified = deblur.next(rectified)
 
             # crop
-            # cropped = rectified[300:-100,500:-500]
-            cropped = rectified[motion_roi[1]:-motion_roi[3], motion_roi[0]:-motion_roi[2]]
+            cropped = motion_roi.crop_numpy_array(rectified)
 
             # pomiar prędkości
             debug = np.zeros_like(cropped)
             velocity, debug, _ = meter.next(cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY), debug=debug)
-            print(f"velocity={velocity}")
+            velocity = velocity_estimator.get_velocity(cropped)
+            print(velocity)
+            velocity = astuple(velocity)
+            # print(f"velocity={velocity}")
             cropped = cv2.add(cropped, debug)
 
             # sklejanie
@@ -70,10 +90,10 @@ def main(video_path, config_json):
             # wyświetlanie :)
             if result is not None:
                 areas = np.zeros_like(result)
-                areas = cv2.rectangle(areas, (motion_roi[0], motion_roi[1]),
-                                      (frame_size[0] - motion_roi[2], frame_size[1] - motion_roi[3]), (255, 0, 0), 1)
-                areas = cv2.rectangle(areas, (stitch_roi[0], stitch_roi[1]),
-                                      (frame_size[0] - stitch_roi[2], frame_size[1] - stitch_roi[3]), (0, 255, 0), 1)
+
+                areas = cv2.rectangle(areas, motion_roi.p1, motion_roi.p2, (255, 0, 0), 1)
+                areas = cv2.rectangle(areas, stitch_roi.p1, stitch_roi.p2, (0, 255, 0), 1)
+
                 result = cv2.add(result, areas)
                 result = cv2.resize(result, (int(result.shape[1] * show_scale), int(result.shape[0] * show_scale)))
                 cv2.imshow('result', result)

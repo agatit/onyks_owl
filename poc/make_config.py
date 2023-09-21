@@ -4,7 +4,7 @@ import math
 import argparse
 import json
 
-import rectify
+from stitch.rectify.FrameRectifier import FrameRectifier
 
 global args
 
@@ -68,7 +68,7 @@ def get_config():
     return config
 
 
-def drawSrcGrid(img, pxstep):
+def drawSrcGrid(img, frame_rectifier, pxstep):
     scale = cv2.getTrackbarPos("scale", WINDOW_NAME) / 50  # pixels
     point_list = np.empty((0, 2), np.float64)
     x = pxstep
@@ -83,7 +83,7 @@ def drawSrcGrid(img, pxstep):
         x += pxstep
 
     config = get_config()
-    new_point_list = rectify.rectify_points(config, point_list, W, H)
+    new_point_list = frame_rectifier.rectify_points(point_list)
     for point in new_point_list:
         cv2.circle(img, (round(point[0]), round(point[1])), 1, (0, 0, 180), 2)
 
@@ -118,15 +118,17 @@ def main():
 
     init_tracker_bars()
 
+    frame_rectifier = FrameRectifier(None, W, H)
+
     while True:
 
-        config = get_config()
-        rectify.calc_maps(config, W, H)
-        output = rectify.rectify(img)
+        frame_rectifier.config = get_config()
+        frame_rectifier.calc_maps()
+        output = frame_rectifier.rectify(img)
 
         output = cv2.resize(output, (output.shape[1] // view_scale, output.shape[0] // view_scale))
         output = drawGrid(output, 20)
-        output = drawSrcGrid(output, 40)
+        output = drawSrcGrid(output, frame_rectifier, 40)
 
         cv2.imshow("output", output)
         cv2.waitKey(1)
@@ -136,6 +138,8 @@ def main():
             break
         elif key == ord('s'):
             save()
+        elif key == ord('m'):
+            print(get_config())
 
 
 if __name__ == '__main__':
