@@ -17,5 +17,5 @@ class RegressionModel:
 
     # y = p0*x0 + p1+x1 + ...
     def fit_fun(self, p, x):
-        _x = np.array(x) * self.arg_format
+        _x = np.array(x) ** self.arg_format
         return np.dot(p, _x)

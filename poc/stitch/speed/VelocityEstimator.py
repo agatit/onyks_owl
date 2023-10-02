@@ -1,16 +1,11 @@
+import copy
 import dataclasses
 
 import cv2
 import numpy as np
-import pandas as pd
 
-from RegressionModel import RegressionModel
-
-
-@dataclasses.dataclass
-class Velocity:
-    x: float
-    y: float
+from stitch.speed.RegressionModel import RegressionModel
+from stitch.speed.regression.Method import Method
 
 
 class VelocityEstimator:
@@ -26,14 +21,20 @@ class VelocityEstimator:
                      maxLevel=2,
                      criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 50, 0.01))
 
-    def __init__(self, window_size=25):
+    def __init__(self, regression_model_x: Method, regression_model_y: Method, window_size=25, center=True):
+        self.x_regression_model = regression_model_x
+        self.y_regression_model = regression_model_y
         self.window_size = window_size
-        self.window = np.array([[0, 0, 0]])
+        self.center = center
 
+        self.window = np.array([[0, 0, 0]])
+        self.old_raw_velocity = np.array([[0, 0, 0]])
         self.frames_counter = 0
 
-        self.x_regression_model = RegressionModel()
-        self.y_regression_model = RegressionModel()
+        if center:
+            self.get_frame = self.get_middle_frame
+        else:
+            self.get_frame = self.get_last_frame
 
         self.old_frame = None
 
@@ -42,25 +43,25 @@ class VelocityEstimator:
 
         if self.old_frame is None:
             self.old_frame = frame
-            self.update_frame_counter()
-            return Velocity(0, 0)
+            self.update_frames_counter()
+            return 0, 0
 
         self.update_window(frame)
         self.update_regression_model()
 
-        last_frame = self.window[:, 0].max()
-        x = self.x_regression_model.predict(last_frame)
-        y = self.y_regression_model.predict(last_frame)
-        return Velocity(x, y)
+        frame_to_predict = self.get_frame()
+        x = self.x_regression_model.predict(frame_to_predict)
+        y = self.y_regression_model.predict(frame_to_predict)
+        return x, y
 
     def update_window(self, frame):
         raw_velocity = self.get_raw_velocity(frame)
+        self.window = np.vstack((self.window, raw_velocity))
 
         if self.window_size < self.frames_counter:
             self.remove_first_last_frame()
 
-        self.window = np.vstack((self.window, raw_velocity))
-        self.update_frame_counter()
+        self.update_frames_counter()
 
     def update_regression_model(self):
         window = self.window
@@ -75,12 +76,14 @@ class VelocityEstimator:
         window = self.window
 
         min_frame = window[:, 0].min()
-        max_frame = window[:, 0].max()
+        # max_frame = window[:, 0].max()
 
         condition_min = window[:, 0] > min_frame
-        condition_max = window[:, 0] < max_frame
+        # condition_max = window[:, 0] < max_frame
 
-        self.window = window[condition_min & condition_max]
+        self.window = window[condition_min]
+        # self.window = window[condition_min & condition_max]
+        # print(np.unique(self.window[:, 0]))
 
     def get_raw_velocity(self, frame):
         points0 = cv2.goodFeaturesToTrack(self.old_frame, mask=None, **self.feature_params)
@@ -101,7 +104,16 @@ class VelocityEstimator:
         index_col = np.full(n, self.frames_counter).reshape(n, 1)
         index_velocities = np.hstack((index_col, velocities))
 
+        self.old_raw_velocity = copy.deepcopy(index_velocities)
         return index_velocities
 
-    def update_frame_counter(self):
+    def update_frames_counter(self):
         self.frames_counter += 1
+
+    def get_middle_frame(self):
+        window = self.window[:, 0]
+        middle_index = len(window) // 2
+        return window[middle_index]
+
+    def get_last_frame(self):
+        return self.window[:, 0].max()
