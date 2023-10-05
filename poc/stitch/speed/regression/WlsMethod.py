@@ -22,9 +22,14 @@ class WlsMethod(Method):
 
         self.model_wls = sm.WLS(y, M, self.calc_weights(self.model_ols_response))
         self.model_wls_response = self.model_wls.fit()
+        self.params = self.model_wls_response.params
+
+    # def predict(self, x: int) -> float:
+    #     return self.model_wls_response.fittedvalues[int(x)]
 
     def predict(self, x: int) -> float:
-        return self.model_wls_response.fittedvalues[int(x)]
+        return self.fit_fun(self.params, x)
+
 
     @staticmethod
     def calc_weights(res_sm):
@@ -36,3 +41,7 @@ class WlsMethod(Method):
 
         mod_fv = res_resid.fittedvalues
         return 1 / (mod_fv ** 2)
+
+    def fit_fun(self, p: list, x: int) -> float:
+        _x = np.array(x) ** self.arg_format
+        return float(np.dot(p, _x))

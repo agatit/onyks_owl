@@ -15,6 +15,11 @@ class OlsMethod(Method):
         M = sm.add_constant(x)
         self._model = sm.OLS(y, M)
         self._response = self._model.fit()
+        self.params = self._response.params
 
     def predict(self, x: int) -> float:
-        return self._response.fittedvalues[int(x)]
+        return self.fit_fun(self.params, x)
+
+    def fit_fun(self, p: list, x: int) -> float:
+        _x = np.array(x) ** self.arg_format
+        return float(np.dot(p, _x))

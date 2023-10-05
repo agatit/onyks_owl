@@ -14,6 +14,7 @@ from stitch.CarStitcherRoi import CarStitcherRoi
 from stitch.speed.VelocityEstimator import VelocityEstimator
 from export_utils.to_csv import CsvData, export
 from stitch.speed.regression.LstsqMethod import LstsqMethod
+from stitch.speed.regression.OlsMethod import OlsMethod
 
 show_scale = {
     "main": 0.5,
@@ -54,7 +55,8 @@ def main(video_path, config_json, export_velocity_path):
         print("Error opening video stream or file")
 
     meter = CarSpeedEstimator()
-    velocity_estimator = VelocityEstimator(LstsqMethod(), LstsqMethod())
+    # velocity_estimator = VelocityEstimator(LstsqMethod(), LstsqMethod())
+    velocity_estimator = VelocityEstimator(OlsMethod(), OlsMethod())
     # velocity_estimator = VelocityEstimator(50)
     # stitcher = CarStitcherDelayed(roi_size=stich_roi, delay=50)
 

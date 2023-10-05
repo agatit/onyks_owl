@@ -31,10 +31,11 @@ class VelocityEstimator:
         self.old_raw_velocity = np.array([[0, 0, 0]])
         self.frames_counter = 0
 
+        self.frame_index = 0
         if center:
-            self.get_frame = self.get_middle_frame
+            self.get_frame_index = self.get_middle_frame_index
         else:
-            self.get_frame = self.get_last_frame
+            self.get_frame_index = self.get_last_frame_index
 
         self.old_frame = None
 
@@ -49,9 +50,9 @@ class VelocityEstimator:
         self.update_window(frame)
         self.update_regression_model()
 
-        frame_to_predict = self.get_frame()
-        x = self.x_regression_model.predict(frame_to_predict)
-        y = self.y_regression_model.predict(frame_to_predict)
+        self.frame_index = self.get_frame_index()
+        x = self.x_regression_model.predict(self.frame_index)
+        y = self.y_regression_model.predict(self.frame_index)
         return x, y
 
     def update_window(self, frame):
@@ -59,7 +60,7 @@ class VelocityEstimator:
         self.window = np.vstack((self.window, raw_velocity))
 
         if self.window_size < self.frames_counter:
-            self.remove_first_last_frame()
+            self.remove_first_frame()
 
         self.update_frames_counter()
 
@@ -72,18 +73,13 @@ class VelocityEstimator:
         self.x_regression_model.fit(frame, x)
         self.y_regression_model.fit(frame, y)
 
-    def remove_first_last_frame(self):
+    def remove_first_frame(self):
         window = self.window
 
         min_frame = window[:, 0].min()
-        # max_frame = window[:, 0].max()
-
         condition_min = window[:, 0] > min_frame
-        # condition_max = window[:, 0] < max_frame
 
         self.window = window[condition_min]
-        # self.window = window[condition_min & condition_max]
-        # print(np.unique(self.window[:, 0]))
 
     def get_raw_velocity(self, frame):
         points0 = cv2.goodFeaturesToTrack(self.old_frame, mask=None, **self.feature_params)
@@ -110,10 +106,10 @@ class VelocityEstimator:
     def update_frames_counter(self):
         self.frames_counter += 1
 
-    def get_middle_frame(self):
+    def get_middle_frame_index(self):
         window = self.window[:, 0]
         middle_index = len(window) // 2
         return window[middle_index]
 
-    def get_last_frame(self):
+    def get_last_frame_index(self):
         return self.window[:, 0].max()
