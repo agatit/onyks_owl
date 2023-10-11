@@ -14,12 +14,13 @@ from stitch.rectify.FrameRectifier import FrameRectifier
 from stitch.speed.CarSpeedEstimator import CarSpeedEstimator
 from stitch.RegionOfInterest import RegionOfInterest
 from stitch.speed.VelocityEstimator import VelocityEstimator
+from stitch.speed.VelocityStreamGen import VelocityStreamGen
 
 show_scale = 0.6
 
 frame_size = (1920, 1080)
 motion_roi = RegionOfInterest.from_margin_px(frame_size, *(50, 100, 50, 200))
-headers = ["frame", "x", "y", "status"]
+headers = ["frame", "x", "y"]
 interrupt_program = False
 
 
@@ -64,7 +65,7 @@ def main(input_movie, rectify_config, output_directory, display):
     frame_rectifier = FrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
-    meter = CarSpeedEstimator()
+    meter = VelocityStreamGen()
 
     print(f"started {input_movie} processing")
 
@@ -78,19 +79,18 @@ def main(input_movie, rectify_config, output_directory, display):
             ret, frame = input_cam.read()
             if ret:
                 frame = frame_rectifier.rectify(frame)
-
                 cropped_frame = motion_roi.crop_numpy_array(frame)
 
-                dots = np.zeros_like(cropped_frame)
-                _, dots, raw_velocities = meter.next(cv2.cvtColor(cropped_frame, cv2.COLOR_BGR2GRAY), debug=dots)
+                raw_velocities = meter.next(cropped_frame)
 
                 if display > 0:
+                    dots = meter.draw_point_from_last_record()
                     display_frame(frame, cropped_frame, dots, display)
                     if interrupt_program:
                         break
 
                 for raw_velocity in raw_velocities:
-                    measurements.append((count, *raw_velocity))
+                    measurements.append(tuple(raw_velocity))
             else:
                 break
 

@@ -91,10 +91,11 @@ def filter_error(df):
         "local": 3
     }
 
-    global_condition = (df_velocity.diff_from_mean_x < global_std_x * magnitude["global"]) & (
-            df_velocity.diff_from_mean_y < global_std_y * magnitude["global"])
+    # global_condition = (df_velocity.diff_from_mean_x < global_std_x * magnitude["global"]) & (
+            # df_velocity.diff_from_mean_y < global_std_y * magnitude["global"])
     local_condition = (df_velocity.diff_from_mean_x < df_velocity.std_x * magnitude["local"]) & (
             df_velocity.diff_from_mean_y < df_velocity.std_y * magnitude["local"])
-    filtered_velocity = df_velocity[local_condition &
-                                    global_condition][headers]
+    filtered_velocity = df_velocity[local_condition][headers]
+    # filtered_velocity = df_velocity[local_condition &
+                                    # global_condition][headers]
     return filtered_velocity

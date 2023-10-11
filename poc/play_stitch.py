@@ -54,13 +54,11 @@ def main(video_path, config_json, export_velocity_path):
     if not cap.isOpened():
         print("Error opening video stream or file")
 
-    meter = CarSpeedEstimator()
     # velocity_estimator = VelocityEstimator(LstsqMethod(), LstsqMethod())
     velocity_estimator = VelocityEstimator(OlsMethod(), OlsMethod())
-    # velocity_estimator = VelocityEstimator(50)
-    # stitcher = CarStitcherDelayed(roi_size=stich_roi, delay=50)
 
     roi_size = (1100, 0, 400, 0)
+    # stitcher = CarStitcherDelayed(roi_size=stich_roi, delay=50)
     stitcher = CarStitcherRoi(roi_size=roi_size)
     # deblur = Deblur(51)
     # deblur.set_speed(120, 0, 1, 1.2)
@@ -79,7 +77,6 @@ def main(video_path, config_json, export_velocity_path):
 
             # prespektywa
             rectified = frame_rectifier.rectify(frame)
-            # rectified = frame
 
             # usunięcie rozmycia
             # rectified = deblur.next(rectified)
@@ -88,12 +85,11 @@ def main(video_path, config_json, export_velocity_path):
             cropped = motion_roi.crop_numpy_array(rectified)
 
             # pomiar prędkości
-            debug = np.zeros_like(cropped)
-            velocity, debug, _ = meter.next(cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY), debug=debug)
             velocity = velocity_estimator.get_velocity(cropped)
+            dots = velocity_estimator.velocity_stream_gen.draw_point_from_last_record()
             print(velocity)
             # print(f"velocity={velocity}")
-            cropped = cv2.add(cropped, debug)
+            cropped = cv2.add(cropped, dots)
 
             if export_velocity_path is not None:
                 frame = velocity_estimator.frames_counter

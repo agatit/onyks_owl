@@ -30,7 +30,7 @@ def recalc(tmp):
     coef = cv.getTrackbarPos('magic', ctrl_window) / 1000
 
     psf = deblur.set_speed(x, y, blur, coef)
-    img_deconv = deblur.next(img)
+    img_deconv = deblur.get_raw_velocity(img)
 
 
     cv.imshow(show_window, cv.resize(img_deconv, np.array(img_deconv.shape[0:2])*show_zoom))
