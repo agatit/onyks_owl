@@ -14,7 +14,7 @@ __pycache__
 node_modules
 .ipynb_checkpoints
 .venv
-
+/test
 /out/*
 /projects/*/logs
 /projects/*/out
