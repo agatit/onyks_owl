@@ -1,3 +1,4 @@
+import time
 from dataclasses import dataclass
 
 import numpy as np
@@ -9,12 +10,30 @@ import pathlib
 from stitch.speed.VelocityEstimator import VelocityEstimator
 
 
+class Timer:
+    def __init__(self):
+        self.start_time = 0
+        self._elapsed_time = []
+
+    def start(self) -> None:
+        self.start_time = time.time()
+
+    def stop(self) -> None:
+        elapsed_time = time.time() - self.start_time
+        self._elapsed_time.append(elapsed_time)
+
+    @property
+    def elapsed_time(self):
+        return np.mean(self._elapsed_time)
+
+
 @dataclass
 class Measurement:
     dataset_name: str
     method_name: str
     velocity_estimator: VelocityEstimator
     results: list[tuple]
+    timer: Timer
 
 
 def iterate_over_df_with_window(df, callback, df_frame_range, window_size, window_step):
@@ -92,10 +111,10 @@ def filter_error(df):
     }
 
     # global_condition = (df_velocity.diff_from_mean_x < global_std_x * magnitude["global"]) & (
-            # df_velocity.diff_from_mean_y < global_std_y * magnitude["global"])
+    # df_velocity.diff_from_mean_y < global_std_y * magnitude["global"])
     local_condition = (df_velocity.diff_from_mean_x < df_velocity.std_x * magnitude["local"]) & (
             df_velocity.diff_from_mean_y < df_velocity.std_y * magnitude["local"])
     filtered_velocity = df_velocity[local_condition][headers]
     # filtered_velocity = df_velocity[local_condition &
-                                    # global_condition][headers]
+    # global_condition][headers]
     return filtered_velocity
