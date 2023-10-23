@@ -8,7 +8,7 @@ from stitch.speed.regression.Method import Method
 
 class FilterErrorMethod(Method):
 
-    def __init__(self, recurrent: bool, *args, **kwargs):
+    def __init__(self, recurrent: bool, *args: object, **kwargs: object) -> object:
         super().__init__(*args, **kwargs)
         self.y = np.zeros(1)
         self.occurred_iterations = 0
@@ -48,4 +48,8 @@ class FilterErrorMethod(Method):
         magnitude = 3
         mask = diff_from_mean < std * magnitude
 
-        return y[mask]
+        result = y[mask]
+        if len(result) > 0:
+            return result
+        else:
+            return np.zeros_like(y)

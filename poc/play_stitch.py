@@ -12,7 +12,7 @@ from stitch.rectify.FrameRectifier import FrameRectifier
 from stitch.speed.CarSpeedEstimator import CarSpeedEstimator
 from stitch.CarStitcherRoi import CarStitcherRoi
 from stitch.speed.VelocityEstimator import VelocityEstimator
-from export_utils.to_csv import CsvData, export
+from io_utils.csv import CsvData, to_csv
 from stitch.speed.regression.LstsqMethod import LstsqMethod
 from stitch.speed.regression.OlsMethod import OlsMethod
 
@@ -46,18 +46,21 @@ def main(video_path, config_json, export_velocity_path):
     frame_rectifier = FrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
-    motion_roi = RegionOfInterest.from_margin_px(frame_size, *(40, 0, 100, 0))
-    stitch_roi = RegionOfInterest.from_margin_px(frame_size, *(0, 0, 0, 1100))
+    # motion_roi = RegionOfInterest.from_margin_px(frame_size, *(40, 0, 100, 0))
+    motion_roi = RegionOfInterest.from_margin_px(frame_size, *(0, 640, 0, 640))
+    stitch_roi = RegionOfInterest.from_margin_px(frame_size, *(0, 640, 0, 640))
 
     cap = cv2.VideoCapture(video_path)
 
     if not cap.isOpened():
         print("Error opening video stream or file")
 
-    # velocity_estimator = VelocityEstimator(LstsqMethod(), LstsqMethod())
-    velocity_estimator = VelocityEstimator(OlsMethod(), OlsMethod())
+    velocity_estimator = VelocityEstimator(LstsqMethod(), LstsqMethod())
+    # velocity_estimator = VelocityEstimator(OlsMethod(), OlsMethod())
 
-    roi_size = (1100, 0, 400, 0)
+    # roi_size = (1100, 0, 400, 0)
+    # roi_size = (1100, 0, 400, 0)
+    roi_size = (640, 0, 640, 0)
     # stitcher = CarStitcherDelayed(roi_size=stich_roi, delay=50)
     stitcher = CarStitcherRoi(roi_size=roi_size)
     # deblur = Deblur(51)
@@ -86,7 +89,7 @@ def main(video_path, config_json, export_velocity_path):
 
             # pomiar prędkości
             velocity = velocity_estimator.get_velocity(cropped)
-            dots = velocity_estimator.velocity_stream_gen.draw_point_from_last_record()
+            dots = velocity_estimator.velocity_from_frames.draw_point_from_last_record()
             print(velocity)
             # print(f"velocity={velocity}")
             cropped = cv2.add(cropped, dots)
@@ -137,7 +140,7 @@ def main(video_path, config_json, export_velocity_path):
         csv_data = CsvData(headers, velocity_data)
 
         with open(export_velocity_path, 'w') as file:
-            export(file, csv_data)
+            to_csv(file, csv_data)
 
 
 if __name__ == '__main__':

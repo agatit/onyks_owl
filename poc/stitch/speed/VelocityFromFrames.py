@@ -6,8 +6,8 @@ import numpy as np
 debug = True
 
 
-class VelocityStreamGen:
-    def __init__(self, y_max_velocity=2, x_min_velocity=5, x_max_velocity=75, window=50):
+class VelocityFromFrames:
+    def __init__(self, y_max_velocity=2, x_min_velocity=1, x_max_velocity=75, window=50):
         # params for ShiTomasi corner detection
         self.feature_params = dict(maxCorners=100,
                                    qualityLevel=0.02,
@@ -40,7 +40,7 @@ class VelocityStreamGen:
         if self.old_frame is None:
             self.input_frame_shape = frame.shape
             self.old_frame = grayscale_frame
-            self.update_frames_counter()
+            self.__update_frames_counter()
             return self.old_velocity
 
         points0 = cv2.goodFeaturesToTrack(self.old_frame, mask=None, **self.feature_params)
@@ -59,7 +59,9 @@ class VelocityStreamGen:
 
         con_status = status == 1
         con_max_y_change = np.abs(velocities[:, 1]) < self.y_max_velocity
-        self.filter = con_status & con_max_y_change
+        con_max_x_change = np.abs(velocities[:, 0]) > self.x_min_velocity
+        self.filter = con_status & con_max_y_change & con_max_x_change
+        # self.filter = con_status & con_max_y_change
         velocities = velocities[self.filter]
 
         n = len(velocities)
@@ -67,7 +69,7 @@ class VelocityStreamGen:
         index_velocities = np.hstack((index_col, velocities))
 
         self.old_velocity = copy.deepcopy(index_velocities)
-        self.update_frames_counter()
+        self.__update_frames_counter()
         return index_velocities
 
     def draw_point_from_last_record(self):
@@ -86,5 +88,5 @@ class VelocityStreamGen:
 
         return draw_points
 
-    def update_frames_counter(self):
+    def __update_frames_counter(self):
         self.frames_counter += 1

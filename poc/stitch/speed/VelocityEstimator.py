@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 from stitch.speed.RegressionModel import RegressionModel
-from stitch.speed.VelocityStreamGen import VelocityStreamGen
+from stitch.speed.VelocityFromFrames import VelocityFromFrames
 from stitch.speed.regression.Method import Method
 
 
@@ -19,7 +19,7 @@ class VelocityEstimator:
         self.window_size = window_size
         self.center = center
 
-        self.velocity_stream_gen = VelocityStreamGen()
+        self.velocity_from_frames = VelocityFromFrames()
 
         self.window = np.array([[0, 0, 0]])
         self.old_raw_velocity = np.array([[0, 0, 0]])
@@ -43,7 +43,7 @@ class VelocityEstimator:
         return x, y
 
     def update_window(self, frame):
-        raw_velocity = self.velocity_stream_gen.next(frame)
+        raw_velocity = self.velocity_from_frames.next(frame)
         self.window = np.vstack((self.window, raw_velocity))
 
         if self.window_size < self.frames_counter:

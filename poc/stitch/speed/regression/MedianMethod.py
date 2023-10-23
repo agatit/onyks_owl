@@ -7,9 +7,8 @@ from stitch.speed.regression.Method import Method
 
 class MedianMethod(Method):
 
-    def __init__(self, max_change, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.max_change = max_change
         self.last_result = 0
         self.result = 0
 

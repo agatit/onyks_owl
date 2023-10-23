@@ -1,6 +1,9 @@
 import csv
 from dataclasses import dataclass
 from datetime import datetime
+from typing import TextIO
+
+import numpy as np
 
 
 @dataclass
@@ -8,13 +11,12 @@ class CsvData:
     headers: list
     data: list[tuple]
 
-    @staticmethod
-    def timestamp_output_file():
-        time = datetime.now().strftime("%Y%m%dT%H%M%S")
-        return time + ".csv"
+
+def ndarray_to_list_tuple(array: np.ndarray) -> list[tuple]:
+    return [tuple(i) for i in array]
 
 
-def export(file, cvs_data: CsvData):
+def to_csv(file: TextIO, cvs_data: CsvData):
     writer = csv.writer(file)
 
     writer.writerow(cvs_data.headers)

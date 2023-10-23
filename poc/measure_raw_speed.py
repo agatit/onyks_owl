@@ -9,12 +9,13 @@ import click
 import cv2
 import numpy as np
 
-from export_utils.to_csv import CsvData, export
+from io_utils.csv import CsvData, to_csv
+from io_utils.utils import timestamp_output_file, get_current_time
 from stitch.rectify.FrameRectifier import FrameRectifier
 from stitch.speed.CarSpeedEstimator import CarSpeedEstimator
 from stitch.RegionOfInterest import RegionOfInterest
 from stitch.speed.VelocityEstimator import VelocityEstimator
-from stitch.speed.VelocityStreamGen import VelocityStreamGen
+from stitch.speed.VelocityFromFrames import VelocityFromFrames
 
 show_scale = 0.6
 
@@ -65,7 +66,7 @@ def main(input_movie, rectify_config, output_directory, display):
     frame_rectifier = FrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
-    meter = VelocityStreamGen()
+    meter = VelocityFromFrames()
 
     print(f"started {input_movie} processing")
 
@@ -100,13 +101,13 @@ def main(input_movie, rectify_config, output_directory, display):
     input_cam.release()
     cv2.destroyAllWindows()
 
-    file_name = CsvData.timestamp_output_file()
+    file_name = timestamp_output_file("csv", get_current_time())
     output_file = os.path.join(output_directory, file_name)
 
     if not interrupt_program:
         with open(output_file, 'w') as file:
             csv_data = CsvData(headers, measurements)
-            export(file, csv_data)
+            to_csv(file, csv_data)
 
 
 if __name__ == '__main__':

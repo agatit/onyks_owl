@@ -1,0 +1,47 @@
+rectify_config: resources/best.json
+
+frame_size: (1920, 1080)
+frames_range:
+  min: 1000
+  max: 1300
+
+save_raw_velocity: true
+
+movies:
+  extension: avi
+  movie:
+    - name: same_wagony
+      input: resources/speeds/same_wagony/
+      output: resources/speeds/same_wagony/measurements/
+    - name: full_train_speed_up
+      input: resources/speeds/full_train_speed_up/
+      output: resources/speeds/full_train_speed_up/measurements/
+    - name: full_train
+      input: resources/speeds/full_train/
+      output: resources/speeds/full_train/measurements/
+
+# todo: zamienić na strukturę
+velocity_roi:
+  - left: (0, 40, 679, 1022)
+  - middle: (899, 43, 1578, 1025)
+  - right: (1625, 41, 2304, 1025)
+  - all: (0, 34, 2304, 1055)
+#  - top: (974, 52, 1594, 460)
+#  - bottom: (993, 661, 1613, 1062)
+#  - random: (1298, 398, 1360, 470)
+
+output_headers:
+  - frame
+  - x
+  - y
+
+methods:
+  - lstsq
+#  - OLS
+#  - WLS
+#  - Mean
+#  - Median
+  - Filter
+#  - Filter_R
+
+
