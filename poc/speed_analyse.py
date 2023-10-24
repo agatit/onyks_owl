@@ -154,6 +154,7 @@ def main(speed_config_path, output, display):
     # print(measurements[0].results)
 
     # todo: do osobnej funkcji
+    # todo: dodać try i except
     headers = config["output_headers"]
     for movie in config["movies"]["movie"]:
         movie_name = movie["name"]
@@ -161,9 +162,7 @@ def main(speed_config_path, output, display):
 
         if os.path.exists(output_dir):
             os.rmdir(output_dir)
-            os.mkdir(output_dir)
-        else:
-            os.mkdir(output_dir)
+        os.mkdir(output_dir)
 
 
         # (results, prefix, roi)

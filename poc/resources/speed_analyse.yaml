@@ -2,8 +2,8 @@ rectify_config: resources/best.json
 
 frame_size: (1920, 1080)
 frames_range:
-  min: 1000
-  max: 1300
+  min: -1
+  max: -1
 
 save_raw_velocity: true
 
@@ -12,13 +12,13 @@ movies:
   movie:
     - name: same_wagony
       input: resources/speeds/same_wagony/
-      output: resources/speeds/same_wagony/measurements/
-    - name: full_train_speed_up
-      input: resources/speeds/full_train_speed_up/
-      output: resources/speeds/full_train_speed_up/measurements/
-    - name: full_train
-      input: resources/speeds/full_train/
-      output: resources/speeds/full_train/measurements/
+      output: resources/speeds/same_wagony/measurements/5
+#    - name: full_train_speed_up
+#      input: resources/speeds/full_train_speed_up/
+#      output: resources/speeds/full_train_speed_up/measurements/
+#    - name: full_train
+#      input: resources/speeds/full_train/
+#      output: resources/speeds/full_train/measurements/
 
 # todo: zamienić na strukturę
 velocity_roi:

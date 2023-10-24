@@ -22,14 +22,6 @@ show_scale = {
 }
 
 
-# frame_size = (1920, 1080)
-# motion_roi = (200, 300, 200, 100)  # 300:-100,500:-500 # motion_roi[1]:-motion_roi[3],motion_roi[0]:-motion_roi[2]
-# stitch_roi = (1100, 0, 400, 0)
-
-# test = (0, 0, 500, 600)
-# test_roi = RegionOfInterest.from_margin_px(frame_size, *(0, 0, 500, 600))
-# motion_roi =
-
 @click.command()
 @click.argument("video_path")
 @click.argument("config_json")
@@ -46,9 +38,9 @@ def main(video_path, config_json, export_velocity_path):
     frame_rectifier = FrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
-    # motion_roi = RegionOfInterest.from_margin_px(frame_size, *(40, 0, 100, 0))
-    motion_roi = RegionOfInterest.from_margin_px(frame_size, *(0, 640, 0, 640))
-    stitch_roi = RegionOfInterest.from_margin_px(frame_size, *(0, 640, 0, 640))
+    roi_size = (0, 640, 0, 600)
+    motion_roi = RegionOfInterest.from_margin_px(frame_size, *roi_size)
+    stitch_roi = RegionOfInterest.from_margin_px(frame_size, *roi_size)
 
     cap = cv2.VideoCapture(video_path)
 
@@ -58,9 +50,12 @@ def main(video_path, config_json, export_velocity_path):
     velocity_estimator = VelocityEstimator(LstsqMethod(), LstsqMethod())
     # velocity_estimator = VelocityEstimator(OlsMethod(), OlsMethod())
 
-    # roi_size = (1100, 0, 400, 0)
-    # roi_size = (1100, 0, 400, 0)
-    roi_size = (640, 0, 640, 0)
+    roi_size = (
+        stitch_roi.margins["left"],
+        stitch_roi.margins["top"],
+        stitch_roi.margins["right"],
+        stitch_roi.margins["bottom"]
+    )
     # stitcher = CarStitcherDelayed(roi_size=stich_roi, delay=50)
     stitcher = CarStitcherRoi(roi_size=roi_size)
     # deblur = Deblur(51)

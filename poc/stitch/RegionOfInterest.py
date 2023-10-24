@@ -15,6 +15,14 @@ class RegionOfInterest:
         self.width = np.abs(x1 - x2)
         self.height = np.abs(y1 - y2)
 
+        src_width, src_height = source_region_size
+        self.margins = {
+            "top": y1,
+            "right": src_width - x2,
+            "bottom": src_height - y2,
+            "left": x1,
+        }
+
     @classmethod
     def from_margin_percent(cls, source_region_size, top, right, bottom, left):
         width, height = source_region_size
@@ -47,5 +55,3 @@ class RegionOfInterest:
     @staticmethod
     def __percent_of_a_number(percent, number):
         return int((percent / 100) * number)
-
-
