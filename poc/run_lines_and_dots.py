@@ -5,7 +5,7 @@ from enum import Enum
 import click
 import cv2
 
-from lines_and_dots.image_event_handler import ImageEventHandler
+from lines_and_dots.ImageEventHandler import ImageEventHandler
 
 
 @dataclass
@@ -38,16 +38,17 @@ def scale_point_by_percent(point, percent):
 @click.argument("input_file")
 @click.option("-o", "--output", "output_file", default="lines.json", help="output json file")
 @click.option("-dn", "--dots_number", "max_dots_number", default=-1, help="number of output line dots")
-def main(input_file, output_file, max_dots_number):
+@click.option("-sc", "--scale", "scale", default=75, help="scale image to display")
+def main(input_file, output_file, max_dots_number, scale):
     image = cv2.imread(input_file)
     window_name = "image"
     resize_percent = {
-        "scale_down": 75,
-        "scale_up": 133,
+        "scale": scale,
+        "scale_back": 100 // (scale / 100),
     }
 
     original_image = image.copy()
-    down_scaled_dim = scale_shape_by_percent(image.shape, resize_percent["scale_down"])
+    down_scaled_dim = scale_shape_by_percent(image.shape, resize_percent["scale"])
     image = cv2.resize(image, down_scaled_dim, interpolation=cv2.INTER_AREA)
 
     horizontal_lines = LineType("horizontal", max_dots_number, [])
@@ -81,14 +82,14 @@ def main(input_file, output_file, max_dots_number):
             line_types = image_event_handler.line_types
             print()
             for line_type in line_types:
-                print(f"{line_type.type}: {line_type.lines}")
+                print(f"{line_type.type}: {line_type.horizontal_lines}")
 
         if key == PressedKey.tab.value:
             img = original_image.copy()
             dots = image_event_handler.dots
 
             for dot in dots:
-                scaled_dot = scale_point_by_percent(dot, resize_percent["scale_up"])
+                scaled_dot = scale_point_by_percent(dot, resize_percent["scale_back"])
                 circle_kwargs = {
                     "img": img,
                     "center": scaled_dot,
@@ -104,11 +105,11 @@ def main(input_file, output_file, max_dots_number):
 
     if check_if_save:
         # scale up to input size
-        resize_map = lambda x: scale_point_by_percent(x, resize_percent["scale_up"])
+        resize_map = lambda x: scale_point_by_percent(x, resize_percent["scale_back"])
 
         for line_type in image_event_handler.line_types:
-            for i in range(len(line_type.lines)):
-                line_type.lines[i] = list(map(resize_map, line_type.lines[i]))
+            for i in range(len(line_type.horizontal_lines)):
+                line_type.horizontal_lines[i] = list(map(resize_map, line_type.horizontal_lines[i]))
 
         with open(output_file, "w") as file:
             dicts = []

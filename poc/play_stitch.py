@@ -1,5 +1,4 @@
 import os
-from dataclasses import astuple
 
 import click
 
@@ -9,12 +8,10 @@ import numpy as np
 
 from stitch.RegionOfInterest import RegionOfInterest
 from stitch.rectify.FrameRectifier import FrameRectifier
-from stitch.speed.CarSpeedEstimator import CarSpeedEstimator
 from stitch.CarStitcherRoi import CarStitcherRoi
 from stitch.speed.VelocityEstimator import VelocityEstimator
 from io_utils.csv import CsvData, to_csv
-from stitch.speed.regression.LstsqMethod import LstsqMethod
-from stitch.speed.regression.OlsMethod import OlsMethod
+from stitch.speed.regression.FilterErrorMethod import FilterErrorMethod
 
 show_scale = {
     "main": 0.5,
@@ -38,7 +35,8 @@ def main(video_path, config_json, export_velocity_path):
     frame_rectifier = FrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
-    roi_size = (0, 640, 0, 600)
+    roi_size = (0, 640, 0, 1200)
+    # roi_size = (0, 640, 0, 640)
     motion_roi = RegionOfInterest.from_margin_px(frame_size, *roi_size)
     stitch_roi = RegionOfInterest.from_margin_px(frame_size, *roi_size)
 
@@ -47,7 +45,8 @@ def main(video_path, config_json, export_velocity_path):
     if not cap.isOpened():
         print("Error opening video stream or file")
 
-    velocity_estimator = VelocityEstimator(LstsqMethod(), LstsqMethod())
+    # velocity_estimator = VelocityEstimator(LstsqMethod(), LstsqMethod())
+    velocity_estimator = VelocityEstimator(FilterErrorMethod(True), FilterErrorMethod(True))
     # velocity_estimator = VelocityEstimator(OlsMethod(), OlsMethod())
 
     roi_size = (
@@ -130,8 +129,8 @@ def main(video_path, config_json, export_velocity_path):
     cap.release()
     cv2.destroyAllWindows()
 
+    headers = ["frame", "x", "y"]
     if export_velocity_path is not None:
-        headers = ["frame", "x", "y"]
         csv_data = CsvData(headers, velocity_data)
 
         with open(export_velocity_path, 'w') as file:

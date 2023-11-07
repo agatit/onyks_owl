@@ -1,0 +1,59 @@
+consts:
+  sensor_h: 3.69
+  sensor_w: 7.38
+  W: 1920
+  H: 1080
+
+bounds:
+  X: (-100, 100)
+  Y: (40, 120)
+  alpha: (-0.1, 0.1)
+  beta: (-0.1, 0.1)
+  gamma: (-0.1, 0.1)
+  focus: (1.5, 6.0)
+  scale: (1.0, 1.0)
+  k1: (-0.2, 0.2)
+  k2: (-0.2, 0.2)
+  k3: (-0.2, 0.2)
+  p1: (-0.2, 0.2)
+  p2: (-0.2, 0.2)
+
+init_values:
+  X: 0
+  Y: 40
+  alpha: 0
+  beta: 0
+  gamma: 0
+  focus: 4
+  scale: 1
+  k1: 0
+  k2: 0
+  k3: 0
+  p1: 0
+  p2: 0
+
+weights_range:
+  stds:
+      - 0.5
+      - 1.1
+      - 0.5
+  distances:
+      - 0.5
+      - 1.1
+      - 0.5
+
+measurements:
+  - name: wagon
+    lines_file_path: resources/lines/wagon/low_10_n.json
+    image_path: resources/lines/wagon/wagon.png
+  - name: szyny
+    lines_file_path: resources/lines/szyny/szyny.json
+    image_path: resources/lines/szyny/szyny.png
+
+
+
+
+
+
+
+

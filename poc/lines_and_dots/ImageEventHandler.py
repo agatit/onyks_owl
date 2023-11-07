@@ -1,7 +1,8 @@
 from itertools import cycle
 
 import cv2
-import numpy as np
+
+from display.StatusImage import StatusImage
 
 
 class ImageEventHandler:
@@ -67,7 +68,7 @@ class ImageEventHandler:
         cv2.imshow(self.window_name, self.image)
 
     def save_current_dots(self):
-        self.current_line_type.lines.append(self.dots)
+        self.current_line_type.horizontal_lines.append(self.dots)
         self.reload()
 
     def reload(self):
@@ -75,15 +76,3 @@ class ImageEventHandler:
         self.dots = []
 
 
-class StatusImage:
-
-    def __init__(self, shape):
-        self.background = np.full(shape, 255, dtype=np.uint8)
-        self.background_copy = self.background.copy()
-
-    def overlay(self, image):
-        shape = self.background.shape
-        image[:shape[0], :shape[1]] = self.background
-
-    def reload(self):
-        self.background = self.background_copy.copy()

@@ -46,7 +46,9 @@ class VelocityEstimator:
             x = self.x_regression_model.predict(self.frame_index)
             y = self.y_regression_model.predict(self.frame_index)
 
-            x, y = self._filter_outliers(x, y)
+            if self.window_size < self.frames_counter:
+                x, y = self._filter_outliers(x, y)
+
             self.last_velocity = (x, y)
             return x, y
         else:

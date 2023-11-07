@@ -14,18 +14,21 @@ def scale_image(image, scale):
     return cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
 
 
-def show_rectified_image(image_path, frame_rectifier, scale_percent):
+def show_rectified_image(image_path, frame_rectifier, save_path, scale_percent):
     image = cv2.imread(image_path)
 
-    image = frame_rectifier.rectify(image)
+    rectified = frame_rectifier.rectify(image)
 
-    image = scale_image(image, scale_percent)
+    image = scale_image(rectified, scale_percent)
     cv2.imshow('Frame', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+    if save_path:
+        cv2.imwrite(save_path, rectified)
 
-def show_rectified_video(video_path, frame_rectifier, scale_percent):
+
+def show_rectified_video(video_path, frame_rectifier, save_path, scale_percent):
     cap = cv2.VideoCapture(video_path)
 
     if not cap.isOpened():
@@ -54,8 +57,9 @@ def show_rectified_video(video_path, frame_rectifier, scale_percent):
 @click.argument("config_json")
 @click.option('--image', "action", flag_value="image", help="Input file type flag")
 @click.option('--video', "action", flag_value="video", help="Input file type flag")
+@click.option('-s', "--save", "save_flag", help="save file path")
 @click.option('-sp', '--scale_percent', "scale", default=50)
-def main(input_source, config_json, action, scale):
+def main(input_source, config_json, action, save_flag, scale):
     actions = {
         "image": show_rectified_image,
         "video": show_rectified_video
@@ -69,7 +73,7 @@ def main(input_source, config_json, action, scale):
     frame_rectifier.calc_maps()
 
     callback = actions[action]
-    callback(input_source, frame_rectifier, scale)
+    callback(input_source, frame_rectifier, save_flag, scale)
 
 
 if __name__ == '__main__':
