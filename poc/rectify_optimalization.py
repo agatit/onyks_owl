@@ -9,8 +9,8 @@ import yaml
 from scipy.optimize import minimize
 from tqdm import tqdm
 
-from display.Points import PointStyle, display_image_with_points, PointDisplay
-from io_utils.yaml import tuple_to_literal
+from display.Points import PointStyle, LineDisplay, display_image_with_points
+from io_utils.yaml import literal_to_tuple
 from rectify_optimalization.Measurement import Measurement
 from rectify_optimalization.Result import Result
 from rectify_optimalization.objective_function import objective_function, calc_horizontal_std, calc_vertical_std, \
@@ -37,14 +37,14 @@ def display(display_ratio, measurements):
     vertical_style = PointStyle(5, -1, (0, 0, 255))
     for measurement in measurements:
         points_displays = [
-            PointDisplay(measurement.horizontal_lines, horizontal_style),
-            PointDisplay(measurement.vertical_lines, vertical_style)
+            LineDisplay(measurement.horizontal_lines, horizontal_style),
+            LineDisplay(measurement.vertical_lines, vertical_style)
         ]
         image = measurement.load_image()
         name = measurement.name
         display_image_with_points(image, name, display_ratio, *points_displays)
 
-
+#todo: zmiana api bibliotek
 @click.command()
 @click.option("-cf'", "--config", "rectify_optimization_config", default="resources/rectify_optimization.yaml",
               required=True, type=click.Path(exists=True), help="yaml configuration for tests")
@@ -55,7 +55,7 @@ def display(display_ratio, measurements):
 def main(rectify_optimization_config, output, display_ratio):
     with open(rectify_optimization_config, "r") as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
-    config["bounds"] = tuple_to_literal(config["bounds"], config["bounds"].keys())
+    config["bounds"] = literal_to_tuple(config["bounds"], config["bounds"].keys())
 
     measurements = []
     for measurement in config["measurements"]:
