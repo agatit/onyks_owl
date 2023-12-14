@@ -32,26 +32,35 @@ init_values:
   p1: 0
   p2: 0
 
-weights_range:
-  stds:
-      - 0.5
-      - 1.1
-      - 0.5
-  distances:
-      - 0.5
-      - 1.1
-      - 0.5
+# todo: dodanie obsługi
+objective_functions:
+  - mean
 
 measurements:
   - name: wagon
     lines_file_path: resources/lines/wagon/low_10_n.json
     image_path: resources/lines/wagon/wagon.png
+    methods:
+      - method: StdMethod
+        line_type: Horizontal
+        line_part: YPoints
+        weights_range: (0.5, 1.1, 0.5)
+        roi: (640, 0, 1280, 1080)
+#        roi: (0, 0, 1920, 1080)
+      - method: StdMethod
+        line_type: Vertical
+        line_part: XPoints
+        weights_range: (0.5, 1.1, 0.5)
+        roi: (640, 0, 1280, 1080)
   - name: szyny
     lines_file_path: resources/lines/szyny/szyny.json
     image_path: resources/lines/szyny/szyny.png
-
-
-
+    methods:
+      - method: DistanceMethod
+        line_part: XPoints
+        line_type: Horizontal
+        weights_range: (0.5, 1.1, 0.5)
+        roi: (640, 0, 1280, 1080)
 
 
 

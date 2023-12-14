@@ -6,7 +6,7 @@ import cv2
 import json
 import numpy as np
 
-from stitch.RegionOfInterest import RegionOfInterest
+from display.RegionOfInterest import RegionOfInterest
 from stitch.rectify.FrameRectifier import FrameRectifier
 from stitch.CarStitcherRoi import CarStitcherRoi
 from stitch.speed.VelocityEstimator import VelocityEstimator

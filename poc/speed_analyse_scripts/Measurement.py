@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from speed_analyse_scripts.Timer import Timer
-from stitch.RegionOfInterest import RegionOfInterest
+from display.RegionOfInterest import RegionOfInterest
 from stitch.speed.VelocityEstimator import VelocityEstimator
 from stitch.speed.VelocityFromFrames import VelocityFromFrames
 

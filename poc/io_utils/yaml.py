@@ -1,6 +1,10 @@
+from abc import ABC
 from ast import literal_eval
 from dataclasses import dataclass
 from typing import Any
+
+# class YamlDataclassExporter(ABC):
+#     def import_yaml(self, file):
 
 
 class FromYaml:
@@ -9,7 +13,7 @@ class FromYaml:
             setattr(self, name, value)
 
 
-def tuple_to_literal(dictionary: dict, keys: list) -> dict:
+def literal_to_tuple(dictionary: dict, keys: list) -> dict:
     result = {}
 
     for key, value in dictionary.items():

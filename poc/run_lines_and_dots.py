@@ -1,18 +1,17 @@
+import ast
 import json
-from dataclasses import dataclass
 from enum import Enum
+from typing import Union
 
 import click
 import cv2
+import numpy as np
 
+from display.OpenCVstyles import OpenCVstyles
+from display.RegionOfInterest import RegionOfInterest
+from display.utils import scale_image_by_percent, scale_point_by_percent
 from lines_and_dots.ImageEventHandler import ImageEventHandler
-
-
-@dataclass
-class LineType:
-    type: str
-    max_dots_number: int
-    lines: list
+from lines_and_dots.LineType import LineType
 
 
 class PressedKey(Enum):
@@ -22,24 +21,26 @@ class PressedKey(Enum):
     tab = 9
 
 
-def scale_shape_by_percent(shape, percent):
-    width = int(shape[1] * percent / 100)
-    height = int(shape[0] * percent / 100)
-    return width, height
+def init_roi(image: np.ndarray, roi_str: Union[None, str]) -> RegionOfInterest:
+    image_height, image_width, _ = image.shape
 
+    if roi_str:
+        region_of_interest = ast.literal_eval(roi_str)
+    else:
+        region_of_interest = [0, 0, image_width, image_height]
+    image_size = (image_width, image_height)
 
-def scale_point_by_percent(point, percent):
-    y = int(point[1] * percent / 100)
-    x = int(point[0] * percent / 100)
-    return x, y
+    return RegionOfInterest(image_size, *region_of_interest)
 
 
 @click.command()
 @click.argument("input_file")
-@click.option("-o", "--output", "output_file", default="lines.json", help="output json file")
+@click.option("-o", "--output", "output_file", type=click.Path(), default="lines.json",
+              help="output json file")
 @click.option("-dn", "--dots_number", "max_dots_number", default=-1, help="number of output line dots")
 @click.option("-sc", "--scale", "scale", default=75, help="scale image to display")
-def main(input_file, output_file, max_dots_number, scale):
+@click.option("-roi", "--region", "roi_str", help="format: [x1,y1,x2,y2]")
+def main(input_file, output_file, max_dots_number, scale, roi_str):
     image = cv2.imread(input_file)
     window_name = "image"
     resize_percent = {
@@ -47,16 +48,22 @@ def main(input_file, output_file, max_dots_number, scale):
         "scale_back": 100 // (scale / 100),
     }
 
-    original_image = image.copy()
-    down_scaled_dim = scale_shape_by_percent(image.shape, resize_percent["scale"])
-    image = cv2.resize(image, down_scaled_dim, interpolation=cv2.INTER_AREA)
+    try:
+        roi = init_roi(image, roi_str)
+    except SyntaxError:
+        raise Exception("invalid roi string")
 
-    horizontal_lines = LineType("horizontal", max_dots_number, [])
-    vertical_lines = LineType("vertical", max_dots_number, [])
-    image_event_handler = ImageEventHandler(image, window_name, horizontal_lines, vertical_lines)
+    image = cv2.rectangle(image, roi.p1, roi.p2, **OpenCVstyles.roi_rectangle.value)
+
+    original_image = image.copy()
+    image = scale_image_by_percent(image, resize_percent["scale"])
+
+    lines = LineType("horizontal", max_dots_number, roi)
+    vertical_lines = LineType("vertical", max_dots_number, roi)
+    image_event_handler = ImageEventHandler(image, window_name, lines, vertical_lines)
 
     cv2.imshow(window_name, image)
-    cv2.setMouseCallback(window_name, image_event_handler.mouse_callback())
+    cv2.setMouseCallback(window_name, image_event_handler.get_mouse_callback())
 
     image_event_handler.display_line_type_state()
 
@@ -82,7 +89,7 @@ def main(input_file, output_file, max_dots_number, scale):
             line_types = image_event_handler.line_types
             print()
             for line_type in line_types:
-                print(f"{line_type.type}: {line_type.horizontal_lines}")
+                print(f"{line_type.type}: {line_type.line}")
 
         if key == PressedKey.tab.value:
             img = original_image.copy()
@@ -108,15 +115,17 @@ def main(input_file, output_file, max_dots_number, scale):
         resize_map = lambda x: scale_point_by_percent(x, resize_percent["scale_back"])
 
         for line_type in image_event_handler.line_types:
-            for i in range(len(line_type.horizontal_lines)):
-                line_type.horizontal_lines[i] = list(map(resize_map, line_type.horizontal_lines[i]))
+            for i in range(len(line_type.line)):
+                line_type.line[i] = list(map(resize_map, line_type.line[i]))
 
         with open(output_file, "w") as file:
-            dicts = []
+            output = []
             for line_type in image_event_handler.line_types:
-                dicts.append(vars(line_type))
+                new_output = vars(line_type)
+                new_output["roi"] = new_output["roi"].get_apices()
+                output.append(new_output)
 
-            json.dump(dicts, file)
+            json.dump(output, file)
 
 
 if __name__ == '__main__':

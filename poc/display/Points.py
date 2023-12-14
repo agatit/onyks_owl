@@ -14,17 +14,23 @@ class PointStyle:
 
 
 @dataclass
-class PointDisplay:
-    lines: np.ndarray
+class LineDisplay:
+    line: np.ndarray
     style: PointStyle
+
+    def draw(self, image: np.ndarray) -> np.ndarray:
+        for point in self.line.astype(int):
+            image = cv2.circle(image, center=point, **asdict(self.style))
+
+        return image
 
 
 def display_image_with_points(image: np.ndarray, window_name: str, display_scale: int = 70,
-                              *point_displays: PointDisplay):
+                              *point_displays: LineDisplay) -> None:
     img = image.copy()
 
     for dot_display in point_displays:
-        for line in dot_display.lines.astype(int):
+        for line in dot_display.line.astype(int):
             for point in line:
                 cv2.circle(img, center=point, **asdict(dot_display.style))
 

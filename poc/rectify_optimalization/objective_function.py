@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 
 from rectify_optimalization.distance import calc_distance
+from rectify_optimalization.objective_functions.methods import Method
 
 
 def rectify_points(config, consts, points):
@@ -63,13 +64,17 @@ def calc_horizontal_distance(config, consts, horizontal) -> np.ndarray:
     return calc_distance(distances_rectified[:, :, 0])
 
 
+def calc_rectified(config, consts, line, method: Method):
+    rectified = rectify_lines(config, consts, line)
+    return method.calculate(None)
+
 def objective_function(x, consts, horizontal, vertical, distances):
     horizontal_std = calc_horizontal_std(x, consts, horizontal)
     vertical_std = calc_vertical_std(x, consts, vertical)
     horizontal_distance = calc_horizontal_distance(x, consts, distances)
 
     weights = consts["weights"]
-    stds = weights["std"] * (horizontal_std.sum() + vertical_std.sum())
-    distance = weights["distance"] * horizontal_distance.sum()
+    stds = weights["std"] * (horizontal_std.mean() + vertical_std.mean())
+    distance = weights["distance"] * horizontal_distance.mean()
 
     return stds + distance

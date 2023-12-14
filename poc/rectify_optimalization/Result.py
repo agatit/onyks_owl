@@ -4,6 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class Result:
     name: str
+    roi: tuple[int, int, int, int]
     res: dict
     weights: dict
     standard_deviations: dict

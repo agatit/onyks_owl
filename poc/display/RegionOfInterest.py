@@ -52,6 +52,9 @@ class RegionOfInterest:
     def crop_numpy_array(self, array):
         return array[self.y1:self.y2, self.x1:self.x2]
 
+    def get_apices(self) -> tuple[int, int, int, int]:
+        return self.x1, self.y1, self.x2, self.y2
+
     @staticmethod
     def __percent_of_a_number(percent, number):
         return int((percent / 100) * number)

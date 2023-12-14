@@ -1,9 +1,6 @@
-import csv
 import json
 import os
 from tqdm import tqdm
-from dataclasses import dataclass
-from datetime import datetime
 
 import click
 import cv2
@@ -12,9 +9,7 @@ import numpy as np
 from io_utils.csv import CsvData, to_csv
 from io_utils.utils import timestamp_output_file, get_current_time
 from stitch.rectify.FrameRectifier import FrameRectifier
-from stitch.speed.CarSpeedEstimator import CarSpeedEstimator
-from stitch.RegionOfInterest import RegionOfInterest
-from stitch.speed.VelocityEstimator import VelocityEstimator
+from display.RegionOfInterest import RegionOfInterest
 from stitch.speed.VelocityFromFrames import VelocityFromFrames
 
 show_scale = 0.6

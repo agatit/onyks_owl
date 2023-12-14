@@ -7,13 +7,11 @@ import click
 import numpy as np
 
 from io_utils.csv import CsvData, ndarray_to_list_tuple, to_csv
-from speed_analyse_scripts.Measurement import Measurement
-from speed_analyse_scripts.Timer import Timer
 from speed_analyse_scripts.config_inits import init_movie_paths, init_rectifier, init_velocity_rois, \
     init_raw_velocities, init_measurements
 import yaml
 
-from stitch.RegionOfInterest import RegionOfInterest
+from display.RegionOfInterest import RegionOfInterest
 from stitch.speed.VelocityEstimator import VelocityEstimator
 from stitch.speed.regression.FilterErrorMethod import FilterErrorMethod
 from stitch.speed.regression.LstsqMethod import LstsqMethod

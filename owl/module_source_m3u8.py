@@ -31,7 +31,7 @@ class Module(module_base.Module):
 
     def get_segment(self, url):
 
-        m3u8_obj = m3u8.load(url)    
+        m3u8_obj = m3u8.init_methods(url)
         segment = m3u8_obj.segments[-1] #domyślnie najnowszy
         segment_no = len(m3u8_obj.segments)-1
         
@@ -45,7 +45,7 @@ class Module(module_base.Module):
                     sleep_time = 0.1
                 logging.warning(f"Need to wait for segment {sleep_time}s")
                 time.sleep(sleep_time)
-                m3u8_obj = m3u8.load(url)
+                m3u8_obj = m3u8.init_methods(url)
 
             # szukanie segmentu następnego
             segment = None

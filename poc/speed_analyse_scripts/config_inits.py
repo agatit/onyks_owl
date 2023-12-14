@@ -1,18 +1,16 @@
 import copy
 import json
 from ast import literal_eval
-from pathlib import PurePath
 
 import numpy as np
 
 from io_utils.utils import get_latest_file_from_directory
-from speed_analyse_scripts.Measurement import Measurement, RawVelocity, MeasurementROI
+from speed_analyse_scripts.Measurement import RawVelocity, MeasurementROI
 from speed_analyse_scripts.Timer import Timer
-from stitch.RegionOfInterest import RegionOfInterest
+from display.RegionOfInterest import RegionOfInterest
 from stitch.rectify.FrameRectifier import FrameRectifier
 from stitch.speed.VelocityEstimator import VelocityEstimator
 from stitch.speed.VelocityFromFrames import VelocityFromFrames
-from stitch.speed.regression.LstsqMethod import LstsqMethod
 
 
 def init_movie_paths(config: dict) -> dict[str, str]:

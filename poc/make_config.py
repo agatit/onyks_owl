@@ -83,7 +83,7 @@ def drawSrcGrid(img, frame_rectifier, pxstep):
         x += pxstep
 
     config = get_config()
-    new_point_list = frame_rectifier.rectify_points(point_list,,
+    new_point_list = frame_rectifier.rectify_points(point_list)
     for point in new_point_list:
         cv2.circle(img, (round(point[0]), round(point[1])), 1, (0, 0, 180), 2)
 

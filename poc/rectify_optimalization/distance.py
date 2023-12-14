@@ -30,7 +30,4 @@ def deviation(array, mean_array):
 def calc_distance(array):
     x = np.apply_along_axis(pairwise, 1, array)
     x = np.abs(x[:, :, 0] - x[:, :, 1])
-
-    # middle = middle_value(x)
-    # return deviation(x, middle.reshape(len(middle), 1)).sum()
     return x.std(axis=1)

@@ -22,7 +22,7 @@ class ImageEventHandler:
         size = (height, width, 3)
         self.status_image = StatusImage(size)
 
-    def mouse_callback(self):
+    def get_mouse_callback(self):
         def wrapper(event, x, y, flags, param):
             if event == cv2.EVENT_LBUTTONDOWN and len(self.dots) != self.current_line_type.max_dots_number:
                 self.dots.append((x, y))
@@ -68,7 +68,7 @@ class ImageEventHandler:
         cv2.imshow(self.window_name, self.image)
 
     def save_current_dots(self):
-        self.current_line_type.horizontal_lines.append(self.dots)
+        self.current_line_type.line.append(self.dots)
         self.reload()
 
     def reload(self):
