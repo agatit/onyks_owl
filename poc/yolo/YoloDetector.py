@@ -14,12 +14,11 @@ class YoloDetector:
         self.classes = classes
         self.device = device
 
-
-    @staticmethod
-    def initialize_model(model_path):
+    @classmethod
+    def initialize_model(cls, model_path):
         model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
         classes = model.names
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        device = 'cuda' if cls.check_if_cuda_is_avaible() else 'cpu'
 
         model.to(device)
 
@@ -43,3 +42,10 @@ class YoloDetector:
             results_df[label] = results_df[label].astype(int)
 
         return results_df.values.tolist()
+
+    def enable_multiprocessing(self) -> None:
+        self.model.share_memory()
+
+    @classmethod
+    def check_if_cuda_is_avaible(cls) -> bool:
+        return torch.cuda.is_available()
