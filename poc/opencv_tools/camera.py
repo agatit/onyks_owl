@@ -9,3 +9,4 @@ def frame_capture_gen(film_path):
         success, image = vid_obj.read()
         if success:
             yield image
+

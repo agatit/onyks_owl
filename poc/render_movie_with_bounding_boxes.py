@@ -43,7 +43,7 @@ def main(input_movie, output_movie, rectify_config, model_path, codec_code):
 
     detector = YoloDetector(model_path)
 
-    frame_count = int(video_writer.get(cv2.CAP_PROP_FRAME_COUNT))
+    frame_count = int(input_cam.get(cv2.CAP_PROP_FRAME_COUNT))
     with tqdm(total=frame_count, desc=f"Processing: {input_movie}") as pbar:
         while input_cam.isOpened():
             result, frame = input_cam.read()
@@ -52,7 +52,7 @@ def main(input_movie, output_movie, rectify_config, model_path, codec_code):
                 if rectify_config:
                     frame = frame_rectifier.rectify(frame)
 
-                found_bounding_boxes = detector.detect_image(frame)
+                found_bounding_boxes = detector.detect_image(frame, detector.LABELS)
                 frame = draw_image_with_rectangles(frame, found_bounding_boxes)
 
                 video_writer.write(frame)

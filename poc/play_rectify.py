@@ -3,15 +3,8 @@ import click
 import cv2
 import json
 
+from display.utils import scale_image_by_percent
 from stitch.rectify.FrameRectifier import FrameRectifier
-
-
-def scale_image(image, scale):
-    width = int(image.shape[1] * scale / 100)
-    height = int(image.shape[0] * scale / 100)
-    dim = (width, height)
-
-    return cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
 
 
 def show_rectified_image(image_path, frame_rectifier, save_path, scale_percent):
@@ -19,7 +12,7 @@ def show_rectified_image(image_path, frame_rectifier, save_path, scale_percent):
 
     rectified = frame_rectifier.rectify(image)
 
-    image = scale_image(rectified, scale_percent)
+    image = scale_image_by_percent(rectified, scale_percent)
     cv2.imshow('Frame', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
@@ -39,7 +32,7 @@ def show_rectified_video(video_path, frame_rectifier, save_path, scale_percent):
         if ret:
 
             frame = frame_rectifier.rectify(frame)
-            frame = scale_image(frame, scale_percent)
+            frame = scale_image_by_percent(frame, scale_percent)
             cv2.imshow('Frame', frame)
 
             if cv2.waitKey(25) & 0xFF == ord('q'):

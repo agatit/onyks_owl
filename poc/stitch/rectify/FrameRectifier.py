@@ -5,13 +5,16 @@ import json
 
 
 class FrameRectifier:
-    def __init__(self, config, width, height):
+    def __init__(self, config, width=1920, height=1080):
         self.config = config
         self.width = width
         self.height = height
 
         self.map_x = 0
         self.map_y = 0
+
+    def rectify(self, img):
+        return cv2.remap(img, self.map_x, self.map_y, interpolation=cv2.INTER_LINEAR)
 
     def calc_maps(self):
         config = self.config
@@ -53,9 +56,6 @@ class FrameRectifier:
             [0, 0, 1]])
 
         self.map_x, self.map_y = cv2.initUndistortRectifyMap(K, dist, R, new_K, (round(scale * W), round(scale * H)), 5)
-
-    def rectify(self, img):
-        return cv2.remap(img, self.map_x, self.map_y, interpolation=cv2.INTER_LINEAR)
 
     def rectify_points(self, points):
         config = self.config

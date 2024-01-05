@@ -7,14 +7,17 @@ import json
 
 import numpy as np
 
+from display.utils import scale_image_by_percent
 from opencv_tools.image_transformations import draw_image_with_rectangles
-from yolo.yolo_detector import YoloDetector
+from yolo.YoloDetector import YoloDetector
 
 
 @click.command()
 @click.argument("input_movie")
-@click.argument("model_path", default="models/l_owl_4.pt")
-def main(input_movie, model_path):
+@click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),
+              required=True, default="resources/models/s_owl_4.pt", help="yolov5 model path")
+@click.option("-sp", "--scale_percent", "scale_percent", type=int, default=50, help="scale view movie")
+def main(input_movie, model_path, scale_percent):
     input_cam = cv2.VideoCapture(input_movie)
     if not input_cam.isOpened():
         print("Error opening video stream or file")
@@ -28,13 +31,18 @@ def main(input_movie, model_path):
     while input_cam.isOpened():
         result, frame = input_cam.read()
         if result:
-            found_bounding_boxes = detector.detect_image(frame)
-            frame = draw_image_with_rectangles(frame, found_bounding_boxes)
+            detection_results = detector.detect_image(frame, detector.LABELS)
 
-            detector.model.track()
+            for detection_result in detection_results:
+                frame = detection_result.draw_on_image(frame)
+
+            # detector.model.track()
+            frame = scale_image_by_percent(frame, scale_percent)
             cv2.imshow(input_movie_name, frame)
 
-            if cv2.waitKey(25) & 0xFF == ord('q'):
+            key = cv2.waitKey(1)
+
+            if key == ord('q'):
                 break
         else:
             break

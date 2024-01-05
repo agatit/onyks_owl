@@ -1,0 +1,11 @@
+extension:
+  input: mp4
+  output: jpg
+
+labels:
+  - vertical_text
+  - horizontal_text
+  - railcar_text
+
+model:
+  confidence_threshold: 0.75

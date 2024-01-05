@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from loggers.loggers import InfoLogger
 from stitch.rectify.FrameRectifier import FrameRectifier
-from yolo.yolo_detector import YoloDetector
+from yolo.YoloDetector import YoloDetector
 
 from opencv_tools.image_transformations import show_image_with_rectangles, draw_image_with_rectangles
 
@@ -46,7 +46,7 @@ def main(image_directory, output_directory, rectify_config, model_path, image_ex
         image = cv2.imread(image_path)
         image = frame_rectifier.rectify(image)
 
-        found_bounding_boxes = detector.detect_image(image)
+        found_bounding_boxes = detector.detect_image(image, detector.LABELS)
         image = draw_image_with_rectangles(image, found_bounding_boxes)
 
         logger.info(f"{image_path}: {found_bounding_boxes}")
