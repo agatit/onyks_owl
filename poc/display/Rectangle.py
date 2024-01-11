@@ -14,4 +14,5 @@ class RectangleDisplay:
 
     @classmethod
     def draw(cls, image: np.ndarray, p1: tuple, p2: tuple, style: RectangleStyle) -> np.ndarray:
-        return cv2.rectangle(image, p1, p2, **asdict(style))
+        return cv2.rectangle(image.copy(), p1, p2, **asdict(style))
+

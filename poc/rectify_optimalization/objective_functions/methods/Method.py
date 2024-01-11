@@ -13,14 +13,16 @@ from rectify_optimalization.objective_functions.methods.line_types.LineType impo
 class Method(ABC):
     id: str = field(init=False)
     name_type: str = field(init=False)
-    lines: Union[list, np.ndarray]
+    lines: np.ndarray = field(init=False)
+
+    lines_from_file: list[dict]
     weight: float
     line_type: LineType
     line_part_selector: LinePartSelector
     roi: RegionOfInterest
 
     def __post_init__(self):
-        self.lines = self.line_type.select(self.lines)
+        self.lines = self.line_type.select(self.lines_from_file)
 
         self.id = self._generate_name(self, self.line_type, self.line_part_selector)
         self.name_type = str(self.id)

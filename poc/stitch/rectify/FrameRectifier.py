@@ -3,9 +3,11 @@ import numpy as np
 import math
 import json
 
+from sympy import Symbol, solve, atan
+
 
 class FrameRectifier:
-    def __init__(self, config, width=1920, height=1080):
+    def __init__(self, config: dict, width: int = 1920, height: int = 1080) -> None:
         self.config = config
         self.width = width
         self.height = height
@@ -13,10 +15,10 @@ class FrameRectifier:
         self.map_x = 0
         self.map_y = 0
 
-    def rectify(self, img):
+    def rectify(self, img: np.ndarray) -> np.ndarray:
         return cv2.remap(img, self.map_x, self.map_y, interpolation=cv2.INTER_LINEAR)
 
-    def calc_maps(self):
+    def calc_maps(self) -> None:
         config = self.config
         W = self.width
         H = self.height
@@ -57,7 +59,7 @@ class FrameRectifier:
 
         self.map_x, self.map_y = cv2.initUndistortRectifyMap(K, dist, R, new_K, (round(scale * W), round(scale * H)), 5)
 
-    def rectify_points(self, points):
+    def rectify_points(self, points: np.ndarray) -> np.ndarray:
         config = self.config
         W = self.width
         H = self.height
@@ -92,3 +94,11 @@ class FrameRectifier:
 
         res = cv2.undistortPoints(points, K, dist, R=R, P=new_K)
         return np.reshape(res, (-1, 2))
+
+    @staticmethod
+    def find_sensor_dimension(focal_mm: float, fov_degree: float) -> list[float]:
+        fov_radians = math.radians(fov_degree)
+
+        x = Symbol('x')
+        # FOV = 2 * atan(sensor_dimension/(2*focal))
+        return solve(fov_radians - 2 * atan(x / (2 * focal_mm)), x)

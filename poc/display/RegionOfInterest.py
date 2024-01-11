@@ -2,7 +2,7 @@ import numpy as np
 
 
 class RegionOfInterest:
-    def __init__(self, source_region_size, x1, y1, x2, y2):
+    def __init__(self, source_region_size: tuple[int, int], x1: int, y1: int, x2: int, y2: int) -> None:
         self.source_region_size = source_region_size
         self.x1 = x1
         self.y1 = y1
@@ -24,7 +24,7 @@ class RegionOfInterest:
         }
 
     @classmethod
-    def from_margin_percent(cls, source_region_size, top, right, bottom, left):
+    def from_margin_percent(cls, source_region_size: np.ndarray, top: int, right: int, bottom: int, left: int) -> None:
         width, height = source_region_size
 
         params = {
@@ -37,7 +37,7 @@ class RegionOfInterest:
         return cls(source_region_size, *params.values())
 
     @classmethod
-    def from_margin_px(cls, source_region_size, top, right, bottom, left):
+    def from_margin_px(cls, source_region_size: np.ndarray, top: int, right: int, bottom: int, left: int) -> None:
         width, height = source_region_size
 
         params = {
@@ -49,12 +49,17 @@ class RegionOfInterest:
 
         return cls(source_region_size, *params.values())
 
-    def crop_numpy_array(self, array):
+    def crop_numpy_array(self, array: np.ndarray) -> np.ndarray:
         return array[self.y1:self.y2, self.x1:self.x2]
 
-    def get_apices(self) -> tuple[int, int, int, int]:
-        return self.x1, self.y1, self.x2, self.y2
+    def get_apices(self) -> dict:
+        return {
+            "x1": self.x1,
+            "y1": self.y1,
+            "x2": self.x2,
+            "y2": self.y2
+        }
 
     @staticmethod
-    def __percent_of_a_number(percent, number):
+    def __percent_of_a_number(percent: float, number: float) -> int:
         return int((percent / 100) * number)

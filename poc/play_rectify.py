@@ -51,7 +51,7 @@ def show_rectified_video(video_path, frame_rectifier, save_path, scale_percent):
 @click.option('--image', "action", flag_value="image", help="Input file type flag")
 @click.option('--video', "action", flag_value="video", help="Input file type flag")
 @click.option('-s', "--save", "save_flag", help="save file path")
-@click.option('-sp', '--scale_percent', "scale", default=50)
+@click.option('-sp', '--scale_percent', "scale", default=75)
 def main(input_source, config_json, action, save_flag, scale):
     actions = {
         "image": show_rectified_image,

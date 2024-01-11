@@ -1,6 +1,6 @@
 import ast
+import dataclasses
 import json
-from enum import Enum
 from typing import Union
 
 import click
@@ -8,29 +8,11 @@ import cv2
 import numpy as np
 
 from display.OpenCVstyles import OpenCVstyles
+from display.PressedKey import PressedKey
 from display.RegionOfInterest import RegionOfInterest
 from display.utils import scale_image_by_percent, scale_point_by_percent
-from lines_and_dots.ImageEventHandler import ImageEventHandler
-from lines_and_dots.LineType import LineType
-
-
-class PressedKey(Enum):
-    escape = 27
-    space = 32
-    enter = 13
-    tab = 9
-
-
-def init_roi(image: np.ndarray, roi_str: Union[None, str]) -> RegionOfInterest:
-    image_height, image_width, _ = image.shape
-
-    if roi_str:
-        region_of_interest = ast.literal_eval(roi_str)
-    else:
-        region_of_interest = [0, 0, image_width, image_height]
-    image_size = (image_width, image_height)
-
-    return RegionOfInterest(image_size, *region_of_interest)
+from rectify_lines.ImageEventHandler import ImageEventHandler
+from rectify_lines.LineType import LineType
 
 
 @click.command()
@@ -89,7 +71,7 @@ def main(input_file, output_file, max_dots_number, scale, roi_str):
             line_types = image_event_handler.line_types
             print()
             for line_type in line_types:
-                print(f"{line_type.type}: {line_type.line}")
+                print(f"{line_type.type}: {line_type.lines}")
 
         if key == PressedKey.tab.value:
             img = original_image.copy()
@@ -115,17 +97,30 @@ def main(input_file, output_file, max_dots_number, scale, roi_str):
         resize_map = lambda x: scale_point_by_percent(x, resize_percent["scale_back"])
 
         for line_type in image_event_handler.line_types:
-            for i in range(len(line_type.line)):
-                line_type.line[i] = list(map(resize_map, line_type.line[i]))
+            for i in range(len(line_type.lines)):
+                line_type.lines[i] = list(map(resize_map, line_type.lines[i]))
 
         with open(output_file, "w") as file:
-            output = []
-            for line_type in image_event_handler.line_types:
-                new_output = vars(line_type)
-                new_output["roi"] = new_output["roi"].get_apices()
-                output.append(new_output)
-
+            output = [generate_output(i) for i in image_event_handler.line_types]
             json.dump(output, file)
+
+
+def init_roi(image: np.ndarray, roi_str: Union[None, str]) -> RegionOfInterest:
+    image_height, image_width, _ = image.shape
+
+    if roi_str:
+        region_of_interest = ast.literal_eval(roi_str)
+    else:
+        region_of_interest = [0, 0, image_width, image_height]
+    image_size = (image_width, image_height)
+
+    return RegionOfInterest(image_size, *region_of_interest)
+
+
+def generate_output(line_type: LineType) -> dict:
+    new_output = dataclasses.asdict(line_type)
+    new_output["roi"] = new_output["roi"].get_apices()
+    return new_output
 
 
 if __name__ == '__main__':

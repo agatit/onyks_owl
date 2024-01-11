@@ -68,7 +68,7 @@ class ImageEventHandler:
         cv2.imshow(self.window_name, self.image)
 
     def save_current_dots(self):
-        self.current_line_type.line.append(self.dots)
+        self.current_line_type.lines.append(self.dots)
         self.reload()
 
     def reload(self):

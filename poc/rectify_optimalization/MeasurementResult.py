@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Result:
+class MeasurementResult:
     name: str
     roi: tuple[int, int, int, int]
     res: dict

@@ -4,6 +4,7 @@ from typing import Callable
 
 import cv2
 import numpy as np
+from scipy.optimize import OptimizeResult
 
 from rectify_optimalization.objective_functions.methods.Method import Method
 
@@ -54,8 +55,8 @@ class ObjectiveFunction(ABC):
         scale = config[6]
         dist = np.array(config[7:])
 
-        W = consts["W"]
-        H = consts["H"]
+        W = consts["width"]
+        H = consts["height"]
         sensor_w = consts["sensor_w"]
         sensor_h = consts["sensor_h"]
 
@@ -75,3 +76,20 @@ class ObjectiveFunction(ABC):
 
         res = cv2.undistortPoints(points, K, dist, R=R, P=new_K)
         return np.reshape(res, (-1, 2))
+
+    def make_rectify_config(self, optimize_result: OptimizeResult) -> dict:
+        consts = self.consts
+        x = optimize_result.x
+
+        return {
+            'sensor_h': consts["sensor_h"],
+            'sensor_w': consts["sensor_w"],
+            'X': x[0],
+            'Y': x[1],
+            'alpha': x[2],
+            'beta': x[3],
+            'gamma': x[4],
+            'focus': x[5],
+            'scale': x[6],
+            'dist': x[7:].tolist()
+        }

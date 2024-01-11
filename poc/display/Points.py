@@ -19,6 +19,8 @@ class LineDisplay:
     style: PointStyle
 
     def draw(self, image: np.ndarray) -> np.ndarray:
+        image = image.copy()
+
         for point in self.line.astype(int):
             image = cv2.circle(image, center=point, **asdict(self.style))
 
