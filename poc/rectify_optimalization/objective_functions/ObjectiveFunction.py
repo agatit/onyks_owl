@@ -46,19 +46,19 @@ class ObjectiveFunction(ABC):
 
     @staticmethod
     def rectify_points(config, consts, points):
-        X = config[0]
-        Y = config[1]
-        alpha = config[2]
-        beta = config[3]
-        gamma = config[4]
-        focus = config[5]
-        scale = config[6]
-        dist = np.array(config[7:])
+        sensor_h = config[0]
+        sensor_w = config[1]
+        X = config[2]
+        Y = config[3]
+        alpha = config[4]
+        beta = config[5]
+        gamma = config[6]
+        focus = config[7]
+        scale = config[8]
+        dist = np.array(config[9:])
 
         W = consts["width"]
         H = consts["height"]
-        sensor_w = consts["sensor_w"]
-        sensor_h = consts["sensor_h"]
 
         Rx = np.array([[1, 0, 0], [0, math.cos(alpha), -math.sin(alpha)], [0, math.sin(alpha), math.cos(alpha)]])
         Ry = np.array([[math.cos(beta), 0, -math.sin(beta)], [0, 1, 0], [math.sin(beta), 0, math.cos(beta)]])
@@ -77,19 +77,19 @@ class ObjectiveFunction(ABC):
         res = cv2.undistortPoints(points, K, dist, R=R, P=new_K)
         return np.reshape(res, (-1, 2))
 
-    def make_rectify_config(self, optimize_result: OptimizeResult) -> dict:
-        consts = self.consts
+    @staticmethod
+    def make_rectify_config(optimize_result: OptimizeResult) -> dict:
         x = optimize_result.x
 
         return {
-            'sensor_h': consts["sensor_h"],
-            'sensor_w': consts["sensor_w"],
-            'X': x[0],
-            'Y': x[1],
-            'alpha': x[2],
-            'beta': x[3],
-            'gamma': x[4],
-            'focus': x[5],
-            'scale': x[6],
-            'dist': x[7:].tolist()
+            'sensor_h': x[0],
+            'sensor_w': x[1],
+            'X': x[2],
+            'Y': x[3],
+            'alpha': x[4],
+            'beta': x[5],
+            'gamma': x[6],
+            'focus': x[7],
+            'scale': x[8],
+            'dist': x[9:].tolist()
         }

@@ -18,6 +18,8 @@ roi:
   y2: 1080
 
 bounds:
+  sensor_h: (2.80, 3.10)
+  sensor_w: (6.90, 7.10)
   X: (-100, 100)
   Y: (40, 120)
   alpha: (-0.1, 0.1)
@@ -32,6 +34,8 @@ bounds:
   p2: (-0.2, 0.2)
 
 init_values:
+  sensor_h: 2.92
+  sensor_w: 7.04
   X: 0
   Y: 0
   alpha: 0

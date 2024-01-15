@@ -11,6 +11,7 @@ class BoundingBox:
     x1: int
     x2: int
 
+    def yolo_annotation(self, ) -> :
 
 @dataclass
 class DetectionResult:
