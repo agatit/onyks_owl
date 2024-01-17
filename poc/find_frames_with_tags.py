@@ -36,6 +36,10 @@ def process_gen(process_data: ProcessData) -> None:
     while input_cam.isOpened():
         result, frame = input_cam.read()
         if result:
+
+            if process_data.rectifier:
+                frame = process_data.rectifier.rectify(frame)
+
             detection_results = process_data.model.detect_image(frame, process_data.labels)
 
             if len(detection_results) > 0:
