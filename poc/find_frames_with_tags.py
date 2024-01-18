@@ -44,7 +44,7 @@ def process_gen(process_data: ProcessData) -> None:
 
             if len(detection_results) > 0:
                 for index, detection_result in enumerate(detection_results):
-                    name = detection_result.label_name
+                    name = detection_result.class_name
                     file_name = f"{counter}_{name}_{index}" + output_extension
                     file_path = process_data.output_dir / file_name
 

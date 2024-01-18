@@ -17,21 +17,23 @@ from yolo.YoloDetector import YoloDetector
 @click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),
               required=True, default="resources/models/s_owl_4.pt", help="yolov5 model path")
 @click.option("-sp", "--scale_percent", "scale_percent", type=int, default=50, help="scale view movie")
-def main(input_movie, model_path, scale_percent):
+@click.option("-ct", "--confidence_threshold", "confidence_threshold", type=float, default=0.25,
+              help="min confidence of detection")
+def main(input_movie, model_path, scale_percent, confidence_threshold):
     input_cam = cv2.VideoCapture(input_movie)
     if not input_cam.isOpened():
         print("Error opening video stream or file")
         exit(1)
     input_movie_name = Path(input_movie).name
 
-    detector = YoloDetector(model_path)
+    detector = YoloDetector(model_path, confidence_threshold)
 
     print(f"started processing: {input_movie}")
 
     while input_cam.isOpened():
         result, frame = input_cam.read()
         if result:
-            detection_results = detector.detect_image(frame, detector.LABELS)
+            detection_results = detector.detect_image(frame, detector.labels)
 
             for detection_result in detection_results:
                 frame = detection_result.draw_on_image(frame)

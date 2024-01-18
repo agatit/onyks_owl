@@ -11,12 +11,21 @@ class BoundingBox:
     x1: int
     x2: int
 
-    # def yolo_annotation(self, ) -> :
+
+@dataclass
+class YoloFormat:
+    class_id: int
+    x_center: float
+    y_center: float
+    width: float
+    height: float
+
 
 @dataclass
 class DetectionResult:
-    label_name: str
+    class_name: str
     bounding_box: BoundingBox
+    yolo_format: YoloFormat
     confidence: float
 
     padding = {
@@ -31,10 +40,10 @@ class DetectionResult:
         box = self.bounding_box
         image = cv2.rectangle(image, (box.x1, box.y1), (box.x2, box.y2), (0, 0, 255), 2)
 
-        padding = self.padding
-        text = f"{self.label_name}: {round(self.confidence, self.precission)}"
+        text = f"{self.class_name}: {round(self.confidence, self.precission)}"
 
         # check if text can be drown outside a rectangle
+        padding = self.padding
         if box.y1 <= padding['y']:
             placement = (box.x1, box.y1 + padding['y'])
         else:

@@ -52,7 +52,7 @@ def main(input_movie, output_movie, rectify_config, model_path, codec_code):
                 if rectify_config:
                     frame = frame_rectifier.rectify(frame)
 
-                found_bounding_boxes = detector.detect_image(frame, detector.LABELS)
+                found_bounding_boxes = detector.detect_image(frame, detector.labels)
                 frame = draw_image_with_rectangles(frame, found_bounding_boxes)
 
                 video_writer.write(frame)
