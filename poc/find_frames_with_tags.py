@@ -18,6 +18,8 @@ from opencv_tools.image_transformations import draw_image_with_rectangles
 from stitch.rectify.FrameRectifier import FrameRectifier
 from yolo.YoloDetector import YoloDetector
 
+BOUNDING_BOX_FILE_SUFFIX = "_b"
+
 
 def init_rectifier(rectify_config: dict, frame_size: tuple[int, int] = (1920, 1080)) -> FrameRectifier:
     frame_rectifier = FrameRectifier(rectify_config, *frame_size)
@@ -56,11 +58,17 @@ def process_gen(process_data: ProcessData) -> None:
 
                     cv2.imwrite(str(file_path), cropped)
 
-                for detection_result in detection_results:
-                    frame = detection_result.draw_on_image(frame)
-
+                # save image
                 frame_file_name = str(counter) + output_extension
                 frame_file_path = str(process_data.output_dir / frame_file_name)
+
+                cv2.imwrite(frame_file_path, frame)
+
+                # save image with drawn bounding boxes
+                frame_file_name = str(counter) + BOUNDING_BOX_FILE_SUFFIX + output_extension
+                frame_file_path = str(process_data.output_dir / frame_file_name)
+                for detection_result in detection_results:
+                    frame = detection_result.draw_on_image(frame)
 
                 cv2.imwrite(frame_file_path, frame)
 
