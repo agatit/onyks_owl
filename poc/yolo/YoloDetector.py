@@ -15,7 +15,7 @@ class YoloDetector:
 
     def __init__(self, model_path: str, confidence_threshold: float = 0.25):
         self.model_path = model_path
-        self.confidence_threshhold = confidence_threshold
+        self.confidence_threshold = confidence_threshold
 
         model, classes, device = self.initialize_model(self.model_path)
         self.model = model
@@ -28,7 +28,7 @@ class YoloDetector:
     def initialize_model(cls, model_path: str):
         model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
         classes = model.names
-        device = 'cuda' if cls.check_if_cuda_is_avaible() else 'cpu'
+        device = 'cuda' if cls.check_if_cuda_is_available() else 'cpu'
 
         model.to(device)
 
@@ -51,7 +51,7 @@ class YoloDetector:
 
         # filter
         results_df = results_df[results_df["name"].isin(selected_labels)]
-        results_df = results_df[results_df["confidence"] > self.confidence_threshhold]
+        results_df = results_df[results_df["confidence"] > self.confidence_threshold]
 
         # float cords to int
         convert_type = {col: "int32" for col in self.INT_COLS}
@@ -90,5 +90,5 @@ class YoloDetector:
         self.model.share_memory()
 
     @staticmethod
-    def check_if_cuda_is_avaible() -> bool:
+    def check_if_cuda_is_available() -> bool:
         return torch.cuda.is_available()

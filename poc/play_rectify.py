@@ -1,48 +1,22 @@
+from pathlib import Path
+
 import click
 
-import cv2
 import json
 
-from display.utils import scale_image_by_percent
 from stitch.rectify.FrameRectifier import FrameRectifier
-
-
-def show_rectified_image(image_path, frame_rectifier, save_path, scale_percent):
-    image = cv2.imread(image_path)
-
-    rectified = frame_rectifier.rectify(image)
-
-    image = scale_image_by_percent(rectified, scale_percent)
-    cv2.imshow('Frame', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-    if save_path:
-        cv2.imwrite(save_path, rectified)
-
-
-def show_rectified_video(video_path, frame_rectifier, save_path, scale_percent):
-    cap = cv2.VideoCapture(video_path)
-
-    if not cap.isOpened():
-        print("Error opening video stream or file")
-
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if ret:
-
-            frame = frame_rectifier.rectify(frame)
-            frame = scale_image_by_percent(frame, scale_percent)
-            cv2.imshow('Frame', frame)
-
-            if cv2.waitKey(25) & 0xFF == ord('q'):
-                break
-
-        else:
-            break
-
-    cv2.destroyAllWindows()
-    cap.release()
+from stream.commands.CommandInvoker import CommandInvoker
+from stream.Stream import Stream
+from stream.commands.display.DestroyWindowsCommand import DestroyWindowsCommand
+from stream.commands.display.DisplayImageCommand import DisplayImageCommand
+from stream.commands.display.DisplayStreamCommand import DisplayStreamCommand
+from stream.commands.display.InterruptStreamCommand import InterruptStreamCommand
+from stream.commands.transformation.RectifyCommand import RectifyCommand
+from stream.commands.transformation.ScaleImageCommand import ScaleImageCommand
+from stream.directors.DisplayImageDirector import DisplayImageDirector
+from stream.directors.DisplayStreamDirector import DisplayStreamDirector
+from stream.loaders.SingleImageLoader import SingleImageLoader
+from stream.loaders.VideoLoader import VideoLoader
 
 
 @click.command()
@@ -50,14 +24,8 @@ def show_rectified_video(video_path, frame_rectifier, save_path, scale_percent):
 @click.argument("config_json")
 @click.option('--image', "action", flag_value="image", help="Input file type flag")
 @click.option('--video', "action", flag_value="video", help="Input file type flag")
-@click.option('-s', "--save", "save_flag", help="save file path")
-@click.option('-sp', '--scale_percent', "scale", default=75)
-def main(input_source, config_json, action, save_flag, scale):
-    actions = {
-        "image": show_rectified_image,
-        "video": show_rectified_video
-    }
-
+@click.option('-sp', '--scale_percent', "scale", default=60)
+def main(input_source, config_json, action, scale):
     with open(config_json) as f:
         config = json.load(f)
 
@@ -65,8 +33,18 @@ def main(input_source, config_json, action, save_flag, scale):
     frame_rectifier = FrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
-    callback = actions[action]
-    callback(input_source, frame_rectifier, save_flag, scale)
+    input_source_path = Path(input_source)
+    if action == "image":
+        loader = SingleImageLoader(input_source_path)
+        stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
+
+        DisplayImageDirector(stream, scale).run()
+
+    if action == "video":
+        loader = VideoLoader(input_source_path)
+        stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
+
+        DisplayStreamDirector(stream, scale).run()
 
 
 if __name__ == '__main__':

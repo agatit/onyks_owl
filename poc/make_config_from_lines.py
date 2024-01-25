@@ -1,13 +1,11 @@
 import json
-import os.path
+from pathlib import Path
 
 import click
-import cv2
 import yaml
 from scipy.optimize import minimize
 
 from display.RegionOfInterest import RegionOfInterest
-from display.utils import scale_image_by_percent
 from io_utils.yaml import literal_to_tuple
 from rectify_optimalization.objective_functions.MeanObjectiveFunction import MeanObjectiveFunction
 from rectify_optimalization.objective_functions.methods.StdMethod import StdMethod
@@ -16,6 +14,11 @@ from rectify_optimalization.objective_functions.methods.line_part_selectors.YPoi
 from rectify_optimalization.objective_functions.methods.line_types.Horizontal import Horizontal
 from rectify_optimalization.objective_functions.methods.line_types.Vertical import Vertical
 from stitch.rectify.FrameRectifier import FrameRectifier
+from stream.Stream import Stream
+from stream.directors.DisplayImageDirector import DisplayImageDirector
+from stream.directors.DisplayStreamDirector import DisplayStreamDirector
+from stream.loaders.SingleImageLoader import SingleImageLoader
+from stream.loaders.VideoLoader import VideoLoader
 
 
 @click.command()
@@ -26,10 +29,12 @@ from stitch.rectify.FrameRectifier import FrameRectifier
 @click.option("-cf", "--config", "config_path", type=click.Path(exists=True, file_okay=True),
               required=True, default="resources/make_config_from_lines.yaml", help="yaml config")
 @click.option("-img", "--image", "image_path", type=click.Path(exists=True, file_okay=True),
-              help="json rectify config")
-@click.option("-d", "--display_ratio", "display_ratio", type=int, default=70,
+              help="display image to rectify")
+@click.option("-mv", "--movie", "movie_path", type=click.Path(exists=True, file_okay=True),
+              help="display movie to rectify")
+@click.option("-d", "--display_ratio", "display_ratio", type=int, default=60,
               help="display images in x% ratio")
-def main(lines_path, output_path, config_path, image_path, display_ratio):
+def main(lines_path, output_path, config_path, image_path, movie_path, display_ratio):
     with open(lines_path, "r") as file:
         lines = json.load(file)
 
@@ -57,21 +62,27 @@ def main(lines_path, output_path, config_path, image_path, display_ratio):
 
         rectify_config = objective_function.make_rectify_config(res)
 
-        if image_path:
+        with open(output_path, "w") as file:
+            json.dump(rectify_config, file)
+
+        print(rectify_config)
+
+        frame_rectifier = None
+        if movie_path or image_path:
             frame_rectifier = FrameRectifier(rectify_config, *region_size)
             frame_rectifier.calc_maps()
 
-            image = cv2.imread(image_path)
-            image = frame_rectifier.rectify(image)
-            image = scale_image_by_percent(image, display_ratio)
+        if image_path:
+            loader = SingleImageLoader(Path(image_path))
+            stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
 
-            file_name = os.path.basename(image_path)
-            cv2.imshow(file_name, image)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            DisplayImageDirector(stream).run()
 
-        with open(output_path, "w") as file:
-            json.dump(rectify_config, file)
+        if movie_path:
+            loader = VideoLoader(Path(movie_path))
+            stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
+
+            DisplayStreamDirector(stream).run()
 
 
 def init_minimize_params(config: dict) -> dict:

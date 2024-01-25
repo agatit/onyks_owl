@@ -2,13 +2,15 @@ from pathlib import Path
 
 import click
 
-import cv2
-import json
-
-import numpy as np
-
-from display.utils import scale_image_by_percent
-from opencv_tools.image_transformations import draw_image_with_rectangles
+from stream.commands.CommandInvoker import CommandInvoker
+from stream.Stream import Stream
+from stream.commands.detection.DetectImageCommand import DetectImageCommand
+from stream.commands.display.DestroyWindowsCommand import DestroyWindowsCommand
+from stream.commands.display.DisplayStreamCommand import DisplayStreamCommand
+from stream.commands.display.InterruptStreamCommand import InterruptStreamCommand
+from stream.commands.transformation.DrawBoundingBoxesCommand import DrawBoundingBoxesCommand
+from stream.commands.transformation.ScaleImageCommand import ScaleImageCommand
+from stream.loaders.VideoLoader import VideoLoader
 from yolo.YoloDetector import YoloDetector
 
 
@@ -20,37 +22,28 @@ from yolo.YoloDetector import YoloDetector
 @click.option("-ct", "--confidence_threshold", "confidence_threshold", type=float, default=0.25,
               help="min confidence of detection")
 def main(input_movie, model_path, scale_percent, confidence_threshold):
-    input_cam = cv2.VideoCapture(input_movie)
-    if not input_cam.isOpened():
-        print("Error opening video stream or file")
-        exit(1)
-    input_movie_name = Path(input_movie).name
+    video_path = Path(input_movie)
+    loader = VideoLoader(video_path)
 
-    detector = YoloDetector(model_path, confidence_threshold)
+    yolo_detector = YoloDetector(model_path, confidence_threshold)
+    all_labels = yolo_detector.labels
 
-    print(f"started processing: {input_movie}")
+    stream = Stream(loader=loader, yolo_detector=yolo_detector)
 
-    while input_cam.isOpened():
-        result, frame = input_cam.read()
-        if result:
-            detection_results = detector.detect_image(frame, detector.labels)
+    in_stream_invoker = CommandInvoker()
+    in_stream_invoker.add_command(DetectImageCommand(stream, all_labels))
+    in_stream_invoker.add_command(DrawBoundingBoxesCommand(stream))
+    in_stream_invoker.add_command(ScaleImageCommand(stream, scale_percent))
+    in_stream_invoker.add_command(DisplayStreamCommand(stream))
+    in_stream_invoker.add_command(InterruptStreamCommand(stream))
 
-            for detection_result in detection_results:
-                frame = detection_result.draw_on_image(frame)
+    post_stream_invoker = CommandInvoker()
+    post_stream_invoker.add_command(DestroyWindowsCommand(stream))
 
-            # detector.model.track()
-            frame = scale_image_by_percent(frame, scale_percent)
-            cv2.imshow(input_movie_name, frame)
+    for _ in stream.get_next_frame_gen():
+        in_stream_invoker.invoke()
 
-            key = cv2.waitKey(1)
-
-            if key == ord('q'):
-                break
-        else:
-            break
-
-    input_cam.release()
-    cv2.destroyAllWindows()
+    post_stream_invoker.invoke()
 
 
 if __name__ == '__main__':

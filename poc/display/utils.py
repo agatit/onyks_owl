@@ -5,6 +5,8 @@ import numpy as np
 
 
 def scale_image_by_percent(image: np.ndarray, percent: int) -> np.ndarray:
+    image = image.copy()
+
     width = int(image.shape[1] * percent / 100)
     height = int(image.shape[0] * percent / 100)
     dim = (width, height)
