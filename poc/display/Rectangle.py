@@ -1,4 +1,4 @@
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 
 import cv2
 import numpy as np
@@ -6,8 +6,9 @@ import numpy as np
 
 @dataclass
 class RectangleStyle:
-    color: tuple[int, int, int]
-    thickness: int
+    # BGR color
+    color: tuple[int, int, int] = (0, 0, 255)
+    thickness: int = 2
 
 
 class RectangleDisplay:
