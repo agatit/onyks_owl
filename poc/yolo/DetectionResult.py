@@ -50,6 +50,11 @@ class YoloFormat:
 
         return BoundingBox(y1, y2, x1, x2)
 
+    def to_yolo_txt_line(self) -> str:
+        fields = [self.class_id, self.x_center, self.y_center, self.width, self.height]
+        _str = " ".join(str(_field) for _field in fields)
+        return _str + '\n'
+
 
 @dataclass
 class DetectionResult:

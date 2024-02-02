@@ -1,0 +1,12 @@
+step: 10
+
+labels:
+  - vertical_text
+  - horizontal_text
+  - railcar_text
+  - container_corner
+  - container
+  - railcar_bogie
+  - railcar_gap
+
+confidence_threshold: 0.6
