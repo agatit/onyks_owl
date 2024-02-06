@@ -1,3 +1,6 @@
+import pathlib
+import platform
+from contextlib import contextmanager
 from dataclasses import dataclass
 
 import cv2 as cv
@@ -5,6 +8,17 @@ import numpy as np
 import torch
 
 from yolo.DetectionResult import DetectionResult, BoundingBox, YoloFormat
+
+
+# bug - https://github.com/ultralytics/yolov5/issues/10240#issuecomment-1927109491
+@contextmanager
+def set_posix_windows():
+    posix_backup = pathlib.PosixPath
+    try:
+        pathlib.PosixPath = pathlib.WindowsPath
+        yield
+    finally:
+        pathlib.PosixPath = posix_backup
 
 
 class YoloDetector:
@@ -26,7 +40,11 @@ class YoloDetector:
 
     @classmethod
     def initialize_model(cls, model_path: str):
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
+        # model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
+
+        with set_posix_windows():
+            model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
+
         classes = model.names
         device = 'cuda' if cls.check_if_cuda_is_available() else 'cpu'
 
