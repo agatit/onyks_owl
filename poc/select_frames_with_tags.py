@@ -5,6 +5,7 @@ from pathlib import Path
 import click
 import yaml
 
+from io_utils.utils import make_directories
 from select_frames_with_tags_scripts.filter_output_json import filter_output_json
 from yolo.DetectionResult import YoloFormat
 from yolo.YoloDataset import YoloDataset
@@ -20,15 +21,17 @@ from yolo.YoloDatasetPart import YoloDatasetPart
               help="output directory")
 @click.option("-fc", "--filter-config", "filter_config",
               type=click.Path(exists=True), default="resources/select_frames_with_tags.yaml",
-              help="skip frame step")
+              help="config for filtering")
 @click.option("-a", "--auto", "auto_mode",
               is_flag=True,
-              help="skip frame step")
+              help="auto mode without gui image selection")
 def main(input_dir, output_dir, filter_config, auto_mode):
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
 
-    make_output_dirs(output_dir)
+    images_dir = output_dir / "images"
+    labels_dir = output_dir / "labels"
+    make_directories(output_dir, images_dir, labels_dir)
 
     with open(input_dir / "output.json", "r") as file:
         output_json = json.load(file)
@@ -69,18 +72,6 @@ def init_datasets_from_output_json(input_dir, output_dir, output_json):
 
         yolo_datasets.append(yolo_dataset)
     return yolo_datasets
-
-
-def make_output_dirs(output_dir: Path):
-    images_dir = output_dir / "images"
-    labels_dir = output_dir / "labels"
-
-    dirs = [output_dir, images_dir, labels_dir]
-    for directory in dirs:
-        if not directory.exists():
-            directory.mkdir()
-
-    return images_dir, labels_dir
 
 
 if __name__ == '__main__':

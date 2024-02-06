@@ -1,0 +1,13 @@
+labels:
+  0: vertical_text
+  1: horizontal_text
+  2: railcar_text
+  3: container_corner
+  4: container
+  5: railcar_bogie
+  6: railcar_gap
+
+split_ratio:
+  train: 60
+  val: 20
+  test: 20
