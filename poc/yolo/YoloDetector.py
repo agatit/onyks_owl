@@ -41,8 +41,10 @@ class YoloDetector:
     @classmethod
     def initialize_model(cls, model_path: str):
         # model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
-
-        with set_posix_windows():
+        if platform.system() == "Windows":
+            with set_posix_windows():
+                model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
+        else:
             model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
 
         classes = model.names
