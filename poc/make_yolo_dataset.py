@@ -62,8 +62,8 @@ def main(input_image_dir, input_label_dir, output_dir, config):
 
 
 def init_dataset_yaml(config: dict, datasets_paths: dict[str, Path]) -> dict:
-    dataset_yaml = {"labels": config["labels"].copy()}
-    dataset_yaml["nc"] = len(dataset_yaml["labels"])
+    dataset_yaml = {"names": config["names"].copy()}
+    dataset_yaml["nc"] = len(dataset_yaml["names"])
 
     for dataset_name, path in datasets_paths.items():
         dataset_yaml[dataset_name] = os.path.abspath(path)
