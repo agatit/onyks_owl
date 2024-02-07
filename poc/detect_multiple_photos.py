@@ -16,8 +16,12 @@ from opencv_tools.image_transformations import show_image_with_rectangles, draw_
 
 
 @click.command()
-@click.argument("image_directory")
-@click.argument("output_directory", default="output/detect_multiple_photos")
+@click.option("-in", "--input", "image_directory",
+              required=True, type=click.Path(exists=True, dir_okay=True),
+              help="select image directory")
+@click.option("-out", "--output", "output_directory",
+              required=True, type=click.Path(),
+              help="select output directory")
 @click.option("--rectify_config", required=True, type=click.Path(exists=True, file_okay=True))
 @click.option("--model_path", required=True, default="models/l_owl_4.pt")
 @click.option("--image_extension", required=True, default="jpg")

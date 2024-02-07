@@ -20,15 +20,19 @@ show_scale = {
 
 
 @click.command()
-@click.argument("video_path")
-@click.argument("config_json")
+@click.option("-in", "--input", "video_path",
+              required=True, type=click.Path(exists=True),
+              help="select movie to stitch")
+@click.option("-rc", "--rectify_config", "rectify_config",
+              required=True, type=click.Path(exists=True),
+              help="select json rectify config file")
 @click.option("-exv", "--export_velocity", "export_velocity_path", help="export velocity to csv")
-def main(video_path, config_json, export_velocity_path):
+def main(video_path, rectify_config, export_velocity_path):
     pause = False
     path, filename = os.path.split(os.path.abspath(video_path))
     basename, extension = os.path.splitext(filename)
 
-    with open(config_json) as f:
+    with open(rectify_config) as f:
         config = json.load(f)
 
     frame_size = (1920, 1080)

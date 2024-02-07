@@ -16,7 +16,9 @@ from rectify_lines.LineType import LineType
 
 
 @click.command()
-@click.argument("input_file")
+@click.option("-in", "--input", "input_file",
+              required=True, type=click.Path(exists=True),
+              help="select image to display")
 @click.option("-o", "--output", "output_file", type=click.Path(), default="lines.json",
               help="output json file")
 @click.option("-dn", "--dots_number", "max_dots_number", default=-1, help="number of output line dots")

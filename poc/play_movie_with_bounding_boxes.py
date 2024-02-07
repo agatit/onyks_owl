@@ -15,7 +15,9 @@ from yolo.YoloDetector import YoloDetector
 
 
 @click.command()
-@click.argument("input_movie")
+@click.option("-in", "--input", "input_movie",
+              required=True, type=click.Path(exists=True),
+              help="select movie to display")
 @click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),
               required=True, default="resources/models/s_owl_4.pt", help="yolov5 model path")
 @click.option("-sp", "--scale_percent", "scale_percent", type=int, default=50, help="scale view movie")

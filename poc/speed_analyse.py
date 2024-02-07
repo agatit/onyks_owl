@@ -23,41 +23,6 @@ from stitch.velocity_stream import open_video_capture
 global config
 
 
-def counter(_id, sleep_time):
-    start = time.time()
-    time.sleep(sleep_time)
-    stop = time.time() - start
-    print(f"{_id}: {stop}")
-
-
-def display_rois(frame: np.ndarray, rois: list[RegionOfInterest], names: list[str], scaling: int):
-    draw_frame = copy.deepcopy(frame)
-    scaling = scaling / 100
-
-    for roi, name in zip(rois, names):
-        color = tuple(np.random.randint(0, 255, 3))
-        color = [int(i) for i in color]
-        draw_frame = cv2.rectangle(draw_frame, roi.p1, roi.p2, color, 3)
-
-        padding = 50
-        text_params = {
-            "img": draw_frame,
-            "text": name,
-            "org": (roi.x1 + padding, roi.y1 + padding),
-            "fontFace": cv2.FONT_HERSHEY_SIMPLEX,
-            "fontScale": 1,
-            "color": color,
-            "thickness": 2,
-        }
-        draw_frame = cv2.putText(**text_params)
-
-    draw_frame = cv2.resize(draw_frame, (int(draw_frame.shape[1] * scaling), int(draw_frame.shape[0] * scaling)))
-    cv2.imshow('ROIs', draw_frame)
-
-    cv2.waitKey(-1)
-    cv2.destroyAllWindows()
-
-
 @click.command()
 @click.option("-sc'", "--speed_config", "speed_config_path", default="resources/speed_analyse.yaml", required=True,
               help="yaml configuration for tests")
@@ -184,6 +149,41 @@ def main(speed_config_path, output, display):
     #         sleep_time = random.randint(1, 5)
     #         map_list.append((i, sleep_time))
     #     p.starmap(counter, map_list)
+
+
+def counter(_id, sleep_time):
+    start = time.time()
+    time.sleep(sleep_time)
+    stop = time.time() - start
+    print(f"{_id}: {stop}")
+
+
+def display_rois(frame: np.ndarray, rois: list[RegionOfInterest], names: list[str], scaling: int):
+    draw_frame = copy.deepcopy(frame)
+    scaling = scaling / 100
+
+    for roi, name in zip(rois, names):
+        color = tuple(np.random.randint(0, 255, 3))
+        color = [int(i) for i in color]
+        draw_frame = cv2.rectangle(draw_frame, roi.p1, roi.p2, color, 3)
+
+        padding = 50
+        text_params = {
+            "img": draw_frame,
+            "text": name,
+            "org": (roi.x1 + padding, roi.y1 + padding),
+            "fontFace": cv2.FONT_HERSHEY_SIMPLEX,
+            "fontScale": 1,
+            "color": color,
+            "thickness": 2,
+        }
+        draw_frame = cv2.putText(**text_params)
+
+    draw_frame = cv2.resize(draw_frame, (int(draw_frame.shape[1] * scaling), int(draw_frame.shape[0] * scaling)))
+    cv2.imshow('ROIs', draw_frame)
+
+    cv2.waitKey(-1)
+    cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':

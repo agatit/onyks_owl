@@ -20,8 +20,12 @@ from stream.loaders.VideoLoader import VideoLoader
 
 
 @click.command()
-@click.argument("input_source")
-@click.argument("config_json")
+@click.option("-in", "--input", "input_source",
+              required=True, type=click.Path(exists=True, dir_okay=True),
+              help="image or video to rectify")
+@click.option("-rc", "--rectify_config", "config_json",
+              required=True, type=click.Path(exists=True, dir_okay=True),
+              help="rectify json config")
 @click.option('--image', "action", flag_value="image", help="Input file type flag")
 @click.option('--video', "action", flag_value="video", help="Input file type flag")
 @click.option('-sp', '--scale_percent', "scale", default=60)

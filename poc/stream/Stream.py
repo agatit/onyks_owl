@@ -15,6 +15,8 @@ class Stream:
     frame_rectifier: FrameRectifier = None
     yolo_detector: YoloDetector = None
 
+    name = "stream"
+
     current_frame: np.ndarray = field(init=False)
     active_image_gen: Generator[np.ndarray, None, np.ndarray] = field(init=False)
     detections: list[list[DetectionResult]] = field(init=False, default_factory=list)

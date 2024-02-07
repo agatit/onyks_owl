@@ -11,17 +11,20 @@ from stitch.rectify.FrameRectifier import FrameRectifier
 from yolo.YoloDetector import YoloDetector
 
 
-# todo: zmienic na folder
 @click.command()
-@click.argument("input_movie")
-@click.argument("output_movie")
-@click.option("-rc", "--rectify_config", "rectify_config", type=click.Path(exists=True, file_okay=True),
-              help="rectify config path")
+@click.option("-in", "--input", "input_movie",
+              required=True, type=click.Path(exists=True, dir_okay=True),
+              help="select movie to process")
+@click.option("-out", "--output", "output_movie",
+              required=True, type=click.Path(),
+              help="select output directory")
 @click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),
               required=True, default="resources/models/x_owl_4.pt", help="yolov5 model path")
 @click.option("-c", "--codec", "codec_code", type=click.Choice(['MJPG', 'mp4v'], case_sensitive=False),
-              required=True, default="resources/models/x_owl_4.pt", help="yolov5 model path")
-def main(input_movie, output_movie, rectify_config, model_path, codec_code):
+              required=True, default="resources/models/x_owl_4.pt", help="select movie codec")
+@click.option("-rc", "--rectify_config", "rectify_config", type=click.Path(exists=True, file_okay=True),
+              help="rectify config path")
+def main(input_movie, output_movie, model_path, codec_code, rectify_config):
     input_cam = cv2.VideoCapture(input_movie)
     if not input_cam.isOpened():
         print("Error opening video stream or file")
@@ -32,7 +35,6 @@ def main(input_movie, output_movie, rectify_config, model_path, codec_code):
     resolution = (1920, 1080)
     video_writer = cv2.VideoWriter(output_movie, codec, fps, resolution)
 
-    # todo: usuniecie ifa
     frame_rectifier = None
     if rectify_config:
         with open(rectify_config) as f:
@@ -52,8 +54,9 @@ def main(input_movie, output_movie, rectify_config, model_path, codec_code):
                 if rectify_config:
                     frame = frame_rectifier.rectify(frame)
 
-                found_bounding_boxes = detector.detect_image(frame, detector.labels)
-                frame = draw_image_with_rectangles(frame, found_bounding_boxes)
+                detection_results = detector.detect_image(frame, detector.labels)
+                for detection_result in detection_results:
+                    frame = detection_result.draw_on_image(frame)
 
                 video_writer.write(frame)
 
