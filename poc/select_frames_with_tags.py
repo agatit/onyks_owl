@@ -7,7 +7,7 @@ import yaml
 
 from io_utils.utils import make_directories
 from select_frames_with_tags_scripts.filter_output_json import filter_output_json
-from yolo.DetectionResult import YoloFormat
+from yolo.YoloFormat import YoloFormat
 from yolo.YoloDataset import YoloDataset
 from yolo.YoloDatasetPart import YoloDatasetPart
 
@@ -25,7 +25,10 @@ from yolo.YoloDatasetPart import YoloDatasetPart
 @click.option("-a", "--auto", "auto_mode",
               is_flag=True,
               help="auto mode without gui image selection")
-def main(input_dir, output_dir, filter_config, auto_mode):
+@click.option("-ex", "--extension", "image_extension",
+              type=str, default=".jpg",
+              help="extension of images with dot")
+def main(input_dir, output_dir, filter_config, auto_mode, image_extension):
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
 
@@ -42,10 +45,10 @@ def main(input_dir, output_dir, filter_config, auto_mode):
 
         filter_output_json(output_json, filter_config)
 
-    yolo_datasets = init_datasets_from_output_json(input_dir, output_dir, output_json)
+    yolo_datasets = init_datasets_from_output_json(input_dir, output_dir, output_json, image_extension)
 
     if not auto_mode:
-        # app = App(input_dir, output_dir)
+        # app = ManualSelector(input_dir, output_dir)
         # app.mainloop()
         pass
 
@@ -53,11 +56,10 @@ def main(input_dir, output_dir, filter_config, auto_mode):
         dataset.export()
 
 
-def init_datasets_from_output_json(input_dir, output_dir, output_json):
+def init_datasets_from_output_json(input_dir, output_dir, output_json, image_extension):
     yolo_datasets = []
     for dataset_name, frames in output_json.items():
         dataset_path = input_dir / dataset_name
-        image_extension = Path(frames[0]["file_name"]).suffix
 
         yolo_dataset = YoloDataset(dataset_path, output_dir, image_extension)
 
@@ -67,7 +69,7 @@ def init_datasets_from_output_json(input_dir, output_dir, output_json):
             image_name = str(frame_number) + image_extension
             image_path = dataset_path / image_name
 
-            new_dataset_part = YoloDatasetPart(yolo_formats, image_path)
+            new_dataset_part = YoloDatasetPart(image_path, yolo_formats)
             yolo_dataset.yolo_dataset_parts.append(new_dataset_part)
 
         yolo_datasets.append(yolo_dataset)

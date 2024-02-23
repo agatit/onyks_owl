@@ -2,7 +2,7 @@ from multiprocessing import Process, Queue, Array, Manager
 from time import sleep
 
 def f(m):
-    a = m.image
+    a = m.image_path
     print(a)
     sleep(2)    
     a.append("asasd")

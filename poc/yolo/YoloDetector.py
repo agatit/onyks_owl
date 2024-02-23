@@ -7,7 +7,8 @@ import cv2 as cv
 import numpy as np
 import torch
 
-from yolo.DetectionResult import DetectionResult, BoundingBox, YoloFormat
+from yolo.DetectionResult import DetectionResult
+from yolo.YoloFormat import BoundingBox, YoloFormat
 
 
 # bug - https://github.com/ultralytics/yolov5/issues/10240#issuecomment-1927109491

@@ -72,7 +72,7 @@ class Producer():
         p = self.redis.pipeline()  
         p.rpush(f"owl:task_queue:{self.task_queue}", json.dumps(task))
         p.expire(f"owl:task_queue:{self.task_queue}", self.task_expire_time)
-        p.execute()          
+        p.execute(None)
       
         return stream_composed.Producer(
             self.redis,

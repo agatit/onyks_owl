@@ -52,7 +52,7 @@ class Producer:
             p = self.redis.pipeline()  
             p.rpush(f"owl:stream_queue:{self.stream_queue}", data)
             p.expire(f"owl:stream_queue:{self.stream_queue}", self.expire_time)
-            p.execute()  
+            p.execute(None)
 
             self.queue_space -= 1
 
@@ -60,7 +60,7 @@ class Producer:
         p = self.redis.pipeline()  
         p.rpush(f"owl:stream_queue:{self.stream_queue}", b"")
         p.expire(f"owl:stream_queue:{self.stream_queue}", self.expire_time)
-        p.execute()  
+        p.execute(None)
 
 
 class Consumer:
