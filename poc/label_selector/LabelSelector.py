@@ -1,3 +1,4 @@
+import pickle
 import tkinter as tk
 from itertools import cycle
 from pathlib import Path
@@ -7,7 +8,11 @@ from PIL import Image
 
 from label_selector.Mode import Mode
 from label_selector.ProcessData import ProcessData
+from label_selector.gui.LabelRectangle import LabelRectangle
+from label_selector.gui.LoadingScreen import LoadingScreen
 from label_selector.gui.MainWindow import MainWindow
+from label_selector.Checkpoint import Checkpoint
+from yolo.YoloDataset import YoloDataset
 from yolo.YoloDatasetPart import YoloDatasetPart
 from yolo.YoloFormat import YoloFormat
 
@@ -15,10 +20,16 @@ from yolo.YoloFormat import YoloFormat
 class LabelSelector(tk.Tk):
     MAX_HISTORY_LENGTH = 50
 
-    def __init__(self, images: list[Path], labels: dict[int, str]):
+    def __init__(self, images: list[Path], labels: dict[int, str], checkpoint_name=".checkpoint"):
         super().__init__()
-        self.labels = labels
+        self.title(self.__class__.__name__)
+
         self.process_data = [ProcessData(image) for image in images]
+        self.labels = labels
+        self.checkpoint_name = checkpoint_name
+
+        self.checkpoint_dir = Path.cwd()
+        self.checkpoint_path = self.checkpoint_dir / self.checkpoint_name
 
         self.to_export = False
         self.start_point = tuple()
@@ -40,20 +51,52 @@ class LabelSelector(tk.Tk):
         # init state
         self.reload_main_window()
 
+    @classmethod
+    def from_yolo_dataset(cls, dataset: YoloDataset, labels: dict[int, str]):
+        images = [i.original_image_path for i in dataset.yolo_dataset_parts]
+        checkpoint_name = '.' + dataset.dataset_name
+
+        self = cls(images, labels, checkpoint_name)
+
+        loading_screen = LoadingScreen(self)
+
+        for process_data, dataset_part, in zip(self.process_data, dataset.yolo_dataset_parts):
+            formats = dataset_part.yolo_formats
+
+            label_rectangles = []
+            for _format in formats:
+                width, height = Image.open(dataset_part.original_image_path).size
+
+                bounding_box = _format.to_bounding_box(width, height)
+
+                label_rectangle = LabelRectangle(
+                    label_id=_format.class_id,
+                    label_text=labels[_format.class_id],
+                    bounding_box=bounding_box
+                )
+                label_rectangles.append(label_rectangle)
+
+            process_data.label_rectangles = label_rectangles
+
+        self.reload_main_window()
+
+        loading_screen.destroy()
+        self.deiconify()
+
+        return self
+
     def reload_main_window(self):
         self.reload_image()
-        self.reload_status()
         self.reload_image_name()
         self.reload_counter()
         self.reload_label()
 
-    def reload_status(self):
-        status = self.process_data[self.current_index].status
-        self.main_window.set_status(status)
+    def reload_image(self):
+        current_process_data = self.process_data[self.current_index]
+        current_image = current_process_data.image_path
+        label_rectangle = current_process_data.label_rectangles
 
-    def reload_label(self):
-        full_label = f"{self.selected_label_id}_{self.selected_label_text}"
-        self.main_window.set_class_label(full_label)
+        self.main_window.load_image(current_image, label_rectangle)
 
     def reload_image_name(self):
         name = self.process_data[self.current_index].image_path.name
@@ -62,12 +105,9 @@ class LabelSelector(tk.Tk):
     def reload_counter(self):
         self.main_window.set_counter(self.current_index, self.max_index)
 
-    def reload_image(self):
-        current_process_data = self.process_data[self.current_index]
-        current_image = current_process_data.image_path
-        label_rectangle = current_process_data.label_rectangles
-
-        self.main_window.load_image(current_image, label_rectangle)
+    def reload_label(self):
+        full_label = f"{self.selected_label_id}_{self.selected_label_text}"
+        self.main_window.set_class_label(full_label)
 
     def bind_canvas(self, key_string: str, callback: Callable[[tk.Event], None]) -> None:
         self.main_window.image_canvas.bind(key_string, callback)
@@ -82,8 +122,6 @@ class LabelSelector(tk.Tk):
     def add_mode(self, mode_name: str) -> None:
         self.modes[mode_name] = Mode()
 
-    # self.default_mode_handler.bind(key_string, callback)
-
     def activate_mode(self, mode_name: str):
         for mode in self.modes.values():
             mode.deactivate()
@@ -97,8 +135,6 @@ class LabelSelector(tk.Tk):
 
             if command.execute(event):
                 self.command_history.append(command)
-                print(self.command_history)
-                # print([id(i) for i in self.command_history])
 
             if len(self.command_history) > self.MAX_HISTORY_LENGTH:
                 self.command_history.pop(0)
@@ -116,13 +152,9 @@ class LabelSelector(tk.Tk):
     def undo(self) -> None:
         if len(self.command_history) > 0:
             self.command_history.pop().undo()
-            print(self.command_history)
-            # print(self.modes)
-
-
 
     def export_dataset_parts(self) -> list[YoloDatasetPart]:
-        filtered = filter(lambda x: x.status and len(x.label_rectangles) > 0, self.process_data)
+        filtered = filter(lambda x: len(x.label_rectangles) > 0, self.process_data)
 
         dataset_parts = []
         for process_data in filtered:
@@ -141,3 +173,22 @@ class LabelSelector(tk.Tk):
             dataset_parts.append(dataset_part)
 
         return dataset_parts
+
+    def save_checkpoint(self) -> None:
+        index = self.current_index
+        checkpoint = Checkpoint(index, self.process_data)
+
+        with open(self.checkpoint_path, 'wb') as file:
+            pickle.dump(checkpoint, file)
+
+    def load_checkpoint(self) -> None:
+        try:
+            with open(self.checkpoint_path, 'rb') as file:
+                checkpoint = pickle.load(file)
+        except FileNotFoundError:
+            raise Exception(f"No checkpoint file: {self.checkpoint_name} found")
+
+        self.current_index = checkpoint.current_index
+        self.process_data = checkpoint.process_data
+
+        self.reload_main_window()

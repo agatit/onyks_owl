@@ -6,6 +6,14 @@ labels:
   - vertical_text
   - horizontal_text
   - railcar_text
+  - container_corner
+  - container
+  - railcar_bogie
+  - railcar_gap
 
 model:
   confidence_threshold: 0.75
+
+step: 10
+
+

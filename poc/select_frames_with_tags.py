@@ -1,34 +1,37 @@
 import json
-from itertools import groupby
+import os
+import sys
 from pathlib import Path
 
 import click
 import yaml
 
 from io_utils.utils import make_directories
-from select_frames_with_tags_scripts.filter_output_json import filter_output_json
-from yolo.YoloFormat import YoloFormat
-from yolo.YoloDataset import YoloDataset
-from yolo.YoloDatasetPart import YoloDatasetPart
+from label_selector.LabelSelector import LabelSelector
+from label_selector.init_commands import init_commands
+from find_frames_with_tags_scripts.filtering import filter_output_json, init_datasets_from_output_json
+
+# pyinstaller
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    config_path = Path(sys._MEIPASS) / "select_frames_with_tags.yaml"
+else:
+    config_path = "resources/select_frames_with_tags.yaml"
 
 
 @click.command()
 @click.option("-in", "--input", "input_dir",
               required=True, type=click.Path(exists=True, dir_okay=True),
-              help="find_with_frames_tags.py output directory")
+              default=".", help="find_with_frames_tags.py output directory")
 @click.option("-out", "--output", "output_dir",
               required=True, type=click.Path(),
-              help="output directory")
-@click.option("-fc", "--filter-config", "filter_config",
-              type=click.Path(exists=True), default="resources/select_frames_with_tags.yaml",
-              help="config for filtering")
-@click.option("-a", "--auto", "auto_mode",
-              is_flag=True,
-              help="auto mode without gui image selection")
+              default=".", help="output directory")
+@click.option("-l", "--labels", "labels_file",
+              required=True, type=click.Path(exists=True), default=config_path,
+              help="path to labels.yaml")
 @click.option("-ex", "--extension", "image_extension",
               type=str, default=".jpg",
               help="extension of images with dot")
-def main(input_dir, output_dir, filter_config, auto_mode, image_extension):
+def main(input_dir, output_dir, labels_file, image_extension):
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
 
@@ -36,44 +39,42 @@ def main(input_dir, output_dir, filter_config, auto_mode, image_extension):
     labels_dir = output_dir / "labels"
     make_directories(output_dir, images_dir, labels_dir)
 
+    with open(labels_file) as f:
+        labels_file = yaml.load(f, Loader=yaml.FullLoader)
+
     with open(input_dir / "output.json", "r") as file:
         output_json = json.load(file)
 
-    if filter_config:
-        with open(filter_config) as f:
-            filter_config = yaml.load(f, Loader=yaml.FullLoader)
-
-        filter_output_json(output_json, filter_config)
+    dirs = os.listdir(input_dir)
+    output_json = {k: v for k, v in output_json.items() if k in dirs}
 
     yolo_datasets = init_datasets_from_output_json(input_dir, output_dir, output_json, image_extension)
 
-    if not auto_mode:
-        # app = ManualSelector(input_dir, output_dir)
-        # app.mainloop()
-        pass
-
     for dataset in yolo_datasets:
+        app = LabelSelector.from_yolo_dataset(dataset, labels_file["names"])
+        init_commands(app)
+
+        try:
+            app.load_checkpoint()
+        except Exception as e:
+            print(f"Not found: {app.checkpoint_name}")
+
+        current_index = app.current_index
+        next_index = current_index + 1
+
+        # check if dataset is complete
+        if next_index == app.max_index:
+            app.destroy()
+            continue
+
+        app.mainloop()
+
+        if not app.to_export:
+            break
+
+        new_parts = app.export_dataset_parts()
+        dataset.yolo_dataset_parts = new_parts
         dataset.export()
-
-
-def init_datasets_from_output_json(input_dir, output_dir, output_json, image_extension):
-    yolo_datasets = []
-    for dataset_name, frames in output_json.items():
-        dataset_path = input_dir / dataset_name
-
-        yolo_dataset = YoloDataset(dataset_path, output_dir, image_extension)
-
-        for frame_number, grouped_frames in groupby(frames, lambda frame: frame["frame_number"]):
-            yolo_formats = [YoloFormat(**i["detection_result"]["yolo_format"]) for i in grouped_frames]
-
-            image_name = str(frame_number) + image_extension
-            image_path = dataset_path / image_name
-
-            new_dataset_part = YoloDatasetPart(image_path, yolo_formats)
-            yolo_dataset.yolo_dataset_parts.append(new_dataset_part)
-
-        yolo_datasets.append(yolo_dataset)
-    return yolo_datasets
 
 
 if __name__ == '__main__':

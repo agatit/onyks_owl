@@ -1,7 +1,6 @@
 from functools import partial
 
 from label_selector.LabelSelector import LabelSelector
-from label_selector.commands.AcceptImageCommand import AcceptImageCommand
 from label_selector.commands.ChainCommand import ChainCommand
 from label_selector.commands.ChangeLabelCommand import ChangeLabelCommand
 from label_selector.commands.ChangeModeCommand import ChangeModeCommand
@@ -11,8 +10,8 @@ from label_selector.commands.ForceCloseAppCommand import ForceCloseAppCommand
 from label_selector.commands.NextImageCommand import NextImageCommand
 from label_selector.commands.NextLabelCommand import NextLabelCommand
 from label_selector.commands.PrevImageCommand import PrevImageCommand
-from label_selector.commands.RejectImageCommand import RejectImageCommand
 from label_selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
+from label_selector.commands.SaveCheckpointCommand import SaveCheckpointCommand
 from label_selector.commands.StartSelectingCommand import StartSelectingCommand
 from label_selector.commands.WheelLabelCommand import WheelLabelCommand
 
@@ -35,35 +34,29 @@ def init_commands(app: LabelSelector) -> None:
     )
 
     # keyboard
-    key = "<Right>"
+    key = "<KeyRelease-Right>"
     command = NextImageCommand
     bind_event_partial(key=key, command=command)
 
-    key = "<Left>"
+    key = "<KeyRelease-Left>"
     command = PrevImageCommand
     bind_event_partial(key=key, command=command)
 
-    key = "<Tab>"
+    key = "<KeyRelease-Tab>"
     command = NextLabelCommand
     bind_event_partial(key=key, command=command, history_flag=False)
 
     key = "<Control-KeyPress-s>"
-    command = CloseAppCommand
+    command = SaveCheckpointCommand
+    bind_event_partial(key=key, command=command, history_flag=False)
+
+    key = "<KeyRelease-space>"
+    command = NextImageCommand
     bind_event_partial(key=key, command=command)
 
-    key = "<space>"
-    commands = [[RejectImageCommand, defaults_args],
-                [NextImageCommand, defaults_args]]
-    command = ChainCommand
-    args = defaults_args + (commands,)
-    bind_event_partial(key=key, command=command, args=args)
-
-    key = "<Return>"
-    commands = [[AcceptImageCommand, defaults_args],
-                [NextImageCommand, defaults_args]]
-    command = ChainCommand
-    args = defaults_args + (commands,)
-    bind_event_partial(key=key, command=command, args=args)
+    key = "<KeyRelease-Return>"
+    command = CloseAppCommand
+    bind_event_partial(key=key, command=command)
 
     # labels
     for class_id, label in app.labels.items():
@@ -100,10 +93,11 @@ def init_commands(app: LabelSelector) -> None:
     bind_event_partial(key=key, command=command, history_flag=False)
 
     # global
-    key = "<Escape>"
+    key = "<KeyRelease-Escape>"
     command = ForceCloseAppCommand
-    bind_event_partial(key=key, command=command)
+    bind_event_partial(key=key, command=command, history_flag=False)
 
+    app.protocol("WM_DELETE_WINDOW", lambda: ForceCloseAppCommand(*defaults_args).execute())
     app.bind("<Control-KeyPress-z>", lambda e: app.undo())
 
     app.activate_mode("default")

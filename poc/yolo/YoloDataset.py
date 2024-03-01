@@ -14,6 +14,7 @@ class YoloDataset:
     input_dir: Path
     output_dir: Path
 
+    dataset_name: str = "YoloDataset"
     image_extension: str = ".jpg"
     labels_extension: str = ".txt"
     yolo_dataset_parts: list[YoloDatasetPart] = field(default_factory=list)

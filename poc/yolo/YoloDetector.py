@@ -28,9 +28,10 @@ class YoloDetector:
 
     INT_COLS = ["class", "ymin", "ymax", "xmin", "xmax"]
 
-    def __init__(self, model_path: str, confidence_threshold: float = 0.25):
+    def __init__(self, model_path: str, confidence_threshold: float = 0.25, batch_size=300):
         self.model_path = model_path
         self.confidence_threshold = confidence_threshold
+        self.batch_size = batch_size
 
         model, classes, device = self.initialize_model(self.model_path)
         self.model = model

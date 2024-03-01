@@ -2,7 +2,6 @@ import copy
 import dataclasses
 import glob
 import json
-import multiprocessing
 import os
 import shutil
 from pathlib import Path
@@ -90,6 +89,12 @@ def main(input_dir, output_dir, config_path, rectify_config_path, model_path):
         movie_name = data.movie_path.stem
         output_data = [dataclasses.asdict(i) for i in data.output_data]
         outputs[movie_name] = output_data
+
+    # if filter_config:
+    #     with open(filter_config) as f:
+    #         filter_config = yaml.load(f, Loader=yaml.FullLoader)
+    #
+    #     filter_output_json(output_json, filter_config)
 
     output_file = output_dir / "output.json"
     with open(str(output_file), 'w') as file:

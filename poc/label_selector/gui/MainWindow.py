@@ -20,11 +20,11 @@ class MainWindow(tk.Frame):
         labels_container = tk.Frame(self)
         self.labels_container = labels_container
 
-        status_label = tk.Label(labels_container, text="status", width=10, anchor=tk.W)
-        status_label.pack(side=tk.LEFT, expand=False)
-        self.status_label = status_label
+        info_label = tk.Label(labels_container, text="", width=10, anchor=tk.W)
+        info_label.pack(side=tk.LEFT, expand=False)
+        self.info_label = info_label
 
-        class_label = tk.Label(labels_container, text="class", width=20)
+        class_label = tk.Label(labels_container, text="class", width=30)
         class_label.pack(side=tk.LEFT, expand=True)
         self.class_label = class_label
 
@@ -49,11 +49,9 @@ class MainWindow(tk.Frame):
         self.label_rectangles = label_rectangles
         self.refresh_image()
 
-    def set_status(self, flag: bool):
-        if flag:
-            self.status_label.config(text="To Export", fg="green")
-        else:
-            self.status_label.config(text="Skipped", fg="red")
+    def set_info_with_timer(self, text: str, delay_ms: int) -> None:
+        self.info_label.config(text=text)
+        self.after(delay_ms, lambda: self.info_label.config(text=''))
 
     def set_class_label(self, text: str) -> None:
         self.class_label.config(text=text)
