@@ -63,5 +63,5 @@ def iterate_over_df_with_window(df, callback, df_frame_range, window_size, windo
                     (df["frame"] <= right_frame)
         df_part = df.loc[condition].reset_index()
 
-        if not df_part.empty:
+        if not df_part._empty:
             callback(df_part)

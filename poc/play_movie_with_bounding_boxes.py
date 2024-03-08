@@ -28,7 +28,7 @@ def main(input_movie, model_path, scale_percent, confidence_threshold):
     loader = VideoLoader(video_path)
 
     yolo_detector = YoloDetector(model_path, confidence_threshold)
-    all_labels = yolo_detector.labels
+    all_labels = yolo_detector.classes_labels
 
     stream = Stream(loader=loader, yolo_detector=yolo_detector)
 

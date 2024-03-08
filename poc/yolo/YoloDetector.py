@@ -2,6 +2,7 @@ import pathlib
 import platform
 from contextlib import contextmanager
 from dataclasses import dataclass
+from functools import singledispatchmethod
 
 import cv2 as cv
 import numpy as np
@@ -22,26 +23,24 @@ def set_posix_windows():
         pathlib.PosixPath = posix_backup
 
 
+
 class YoloDetector:
-    XYXY_COLS = ["class", "name", "confidence", "ymin", "ymax", "xmin", "xmax"]
-    XYWHN_COLS = ["xcenter", "ycenter", "width", "height"]
-
-    INT_COLS = ["class", "ymin", "ymax", "xmin", "xmax"]
-
     def __init__(self, model_path: str, confidence_threshold: float = 0.25, batch_size=300):
         self.model_path = model_path
         self.confidence_threshold = confidence_threshold
         self.batch_size = batch_size
 
-        model, classes, device = self.initialize_model(self.model_path)
-        self.model = model
+        model, classes, device = self._initialize_model(self.model_path)
+        self._model = model
         self.classes = classes
         self.device = device
 
-        self.labels = list(self.classes.values())
+        self._model.conf = self.confidence_threshold
+
+        self.selected_classes = self.classes.keys()
 
     @classmethod
-    def initialize_model(cls, model_path: str):
+    def _initialize_model(cls, model_path: str):
         # model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
         if platform.system() == "Windows":
             with set_posix_windows():
@@ -51,65 +50,61 @@ class YoloDetector:
 
         classes = model.names
         device = 'cuda' if cls.check_if_cuda_is_available() else 'cpu'
-
         model.to(device)
 
         return model, classes, device
 
-    def detect_image(self, image: np.ndarray, selected_labels: list[str]) -> list[DetectionResult]:
-        yolo_detection_result = self.model(image)
+    def select_classes(self, new_classes: list[int]) -> None:
+        self._model.classes = list(new_classes)
 
-        # output to pandas format
-        results_df = yolo_detection_result.pandas()
+    @singledispatchmethod
+    def __call__(self):
+        pass
 
-        xyxy = results_df.xyxy[0]  # xmin, ymin, xmax, ymax
-        xyxy = xyxy[self.XYXY_COLS]
+    @__call__.register
+    def _(self, images: list) -> list[list[DetectionResult]]:
+        results = self._model(images)
+        return self._detection_results_from_detections(results)
 
-        xywhn = results_df.xywhn[0]  # xcenter, ycenter, width, height, normalized
-        xywhn = xywhn[self.XYWHN_COLS]
+    @__call__.register
+    def _(self, image: np.ndarray) -> list[DetectionResult]:
+        yolo_detection_result = self._model(image)
+        return self._detection_results_from_detections(yolo_detection_result)[0]
 
-        # join by index
-        results_df = xyxy.join(xywhn, lsuffix='_xyxy', rsuffix='_xywhn')
+    def _detection_results_from_detections(self, results) -> list[DetectionResult]:
+        classes = self.classes
 
-        # filter
-        results_df = results_df[results_df["name"].isin(selected_labels)]
-        results_df = results_df[results_df["confidence"] > self.confidence_threshold]
+        all_results = []
+        for preds, xywhns in zip(results.pred, results.xywhn):
+            detection_results = []
 
-        # float cords to int
-        convert_type = {col: "int32" for col in self.INT_COLS}
-        results_df = results_df.astype(convert_type)
+            # check if no predictions
+            if len(preds) < 1:
+                all_results.append(detection_results)
+                continue
 
-        return [self._map_cols_to_detection_result(cols) for cols in results_df.to_dict('index').values()]
+            for pred, xywhn in zip(preds, xywhns):
+                pred_int = [int(i) for i in pred]
 
-    @staticmethod
-    def _map_cols_to_detection_result(cols: dict) -> DetectionResult:
-        kwargs = {
-            "x1": cols["xmin"],
-            "y1": cols["ymin"],
-            "x2": cols["xmax"],
-            "y2": cols["ymax"],
-        }
-        bounding_box = BoundingBox(**kwargs)
+                x1, y1 = pred_int[0], pred_int[1]
+                x2, y2 = pred_int[2], pred_int[3]
+                confidence = float(pred[4])
+                class_id = pred_int[5]
+                class_name = classes[class_id]
 
-        kwargs = {
-            "class_id": cols["class"],
-            "x_center": cols["xcenter"],
-            "y_center": cols["ycenter"],
-            "width": cols["width"],
-            "height": cols["height"],
-        }
-        yolo_format = YoloFormat(**kwargs)
+                float_xywhn = [float(i) for i in xywhn[:4]]
+                x_center, y_center = float_xywhn[0], float_xywhn[1]
+                width, height = float_xywhn[2], float_xywhn[3]
 
-        kwargs = {
-            "class_name": cols["name"],
-            "bounding_box": bounding_box,
-            "yolo_format": yolo_format,
-            "confidence": cols["confidence"],
-        }
-        return DetectionResult(**kwargs)
+                bounding_box = BoundingBox(y1, y2, x1, x2)
+                yolo_format = YoloFormat(class_id, x_center, y_center, width, height)
+                detection_result = DetectionResult(class_name, bounding_box, yolo_format, confidence)
 
-    def enable_multiprocessing(self) -> None:
-        self.model.share_memory()
+                detection_results.append(detection_result)
+
+            all_results.append(detection_results)
+
+        return all_results
 
     @staticmethod
     def check_if_cuda_is_available() -> bool:

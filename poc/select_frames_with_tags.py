@@ -9,7 +9,7 @@ import yaml
 from io_utils.utils import make_directories
 from label_selector.LabelSelector import LabelSelector
 from label_selector.init_commands import init_commands
-from find_frames_with_tags_scripts.filtering import filter_output_json, init_datasets_from_output_json
+from find_frames_with_tags_scripts.output_utils import init_datasets_from_output_json
 
 # pyinstaller
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):

@@ -5,14 +5,7 @@ import click
 import json
 
 from stitch.rectify.FrameRectifier import FrameRectifier
-from stream.commands.CommandInvoker import CommandInvoker
 from stream.Stream import Stream
-from stream.commands.display.DestroyWindowsCommand import DestroyWindowsCommand
-from stream.commands.display.DisplayImageCommand import DisplayImageCommand
-from stream.commands.display.DisplayStreamCommand import DisplayStreamCommand
-from stream.commands.display.InterruptStreamCommand import InterruptStreamCommand
-from stream.commands.transformation.RectifyCommand import RectifyCommand
-from stream.commands.transformation.ScaleImageCommand import ScaleImageCommand
 from stream.directors.DisplayImageDirector import DisplayImageDirector
 from stream.directors.DisplayStreamDirector import DisplayStreamDirector
 from stream.loaders.SingleImageLoader import SingleImageLoader

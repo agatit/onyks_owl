@@ -4,20 +4,24 @@ import glob
 import json
 import os
 import shutil
+from functools import partial
 from pathlib import Path
+from typing import Callable
 
 import click
 import cv2
+import numpy as np
+import torch
 import yaml
 from tqdm import tqdm
 
-from find_frames_with_tags_scripts.OutputData import OutputData
-from find_frames_with_tags_scripts.ProcessData import ProcessData
-from opencv_tools.image_transformations import draw_image_with_rectangles
+from find_frames_with_tags_scripts.ProcessFrameData import ProcessFrameData
+from find_frames_with_tags_scripts.fitering import similarity_conv, filter_batch
+from find_frames_with_tags_scripts.process import process, export_original_image, export_cropped_class, \
+    export_bounding_box_image, rectify_frame
 from stitch.rectify.FrameRectifier import FrameRectifier
+from yolo.DetectionResult import DetectionResult
 from yolo.YoloDetector import YoloDetector
-
-BOUNDING_BOX_FILE_SUFFIX = "_b"
 
 
 @click.command()
@@ -34,7 +38,9 @@ BOUNDING_BOX_FILE_SUFFIX = "_b"
 @click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),
               required=True, default="resources/models/s_owl_4.pt", help="yolov5 model path")
 def main(input_dir, output_dir, config_path, rectify_config_path, model_path):
-    print(f"{__file__} started")
+    input_dir = Path(input_dir)
+    output_dir = Path(output_dir)
+
     with open(config_path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
@@ -43,8 +49,87 @@ def main(input_dir, output_dir, config_path, rectify_config_path, model_path):
         with open(rectify_config_path) as f:
             rectify_config = json.load(f)
 
-    # check if output_dir is empty
-    output_dir = Path(output_dir)
+    check_output_dir(output_dir)
+
+    input_extension = config["extension"]["input"]
+    movies_paths = init_movie_paths(input_dir, input_extension)
+
+    confidence_threshold = float(config["model"]["confidence_threshold"])
+    batch = config["batch"]
+    labels_id = config["labels"].keys()
+    detector = YoloDetector(model_path, confidence_threshold, batch)
+    detector.select_classes(labels_id)
+
+    frame_size = config["image_size"]["width"], config["image_size"]["height"]
+    output_extension = config["extension"]["output"]
+
+    export_callbacks: dict[str, tuple[str, Callable]] = {
+        "original_image": ("export_original_image_fun", export_original_image),
+        "cropped": ("export_cropped_class_fun", export_cropped_class),
+        "bounding_box_image": ("export_bounding_box_image_fun", export_bounding_box_image)
+    }
+    selected_output = config["output"]
+    export_callbacks = [v for k, v in export_callbacks.items() if selected_output[k]]
+
+    empty_image_step = config["empty_image_step"]
+    process_data = init_processing_data(frame_size, detector,
+                                        movies_paths, output_dir,
+                                        rectify_config, output_extension,
+                                        export_callbacks, empty_image_step)
+
+    for data in process_data:
+        for _ in tqdm(process(data), desc=data.movie_path.name):
+            pass
+
+    outputs = {}
+    for data in process_data:
+        movie_name = data.movie_path.stem
+        output_data = [dataclasses.asdict(i) for i in data.output_data]
+
+        outputs[movie_name] = output_data
+
+    output_file = output_dir / "output.json"
+    with open(str(output_file), 'w') as file:
+        json.dump(outputs, file)
+
+
+# todo: zredukować parametry
+def init_processing_data(frame_size, detector, movies_paths,
+                         output_dir, rectify_config, output_extension,
+                         export_callbacks, empty_image_step):
+    output = []
+
+    for movie_path in movies_paths:
+        frame_rectifier = None
+        if len(rectify_config) > 0:
+            frame_rectifier = FrameRectifier(rectify_config, *frame_size)
+            frame_rectifier.calc_maps()
+
+        _output_dir = output_dir / movie_path.stem
+        os.mkdir(_output_dir)
+
+        process_frame_data = ProcessFrameData(movie_path, _output_dir, output_extension,
+                                              frame_rectifier, detector, empty_image_step)
+
+        if process_frame_data.rectifier:
+            rectify_fun = partial(rectify_frame, process_frame_data)
+            process_frame_data.rectify_frame_fun = rectify_fun
+
+        for method_name, callback, in export_callbacks:
+            similarity_fun = partial(callback, process_frame_data)
+            setattr(process_frame_data, method_name, similarity_fun)
+
+        model, device = load_efficientnet()
+        similarity_fun = partial(similarity_conv, model=model, device=device)
+        filter_fun = partial(filter_batch, similarity_fun=similarity_fun)
+        process_frame_data.filter_batch_fun = filter_fun
+
+        output.append(process_frame_data)
+
+    return output
+
+
+def check_output_dir(output_dir: Path) -> None:
     if not output_dir.is_dir():
         os.mkdir(output_dir)
 
@@ -52,112 +137,20 @@ def main(input_dir, output_dir, config_path, rectify_config_path, model_path):
         shutil.rmtree(output_dir)
         os.mkdir(output_dir)
 
-    input_extension = config["extension"]["input"]
-    glob_mask = Path(input_dir) / f"*.{input_extension}"
+
+def init_movie_paths(input_dir: Path, input_extension: str) -> list[Path]:
+    glob_mask = input_dir / f"*{input_extension}"
     movies_paths = glob.glob(str(glob_mask))
-    movies_paths = [Path(i) for i in movies_paths]
 
-    confidence_threshold = float(config["model"]["confidence_threshold"])
-    detector = YoloDetector(model_path, confidence_threshold)
-    detector.enable_multiprocessing()
-
-    process_data = []
-    for movie_path in movies_paths:
-        frame_rectifier = None
-        if len(rectify_config) > 0:
-            frame_rectifier = init_rectifier(rectify_config)
-
-        _output_dir = output_dir / movie_path.stem
-        os.mkdir(_output_dir)
-
-        output_extension = config["extension"]["output"]
-        labels_copy = copy.copy(config["labels"])
-
-        data = ProcessData(movie_path, _output_dir, output_extension, frame_rectifier, detector, labels_copy)
-        process_data.append(data)
-
-    for data in process_data:
-        input_cam = cv2.VideoCapture(str(data.movie_path))
-        frame_count = int(input_cam.get(cv2.CAP_PROP_FRAME_COUNT))
-        input_cam.release()
-
-        for _ in tqdm(process_gen(data), desc=data.movie_path.name, total=frame_count):
-            pass
-
-    outputs = {}
-    for data in process_data:
-        movie_name = data.movie_path.stem
-        output_data = [dataclasses.asdict(i) for i in data.output_data]
-        outputs[movie_name] = output_data
-
-    # if filter_config:
-    #     with open(filter_config) as f:
-    #         filter_config = yaml.load(f, Loader=yaml.FullLoader)
-    #
-    #     filter_output_json(output_json, filter_config)
-
-    output_file = output_dir / "output.json"
-    with open(str(output_file), 'w') as file:
-        json.dump(outputs, file)
+    return [Path(i) for i in movies_paths]
 
 
-def init_rectifier(rectify_config: dict, frame_size: tuple[int, int] = (1920, 1080)) -> FrameRectifier:
-    frame_rectifier = FrameRectifier(rectify_config, *frame_size)
-    frame_rectifier.calc_maps()
+def load_efficientnet():
+    model = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_efficientnet_b0', pretrained=True)
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    model.to(device)
 
-    return frame_rectifier
-
-
-def process_gen(process_data: ProcessData) -> None:
-    input_cam = cv2.VideoCapture(str(process_data.movie_path))
-
-    extension = process_data.output_extension
-    output_extension = f".{extension}"
-
-    counter = 0
-    while input_cam.isOpened():
-        result, frame = input_cam.read()
-        if result:
-
-            if process_data.rectifier:
-                frame = process_data.rectifier.rectify(frame)
-
-            detection_results = process_data.model.detect_image(frame, process_data.labels)
-
-            if len(detection_results) > 0:
-                for index, detection_result in enumerate(detection_results):
-                    name = detection_result.class_name
-                    file_name = f"{counter}_{name}_{index}" + output_extension
-                    file_path = process_data.output_dir / file_name
-
-                    output_data = OutputData(counter, file_name, detection_result)
-                    process_data.output_data.append(output_data)
-
-                    box = detection_result.bounding_box
-                    cropped = frame[box.y1:box.y2, box.x1:box.x2]
-
-                    cv2.imwrite(str(file_path), cropped)
-
-                # save image
-                frame_file_name = str(counter) + output_extension
-                frame_file_path = str(process_data.output_dir / frame_file_name)
-
-                cv2.imwrite(frame_file_path, frame)
-
-                # save image with drawn bounding boxes
-                frame_file_name = str(counter) + BOUNDING_BOX_FILE_SUFFIX + output_extension
-                frame_file_path = str(process_data.output_dir / frame_file_name)
-                for detection_result in detection_results:
-                    frame = detection_result.draw_on_image(frame)
-
-                cv2.imwrite(frame_file_path, frame)
-
-            counter += 1
-            yield
-        else:
-            break
-
-    input_cam.release()
+    return model, device
 
 
 if __name__ == '__main__':

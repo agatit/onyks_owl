@@ -50,7 +50,7 @@ def main(image_directory, output_directory, rectify_config, model_path, image_ex
         image = cv2.imread(image_path)
         image = frame_rectifier.rectify(image)
 
-        found_bounding_boxes = detector.detect_image(image, detector.labels)
+        found_bounding_boxes = detector(image, detector.classes_labels)
         image = draw_image_with_rectangles(image, found_bounding_boxes)
 
         logger.info(f"{image_path}: {found_bounding_boxes}")

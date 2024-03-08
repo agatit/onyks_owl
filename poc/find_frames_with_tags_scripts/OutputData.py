@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from yolo.DetectionResult import DetectionResult
 
@@ -7,4 +7,4 @@ from yolo.DetectionResult import DetectionResult
 class OutputData:
     frame_number: int
     file_name: str
-    detection_result: DetectionResult
+    detection_result: DetectionResult = field(default=None)

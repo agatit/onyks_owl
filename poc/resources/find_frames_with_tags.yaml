@@ -1,19 +1,32 @@
 extension:
-  input: mp4
-  output: jpg
+  input: .mp4
+  output: .jpg
+
+image_size:
+  width: 1920
+  height: 1080
+
+empty_image_step: 50
+
+output:
+  original_image: True
+  cropped: False
+  bounding_box_image: False
+
+batch: 100
 
 labels:
-  - vertical_text
-  - horizontal_text
-  - railcar_text
-  - container_corner
-  - container
-  - railcar_bogie
-  - railcar_gap
+  0: vertical_text
+  1: horizontal_text
+  2: railcar_text
+  3: container_corner
+  4: container
+  5: railcar_bogie
+  6: railcar_gap
 
 model:
-  confidence_threshold: 0.75
+  confidence_threshold: 0.70
 
-step: 10
+
 
 

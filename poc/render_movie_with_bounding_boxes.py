@@ -43,8 +43,11 @@ def main(input_movie, output_movie, model_path, codec_code, rectify_config):
         frame_rectifier = FrameRectifier(config)
         frame_rectifier.calc_maps()
 
-    detector = YoloDetector(model_path)
+    detector = YoloDetector(model_path, batch_size=100)
+    # classes = [0, 1]
+    # detector.select_classes(classes)
 
+    batch = []
     frame_count = int(input_cam.get(cv2.CAP_PROP_FRAME_COUNT))
     with tqdm(total=frame_count, desc=f"Processing: {input_movie}") as pbar:
         while input_cam.isOpened():
@@ -54,18 +57,35 @@ def main(input_movie, output_movie, model_path, codec_code, rectify_config):
                 if rectify_config:
                     frame = frame_rectifier.rectify(frame)
 
-                detection_results = detector.detect_image(frame, detector.labels)
-                for detection_result in detection_results:
-                    frame = detection_result.draw_on_image(frame)
+                if len(batch) < detector.batch_size:
+                    batch.append(frame)
+                    pbar.update()
+                    continue
 
-                video_writer.write(frame)
+                detected_frames = detector(batch)
+                for frame in write_bounding_boxes_gen(batch, detected_frames):
+                    video_writer.write(frame)
 
+                batch = []
                 pbar.update()
             else:
+                detected_frames = detector(batch)
+                for frame in write_bounding_boxes_gen(batch, detected_frames):
+                    video_writer.write(frame)
+
+                pbar.update()
                 break
 
     input_cam.release()
     video_writer.release()
+
+
+def write_bounding_boxes_gen(batch, detected_frames):
+    for frame, detection_results in zip(batch, detected_frames):
+        for detection_result in detection_results:
+            frame = detection_result.draw_on_image(frame)
+
+        yield frame
 
 
 if __name__ == '__main__':
