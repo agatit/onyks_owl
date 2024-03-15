@@ -25,13 +25,13 @@ else:
 @click.option("-out", "--output", "output_dir",
               required=True, type=click.Path(),
               default=".", help="output directory")
-@click.option("-l", "--labels", "labels_file",
+@click.option("-c", "--config", "config",
               required=True, type=click.Path(exists=True), default=config_path,
-              help="path to labels.yaml")
+              help="path to config")
 @click.option("-ex", "--extension", "image_extension",
               type=str, default=".jpg",
               help="extension of images with dot")
-def main(input_dir, output_dir, labels_file, image_extension):
+def main(input_dir, output_dir, config, image_extension):
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
 
@@ -39,8 +39,8 @@ def main(input_dir, output_dir, labels_file, image_extension):
     labels_dir = output_dir / "labels"
     make_directories(output_dir, images_dir, labels_dir)
 
-    with open(labels_file) as f:
-        labels_file = yaml.load(f, Loader=yaml.FullLoader)
+    with open(config, encoding="utf8") as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
 
     with open(input_dir / "output.json", "r") as file:
         output_json = json.load(file)
@@ -50,8 +50,11 @@ def main(input_dir, output_dir, labels_file, image_extension):
 
     yolo_datasets = init_datasets_from_output_json(input_dir, output_dir, output_json, image_extension)
 
+    labels = config["names"]
+    max_image_number = int(config["max_images_number"])
+
     for dataset in yolo_datasets:
-        app = LabelSelector.from_yolo_dataset(dataset, labels_file["names"])
+        app = LabelSelector.from_yolo_dataset(dataset, labels, max_image_number)
         init_commands(app)
 
         try:

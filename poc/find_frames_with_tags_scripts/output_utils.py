@@ -49,7 +49,8 @@ def init_datasets_from_output_json(input_dir: Path, output_dir: Path, output_jso
         yolo_dataset = YoloDataset(dataset_path, output_dir, image_extension=image_extension, dataset_name=dataset_name)
 
         for frame_number, grouped_frames in groupby(frames, lambda frame: frame["frame_number"]):
-            yolo_formats = [YoloFormat(**i["detection_result"]["yolo_format"]) for i in grouped_frames]
+            yolo_formats = [YoloFormat(**i["detection_result"]["yolo_format"])
+                            for i in grouped_frames if i["detection_result"]]
 
             image_name = str(frame_number) + image_extension
             image_path = dataset_path / image_name

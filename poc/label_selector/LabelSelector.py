@@ -20,11 +20,17 @@ from yolo.YoloFormat import YoloFormat
 class LabelSelector(tk.Tk):
     MAX_HISTORY_LENGTH = 50
 
-    def __init__(self, images: list[Path], labels: dict[int, str], checkpoint_name=".checkpoint"):
+    def __init__(self, images: list[Path], labels: dict[int, str], checkpoint_name=".checkpoint",
+                 max_images: int = 500):
         super().__init__()
         self.title(self.__class__.__name__)
 
-        self.process_data = [ProcessData(image) for image in images]
+        if max_images < 0:
+            images_to_load = len(images)
+        else:
+            images_to_load = max_images
+
+        self.process_data = [ProcessData(image) for image in images[:images_to_load]]
         self.labels = labels
         self.checkpoint_name = checkpoint_name
 
@@ -35,6 +41,7 @@ class LabelSelector(tk.Tk):
         self.start_point = tuple()
 
         self.current_index = 0
+
         self.max_index = len(self.process_data)
         self.selected_label_id = 0
         self.selected_label_text = labels[0]
@@ -52,15 +59,15 @@ class LabelSelector(tk.Tk):
         self.reload_main_window()
 
     @classmethod
-    def from_yolo_dataset(cls, dataset: YoloDataset, labels: dict[int, str]):
+    def from_yolo_dataset(cls, dataset: YoloDataset, labels: dict[int, str], max_images: int = 500) -> "LabelSelector":
         images = [i.original_image_path for i in dataset.yolo_dataset_parts]
         checkpoint_name = '.' + dataset.dataset_name
 
-        self = cls(images, labels, checkpoint_name)
+        self = cls(images, labels, checkpoint_name, max_images)
 
         loading_screen = LoadingScreen(self)
 
-        for process_data, dataset_part, in zip(self.process_data, dataset.yolo_dataset_parts):
+        for process_data, dataset_part, in zip(self.process_data[:max_images], dataset.yolo_dataset_parts[:max_images]):
             formats = dataset_part.yolo_formats
 
             label_rectangles = []
@@ -106,8 +113,7 @@ class LabelSelector(tk.Tk):
         self.main_window.set_counter(self.current_index, self.max_index)
 
     def reload_label(self):
-        full_label = f"{self.selected_label_id}_{self.selected_label_text}"
-        self.main_window.set_class_label(full_label)
+        self.main_window.set_class_label(self.selected_label_text)
 
     def bind_canvas(self, key_string: str, callback: Callable[[tk.Event], None]) -> None:
         self.main_window.image_canvas.bind(key_string, callback)
@@ -192,3 +198,4 @@ class LabelSelector(tk.Tk):
         self.process_data = checkpoint.process_data
 
         self.reload_main_window()
+        self.max_index = len(self.process_data)

@@ -7,6 +7,7 @@ from label_selector.commands.ChangeModeCommand import ChangeModeCommand
 from label_selector.commands.CloseAppCommand import CloseAppCommand
 from label_selector.commands.EndSelectingCommand import EndSelectingCommand
 from label_selector.commands.ForceCloseAppCommand import ForceCloseAppCommand
+from label_selector.commands.GoToImageCommand import GoToImageCommand
 from label_selector.commands.NextImageCommand import NextImageCommand
 from label_selector.commands.NextLabelCommand import NextLabelCommand
 from label_selector.commands.PrevImageCommand import PrevImageCommand
@@ -38,9 +39,19 @@ def init_commands(app: LabelSelector) -> None:
     command = NextImageCommand
     bind_event_partial(key=key, command=command)
 
+    key = "<Control-KeyRelease-Right>"
+    command = GoToImageCommand
+    args = defaults_args + (app.max_index - 1,)
+    bind_event_partial(key=key, command=command, args=args)
+
     key = "<KeyRelease-Left>"
     command = PrevImageCommand
     bind_event_partial(key=key, command=command)
+
+    key = "<Control-KeyRelease-Left>"
+    command = GoToImageCommand
+    args = defaults_args + (0,)
+    bind_event_partial(key=key, command=command, args=args)
 
     key = "<KeyRelease-Tab>"
     command = NextLabelCommand
@@ -59,9 +70,10 @@ def init_commands(app: LabelSelector) -> None:
     bind_event_partial(key=key, command=command)
 
     # labels
+    class_offset = 1
     for class_id, label in app.labels.items():
         command = ChangeLabelCommand
-        key = str(class_id)
+        key = str(class_id + class_offset)
         args = defaults_args + (class_id, label)
         bind_event_partial(key=key, command=command,
                            args=args, history_flag=False)
@@ -109,4 +121,4 @@ def register_command(app, target, key, mode_name, command, args, history_flag):
     else:
         event = app.register_command_without_history(command, *args)
 
-    app.modes[mode_name].register(target, key, event)
+    app.register_to_mode(mode_name, target, key, event)

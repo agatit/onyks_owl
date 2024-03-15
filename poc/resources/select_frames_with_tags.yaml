@@ -1,8 +1,21 @@
+#names:
+#  0: vertical_container_number
+#  1: horizontal_container_number
+#  2: container_corner
+#  3: container
+#  4: railcar_bogie
+#  5: railcar_square_number
+#  6: railcar_gap
+
 names:
-  0: vertical_container_number
-  1: horizontal_container_number
-  2: container_corner
-  3: container
-  4: railcar_bogie
-  5: railcar_square_number
-  6: railcar_gap
+  0: "Pionowy numer kontenera"
+  1: "Poziomy numer kontenera"
+  2: "Krawędź kontenera"
+  3: "Kontener"
+  4: "Koła wagonu"
+  5: "Numer wagonu - 2 linijki"
+  6: "Łączenie między wagonami"
+  7: "Numer wagonu - 4 linijki"
+  8: "Numer wagonu - 1 linijka"
+
+max_images_number: -1
