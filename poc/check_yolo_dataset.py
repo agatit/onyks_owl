@@ -18,7 +18,7 @@ from yolo.YoloFormat import YoloFormat
 
 # pyinstaller
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-    config_path = Path(sys._MEIPASS) / "select_frames_with_tags.yaml"
+    config_path = Path(sys._MEIPASS) / "check_yolo_dataset.yaml"
 else:
     config_path = "resources/select_frames_with_tags.yaml"
 
