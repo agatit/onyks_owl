@@ -6,13 +6,10 @@ from typing import Callable, Any
 
 from PIL import Image
 
+from label_selector.Checkpoint import Checkpoint
 from label_selector.Mode import Mode
 from label_selector.ProcessData import ProcessData
-from label_selector.gui.LabelRectangle import LabelRectangle
-from label_selector.gui.LoadingScreen import LoadingScreen
 from label_selector.gui.MainWindow import MainWindow
-from label_selector.Checkpoint import Checkpoint
-from yolo.YoloDataset import YoloDataset
 from yolo.YoloDatasetPart import YoloDatasetPart
 from yolo.YoloFormat import YoloFormat
 
@@ -20,8 +17,8 @@ from yolo.YoloFormat import YoloFormat
 class LabelSelector(tk.Tk):
     MAX_HISTORY_LENGTH = 50
 
-    def __init__(self, images: list[Path], labels: dict[int, str], checkpoint_name=".checkpoint",
-                 max_images: int = 500):
+    def __init__(self, images: list[Path], labels: dict[int, str], checkpoint_name="checkpoint",
+                 max_images: int = -1):
         super().__init__()
         self.title(self.__class__.__name__)
 
@@ -57,40 +54,6 @@ class LabelSelector(tk.Tk):
 
         # init state
         self.reload_main_window()
-
-    @classmethod
-    def from_yolo_dataset(cls, dataset: YoloDataset, labels: dict[int, str], max_images: int = 500) -> "LabelSelector":
-        images = [i.original_image_path for i in dataset.yolo_dataset_parts]
-        checkpoint_name = '.' + dataset.dataset_name
-
-        self = cls(images, labels, checkpoint_name, max_images)
-
-        loading_screen = LoadingScreen(self)
-
-        for process_data, dataset_part, in zip(self.process_data[:max_images], dataset.yolo_dataset_parts[:max_images]):
-            formats = dataset_part.yolo_formats
-
-            label_rectangles = []
-            for _format in formats:
-                width, height = Image.open(dataset_part.original_image_path).size
-
-                bounding_box = _format.to_bounding_box(width, height)
-
-                label_rectangle = LabelRectangle(
-                    label_id=_format.class_id,
-                    label_text=labels[_format.class_id],
-                    bounding_box=bounding_box
-                )
-                label_rectangles.append(label_rectangle)
-
-            process_data.label_rectangles = label_rectangles
-
-        self.reload_main_window()
-
-        loading_screen.destroy()
-        self.deiconify()
-
-        return self
 
     def reload_main_window(self):
         self.reload_image()
@@ -165,37 +128,52 @@ class LabelSelector(tk.Tk):
         dataset_parts = []
         for process_data in filtered:
             image_path = process_data.image_path
-
-            yolo_formats = []
-            for label_rectangle in process_data.label_rectangles:
-                class_id = label_rectangle.label_id
-                bounding_box = label_rectangle.bounding_box
-                width, height = Image.open(image_path).size
-
-                yolo_format = YoloFormat.from_bounding_box(class_id, width, height, bounding_box)
-                yolo_formats.append(yolo_format)
+            yolo_formats = self._process_data_to_yolo_formats(process_data)
 
             dataset_part = YoloDatasetPart(image_path, yolo_formats)
             dataset_parts.append(dataset_part)
 
         return dataset_parts
 
+    @staticmethod
+    def _process_data_to_yolo_formats(process_data):
+        image_path = process_data.image_path
+
+        yolo_formats = []
+        for label_rectangle in process_data.label_rectangles:
+            class_id = label_rectangle.label_id
+            bounding_box = label_rectangle.bounding_box
+            width, height = Image.open(image_path).size
+
+            yolo_format = YoloFormat.from_bounding_box(class_id, width, height, bounding_box)
+            yolo_formats.append(yolo_format)
+
+        return yolo_formats
+
     def save_checkpoint(self) -> None:
         index = self.current_index
         checkpoint = Checkpoint(index, self.process_data)
 
+        self._dump_checkpoint(checkpoint)
+
+    def _dump_checkpoint(self, data):
         with open(self.checkpoint_path, 'wb') as file:
-            pickle.dump(checkpoint, file)
+            pickle.dump(data, file)
 
     def load_checkpoint(self) -> None:
-        try:
-            with open(self.checkpoint_path, 'rb') as file:
-                checkpoint = pickle.load(file)
-        except FileNotFoundError:
-            raise Exception(f"No checkpoint file: {self.checkpoint_name} found")
+        checkpoint = self._load_from_pickle()
 
         self.current_index = checkpoint.current_index
         self.process_data = checkpoint.process_data
 
         self.reload_main_window()
         self.max_index = len(self.process_data)
+
+    def _load_from_pickle(self):
+        try:
+            with open(self.checkpoint_path, 'rb') as file:
+                data = pickle.load(file)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"No checkpoint file: {self.checkpoint_name} found")
+
+        return data

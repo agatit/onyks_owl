@@ -5,11 +5,15 @@ from pathlib import Path
 
 import click
 import yaml
+from PIL import Image
 
+from find_frames_with_tags_scripts.output_utils import init_datasets_from_output_json
 from io_utils.utils import make_directories
 from label_selector.LabelSelector import LabelSelector
-from label_selector.init_commands import init_commands
-from find_frames_with_tags_scripts.output_utils import init_datasets_from_output_json
+from label_selector.gui.LabelRectangle import LabelRectangle
+from label_selector.gui.utils import open_loading_screen
+from label_selector.init_commands import init_default_commands
+from yolo.YoloDataset import YoloDataset
 
 # pyinstaller
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
@@ -31,7 +35,10 @@ else:
 @click.option("-ex", "--extension", "image_extension",
               type=str, default=".jpg",
               help="extension of images with dot")
-def main(input_dir, output_dir, config, image_extension):
+@click.option("-max", "--max_image_number", "max_image_number",
+              type=int, default=-1,
+              help="max image number to compute, if -1 then no limit")
+def main(input_dir, output_dir, config, image_extension, max_image_number):
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
 
@@ -51,15 +58,13 @@ def main(input_dir, output_dir, config, image_extension):
     yolo_datasets = init_datasets_from_output_json(input_dir, output_dir, output_json, image_extension)
 
     labels = config["names"]
-    max_image_number = int(config["max_images_number"])
-
     for dataset in yolo_datasets:
-        app = LabelSelector.from_yolo_dataset(dataset, labels, max_image_number)
-        init_commands(app)
+        app = SelectFramesWithTags(dataset, labels, max_image_number)
+        init_default_commands(app)
 
         try:
             app.load_checkpoint()
-        except Exception as e:
+        except FileNotFoundError as e:
             print(f"Not found: {app.checkpoint_name}")
 
         current_index = app.current_index
@@ -78,6 +83,40 @@ def main(input_dir, output_dir, config, image_extension):
         new_parts = app.export_dataset_parts()
         dataset.yolo_dataset_parts = new_parts
         dataset.export()
+
+
+class SelectFramesWithTags(LabelSelector):
+    def __init__(self, dataset: YoloDataset, labels: dict[int, str], max_images: int = -1):
+        images = [i.original_image_path for i in dataset.yolo_dataset_parts]
+        checkpoint_name = '.' + dataset.dataset_name
+
+        super().__init__(images, labels, checkpoint_name, max_images)
+        self.__load_yolo_dataset_parts(dataset, labels)
+
+        self.reload_main_window()
+        self.deiconify()
+
+    @open_loading_screen
+    def __load_yolo_dataset_parts(self, dataset, labels):
+        max_images = self.max_index
+
+        for process_data, dataset_part, in zip(self.process_data[:max_images], dataset.yolo_dataset_parts[:max_images]):
+            formats = dataset_part.yolo_formats
+
+            label_rectangles = []
+            for _format in formats:
+                width, height = Image.open(dataset_part.original_image_path).size
+
+                bounding_box = _format.to_bounding_box(width, height)
+
+                label_rectangle = LabelRectangle(
+                    label_id=_format.class_id,
+                    label_text=labels[_format.class_id],
+                    bounding_box=bounding_box
+                )
+                label_rectangles.append(label_rectangle)
+
+            process_data.label_rectangles = label_rectangles
 
 
 if __name__ == '__main__':

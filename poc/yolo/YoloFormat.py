@@ -53,3 +53,11 @@ class YoloFormat:
         fields = [self.class_id, self.x_center, self.y_center, self.width, self.height]
         _str = " ".join(str(_field) for _field in fields)
         return _str + '\n'
+
+    @classmethod
+    def from_yolo_txt(cls, str_line: str) -> "YoloFormat":
+        split = str_line.split()
+
+        class_id, x_center, y_center, width, height = split
+        return cls(int(class_id), float(x_center), float(y_center), float(width), float(height))
+

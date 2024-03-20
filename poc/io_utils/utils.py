@@ -1,4 +1,6 @@
 import glob
+import os
+import shutil
 from datetime import datetime
 from pathlib import Path
 
@@ -24,3 +26,12 @@ def make_directories(*paths: Path) -> None:
     for directory in paths:
         if not directory.exists():
             directory.mkdir()
+
+
+def make_clean_dir(dir_path: Path) -> None:
+    if not dir_path.is_dir():
+        os.mkdir(dir_path)
+
+    if len(list(dir_path.iterdir())) > 0:
+        shutil.rmtree(dir_path)
+        os.mkdir(dir_path)

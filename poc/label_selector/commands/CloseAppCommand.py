@@ -19,7 +19,6 @@ class CloseAppCommand(Command):
 
             if answer:
                 self.app.to_export = True
-                self.app.save_checkpoint()
                 self.app.destroy()
         else:
             showinfo(self.INFO_TITLE, self.INFO_MESSAGE)

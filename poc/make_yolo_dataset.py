@@ -7,7 +7,7 @@ import click
 import numpy as np
 import yaml
 
-from io_utils.utils import make_directories
+from io_utils.utils import make_directories, make_clean_dir
 
 
 @click.command()
@@ -31,6 +31,8 @@ def main(input_image_dir, input_label_dir, output_dir, config):
     input_image_dir = Path(input_image_dir)
     input_label_dir = Path(input_label_dir)
     output_dir = Path(output_dir)
+
+    make_clean_dir(output_dir)
 
     images_paths = [i for i in input_image_dir.iterdir() if i.is_file()]
     labels_paths = [i for i in input_label_dir.iterdir() if i.is_file()]
@@ -67,6 +69,9 @@ def init_dataset_yaml(config: dict, datasets_paths: dict[str, Path]) -> dict:
 
     for dataset_name, path in datasets_paths.items():
         dataset_yaml[dataset_name] = os.path.abspath(path)
+
+    for k, v in config["augmentation"].items():
+        dataset_yaml[k] = v
 
     return dataset_yaml
 

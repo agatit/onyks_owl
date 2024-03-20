@@ -30,8 +30,8 @@ class RemoveSelectedCommand(Command):
             self.removed_data_index = current_index
             self.removed_items = items_to_remove
 
-            process_data.label_rectangles = [i for i in label_rectangles
-                                             if i not in items_to_remove]
+            items_to_remove.sort(key=lambda x: self._bounding_box_area(x.bounding_box))
+            process_data.label_rectangles.remove(items_to_remove[0])
 
             app.reload_image()
             return True
@@ -46,14 +46,16 @@ class RemoveSelectedCommand(Command):
 
         self.app.reload_image()
 
-    # @staticmethod
-    # def _point_in_bounds(point: tuple[int, int], bounding_box: BoundingBox) -> bool:
-    #     x_condition = bounding_box.x1 <= point[0] <= bounding_box.x2
-    #     y_condition = bounding_box.y1 <= point[1] <= bounding_box.y2
-    #     return x_condition and y_condition
-
     @staticmethod
     def _point_in_bounds(point: tuple[int, int], bounding_box: BoundingBox) -> bool:
         x_condition = bounding_box.x1 <= point[0] <= bounding_box.x2
         y_condition = bounding_box.y1 <= point[1] <= bounding_box.y2
+
         return x_condition and y_condition
+
+    @staticmethod
+    def _bounding_box_area(bounding_box: BoundingBox) -> float:
+        width = abs(bounding_box.x1 - bounding_box.x2)
+        height = abs(bounding_box.y1 - bounding_box.y2)
+
+        return width * height

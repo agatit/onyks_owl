@@ -1,16 +1,12 @@
-import copy
 import dataclasses
 import glob
 import json
 import os
-import shutil
 from functools import partial
 from pathlib import Path
 from typing import Callable
 
 import click
-import cv2
-import numpy as np
 import torch
 import yaml
 from tqdm import tqdm
@@ -19,8 +15,8 @@ from find_frames_with_tags_scripts.ProcessFrameData import ProcessFrameData
 from find_frames_with_tags_scripts.fitering import similarity_conv, filter_batch
 from find_frames_with_tags_scripts.process import process, export_original_image, export_cropped_class, \
     export_bounding_box_image, rectify_frame
+from io_utils.utils import make_clean_dir
 from stitch.rectify.FrameRectifier import FrameRectifier
-from yolo.DetectionResult import DetectionResult
 from yolo.YoloDetector import YoloDetector
 
 
@@ -49,7 +45,7 @@ def main(input_dir, output_dir, config_path, rectify_config_path, model_path):
         with open(rectify_config_path) as f:
             rectify_config = json.load(f)
 
-    check_output_dir(output_dir)
+    make_clean_dir(output_dir)
 
     input_extension = config["extension"]["input"]
     movies_paths = init_movie_paths(input_dir, input_extension)
@@ -127,15 +123,6 @@ def init_processing_data(frame_size, detector, movies_paths,
         output.append(process_frame_data)
 
     return output
-
-
-def check_output_dir(output_dir: Path) -> None:
-    if not output_dir.is_dir():
-        os.mkdir(output_dir)
-
-    if len(list(output_dir.iterdir())) > 0:
-        shutil.rmtree(output_dir)
-        os.mkdir(output_dir)
 
 
 def init_movie_paths(input_dir: Path, input_extension: str) -> list[Path]:
