@@ -8,3 +8,6 @@ names:
   6: "Łączenie między wagonami"
   7: "Numer wagonu - 4 linijki"
   8: "Numer wagonu - 1 linijka"
+
+max_images: -1
+image_extension: .jpg

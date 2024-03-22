@@ -8,7 +8,7 @@ class WheelLabelCommand(Command):
         app = self.app
 
         labels_number = len(app.labels)
-        current_id = app.selected_label_id
+        current_id = app.current_label_id
 
         if event.delta > 0:
             next_id = current_id + 1
@@ -20,8 +20,8 @@ class WheelLabelCommand(Command):
         elif next_id >= labels_number:
             next_id = 0
 
-        app.selected_label_id = next_id
-        app.selected_label_text = app.labels[next_id]
+        app.current_label_id = next_id
+        app.current_label_text = app.labels[next_id]
 
         app.reload_label()
         return True

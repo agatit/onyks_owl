@@ -10,8 +10,8 @@ class ChangeLabelCommand(Command):
     label: str
 
     def execute(self, event: tkinter.Event = None) -> bool:
-        self.app.selected_label_id = self.class_id
-        self.app.selected_label_text = self.label
+        self.app.current_label_id = self.class_id
+        self.app.current_label_text = self.label
 
         self.app.reload_label()
         return True

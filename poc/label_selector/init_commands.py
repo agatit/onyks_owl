@@ -10,7 +10,9 @@ from label_selector.commands.EndSelectingCommand import EndSelectingCommand
 from label_selector.commands.ForceCloseAppCommand import ForceCloseAppCommand
 from label_selector.commands.GoToImageCommand import GoToImageCommand
 from label_selector.commands.NextImageCommand import NextImageCommand
+from label_selector.commands.NextLabelCommand import NextLabelCommand
 from label_selector.commands.PrevImageCommand import PrevImageCommand
+from label_selector.commands.PrevLabelCommand import PrevLabelCommand
 from label_selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
 from label_selector.commands.SaveCheckpointCommand import SaveCheckpointCommand
 from label_selector.commands.StartSelectingCommand import StartSelectingCommand
@@ -41,7 +43,7 @@ def init_default_commands(app: LabelSelector) -> None:
         history_flag=True,
     )
 
-    # keyboard
+    # Arrows
     key = "<KeyRelease-Right>"
     commands = [[SaveCheckpointCommand, defaults_args],
                 [NextImageCommand, defaults_args]]
@@ -60,6 +62,25 @@ def init_default_commands(app: LabelSelector) -> None:
     key = "<Control-KeyRelease-Left>"
     commands = [[SaveCheckpointCommand, defaults_args],
                 [GoToImageCommand, defaults_args + (0,)]]
+    register_chain_partial(key=key, commands=commands)
+
+    # WSAD - aka tryb gamingowy
+    key = "<KeyRelease-w>"
+    command = NextLabelCommand
+    register_partial(key=key, command=command, history_flag=False)
+
+    key = "<KeyRelease-s>"
+    command = PrevLabelCommand
+    register_partial(key=key, command=command, history_flag=False)
+
+    key = "<KeyRelease-a>"
+    commands = [[SaveCheckpointCommand, defaults_args],
+                [PrevImageCommand, defaults_args]]
+    register_chain_partial(key=key, commands=commands)
+
+    key = "<KeyRelease-d>"
+    commands = [[SaveCheckpointCommand, defaults_args],
+                [NextImageCommand, defaults_args]]
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-space>"

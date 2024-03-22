@@ -35,8 +35,8 @@ class EndSelectingCommand(Command):
         main_window.image_canvas.delete(start_point_ref)
 
         # draw rectangle
-        label_text = app.selected_label_text
-        label_id = app.selected_label_id
+        label_text = app.current_label_text
+        label_id = app.current_label_id
         label = f"{label_id}_{label_text}"
         main_window.draw_label_rectangle(canvas_x1y1, canvas_x2y2, label)
 

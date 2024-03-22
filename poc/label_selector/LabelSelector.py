@@ -38,12 +38,9 @@ class LabelSelector(tk.Tk):
         self.start_point = tuple()
 
         self.current_index = 0
-
+        self.current_label_id = 0
+        self.current_label_text = labels[self.current_label_id]
         self.max_index = len(self.process_data)
-        self.selected_label_id = 0
-        self.selected_label_text = labels[0]
-        self.labels_id_cycle = cycle(labels.keys())
-        self.labels_text_cycle = cycle(labels.values())
 
         self.command_history = []
         self.modes = {}
@@ -76,7 +73,7 @@ class LabelSelector(tk.Tk):
         self.main_window.set_counter(self.current_index, self.max_index)
 
     def reload_label(self):
-        self.main_window.set_class_label(self.selected_label_text)
+        self.main_window.set_class_label(self.current_label_text)
 
     def bind_canvas(self, key_string: str, callback: Callable[[tk.Event], None]) -> None:
         self.main_window.image_canvas.bind(key_string, callback)

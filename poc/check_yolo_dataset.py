@@ -1,7 +1,4 @@
 import glob
-import pickle
-import sys
-from functools import partial
 from itertools import product
 from pathlib import Path
 
@@ -10,17 +7,10 @@ import yaml
 from PIL import Image
 
 from label_selector.LabelSelector import LabelSelector
-from label_selector.ProcessData import ProcessData
 from label_selector.gui.LabelRectangle import LabelRectangle
 from label_selector.gui.utils import open_loading_screen
-from label_selector.init_commands import init_default_commands, register_command, unbind_event
+from label_selector.init_commands import init_default_commands
 from yolo.YoloFormat import YoloFormat
-
-# pyinstaller
-if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-    config_path = Path(sys._MEIPASS) / "check_yolo_dataset.yaml"
-else:
-    config_path = "resources/select_frames_with_tags.yaml"
 
 
 @click.command()
@@ -31,21 +21,19 @@ else:
               required=True, type=click.Path(exists=True, dir_okay=True),
               default="labels", help="output directory")
 @click.option("-lc", "--labels_config", "config",
-              required=True, type=click.Path(exists=True), default=config_path,
-              help="path to config")
-@click.option("-ex", "--extension", "image_extension",
-              type=str, default=".jpg",
-              help="extension of images with dot")
-def main(images_dir, labels_dir, config, image_extension):
+              required=True, type=click.Path(exists=True),
+              default="check_yolo_dataset.yaml", help="path to config")
+def main(images_dir, labels_dir, config):
     images_dir = Path(images_dir)
     labels_dir = Path(labels_dir)
-
-    images = load_files(image_extension, images_dir)
-    labels = load_files(".txt", labels_dir)
 
     with open(config, encoding="utf8") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
         labels_config = config["names"]
+
+    image_extension = config["image_extension"]
+    images = load_files(image_extension, images_dir)
+    labels = load_files(".txt", labels_dir)
 
     images_labels = [(i, l) for i, l in product(images, labels) if i.stem == l.stem]
 

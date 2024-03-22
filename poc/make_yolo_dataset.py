@@ -70,6 +70,9 @@ def init_dataset_yaml(config: dict, datasets_paths: dict[str, Path]) -> dict:
     for dataset_name, path in datasets_paths.items():
         dataset_yaml[dataset_name] = os.path.abspath(path)
 
+    for k, v in config["training"].items():
+        dataset_yaml[k] = v
+
     for k, v in config["augmentation"].items():
         dataset_yaml[k] = v
 
