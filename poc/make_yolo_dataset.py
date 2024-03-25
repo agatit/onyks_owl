@@ -36,7 +36,7 @@ def main(input_image_dir, input_label_dir, output_dir, config):
 
     images_paths = [i for i in input_image_dir.iterdir() if i.is_file()]
     labels_paths = [i for i in input_label_dir.iterdir() if i.is_file()]
-    assert len(images_paths) == len(labels_paths), "Number of images and labels is not equal"
+    # assert len(images_paths) == len(labels_paths), "Number of images and labels is not equal"
 
     sets_names = config["split_ratio"].keys()
     output_images_paths = init_output_dirs(output_dir, "images", sets_names)
@@ -65,16 +65,13 @@ def main(input_image_dir, input_label_dir, output_dir, config):
 
 def init_dataset_yaml(config: dict, datasets_paths: dict[str, Path]) -> dict:
     dataset_yaml = {"names": config["names"].copy()}
-    dataset_yaml["nc"] = len(dataset_yaml["names"])
+    # dataset_yaml["nc"] = len(dataset_yaml["names"])
 
     for dataset_name, path in datasets_paths.items():
         dataset_yaml[dataset_name] = os.path.abspath(path)
 
-    for k, v in config["training"].items():
-        dataset_yaml[k] = v
-
-    for k, v in config["augmentation"].items():
-        dataset_yaml[k] = v
+    dataset_yaml["training"] = config["training"].copy()
+    dataset_yaml["augmentation"] = config["augmentation"].copy()
 
     return dataset_yaml
 

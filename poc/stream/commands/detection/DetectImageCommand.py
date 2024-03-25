@@ -9,7 +9,6 @@ class DetectImageCommand(Command):
 
     def execute(self) -> None:
         frame = self.stream.current_frame
-        labels = self.labels_to_detect
 
-        detection_result = self.stream.yolo_detector(frame, labels)
+        detection_result = self.stream.yolo_detector(frame)
         self.stream.detections.append(detection_result)

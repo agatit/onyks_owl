@@ -1,0 +1,23 @@
+training:
+#  wszystkie klasy bez cornerow
+  classes: [0,1,3,4,5,6,7,8]
+  epochs: 200
+  patience: 50
+  batch: 300
+  imgsz: 416
+  save_period: 50
+  cache: True
+  optimizer: auto
+  verbose: True
+  plots: True
+
+augmentation:
+  hsv_h: 0.9
+  hsv_s: 0.9
+  hsv_v: 0.9
+  degrees: 5.0
+  translate: 0.5
+  scale: 0.5
+  shear: 30.0
+  mixup: 0.5
+  erasing: 0.9

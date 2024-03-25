@@ -30,8 +30,8 @@ def make_directories(*paths: Path) -> None:
 
 def make_clean_dir(dir_path: Path) -> None:
     if not dir_path.is_dir():
-        os.mkdir(dir_path)
+        dir_path.mkdir()
 
     if len(list(dir_path.iterdir())) > 0:
         shutil.rmtree(dir_path)
-        os.mkdir(dir_path)
+        dir_path.mkdir()

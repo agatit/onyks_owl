@@ -1,10 +1,8 @@
 import pathlib
 import platform
 from contextlib import contextmanager
-from dataclasses import dataclass
 from functools import singledispatchmethod
 
-import cv2 as cv
 import numpy as np
 import torch
 

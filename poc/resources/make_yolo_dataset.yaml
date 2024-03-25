@@ -15,11 +15,11 @@ split_ratio:
   test: 20
 
 training:
-  epochs: 150
-  patience: 100
+  epochs: 120
+  patience: 30
   batch: 300
   imgsz: 416
-  save_period: 50
+  save_period: 30
   cache: True
   optimizer: auto
   verbose: True
