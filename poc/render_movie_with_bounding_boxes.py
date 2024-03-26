@@ -3,12 +3,10 @@ import click
 import cv2
 import json
 
-import numpy as np
 from tqdm import tqdm
 
-from opencv_tools.image_transformations import draw_image_with_rectangles
 from stitch.rectify.FrameRectifier import FrameRectifier
-from yolo.YoloDetector import YoloDetector
+from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
 
 
 @click.command()
@@ -43,7 +41,7 @@ def main(input_movie, output_movie, model_path, codec_code, rectify_config):
         frame_rectifier = FrameRectifier(config)
         frame_rectifier.calc_maps()
 
-    detector = YoloDetector(model_path, batch_size=100)
+    detector = YoloDetectorV5(model_path, batch_size=100)
     # classes = [0, 1]
     # detector.select_classes(classes)
 

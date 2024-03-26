@@ -14,7 +14,13 @@ from stream.commands.transformation.DrawBoundingBoxesCommand import DrawBounding
 from stream.commands.transformation.RectifyCommand import RectifyCommand
 from stream.commands.transformation.ScaleImageCommand import ScaleImageCommand
 from stream.loaders.VideoLoader import VideoLoader
-from yolo.YoloDetector import YoloDetector
+from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
+from yolo.yolo_detectors.YoloDetectorV8 import YoloDetectorV8
+
+yolo_versions = {
+    "v5": YoloDetectorV5,
+    "v8": YoloDetectorV8
+}
 
 
 @click.command()
@@ -22,13 +28,15 @@ from yolo.YoloDetector import YoloDetector
               required=True, type=click.Path(exists=True),
               help="select movie to display")
 @click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),
-              required=True, default="resources/models/s_owl_4.pt", help="yolov5 model path")
+              required=True, help="yolov5 model path")
 @click.option("-rc", "--rectify_config", "rectify_config", type=click.Path(exists=True, file_okay=True),
-              required=True, default="resources/models/s_owl_4.pt", help="yolov5 model path")
+              required=True, help="rectify json file")
+@click.option("-v", "--yolo_version", "yolo_version", type=click.Choice(yolo_versions.keys()),
+              required=True, help="select yolo version")
 @click.option("-sp", "--scale_percent", "scale_percent", type=int, default=50, help="scale view movie")
 @click.option("-ct", "--confidence_threshold", "confidence_threshold", type=float, default=0.25,
               help="min confidence of detection")
-def main(input_movie, model_path, rectify_config, scale_percent, confidence_threshold):
+def main(input_movie, model_path, rectify_config, yolo_version, scale_percent, confidence_threshold):
     video_path = Path(input_movie)
     loader = VideoLoader(video_path)
 
@@ -41,7 +49,9 @@ def main(input_movie, model_path, rectify_config, scale_percent, confidence_thre
         frame_rectifier = FrameRectifier(config, *frame_size)
         frame_rectifier.calc_maps()
 
-    yolo_detector = YoloDetector(model_path, confidence_threshold)
+    detector_class = yolo_versions[yolo_version]
+    yolo_detector = detector_class(model_path, confidence_threshold)
+
     stream = Stream(loader=loader, yolo_detector=yolo_detector, frame_rectifier=frame_rectifier)
 
     in_stream_invoker = CommandInvoker()

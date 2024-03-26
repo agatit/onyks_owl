@@ -1,6 +1,5 @@
 import glob
 import json
-import logging
 import os.path
 import pathlib
 
@@ -10,7 +9,7 @@ from tqdm import tqdm
 
 from loggers.loggers import InfoLogger
 from stitch.rectify.FrameRectifier import FrameRectifier
-from yolo.YoloDetector import YoloDetector
+from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
 
 from opencv_tools.image_transformations import show_image_with_rectangles, draw_image_with_rectangles
 
@@ -40,7 +39,7 @@ def main(image_directory, output_directory, rectify_config, model_path, image_ex
     if not os.path.exists(output_directory):
         os.mkdir(output_directory)
 
-    detector = YoloDetector(model_path)
+    detector = YoloDetectorV5(model_path)
 
     log_file_name = "log.txt"
     log_path = pathlib.Path(output_directory).joinpath(log_file_name)

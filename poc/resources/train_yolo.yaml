@@ -12,12 +12,12 @@ training:
   plots: True
 
 augmentation:
-  hsv_h: 0.9
-  hsv_s: 0.9
-  hsv_v: 0.9
+  hsv_h: 0.4
+  hsv_s: 0.4
+  hsv_v: 0.4
   degrees: 5.0
-  translate: 0.5
+  translate: 0.3
   scale: 0.5
   shear: 30.0
   mixup: 0.5
-  erasing: 0.9
+  erasing: 0.4

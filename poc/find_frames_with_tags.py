@@ -17,7 +17,7 @@ from find_frames_with_tags_scripts.process import process, export_original_image
     export_bounding_box_image, rectify_frame
 from io_utils.utils import make_clean_dir
 from stitch.rectify.FrameRectifier import FrameRectifier
-from yolo.YoloDetector import YoloDetector
+from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
 
 
 @click.command()
@@ -53,7 +53,7 @@ def main(input_dir, output_dir, config_path, rectify_config_path, model_path):
     confidence_threshold = float(config["model"]["confidence_threshold"])
     batch = config["batch"]
     labels_id = config["labels"].keys()
-    detector = YoloDetector(model_path, confidence_threshold, batch)
+    detector = YoloDetectorV5(model_path, confidence_threshold, batch)
     detector.select_classes(labels_id)
 
     frame_size = config["image_size"]["width"], config["image_size"]["height"]

@@ -7,7 +7,7 @@ import numpy as np
 from find_frames_with_tags_scripts.OutputData import OutputData
 from stitch.rectify.FrameRectifier import FrameRectifier
 from yolo.DetectionResult import DetectionResult
-from yolo.YoloDetector import YoloDetector
+from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
 
 
 def _empty(*args, **kwargs):
@@ -21,7 +21,7 @@ class ProcessFrameData:
     output_extension: str
 
     rectifier: FrameRectifier
-    model: YoloDetector
+    model: YoloDetectorV5
     empty_image_step: int
 
     # functions to turn on/off

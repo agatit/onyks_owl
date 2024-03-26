@@ -13,25 +13,3 @@ split_ratio:
   train: 60
   val: 20
   test: 20
-
-training:
-  epochs: 120
-  patience: 30
-  batch: 300
-  imgsz: 416
-  save_period: 30
-  cache: True
-  optimizer: auto
-  verbose: True
-  plots: True
-
-augmentation:
-  hsv_h: 0.9
-  hsv_s: 0.9
-  hsv_v: 0.9
-  degrees: 5.0
-  translate: 0.5
-  scale: 0.5
-  shear: 30.0
-  mixup: 0.5
-  erasing: 0.9

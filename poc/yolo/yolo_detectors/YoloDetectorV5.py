@@ -2,12 +2,15 @@ import pathlib
 import platform
 from contextlib import contextmanager
 from functools import singledispatchmethod
+from typing import Any
 
 import numpy as np
 import torch
+from ultralytics import YOLO
 
 from yolo.DetectionResult import DetectionResult
 from yolo.YoloFormat import BoundingBox, YoloFormat
+from yolo.yolo_detectors.YoloDetector import YoloDetector
 
 
 # bug - https://github.com/ultralytics/yolov5/issues/10240#issuecomment-1927109491
@@ -22,38 +25,23 @@ def set_posix_windows():
 
 
 
-class YoloDetector:
-    def __init__(self, model_path: str, confidence_threshold: float = 0.25, batch_size=300):
-        self.model_path = model_path
-        self.confidence_threshold = confidence_threshold
-        self.batch_size = batch_size
-
-        model, classes, device = self._initialize_model(self.model_path)
-        self._model = model
-        self.classes = classes
-        self.device = device
-
-        self._model.conf = self.confidence_threshold
-
-        self.selected_classes = self.classes.keys()
+class YoloDetectorV5(YoloDetector):
 
     @classmethod
-    def _initialize_model(cls, model_path: str):
+    def _initialize_model(cls, model_path: str) -> tuple[Any, dict, str]:
         # model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
+
         if platform.system() == "Windows":
             with set_posix_windows():
                 model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
         else:
-            model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
+            model = torch.hub.load('ultralytics/yolov8', 'custom', path=model_path)
 
         classes = model.names
         device = 'cuda' if cls.check_if_cuda_is_available() else 'cpu'
         model.to(device)
 
         return model, classes, device
-
-    def select_classes(self, new_classes: list[int]) -> None:
-        self._model.classes = list(new_classes)
 
     @singledispatchmethod
     def __call__(self):
@@ -65,9 +53,9 @@ class YoloDetector:
         return self._detection_results_from_detections(results)
 
     @__call__.register
-    def _(self, image: np.ndarray) -> list[DetectionResult]:
+    def _(self, image: np.ndarray) -> list[list[DetectionResult]]:
         yolo_detection_result = self._model(image)
-        return self._detection_results_from_detections(yolo_detection_result)[0]
+        return self._detection_results_from_detections(yolo_detection_result)
 
     def _detection_results_from_detections(self, results) -> list[DetectionResult]:
         classes = self.classes
@@ -104,6 +92,4 @@ class YoloDetector:
 
         return all_results
 
-    @staticmethod
-    def check_if_cuda_is_available() -> bool:
-        return torch.cuda.is_available()
+
