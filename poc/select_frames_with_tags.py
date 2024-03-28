@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from pathlib import Path
 
 import click
@@ -29,6 +30,9 @@ from yolo.YoloDataset import YoloDataset
               type=int, default=-1,
               help="quick export mode, select number images to export")
 def main(input_dir, output_dir, config, quick_export):
+    # pickle dump recursion error
+    sys.setrecursionlimit(10000)
+
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
 

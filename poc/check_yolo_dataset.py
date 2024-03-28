@@ -25,6 +25,9 @@ from yolo.YoloFormat import YoloFormat
               required=True, type=click.Path(exists=True),
               default="check_yolo_dataset.yaml", help="path to config")
 def main(images_dir, labels_dir, config):
+    # pickle dump recursion error
+    sys.setrecursionlimit(10000)
+
     images_dir = Path(images_dir)
     labels_dir = Path(labels_dir)
 
