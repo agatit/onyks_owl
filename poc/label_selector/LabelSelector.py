@@ -1,6 +1,7 @@
 import pickle
 import tkinter as tk
 from itertools import cycle
+from os import access, R_OK
 from pathlib import Path
 from typing import Callable, Any
 
@@ -30,17 +31,21 @@ class LabelSelector(tk.Tk):
         self.process_data = [ProcessData(image) for image in images[:images_to_load]]
         self.labels = labels
         self.checkpoint_name = checkpoint_name
+        self.periodic_checkpoint_name = checkpoint_name + "_tmp"
 
         self.checkpoint_dir = Path.cwd()
         self.checkpoint_path = self.checkpoint_dir / self.checkpoint_name
+        self.periodic_checkpoint_path = self.checkpoint_dir / self.periodic_checkpoint_name
 
         self.to_export = False
         self.start_point = tuple()
 
-        self.current_index = 0
+        self._current_index = 0
         self.current_label_id = 0
         self.current_label_text = labels[self.current_label_id]
         self.max_index = len(self.process_data)
+
+        self.total_changed_index = 0
 
         self.command_history = []
         self.modes = {}
@@ -51,6 +56,15 @@ class LabelSelector(tk.Tk):
 
         # init state
         self.reload_main_window()
+
+    @property
+    def current_index(self):
+        return self._current_index
+
+    @current_index.setter
+    def current_index(self, value):
+        self.total_changed_index += 1
+        self._current_index = value
 
     def reload_main_window(self):
         self.reload_image()
@@ -147,30 +161,43 @@ class LabelSelector(tk.Tk):
 
         return yolo_formats
 
-    def save_checkpoint(self) -> None:
+    def save_checkpoint(self, path: Path) -> None:
         index = self.current_index
         checkpoint = Checkpoint(index, self.process_data)
+        self._dump_checkpoint(path, checkpoint)
 
-        self._dump_checkpoint(checkpoint)
-
-    def _dump_checkpoint(self, data):
-        with open(self.checkpoint_path, 'wb') as file:
+    @staticmethod
+    def _dump_checkpoint(path: Path, data: Any):
+        with open(path, 'wb') as file:
             pickle.dump(data, file)
 
     def load_checkpoint(self) -> None:
-        checkpoint = self._load_from_pickle()
+        last_checkpoint = self._select_latest_checkpoint()
 
-        self.current_index = checkpoint.current_index
-        self.process_data = checkpoint.process_data
+        if last_checkpoint:
+            self._load_from_pickle(last_checkpoint)
 
-        self.reload_main_window()
-        self.max_index = len(self.process_data)
+    def _select_latest_checkpoint(self) -> Any:
+        checkpoints = [
+            self.checkpoint_path,
+            self.periodic_checkpoint_path
+        ]
 
-    def _load_from_pickle(self):
+        checkpoints = [i for i in checkpoints if i.exists() and i.stat().st_size > 0]
+
+        if len(checkpoints) > 0:
+            checkpoints.sort(key=lambda p: p.stat().st_mtime)
+            return checkpoints.pop()
+        else:
+            return None
+
+    def _load_from_pickle(self, path: Path) -> Any:
         try:
-            with open(self.checkpoint_path, 'rb') as file:
+            with open(path, 'rb') as file:
                 data = pickle.load(file)
         except FileNotFoundError:
-            raise FileNotFoundError(f"No checkpoint file: {self.checkpoint_name} found")
+            raise FileNotFoundError(f"No checkpoint file: {self.checkpoint_name}")
+        except TypeError:
+            raise FileNotFoundError(f"Any checkpoint file")
 
         return data

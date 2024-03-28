@@ -15,6 +15,7 @@ from label_selector.commands.PrevImageCommand import PrevImageCommand
 from label_selector.commands.PrevLabelCommand import PrevLabelCommand
 from label_selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
 from label_selector.commands.SaveCheckpointCommand import SaveCheckpointCommand
+from label_selector.commands.SavePeriodicCheckpointCommand import SavePeriodicCheckpointCommand
 from label_selector.commands.StartSelectingCommand import StartSelectingCommand
 from label_selector.commands.WheelLabelCommand import WheelLabelCommand
 
@@ -43,25 +44,37 @@ def init_default_commands(app: LabelSelector) -> None:
         history_flag=True,
     )
 
+    # todo: do jakieś struktury
+    go_to_next_image = [[SaveCheckpointCommand, defaults_args],
+                        [NextImageCommand, defaults_args],
+                        [SavePeriodicCheckpointCommand, defaults_args]]
+
+    go_to_last_image = [[SaveCheckpointCommand, defaults_args],
+                        [GoToImageCommand, defaults_args + (app.max_index - 1,)],
+                        [SavePeriodicCheckpointCommand, defaults_args]]
+
+    go_to_previous_image = [[SaveCheckpointCommand, defaults_args],
+                            [PrevImageCommand, defaults_args],
+                            [SavePeriodicCheckpointCommand, defaults_args]]
+
+    go_to_first_image = [[SaveCheckpointCommand, defaults_args],
+                         [GoToImageCommand, defaults_args + (0,)],
+                         [SavePeriodicCheckpointCommand, defaults_args]]
     # Arrows
     key = "<KeyRelease-Right>"
-    commands = [[SaveCheckpointCommand, defaults_args],
-                [NextImageCommand, defaults_args]]
+    commands = go_to_next_image
     register_chain_partial(key=key, commands=commands)
 
     key = "<Control-KeyRelease-Right>"
-    commands = [[SaveCheckpointCommand, defaults_args],
-                [GoToImageCommand, defaults_args + (app.max_index - 1,)]]
+    commands = go_to_last_image
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-Left>"
-    commands = [[SaveCheckpointCommand, defaults_args],
-                [PrevImageCommand, defaults_args]]
+    commands = go_to_previous_image
     register_chain_partial(key=key, commands=commands)
 
     key = "<Control-KeyRelease-Left>"
-    commands = [[SaveCheckpointCommand, defaults_args],
-                [GoToImageCommand, defaults_args + (0,)]]
+    commands = go_to_first_image
     register_chain_partial(key=key, commands=commands)
 
     # WSAD - aka tryb gamingowy
@@ -74,18 +87,15 @@ def init_default_commands(app: LabelSelector) -> None:
     register_partial(key=key, command=command, history_flag=False)
 
     key = "<KeyRelease-a>"
-    commands = [[SaveCheckpointCommand, defaults_args],
-                [PrevImageCommand, defaults_args]]
+    commands = go_to_previous_image
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-d>"
-    commands = [[SaveCheckpointCommand, defaults_args],
-                [NextImageCommand, defaults_args]]
+    commands = go_to_next_image
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-space>"
-    commands = [[SaveCheckpointCommand, defaults_args],
-                [NextImageCommand, defaults_args]]
+    commands = go_to_next_image
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-Return>"
@@ -135,6 +145,13 @@ def init_default_commands(app: LabelSelector) -> None:
     app.activate_mode("default")
 
 
+def register_chain_command(commands: list[list[type, Any]], default_args: tuple, **kwargs):
+    command = ChainCommand
+    args = default_args + (commands,)
+
+    register_command(command=command, args=args, **kwargs)
+
+
 def register_command(app: LabelSelector, target: Any, key: str, mode_name: str,
                      command: type, args: tuple, history_flag: bool):
     if history_flag:
@@ -143,13 +160,6 @@ def register_command(app: LabelSelector, target: Any, key: str, mode_name: str,
         event = app.register_command_without_history(command, *args)
 
     app.register_to_mode(mode_name, target, key, event)
-
-
-def register_chain_command(commands: list[list[type, Any]], default_args: tuple, **kwargs):
-    command = ChainCommand
-    args = default_args + (commands,)
-
-    register_command(command=command, args=args, **kwargs)
 
 
 def unbind_event(target: Any, event_key: str) -> None:

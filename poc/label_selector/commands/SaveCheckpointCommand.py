@@ -9,10 +9,10 @@ class SaveCheckpointCommand(Command):
     silent: bool = True
 
     def execute(self, event: tkinter.Event = None) -> bool:
-        self.app.save_checkpoint()
+        self.app.save_checkpoint(self.app.checkpoint_path)
 
         if not self.silent:
-            self.main_window.set_info_with_timer("Saved", 2000)
+            self.main_window.set_info_with_timer("Auto saved", 2000)
 
         return True
 

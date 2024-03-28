@@ -118,6 +118,16 @@ class SelectFramesWithTags(LabelSelector):
 
             process_data.label_rectangles = label_rectangles
 
+    def load_checkpoint(self) -> None:
+        last_checkpoint = self._select_latest_checkpoint()
+        checkpoint = self._load_from_pickle(last_checkpoint)
+
+        self.current_index = checkpoint.current_index
+        self.process_data = checkpoint.process_data
+
+        self.reload_main_window()
+        self.max_index = len(self.process_data)
+
 
 if __name__ == '__main__':
     main()

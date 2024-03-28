@@ -1,4 +1,5 @@
 import glob
+import sys
 from itertools import product
 from pathlib import Path
 
@@ -95,15 +96,17 @@ class CheckYoloDataset(LabelSelector):
 
         self.reload_main_window()
 
-    def save_checkpoint(self) -> None:
+    def save_checkpoint(self, path: Path) -> None:
         index = self.current_index
         status = self.to_export
         data = (status, index, self.process_data)
 
-        self._dump_checkpoint(data)
+        self._dump_checkpoint(path, data)
 
     def load_checkpoint(self) -> None:
-        data = self._load_from_pickle()
+        last_checkpoint = self._select_latest_checkpoint()
+        data = self._load_from_pickle(last_checkpoint)
+
         self.to_export, self.current_index, self.process_data = data
 
         self.process_data = [i for i in self.process_data if i.image_path.exists()]
