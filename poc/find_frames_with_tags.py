@@ -4,20 +4,22 @@ import json
 import os
 from functools import partial
 from pathlib import Path
-from typing import Callable
+from typing import Iterable, Callable
 
 import click
-import torch
 import yaml
 from tqdm import tqdm
 
 from find_frames_with_tags_scripts.ProcessFrameData import ProcessFrameData
-from find_frames_with_tags_scripts.fitering import similarity_conv, filter_batch
-from find_frames_with_tags_scripts.process import process, export_original_image, export_cropped_class, \
-    export_bounding_box_image, rectify_frame
+from find_frames_with_tags_scripts.exporters import export_original_image, export_cropped_class, \
+    export_bounding_box_image
+from find_frames_with_tags_scripts.loaders import load_efficientnet, load_any_below_threshold, \
+    load_exporter_original_image, load_exporter_bounding_box_image, load_exporter_cropped
+from find_frames_with_tags_scripts.process import process
 from io_utils.utils import make_clean_dir
+from io_utils.yaml import init_options, Options
 from stitch.rectify.FrameRectifier import FrameRectifier
-from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
+from yolo.yolo_detectors.YoloDetectorV8 import YoloDetectorV8
 
 
 @click.command()
@@ -47,31 +49,7 @@ def main(input_dir, output_dir, config_path, rectify_config_path, model_path):
 
     make_clean_dir(output_dir)
 
-    input_extension = config["extension"]["input"]
-    movies_paths = init_movie_paths(input_dir, input_extension)
-
-    confidence_threshold = float(config["model"]["confidence_threshold"])
-    batch = config["batch"]
-    labels_id = config["labels"].keys()
-    detector = YoloDetectorV5(model_path, confidence_threshold, batch)
-    detector.select_classes(labels_id)
-
-    frame_size = config["image_size"]["width"], config["image_size"]["height"]
-    output_extension = config["extension"]["output"]
-
-    export_callbacks: dict[str, tuple[str, Callable]] = {
-        "original_image": ("export_original_image_fun", export_original_image),
-        "cropped": ("export_cropped_class_fun", export_cropped_class),
-        "bounding_box_image": ("export_bounding_box_image_fun", export_bounding_box_image)
-    }
-    selected_output = config["output"]
-    export_callbacks = [v for k, v in export_callbacks.items() if selected_output[k]]
-
-    empty_image_step = config["empty_image_step"]
-    process_data = init_processing_data(frame_size, detector,
-                                        movies_paths, output_dir,
-                                        rectify_config, output_extension,
-                                        export_callbacks, empty_image_step)
+    process_data = configure_process_data(config, input_dir, model_path, output_dir, rectify_config)
 
     for data in process_data:
         for _ in tqdm(process(data), desc=data.movie_path.name):
@@ -89,14 +67,43 @@ def main(input_dir, output_dir, config_path, rectify_config_path, model_path):
         json.dump(outputs, file)
 
 
-# todo: zredukować parametry
-def init_processing_data(frame_size, detector, movies_paths,
-                         output_dir, rectify_config, output_extension,
-                         export_callbacks, empty_image_step):
-    output = []
+def configure_process_data(config, input_dir, model_path, output_dir, rectify_config):
+    input_extension = config["extension"]["input"]
+    movies_paths = init_movie_paths(input_dir, input_extension)
 
+    confidence_threshold = float(config["model"]["confidence_threshold"])
+    batch = config["model"]["batch"]
+    labels_id = config["model"]["classes"]
+    detector = YoloDetectorV8(model_path, confidence_threshold, batch)
+    detector.select_classes(labels_id)
+
+    batch_filters: Options = {
+        "efficientnet": load_efficientnet,
+    }
+    detection_filters: Options = {
+        "any_below_threshold": load_any_below_threshold
+    }
+    export_frame_callbacks: Options = {
+        "original_image": load_exporter_original_image,
+    }
+    export_frame_with_detections_callbacks: Options = {
+        "cropped": load_exporter_cropped,
+        "bounding_box_image": load_exporter_bounding_box_image
+    }
+
+    batch_filters = init_options(batch_filters, config["batch_filters"])
+    detection_filters = init_options(detection_filters, config["detections_filters"])
+    export_frame_callbacks = init_options(export_frame_callbacks, config["output"])
+    export_frame_with_detections_callbacks = init_options(export_frame_with_detections_callbacks, config["output"])
+
+    frame_size = config["image_size"]["width"], config["image_size"]["height"]
+    output_extension = config["extension"]["output"]
+    empty_image_step = config["empty_image_step"]
+
+    process_data = []
     for movie_path in movies_paths:
         frame_rectifier = None
+
         if len(rectify_config) > 0:
             frame_rectifier = FrameRectifier(rectify_config, *frame_size)
             frame_rectifier.calc_maps()
@@ -104,25 +111,26 @@ def init_processing_data(frame_size, detector, movies_paths,
         _output_dir = output_dir / movie_path.stem
         os.mkdir(_output_dir)
 
-        process_frame_data = ProcessFrameData(movie_path, _output_dir, output_extension,
-                                              frame_rectifier, detector, empty_image_step)
+        new_data = ProcessFrameData(movie_path, _output_dir, output_extension,
+                                    frame_rectifier, detector, empty_image_step)
 
-        if process_frame_data.rectifier:
-            rectify_fun = partial(rectify_frame, process_frame_data)
-            process_frame_data.rectify_frame_fun = rectify_fun
+        new_data.batch_filter_callbacks = batch_filters
+        new_data.detections_filter_callbacks = detection_filters
 
-        for method_name, callback, in export_callbacks:
-            similarity_fun = partial(callback, process_frame_data)
-            setattr(process_frame_data, method_name, similarity_fun)
+        add_callbacks_to_list_partial = partial(add_callbacks_to_list, new_data)
+        add_callbacks_to_list_partial(new_data.export_frame_callbacks, export_frame_callbacks)
+        add_callbacks_to_list_partial(new_data.export_frame_with_detections_callbacks,
+                                      export_frame_with_detections_callbacks)
 
-        model, device = load_efficientnet()
-        similarity_fun = partial(similarity_conv, model=model, device=device)
-        filter_fun = partial(filter_batch, similarity_fun=similarity_fun)
-        process_frame_data.filter_batch_fun = filter_fun
+        process_data.append(new_data)
 
-        output.append(process_frame_data)
+    return process_data
 
-    return output
+
+def add_callbacks_to_list(process_frame_data: ProcessFrameData, target_list: list, callbacks: Iterable[Callable]):
+    for callback in callbacks:
+        partial_fun = partial(callback, process_frame_data)
+        target_list.append(partial_fun)
 
 
 def init_movie_paths(input_dir: Path, input_extension: str) -> list[Path]:
@@ -130,14 +138,6 @@ def init_movie_paths(input_dir: Path, input_extension: str) -> list[Path]:
     movies_paths = glob.glob(str(glob_mask))
 
     return [Path(i) for i in movies_paths]
-
-
-def load_efficientnet():
-    model = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_efficientnet_b0', pretrained=True)
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-    model.to(device)
-
-    return model, device
 
 
 if __name__ == '__main__':

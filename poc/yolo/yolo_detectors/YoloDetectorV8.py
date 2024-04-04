@@ -9,6 +9,11 @@ from yolo.yolo_detectors.YoloDetector import YoloDetector
 
 
 class YoloDetectorV8(YoloDetector):
+
+    def __init__(self, model_path: str, confidence_threshold: float = 0.25, batch_size=300, verbose=False) -> None:
+        super().__init__(model_path, confidence_threshold, batch_size)
+        self.verbose = verbose
+
     @classmethod
     def _initialize_model(cls, model_path: str) -> tuple:
         model = YOLO(model_path)
@@ -25,12 +30,18 @@ class YoloDetectorV8(YoloDetector):
 
     @__call__.register
     def _(self, images: list) -> list[list[DetectionResult]]:
-        results = self._model(images, conf=self.confidence_threshold)
+        if len(images) < 1:
+            return []
+
+        results = self._model(images, conf=self.confidence_threshold, verbose=self.verbose)
         return self._detection_results_from_detections(results)
 
     @__call__.register
     def _(self, image: np.ndarray) -> list[list[DetectionResult]]:
-        yolo_detection_result = self._model(image, conf=self.confidence_threshold)
+        if image is None:
+            return None
+
+        yolo_detection_result = self._model(image, conf=self.confidence_threshold, verbose=self.verbose)
         return self._detection_results_from_detections(yolo_detection_result)
 
     @staticmethod

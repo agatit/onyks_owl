@@ -1,4 +1,5 @@
-from typing import Callable
+from functools import partial
+from typing import Callable, Iterable
 
 import numpy as np
 import torch
@@ -7,8 +8,10 @@ from torchvision import transforms
 SIMILARITY_DIFF_RATIO = 21.3
 SIMILARITY_CONV_THRESHOLD = 1700
 
+SimilarityFun = Callable[[np.ndarray, np.ndarray], bool]
+BatchFilterCallback = Callable[[Iterable[np.ndarray]], Iterable[np.ndarray]]
 
-def filter_batch(batch: list[np.ndarray], similarity_fun: Callable[[np.ndarray, np.ndarray], bool]) -> list[np.ndarray]:
+def filter_batch(batch: list[np.ndarray], similarity_fun: SimilarityFun) -> list[np.ndarray]:
     if len(batch) < 1:
         return batch
 
@@ -56,4 +59,15 @@ def similarity_conv(image1: np.ndarray, image2: np.ndarray, model, device) -> fl
 
     # if value > then threshold then are different
     return value > SIMILARITY_CONV_THRESHOLD
+
+def init_efficientnet() -> BatchFilterCallback:
+    model = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_efficientnet_b0', pretrained=True)
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    model.to(device)
+
+    similarity_fun = partial(similarity_conv, model=model, device=device)
+    filter_fun = partial(filter_batch, similarity_fun=similarity_fun)
+
+    return filter_fun
+
 

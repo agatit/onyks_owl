@@ -1,7 +1,9 @@
 import abc
 from abc import ABC
+from functools import singledispatchmethod
 from typing import Any
 
+import numpy as np
 import torch
 
 from yolo.DetectionResult import DetectionResult
@@ -28,8 +30,18 @@ class YoloDetector(ABC):
     def _initialize_model(cls, model_path: str) -> tuple[Any, dict, str]:
         pass
 
-    @abc.abstractmethod
+    @singledispatchmethod
     def __call__(self) -> list[list[DetectionResult]]:
+        pass
+
+    @abc.abstractmethod
+    @__call__.register
+    def _(self, images: list) -> list[list[DetectionResult]]:
+        pass
+
+    @abc.abstractmethod
+    @__call__.register
+    def _(self, image: np.ndarray) -> list[list[DetectionResult]]:
         pass
 
     def select_classes(self, new_classes: list[int]) -> None:

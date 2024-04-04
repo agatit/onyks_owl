@@ -1,13 +1,20 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, Iterable
+from typing import Iterable, Callable
 
 import numpy as np
 
 from find_frames_with_tags_scripts.OutputData import OutputData
+from find_frames_with_tags_scripts.filtering.batch_filtering import BatchFilterCallback
+from find_frames_with_tags_scripts.filtering.detecions_filtering import DetectionsFilterCallback
 from stitch.rectify.FrameRectifier import FrameRectifier
 from yolo.DetectionResult import DetectionResult
-from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
+from yolo.yolo_detectors.YoloDetector import YoloDetector
+
+
+ExportFrameCallback = Callable[[np.ndarray], None]
+ExportFrameWithDetectionsCallback = Callable[[np.ndarray, Iterable[DetectionResult]], None]
+
 
 
 def _empty(*args, **kwargs):
@@ -21,20 +28,18 @@ class ProcessFrameData:
     output_extension: str
 
     rectifier: FrameRectifier
-    model: YoloDetectorV5
+    model: YoloDetector
     empty_image_step: int
 
-    # functions to turn on/off
-    rectify_frame_fun: Callable[[np.ndarray], np.ndarray] = field(default=(lambda x: x))
-    filter_batch_fun: Callable[[Iterable[np.ndarray]], Iterable[np.ndarray]] = field(default=(lambda x: x))
-    export_original_image_fun: Callable[[np.ndarray], None] = field(default=_empty)
-    export_cropped_class_fun: Callable[[Iterable[DetectionResult],
-                                        np.ndarray], None] = field(default=_empty)
-    export_bounding_box_image_fun: Callable[[Iterable[DetectionResult],
-                                             np.ndarray], None] = field(default=_empty)
-
+    batch_filter_callbacks: list[BatchFilterCallback] = field(init=False, default_factory=list)
+    detections_filter_callbacks: list[DetectionsFilterCallback] = field(init=False, default_factory=list)
+    export_frame_callbacks: list[ExportFrameCallback] = field(init=False, default_factory=list)
+    export_frame_with_detections_callbacks: list[ExportFrameWithDetectionsCallback] = field(init=False,
+                                                                                            default_factory=list)
     output_data: list[OutputData] = field(init=False, default_factory=list)
     export_frame_counter: int = field(init=False, default=0)
+
+    BOUNDING_BOX_FILE_SUFFIX = "_b"
 
     def append_output_data(self, detection_results: Iterable[DetectionResult]):
         extension = self.output_extension
@@ -55,3 +60,34 @@ class ProcessFrameData:
 
     def update_export_frame_counter(self):
         self.export_frame_counter += 1
+
+    def rectify_frame(self, frame: np.ndarray) -> np.ndarray:
+        if self.rectifier:
+            return self.rectifier.rectify(frame)
+        else:
+            return frame
+
+    def filter_batch(self, batch: Iterable[np.ndarray]) -> list[np.ndarray]:
+        for batch_filter in self.batch_filter_callbacks:
+            batch = batch_filter(batch)
+
+        return batch
+
+    def check_detections(self, detections: Iterable[DetectionResult]) -> bool:
+        results = []
+
+        for detection_filter in self.detections_filter_callbacks:
+            result = detection_filter(detections)
+            results.append(result)
+
+        return all(results)
+
+    def export_frame(self, frame: np.ndarray) -> None:
+        for frame_exporter in self.export_frame_callbacks:
+            frame_exporter(frame)
+
+    def export_frames_with_detections(self, frame: np.ndarray, detections: Iterable[DetectionResult]) -> None:
+        for frame_exporter in self.export_frame_with_detections_callbacks:
+            frame_exporter(frame, detections)
+
+

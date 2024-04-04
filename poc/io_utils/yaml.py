@@ -1,16 +1,5 @@
-from abc import ABC
 from ast import literal_eval
-from dataclasses import dataclass
-from typing import Any
-
-# class YamlDataclassExporter(ABC):
-#     def import_yaml(self, file):
-
-
-class FromYaml:
-    def __init__(self, **attr):
-        for name, value in attr.items():
-            setattr(self, name, value)
+from typing import Any, Protocol, runtime_checkable
 
 
 def literal_to_tuple(dictionary: dict, keys: list) -> dict:
@@ -24,3 +13,22 @@ def literal_to_tuple(dictionary: dict, keys: list) -> dict:
 
     return result
 
+class LoaderFunction(Protocol):
+    def __call__(self, **kwargs) -> Any:
+        pass
+
+
+Options = dict[str, LoaderFunction]
+
+
+def init_options(options: Options, config: dict) -> list[Any]:
+    results = []
+
+    for option_name, loader_function in options.items():
+        if not config[option_name]["active"]:
+            continue
+
+        result = loader_function(**config[option_name])
+        results.append(result)
+
+    return results
