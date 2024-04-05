@@ -1,4 +1,6 @@
 import json
+from copy import copy
+from functools import reduce
 from pathlib import Path
 
 import click
@@ -22,8 +24,8 @@ from stream.loaders.VideoLoader import VideoLoader
 
 
 @click.command()
-@click.option("-in", "--input", "lines_path", type=click.Path(exists=True, file_okay=True),
-              required=True, help="json file with lines")
+@click.option("-in", "--input", "lines_paths", type=click.Path(exists=True, file_okay=True),
+              required=True, help="json file with lines, can input multiple", multiple=True)
 @click.option("-out", "--output", "output_path", type=click.Path(),
               required=True, help="json rectify config")
 @click.option("-cf", "--config", "config_path", type=click.Path(exists=True, file_okay=True),
@@ -34,9 +36,13 @@ from stream.loaders.VideoLoader import VideoLoader
               help="display movie to rectify")
 @click.option("-d", "--display_ratio", "display_ratio", type=int, default=60,
               help="display images in x% ratio")
-def main(lines_path, output_path, config_path, image_path, movie_path, display_ratio):
-    with open(lines_path, "r") as file:
-        lines = json.load(file)
+def main(lines_paths, output_path, config_path, image_path, movie_path, display_ratio):
+    lines = []
+    for path in lines_paths:
+        with open(path, "r") as file:
+            lines.append(json.load(file))
+
+    lines = concat_lines(lines)
 
     with open(config_path, "r") as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
@@ -83,6 +89,20 @@ def main(lines_path, output_path, config_path, image_path, movie_path, display_r
             stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
 
             DisplayStreamDirector(stream).run()
+
+
+def concat_lines(lines: list[dict]) -> list[dict]:
+    return reduce(merge, lines)
+
+
+def merge(x, y):
+    results = []
+    for list_x, list_y in zip(x, y):
+        result = copy(list_x)
+        result["lines"] += list_y["lines"]
+        results.append(result)
+
+    return results
 
 
 def init_minimize_params(config: dict) -> dict:

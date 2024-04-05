@@ -1,0 +1,18 @@
+names:
+  0: vertical_container_number
+  1: horizontal_container_number
+  2: container_corner
+  3: container
+  4: railcar_bogie
+  5: railcar_number_two_lines
+  6: railcar_gap
+  7: railcar_number_four_lines
+  8: railcar_number_one_line
+
+image:
+  extension: .jpg
+
+model:
+  confidence_threshold: 0.25
+  batch_size: 500
+  classes: [0,1,3,4,5,6,7,8]

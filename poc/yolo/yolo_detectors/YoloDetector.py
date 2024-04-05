@@ -10,7 +10,8 @@ from yolo.DetectionResult import DetectionResult
 
 
 class YoloDetector(ABC):
-    def __init__(self, model_path: str, confidence_threshold: float = 0.25, batch_size=300):
+    def __init__(self, model_path: str, confidence_threshold: float = 0.25, batch_size: int = 300,
+                 classes: list[int] = None):
         self.model_path = model_path
         self.confidence_threshold = confidence_threshold
         self.batch_size = batch_size
@@ -23,6 +24,9 @@ class YoloDetector(ABC):
         self._model.conf = self.confidence_threshold
 
         self.selected_classes = self.classes.keys()
+
+        if classes is not None:
+            self.select_classes(classes)
 
     @classmethod
     @abc.abstractmethod

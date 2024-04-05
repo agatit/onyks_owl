@@ -10,8 +10,8 @@ from yolo.yolo_detectors.YoloDetector import YoloDetector
 
 class YoloDetectorV8(YoloDetector):
 
-    def __init__(self, model_path: str, confidence_threshold: float = 0.25, batch_size=300, verbose=False) -> None:
-        super().__init__(model_path, confidence_threshold, batch_size)
+    def __init__(self, model_path: str, confidence_threshold: float = 0.25, batch_size=300, verbose=False, classes: list[int] = None) -> None:
+        super().__init__(model_path, confidence_threshold, batch_size, classes)
         self.verbose = verbose
 
     @classmethod

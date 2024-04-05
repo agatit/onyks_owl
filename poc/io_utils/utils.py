@@ -35,3 +35,8 @@ def make_clean_dir(dir_path: Path) -> None:
     if len(list(dir_path.iterdir())) > 0:
         shutil.rmtree(dir_path)
         dir_path.mkdir()
+
+
+def load_paths_with_extension(images_dir: Path, image_extension: str):
+    glob_mask = str(images_dir / ("*" + image_extension))
+    return [Path(i) for i in glob.glob(glob_mask)]

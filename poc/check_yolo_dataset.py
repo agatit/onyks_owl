@@ -1,4 +1,3 @@
-import glob
 import sys
 from itertools import product
 from pathlib import Path
@@ -7,6 +6,7 @@ import click
 import yaml
 from PIL import Image
 
+from io_utils.utils import load_paths_with_extension
 from label_selector.LabelSelector import LabelSelector
 from label_selector.gui.LabelRectangle import LabelRectangle
 from label_selector.gui.utils import open_loading_screen
@@ -36,8 +36,8 @@ def main(images_dir, labels_dir, config):
         labels_config = config["names"]
 
     image_extension = config["image_extension"]
-    images = load_files(image_extension, images_dir)
-    labels = load_files(".txt", labels_dir)
+    images = load_paths_with_extension(images_dir, image_extension)
+    labels = load_paths_with_extension(labels_dir, ".txt")
 
     images_labels = [(i, l) for i, l in product(images, labels) if i.stem == l.stem]
 
@@ -56,11 +56,6 @@ def main(images_dir, labels_dir, config):
 
     if app.to_export:
         app.export()
-
-
-def load_files(image_extension: str, images_dir: Path):
-    glob_mask = str(images_dir / ("*" + image_extension))
-    return [Path(i) for i in glob.glob(glob_mask)]
 
 
 class CheckYoloDataset(LabelSelector):

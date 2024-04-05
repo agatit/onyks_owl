@@ -28,9 +28,9 @@ yolo_versions = {
               required=True, type=click.Path(exists=True),
               help="select movie to display")
 @click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),
-              required=True, help="yolov5 model path")
+              required=True, help="yolo model path")
 @click.option("-rc", "--rectify_config", "rectify_config", type=click.Path(exists=True, file_okay=True),
-              required=True, help="rectify json file")
+              help="rectify json file")
 @click.option("-v", "--yolo_version", "yolo_version", type=click.Choice(yolo_versions.keys()),
               required=True, help="select yolo version")
 @click.option("-sp", "--scale_percent", "scale_percent", type=int, default=50, help="scale view movie")
