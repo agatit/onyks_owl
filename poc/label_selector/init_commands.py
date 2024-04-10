@@ -18,6 +18,7 @@ from label_selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
 from label_selector.commands.SaveCheckpointCommand import SaveCheckpointCommand
 from label_selector.commands.SavePeriodicCheckpointCommand import SavePeriodicCheckpointCommand
 from label_selector.commands.StartSelectingCommand import StartSelectingCommand
+from label_selector.commands.WheelLabelCommand import WheelLabelCommand
 
 
 def init_default_commands(app: LabelSelector) -> None:
@@ -129,15 +130,15 @@ def init_default_commands(app: LabelSelector) -> None:
     command = RemoveSelectedCommand
     register_partial(key=key, command=command, target=app.main_window.image_canvas)
 
-    # key = "<MouseWheel>"
-    # command = WheelLabelCommand
-    # register_partial(key=key, command=command, history_flag=False)
+    key = "<MouseWheel>"
+    command = WheelLabelCommand
+    register_partial(key=key, command=command, history_flag=False)
 
-    key = "<<ListboxSelect>>"
-    command = ListBoxSelectLabelCommand
-    args = defaults_args + (main_window.side_bar.classes_listbox.listbox,)
-    register_partial(key=key, command=command, args=args, history_flag=False,
-                     target=main_window.side_bar.classes_listbox.listbox)
+    # key = "<<ListboxSelect>>"
+    # command = ListBoxSelectLabelCommand
+    # args = defaults_args + (main_window.side_bar.classes_listbox.listbox,)
+    # register_partial(key=key, command=command, args=args, history_flag=False,
+    #                  target=main_window.side_bar.classes_listbox.listbox)
 
     # global
     key = "<KeyRelease-Escape>"

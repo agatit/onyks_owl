@@ -11,7 +11,8 @@ class SideBar(tk.Frame):
         info_label.pack(side=tk.TOP, expand=False, anchor=tk.N)
         self.info_label = info_label
 
-        gamma_scale = tk.Scale(self, orient=tk.HORIZONTAL, length=200, from_=1.0, to=100.0)
+        self.gamma_value = tk.IntVar(value=100)
+        gamma_scale = tk.Scale(self, variable=self.gamma_value, orient=tk.HORIZONTAL, length=200, from_=100, to=500)
         gamma_scale.pack(side=tk.TOP, expand=False, anchor=tk.N)
         self.gamma_scale = gamma_scale
 

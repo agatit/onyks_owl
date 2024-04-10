@@ -1,7 +1,9 @@
 import tkinter as tk
 from pathlib import Path
 
-from PIL import Image, ImageTk
+import cv2
+import numpy as np
+from PIL import Image, ImageTk, ImageEnhance
 
 from label_selector.gui.LabelRectangle import LabelRectangle
 from label_selector.gui.components.SideBar import SideBar
@@ -30,6 +32,8 @@ class MainWindow(tk.Frame):
         side_bar.pack(side=tk.RIGHT, fill=tk.Y, padx=5, pady=5)
         self.side_bar = side_bar
 
+        self.side_bar.gamma_value.trace("w", lambda *x: self.refresh_image())
+
         self.bind("<Configure>", lambda e: self.refresh_image())
 
     def load_image(self, img_path: Path, label_rectangles: list[LabelRectangle]) -> None:
@@ -46,9 +50,10 @@ class MainWindow(tk.Frame):
 
         image_canvas.update()
         canvas_size = image_canvas.winfo_width(), image_canvas.winfo_height()
-        resized_image = self.original_image.resize(canvas_size)
+        transformed_image = self.original_image.resize(canvas_size)
+        transformed_image = self.adjust_brightness(transformed_image, self.side_bar.gamma_value.get() / 100)
 
-        self.tk_image = ImageTk.PhotoImage(resized_image)
+        self.tk_image = ImageTk.PhotoImage(transformed_image)
         image_canvas.create_image(0, 0, anchor=tk.NW, image=self.tk_image)
 
         self._draw_on_canvas()
@@ -93,3 +98,7 @@ class MainWindow(tk.Frame):
 
         label_x1y1 = (x1y1[0] + 6, x1y1[1] - 6)
         self.image_canvas.create_text(label_x1y1, fill="red", text=text)
+
+    @staticmethod
+    def adjust_brightness(image: Image, gamma: float = 1.0):
+        return ImageEnhance.Brightness(image).enhance(gamma)
