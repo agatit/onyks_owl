@@ -29,7 +29,10 @@ from yolo.YoloDataset import YoloDataset
 @click.option("-qe", "--quick_export", "quick_export",
               type=int, default=-1,
               help="quick export mode, select number images to export")
-def main(input_dir, output_dir, config, quick_export):
+@click.option("-li", "--last_image", "last_image",
+              is_flag=True,
+              help="last image mode, select number images to export")
+def main(input_dir, output_dir, config, quick_export, last_image):
     # pickle dump recursion error
     sys.setrecursionlimit(10000)
 
@@ -62,6 +65,10 @@ def main(input_dir, output_dir, config, quick_export):
             app.load_checkpoint()
         except FileNotFoundError:
             print(f"Not found: {app.checkpoint_name}")
+
+        if last_image:
+            app.current_index = app.max_index - 2
+            app.reload_main_window()
 
         if quick_export > 0:
             app.destroy()

@@ -1,10 +1,11 @@
-from dataclasses import dataclass
 import tkinter as tk
 from pathlib import Path
 
 from PIL import Image, ImageTk
 
 from label_selector.gui.LabelRectangle import LabelRectangle
+from label_selector.gui.components.SideBar import SideBar
+from label_selector.gui.components.TopBar import TopBar, TopBarLabels
 
 
 class MainWindow(tk.Frame):
@@ -17,30 +18,17 @@ class MainWindow(tk.Frame):
 
         self.label_rectangles = []
 
-        labels_container = tk.Frame(self)
-        self.labels_container = labels_container
-
-        info_label = tk.Label(labels_container, text="", width=10, anchor=tk.W)
-        info_label.pack(side=tk.LEFT, expand=False)
-        self.info_label = info_label
-
-        class_label = tk.Label(labels_container, text="class", width=30)
-        class_label.pack(side=tk.LEFT, expand=True)
-        self.class_label = class_label
-
-        image_name = tk.Label(labels_container, text="Image", width=40)
-        image_name.pack(side=tk.LEFT, expand=True)
-        self.image_name = image_name
-
-        counter_label = tk.Label(labels_container, text="counter", width=10, anchor=tk.E)
-        counter_label.pack(side=tk.LEFT, expand=False)
-        self.counter_label = counter_label
-
-        labels_container.pack(side=tk.TOP, fill=tk.X)
+        top_bar = TopBar(self)
+        top_bar.pack(side=tk.TOP, fill=tk.X)
+        self.top_bar = top_bar
 
         image_canvas = tk.Canvas(self, bg="blue")
-        image_canvas.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
+        image_canvas.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
         self.image_canvas = image_canvas
+
+        side_bar = SideBar(self)
+        side_bar.pack(side=tk.RIGHT, fill=tk.Y, padx=5, pady=5)
+        self.side_bar = side_bar
 
         self.bind("<Configure>", lambda e: self.refresh_image())
 
@@ -50,18 +38,8 @@ class MainWindow(tk.Frame):
         self.refresh_image()
 
     def set_info_with_timer(self, text: str, delay_ms: int) -> None:
-        self.info_label.config(text=text)
-        self.after(delay_ms, lambda: self.info_label.config(text=''))
-
-    def set_class_label(self, text: str) -> None:
-        self.class_label.config(text=text)
-
-    def set_image_name(self, text: str) -> None:
-        self.image_name.config(text=text)
-
-    def set_counter(self, current: int, max_number: int) -> None:
-        text = f"{current + 1}/{max_number}"
-        self.counter_label.config(text=text)
+        self.top_bar.set_label(TopBarLabels.INFO, text)
+        self.after(delay_ms, lambda: self.top_bar.set_label(TopBarLabels.INFO, ''))
 
     def refresh_image(self) -> None:
         image_canvas = self.image_canvas

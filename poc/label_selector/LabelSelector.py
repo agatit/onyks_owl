@@ -1,7 +1,5 @@
 import pickle
 import tkinter as tk
-from itertools import cycle
-from os import access, R_OK
 from pathlib import Path
 from typing import Callable, Any
 
@@ -11,6 +9,7 @@ from label_selector.Checkpoint import Checkpoint
 from label_selector.Mode import Mode
 from label_selector.ProcessData import ProcessData
 from label_selector.gui.MainWindow import MainWindow
+from label_selector.gui.components.TopBar import TopBarLabels
 from yolo.YoloDatasetPart import YoloDatasetPart
 from yolo.YoloFormat import YoloFormat
 
@@ -53,6 +52,15 @@ class LabelSelector(tk.Tk):
         self.geometry('800x600')
         self.main_window = MainWindow(self)
         self.main_window.pack(anchor="center", fill="both", expand=True)
+        # self.init_side_bar()
+
+        # self. tk.StringVar(value=dir(tk))
+        _list = list(self.labels.values())
+        self.classes_listbox_var = tk.StringVar(value=_list)
+        self.main_window.side_bar.classes_listbox.listbox.config(listvariable=self.classes_listbox_var)
+
+        self.results_listbox_var = tk.StringVar(value=_list)
+        self.main_window.side_bar.results_listbox.listbox.config(listvariable=self.results_listbox_var)
 
         # init state
         self.reload_main_window()
@@ -81,13 +89,19 @@ class LabelSelector(tk.Tk):
 
     def reload_image_name(self):
         name = self.process_data[self.current_index].image_path.name
-        self.main_window.set_image_name(name)
+        self.main_window.top_bar.set_label(TopBarLabels.IMAGE, name)
 
     def reload_counter(self):
-        self.main_window.set_counter(self.current_index, self.max_index)
+        self.main_window.top_bar.set_counter(self.current_index, self.max_index)
 
     def reload_label(self):
-        self.main_window.set_class_label(self.current_label_text)
+        self.main_window.top_bar.set_label(TopBarLabels.ClASS, self.current_label_text)
+        self.reload_results_listbox()
+
+    def reload_results_listbox(self):
+        _list = [f"{label_rectangle.label_text}({i})" for i, label_rectangle
+                 in enumerate(self.process_data[self._current_index].label_rectangles)]
+        self.results_listbox_var.set(_list)
 
     def bind_canvas(self, key_string: str, callback: Callable[[tk.Event], None]) -> None:
         self.main_window.image_canvas.bind(key_string, callback)
