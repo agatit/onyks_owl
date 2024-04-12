@@ -12,6 +12,7 @@ class DetectionResult:
     bounding_box: BoundingBox
     yolo_format: YoloFormat
     confidence: float
+    track_id: int = None
 
     padding = {
         'x': 20,

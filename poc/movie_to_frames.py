@@ -1,37 +1,57 @@
+import json
+import logging
 import os
 import shutil
 from pathlib import Path
 import click
 import cv2
 
+from io_utils.utils import make_clean_dir
 from opencv_tools.camera import frame_capture_gen
+from stitch.rectify.FrameRectifier import FrameRectifier
 
 
 @click.command()
-@click.option("--movie_path")
-@click.option("--output_directory", default="output")
-@click.option("--image_extension", default="jpg")
-def main(movie_path, output_directory, image_extension):
-    movie_path = Path(movie_path)
-    movie_name = movie_path.stem
-    output_directory = Path(output_directory).joinpath(movie_name)
+@click.option("-in", "--input_movie", "input_movie",
+              required=True, type=click.Path(exists=True),
+              help="source movie")
+@click.option("-out", "--output_dir", "output_dir",
+              required=True, type=click.Path(),
+              help="directory to save frames")
+@click.option("-rc", "--rectify_config", "rectify_config", type=click.Path(exists=True, file_okay=True),
+              help="rectify config path")
+@click.option("-ie", "--image_extension", "image_extension", type=str,
+              default=".jpg", help="image extension with dot")
+@click.option("-v", "--verbose", "verbose", is_flag=True,
+              help="enable verbose mode")
+def main(input_movie, output_dir, rectify_config, image_extension, verbose):
+    if verbose:
+        logging.basicConfig(level=logging.INFO)
 
-    if output_directory.exists():
-        shutil.rmtree(output_directory)
-    os.mkdir(output_directory)
+    input_movie = Path(input_movie)
+    output_dir = Path(output_dir)
 
-    print(movie_path, output_directory)
+    make_clean_dir(output_dir)
 
-    count = 0
-    for frame in frame_capture_gen(str(movie_path)):
-        file_name = f"frame_{count}.{image_extension}"
-        file_path = Path(output_directory).joinpath(file_name)
+    frame_rectifier = None
+    if rectify_config:
+        with open(rectify_config) as f:
+            rectify_config = json.load(f)
+        frame_rectifier = FrameRectifier(rectify_config)
+        frame_rectifier.calc_maps()
+
+    logging.info(f"Started: {input_movie}")
+    for index, frame in enumerate(frame_capture_gen(str(input_movie))):
+        file_name = f"frame_{index}{image_extension}"
+        file_path = Path(output_dir) / file_name
+
+        if frame_rectifier:
+            frame = frame_rectifier.rectify(frame)
 
         cv2.imwrite(str(file_path), frame)
-        count = count + 1
 
-        if count % 50 == 0:
-            print(f"processed: {count}")
+        if index % 50 == 0:
+            logging.info(f"processed: {index}")
 
 
 if __name__ == '__main__':

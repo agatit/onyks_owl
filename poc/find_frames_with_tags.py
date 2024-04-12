@@ -14,7 +14,7 @@ from find_frames_with_tags_scripts.ProcessFrameData import ProcessFrameData
 from find_frames_with_tags_scripts.exporters import export_original_image, export_cropped_class, \
     export_bounding_box_image
 from find_frames_with_tags_scripts.loaders import load_efficientnet, load_any_below_threshold, \
-    load_exporter_original_image, load_exporter_bounding_box_image, load_exporter_cropped
+    load_exporter_original_image, load_exporter_bounding_box_image, load_exporter_cropped, load_tracking_patience
 from find_frames_with_tags_scripts.process import process
 from io_utils.utils import make_clean_dir
 from io_utils.yaml import init_options, Options
@@ -81,7 +81,8 @@ def configure_process_data(config, input_dir, model_path, output_dir, rectify_co
         "efficientnet": load_efficientnet,
     }
     detection_filters: Options = {
-        "any_below_threshold": load_any_below_threshold
+        "any_below_threshold": load_any_below_threshold,
+        "tracking_patience": load_tracking_patience
     }
     export_frame_callbacks: Options = {
         "original_image": load_exporter_original_image,
