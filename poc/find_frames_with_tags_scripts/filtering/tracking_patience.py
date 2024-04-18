@@ -27,12 +27,11 @@ class PatienceTracker:
 
     def check_patience(self) -> list[int]:
         results = []
+        patience = self.patience
 
         for _id, occurrence in self.id_occurrence.items():
-            if occurrence < self.patience:
+            if occurrence % patience == 0:
                 results.append(_id)
-            else:
-                self.id_occurrence[_id] = 0
 
         return results
 

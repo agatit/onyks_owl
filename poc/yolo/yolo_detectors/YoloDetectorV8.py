@@ -1,4 +1,5 @@
 from functools import singledispatchmethod
+from typing import Any
 
 import numpy as np
 from ultralytics import YOLO
@@ -49,6 +50,7 @@ class YoloDetectorV8(YoloDetector):
     @staticmethod
     def _detection_results_from_detections(batch) -> list[list[DetectionResult]]:
         all_results = []
+
         for results in batch:
             detection_results = []
 
@@ -57,10 +59,18 @@ class YoloDetectorV8(YoloDetector):
                 continue
 
             boxes = results.boxes
-            for cls, conf, xyxy, xywhn, track_id in zip(boxes.cls, boxes.conf, boxes.xyxy, boxes.xywhn, boxes.id):
-                track_id = int(track_id.item())
-                cls, conf = int(cls.item()), conf.item()
 
+            if boxes.is_track:
+                ids = boxes.id
+            else:
+                ids = [None] * len(boxes)
+
+            for cls, conf, xyxy, xywhn, track_id in zip(boxes.cls, boxes.conf, boxes.xyxy, boxes.xywhn, ids):
+
+                if track_id is not None:
+                    track_id = int(track_id.item())
+
+                cls, conf = int(cls.item()), conf.item()
                 class_name = results.names[cls]
 
                 x1, y1 = int(xyxy[0].item()), int(xyxy[1].item())
