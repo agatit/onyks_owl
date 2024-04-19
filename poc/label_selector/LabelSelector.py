@@ -1,15 +1,16 @@
-import pickle
 import tkinter as tk
+from abc import ABC
 from pathlib import Path
 from typing import Callable, Any
 
 from PIL import Image
 
-from label_selector.Checkpoint import Checkpoint
 from label_selector.Mode import Mode
 from label_selector.ProcessData import ProcessData
 from label_selector.gui.MainWindow import MainWindow
 from label_selector.gui.components.TopBar import TopBarLabels
+
+from label_selector.saving.SaveManager import SaveManager
 from yolo.YoloDatasetPart import YoloDatasetPart
 from yolo.YoloFormat import YoloFormat
 
@@ -17,10 +18,11 @@ from yolo.YoloFormat import YoloFormat
 class LabelSelector(tk.Tk):
     MAX_HISTORY_LENGTH = 50
 
-    def __init__(self, images: list[Path], labels: dict[int, str], checkpoint_name="checkpoint",
-                 max_images: int = -1):
+    def __init__(self, images: list[Path], labels: dict[int, str], save_manager: SaveManager,
+                 max_images: int = -1, dataset_name: str = "dataset"):
         super().__init__()
         self.title(self.__class__.__name__)
+        self.dataset_name = dataset_name
 
         if max_images < 0:
             images_to_load = len(images)
@@ -29,12 +31,7 @@ class LabelSelector(tk.Tk):
 
         self.process_data = [ProcessData(image) for image in images[:images_to_load]]
         self.labels = labels
-        self.checkpoint_name = checkpoint_name
-        self.periodic_checkpoint_name = checkpoint_name + "_tmp"
-
-        self.checkpoint_dir = Path.cwd()
-        self.checkpoint_path = self.checkpoint_dir / self.checkpoint_name
-        self.periodic_checkpoint_path = self.checkpoint_dir / self.periodic_checkpoint_name
+        self.save_manager = save_manager
 
         self.to_export = False
         self.start_point = tuple()
@@ -175,43 +172,19 @@ class LabelSelector(tk.Tk):
 
         return yolo_formats
 
-    def save_checkpoint(self, path: Path) -> None:
-        index = self.current_index
-        checkpoint = Checkpoint(index, self.process_data)
-        self._dump_checkpoint(path, checkpoint)
-
-    @staticmethod
-    def _dump_checkpoint(path: Path, data: Any):
-        with open(path, 'wb') as file:
-            pickle.dump(data, file)
+    def save_checkpoint(self, checkpoint_name: str):
+        checkpoint_data = (self.to_export, self.current_index, self.process_data)
+        checkpoint = self.save_manager.get_checkpoint(checkpoint_name)
+        checkpoint.save(checkpoint_data)
 
     def load_checkpoint(self) -> None:
-        last_checkpoint = self._select_latest_checkpoint()
+        checkpoint = self.save_manager.get_latest_checkpoint()
 
-        if last_checkpoint:
-            self._load_from_pickle(last_checkpoint)
+        if checkpoint is not None:
+            data = checkpoint.load()
 
-    def _select_latest_checkpoint(self) -> Any:
-        checkpoints = [
-            self.checkpoint_path,
-            self.periodic_checkpoint_path
-        ]
+            self.to_export = data[0]
+            self.current_index = data[1]
+            self.process_data = data[2]
 
-        checkpoints = [i for i in checkpoints if i.exists() and i.stat().st_size > 0]
-
-        if len(checkpoints) > 0:
-            checkpoints.sort(key=lambda p: p.stat().st_mtime)
-            return checkpoints.pop()
-        else:
-            return None
-
-    def _load_from_pickle(self, path: Path) -> Any:
-        try:
-            with open(path, 'rb') as file:
-                data = pickle.load(file)
-        except FileNotFoundError:
-            raise FileNotFoundError(f"No checkpoint file: {self.checkpoint_name}")
-        except TypeError:
-            raise FileNotFoundError(f"Any checkpoint file")
-
-        return data
+            self.reload_main_window()

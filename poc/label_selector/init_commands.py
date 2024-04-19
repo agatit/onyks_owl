@@ -8,15 +8,14 @@ from label_selector.commands.ChangeModeCommand import ChangeModeCommand
 from label_selector.commands.CloseAppCommand import CloseAppCommand
 from label_selector.commands.EndSelectingCommand import EndSelectingCommand
 from label_selector.commands.ForceCloseAppCommand import ForceCloseAppCommand
+from label_selector.commands.ForceSaveCommand import ForceSaveCommand
 from label_selector.commands.GoToImageCommand import GoToImageCommand
-from label_selector.commands.ListBoxSelectLabelCommand import ListBoxSelectLabelCommand
 from label_selector.commands.NextImageCommand import NextImageCommand
 from label_selector.commands.NextLabelCommand import NextLabelCommand
 from label_selector.commands.PrevImageCommand import PrevImageCommand
 from label_selector.commands.PrevLabelCommand import PrevLabelCommand
 from label_selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
 from label_selector.commands.SaveCheckpointCommand import SaveCheckpointCommand
-from label_selector.commands.SavePeriodicCheckpointCommand import SavePeriodicCheckpointCommand
 from label_selector.commands.StartSelectingCommand import StartSelectingCommand
 from label_selector.commands.WheelLabelCommand import WheelLabelCommand
 
@@ -45,22 +44,35 @@ def init_default_commands(app: LabelSelector) -> None:
         history_flag=True,
     )
 
+    checkpoints_commands = []
+    checkpoint_names = app.save_manager.get_names()
+    for checkpoint_name in checkpoint_names:
+        args = defaults_args + (checkpoint_name,)
+
+        checkpoint_command = [SaveCheckpointCommand, args]
+        checkpoints_commands.append(checkpoint_command)
+
     # todo: do jakieś struktury
-    go_to_next_image = [[SaveCheckpointCommand, defaults_args],
-                        [NextImageCommand, defaults_args],
-                        [SavePeriodicCheckpointCommand, defaults_args]]
+    go_to_next_image = [
+        [NextImageCommand, defaults_args],
+        *checkpoints_commands
+    ]
 
-    go_to_last_image = [[SaveCheckpointCommand, defaults_args],
-                        [GoToImageCommand, defaults_args + (app.max_index - 1,)],
-                        [SavePeriodicCheckpointCommand, defaults_args]]
+    go_to_last_image = [
+        [GoToImageCommand, defaults_args + (app.max_index - 1,)],
+        *checkpoints_commands
+    ]
 
-    go_to_previous_image = [[SaveCheckpointCommand, defaults_args],
-                            [PrevImageCommand, defaults_args],
-                            [SavePeriodicCheckpointCommand, defaults_args]]
+    go_to_previous_image = [
+        [PrevImageCommand, defaults_args],
+        *checkpoints_commands
+    ]
 
-    go_to_first_image = [[SaveCheckpointCommand, defaults_args],
-                         [GoToImageCommand, defaults_args + (0,)],
-                         [SavePeriodicCheckpointCommand, defaults_args]]
+    go_to_first_image = [
+        [GoToImageCommand, defaults_args + (0,)],
+        *checkpoints_commands
+    ]
+
     # Arrows
     key = "<KeyRelease-Right>"
     commands = go_to_next_image
@@ -100,8 +112,8 @@ def init_default_commands(app: LabelSelector) -> None:
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-Return>"
-    commands = [[SaveCheckpointCommand, defaults_args],
-                [CloseAppCommand, defaults_args]]
+    commands = [[CloseAppCommand, defaults_args],
+                [ForceSaveCommand, defaults_args]]
     register_chain_partial(key=key, commands=commands)
 
     # labels
@@ -142,15 +154,23 @@ def init_default_commands(app: LabelSelector) -> None:
 
     # global
     key = "<KeyRelease-Escape>"
-    commands = [[SaveCheckpointCommand, defaults_args],
+    commands = [[ForceSaveCommand, defaults_args],
                 [ForceCloseAppCommand, defaults_args]]
     register_chain_partial(key=key, commands=commands, history_flag=False)
 
-    app.protocol("WM_DELETE_WINDOW", lambda: ForceCloseAppCommand(*defaults_args).execute())
+    commands = [[ForceSaveCommand, defaults_args],
+                [ForceCloseAppCommand, defaults_args]]
+    clicked_exit_partial = partial(clicked_exit, commands)
+    app.protocol("WM_DELETE_WINDOW", clicked_exit_partial)
+
     app.bind("<Control-KeyPress-z>", lambda e: app.undo())
 
     app.activate_mode("default")
 
+def clicked_exit(commands):
+    for command_args in commands:
+        command, args = command_args
+        command(*args).execute()
 
 def register_chain_command(commands: list[list[type, Any]], default_args: tuple, **kwargs):
     command = ChainCommand

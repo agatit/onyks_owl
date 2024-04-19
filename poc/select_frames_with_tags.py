@@ -9,10 +9,13 @@ from PIL import Image
 
 from find_frames_with_tags_scripts.output_utils import init_datasets_from_output_json
 from io_utils.utils import make_directories
+from io_utils.yaml import Options, init_options
+from label_selector.saving.Checkpoint import Checkpoint, init_checkpoint
 from label_selector.LabelSelector import LabelSelector
 from label_selector.gui.LabelRectangle import LabelRectangle
 from label_selector.gui.utils import open_loading_screen
 from label_selector.init_commands import init_default_commands
+from label_selector.saving.SaveManager import SaveManager
 from yolo.YoloDataset import YoloDataset
 
 
@@ -33,9 +36,6 @@ from yolo.YoloDataset import YoloDataset
               is_flag=True,
               help="last image mode, select number images to export")
 def main(input_dir, output_dir, config, quick_export, last_image):
-    # pickle dump recursion error
-    sys.setrecursionlimit(10000)
-
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
 
@@ -49,6 +49,12 @@ def main(input_dir, output_dir, config, quick_export, last_image):
     with open(input_dir / "output.json", "r") as file:
         output_json = json.load(file)
 
+    checkpoints: Options = {
+        "auto1": init_checkpoint,
+        "auto2": init_checkpoint
+    }
+    checkpoints = init_options(checkpoints, config["checkpoints"])
+
     dirs = os.listdir(input_dir)
     output_json = {k: v for k, v in output_json.items() if k in dirs}
 
@@ -57,32 +63,20 @@ def main(input_dir, output_dir, config, quick_export, last_image):
 
     labels = config["names"]
     max_image_number = config["max_images"]
+
     for dataset in yolo_datasets:
-        app = SelectFramesWithTags(dataset, labels, max_image_number)
+        save_manager = SaveManager(dataset.dataset_name)
+        [save_manager.add_checkpoint(checkpoint) for checkpoint in checkpoints]
+
+        app = SelectFramesWithTags(dataset, labels, save_manager, max_image_number)
         init_default_commands(app)
 
         try:
             app.load_checkpoint()
         except FileNotFoundError:
-            print(f"Not found: {app.checkpoint_name}")
+            print(f"Not found: {app.save_manager.get_latest_checkpoint()}")
 
-        if last_image:
-            app.current_index = app.max_index - 2
-            app.reload_main_window()
-
-        if quick_export > 0:
-            app.destroy()
-
-            new_parts = app.export_dataset_parts()[:quick_export]
-            dataset.yolo_dataset_parts = new_parts
-            dataset.export()
-            continue
-
-        current_index = app.current_index
-        next_index = current_index + 1
-
-        # check if dataset is complete
-        if next_index == app.max_index:
+        if app.to_export:
             app.destroy()
             continue
 
@@ -97,11 +91,10 @@ def main(input_dir, output_dir, config, quick_export, last_image):
 
 
 class SelectFramesWithTags(LabelSelector):
-    def __init__(self, dataset: YoloDataset, labels: dict[int, str], max_images: int = -1):
+    def __init__(self, dataset: YoloDataset, labels: dict[int, str], save_manager:SaveManager, max_images: int = -1, *args, **kwargs):
         images = [i.original_image_path for i in dataset.yolo_dataset_parts]
-        checkpoint_name = '.' + dataset.dataset_name
 
-        super().__init__(images, labels, checkpoint_name, max_images)
+        super().__init__(images, labels, save_manager, max_images, dataset.dataset_name, *args, **kwargs)
         self._load_yolo_dataset_parts(dataset, labels)
 
         self.reload_main_window()
@@ -129,15 +122,18 @@ class SelectFramesWithTags(LabelSelector):
 
             process_data.label_rectangles = label_rectangles
 
-    def load_checkpoint(self) -> None:
-        last_checkpoint = self._select_latest_checkpoint()
-        checkpoint = self._load_from_pickle(last_checkpoint)
-
-        self.current_index = checkpoint.current_index
-        self.process_data = checkpoint.process_data
-
-        self.reload_main_window()
-        self.max_index = len(self.process_data)
+    # def save_checkpoint(self):
+    #     pass
+    #
+    # def load_checkpoint(self) -> None:
+    #     last_checkpoint = self._select_latest_checkpoint()
+    #     checkpoint = self._load_from_pickle(last_checkpoint)
+    #
+    #     self.current_index = checkpoint.current_index
+    #     self.process_data = checkpoint.process_data
+    #
+    #     self.reload_main_window()
+    #     self.max_index = len(self.process_data)
 
 
 if __name__ == '__main__':

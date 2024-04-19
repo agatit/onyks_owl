@@ -6,13 +6,17 @@ from label_selector.commands.Command import Command
 
 @dataclass
 class SaveCheckpointCommand(Command):
-    silent: bool = True
+    checkpoint_name: str
 
     def execute(self, event: tkinter.Event = None) -> bool:
-        self.app.save_checkpoint(self.app.checkpoint_path)
+        checkpoint = self.app.save_manager.get_checkpoint(self.checkpoint_name)
 
-        if not self.silent:
-            self.main_window.set_info_with_timer("Auto saved", 2000)
+        if self.app.total_changed_index % checkpoint.period == 0:
+            self.app.save_checkpoint(self.checkpoint_name)
+
+            if not checkpoint.silent:
+                self.main_window.set_info_with_timer("Auto saved", 2000)
+
 
         return True
 
