@@ -1,0 +1,23 @@
+detection:
+  - null
+  - dbnet
+  - dbnetpp
+  - maskrcnn
+  - drrg
+  - fcenet
+  - panet
+  - psenet
+  - textsnake
+    
+recognition:
+  - abinet
+  - aster
+  - crnn
+  - master
+  - nrtr
+  - svtr
+  - robust_scanner
+  - sar
+  - satrn
+
+extension: .jpg

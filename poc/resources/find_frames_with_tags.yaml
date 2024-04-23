@@ -10,7 +10,7 @@ names:
   8: railcar_number_one_line
 
 model:
-  confidence_threshold: 0.80
+  confidence_threshold: 0.70
   batch: 1000
   classes: [0,1,3,4,5,6,7,8]
 
@@ -35,14 +35,14 @@ detections_filters:
   tracking_patience:
     active: True
     patience: 50
-    classes: [0,1,5,7,8]
+    classes: [0]
 
 output:
   original_image:
     active: False
   cropped:
     active: True
-    classes: [0,1,5,7,8]
+    classes: [0]
   bounding_box_image:
     active: False
     classes: [0,1,3,4,5,6,7,8]
