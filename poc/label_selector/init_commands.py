@@ -10,6 +10,8 @@ from label_selector.commands.EndSelectingCommand import EndSelectingCommand
 from label_selector.commands.ForceCloseAppCommand import ForceCloseAppCommand
 from label_selector.commands.ForceSaveCommand import ForceSaveCommand
 from label_selector.commands.GoToImageCommand import GoToImageCommand
+from label_selector.commands.ListBoxGlowSelectedLabelCommand import ListBoxGlowSelectedLabelCommand
+from label_selector.commands.ListBoxSelectLabelCommand import ListBoxSelectLabelCommand
 from label_selector.commands.NextImageCommand import NextImageCommand
 from label_selector.commands.NextLabelCommand import NextLabelCommand
 from label_selector.commands.PrevImageCommand import PrevImageCommand
@@ -146,11 +148,17 @@ def init_default_commands(app: LabelSelector) -> None:
     command = WheelLabelCommand
     register_partial(key=key, command=command, history_flag=False)
 
-    # key = "<<ListboxSelect>>"
-    # command = ListBoxSelectLabelCommand
-    # args = defaults_args + (main_window.side_bar.classes_listbox.listbox,)
-    # register_partial(key=key, command=command, args=args, history_flag=False,
-    #                  target=main_window.side_bar.classes_listbox.listbox)
+    key = "<<ListboxSelect>>"
+    command = ListBoxSelectLabelCommand
+    args = defaults_args + (main_window.side_bar.classes_listbox.listbox,)
+    register_partial(key=key, command=command, args=args, history_flag=False,
+                     target=main_window.side_bar.classes_listbox.listbox)
+
+    key = "<<ListboxSelect>>"
+    command = ListBoxGlowSelectedLabelCommand
+    args = defaults_args + (main_window.side_bar.results_listbox.listbox,)
+    register_partial(key=key, command=command, args=args, history_flag=False,
+                     target=main_window.side_bar.results_listbox.listbox)
 
     # global
     key = "<KeyRelease-Escape>"

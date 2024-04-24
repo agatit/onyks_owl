@@ -10,6 +10,7 @@ class LabelRectangle:
     bounding_box: BoundingBox
 
     full_label: str = field(init=False, repr=False)
+    color: str = field(init=False, repr=False, default="red")
 
     def __post_init__(self):
         self.full_label = f"{self.label_id}:{self.label_text}"

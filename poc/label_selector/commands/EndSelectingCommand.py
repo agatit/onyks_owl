@@ -37,7 +37,7 @@ class EndSelectingCommand(Command):
         # draw rectangle
         label_text = app.current_label_text
         label_id = app.current_label_id
-        label = f"{label_id}_{label_text}"
+        label = app.current_label_text
         main_window.draw_label_rectangle(canvas_x1y1, canvas_x2y2, label)
 
         # save label_rectangle

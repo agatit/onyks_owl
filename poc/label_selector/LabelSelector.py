@@ -37,7 +37,7 @@ class LabelSelector(tk.Tk):
         self.start_point = tuple()
 
         self._current_index = 0
-        self.current_label_id = 0
+        self._current_label_id = 0
         self.current_label_text = labels[self.current_label_id]
         self.max_index = len(self.process_data)
 
@@ -67,15 +67,28 @@ class LabelSelector(tk.Tk):
         return self._current_index
 
     @current_index.setter
-    def current_index(self, value):
+    def current_index(self, value) -> None:
         self.total_changed_index += 1
         self._current_index = value
+
+    @property
+    def current_label_id(self) -> int:
+        return self._current_label_id
+
+    @current_label_id.setter
+    def current_label_id(self, value: int) -> None:
+        self._current_label_id = value
+        self.current_label_text = self.labels[self._current_label_id]
+
+    def get_current_process_data(self) -> ProcessData:
+        return self.process_data[self.current_index]
 
     def reload_main_window(self):
         self.reload_image()
         self.reload_image_name()
         self.reload_counter()
         self.reload_label()
+        self.reload_results_listbox()
 
     def reload_image(self):
         current_process_data = self.process_data[self.current_index]
@@ -93,7 +106,6 @@ class LabelSelector(tk.Tk):
 
     def reload_label(self):
         self.main_window.top_bar.set_label(TopBarLabels.ClASS, self.current_label_text)
-        self.reload_results_listbox()
 
     def reload_results_listbox(self):
         _list = [f"{label_rectangle.label_text}({i})" for i, label_rectangle

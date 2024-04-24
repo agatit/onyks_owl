@@ -60,11 +60,13 @@ class MainWindow(tk.Frame):
 
     def _draw_on_canvas(self):
         for label_rectangle in self.label_rectangles:
+            color = label_rectangle.color
+
             bounding_box = label_rectangle.bounding_box
             x1y1 = self.resize_point_to_canvas(bounding_box.x1, bounding_box.y1)
             x2y2 = self.resize_point_to_canvas(bounding_box.x2, bounding_box.y2)
 
-            self.draw_label_rectangle(x1y1, x2y2, label_rectangle.full_label)
+            self.draw_label_rectangle(x1y1, x2y2, label_rectangle.full_label, color)
 
     def resize_point_to_original(self, x: int, y: int) -> tuple[int, int]:
         image_canvas = self.image_canvas
@@ -93,11 +95,11 @@ class MainWindow(tk.Frame):
 
         return self.image_canvas.create_rectangle(x1y1, x2y2, fill="red")
 
-    def draw_label_rectangle(self, x1y1: tuple[int, int], x2y2: tuple[int, int], text: str) -> None:
-        self.image_canvas.create_rectangle(x1y1, x2y2, outline='red')
+    def draw_label_rectangle(self, x1y1: tuple[int, int], x2y2: tuple[int, int], text: str, color:str = "red") -> None:
+        self.image_canvas.create_rectangle(x1y1, x2y2, outline=color)
 
         label_x1y1 = (x1y1[0] + 6, x1y1[1] - 6)
-        self.image_canvas.create_text(label_x1y1, fill="red", text=text)
+        self.image_canvas.create_text(label_x1y1, fill=color, text=text)
 
     @staticmethod
     def adjust_brightness(image: Image, gamma: float = 1.0):
