@@ -1,9 +1,12 @@
 import tkinter
+from dataclasses import dataclass
 
 from label_selector.commands.Command import Command
 
+@dataclass
+class ListBoxRemoveLabelCommand(Command):
+    listbox: tkinter.Listbox
 
-class LabelChangedCommand(Command):
     def execute(self, event: tkinter.Event = None) -> bool:
         pass
 

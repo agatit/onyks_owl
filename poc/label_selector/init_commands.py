@@ -11,6 +11,7 @@ from label_selector.commands.ForceCloseAppCommand import ForceCloseAppCommand
 from label_selector.commands.ForceSaveCommand import ForceSaveCommand
 from label_selector.commands.GoToImageCommand import GoToImageCommand
 from label_selector.commands.ListBoxGlowSelectedLabelCommand import ListBoxGlowSelectedLabelCommand
+from label_selector.commands.ListBoxRemoveLabelCommand import ListBoxRemoveLabelCommand
 from label_selector.commands.ListBoxSelectLabelCommand import ListBoxSelectLabelCommand
 from label_selector.commands.NextImageCommand import NextImageCommand
 from label_selector.commands.NextLabelCommand import NextLabelCommand
@@ -19,6 +20,7 @@ from label_selector.commands.PrevLabelCommand import PrevLabelCommand
 from label_selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
 from label_selector.commands.SaveCheckpointCommand import SaveCheckpointCommand
 from label_selector.commands.StartSelectingCommand import StartSelectingCommand
+from label_selector.commands.UnselectLabelRectanglesCommand import UnselectLabelRectanglesCommand
 from label_selector.commands.WheelLabelCommand import WheelLabelCommand
 
 
@@ -57,21 +59,25 @@ def init_default_commands(app: LabelSelector) -> None:
     # todo: do jakieś struktury
     go_to_next_image = [
         [NextImageCommand, defaults_args],
+        [UnselectLabelRectanglesCommand, defaults_args],
         *checkpoints_commands
     ]
 
     go_to_last_image = [
         [GoToImageCommand, defaults_args + (app.max_index - 1,)],
+        [UnselectLabelRectanglesCommand, defaults_args],
         *checkpoints_commands
     ]
 
     go_to_previous_image = [
         [PrevImageCommand, defaults_args],
+        [UnselectLabelRectanglesCommand, defaults_args],
         *checkpoints_commands
     ]
 
     go_to_first_image = [
         [GoToImageCommand, defaults_args + (0,)],
+        [UnselectLabelRectanglesCommand, defaults_args],
         *checkpoints_commands
     ]
 
@@ -120,10 +126,10 @@ def init_default_commands(app: LabelSelector) -> None:
 
     # labels
     class_offset = 1
-    for class_id, label in app.labels.items():
+    for class_id in app.labels:
         key = str(class_id + class_offset)
         command = ChangeLabelCommand
-        args = defaults_args + (class_id, label)
+        args = defaults_args + (class_id,)
         register_partial(key=key, command=command,
                          args=args, history_flag=False)
 
@@ -148,6 +154,7 @@ def init_default_commands(app: LabelSelector) -> None:
     command = WheelLabelCommand
     register_partial(key=key, command=command, history_flag=False)
 
+    # list boxes
     key = "<<ListboxSelect>>"
     command = ListBoxSelectLabelCommand
     args = defaults_args + (main_window.side_bar.classes_listbox.listbox,)
@@ -158,6 +165,13 @@ def init_default_commands(app: LabelSelector) -> None:
     command = ListBoxGlowSelectedLabelCommand
     args = defaults_args + (main_window.side_bar.results_listbox.listbox,)
     register_partial(key=key, command=command, args=args, history_flag=False,
+                     target=main_window.side_bar.results_listbox.listbox)
+
+    # key = "<BackSpace>"
+    key = "<KeyRelease-KP_Delete>"
+    command = ListBoxRemoveLabelCommand
+    args = defaults_args + (main_window.side_bar.results_listbox.listbox,)
+    register_partial(key=key, command=command, args=args, history_flag=True,
                      target=main_window.side_bar.results_listbox.listbox)
 
     # global
@@ -175,10 +189,12 @@ def init_default_commands(app: LabelSelector) -> None:
 
     app.activate_mode("default")
 
+
 def clicked_exit(commands):
     for command_args in commands:
         command, args = command_args
         command(*args).execute()
+
 
 def register_chain_command(commands: list[list[type, Any]], default_args: tuple, **kwargs):
     command = ChainCommand

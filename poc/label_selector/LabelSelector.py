@@ -32,19 +32,21 @@ class LabelSelector(tk.Tk):
         self.process_data = [ProcessData(image) for image in images[:images_to_load]]
         self.labels = labels
         self.save_manager = save_manager
-
         self.to_export = False
+
         self.start_point = tuple()
 
-        self._current_index = 0
-        self._current_label_id = 0
-        self.current_label_text = labels[self.current_label_id]
+        self.current_index_var = tk.IntVar(self, 0, "current_index_var")
+        self.current_label_id_var = tk.IntVar(self, 0, "current_label_id_var")
+
+        self.current_label_text = labels[self.current_label_id_var.get()]
         self.max_index = len(self.process_data)
 
         self.total_changed_index = 0
 
-        self.command_history = []
-        self.modes = {}
+        self._command_history = []
+        self._modes = {}
+        self._listeners = {}
 
         self.geometry('800x600')
         self.main_window = MainWindow(self)
@@ -53,83 +55,37 @@ class LabelSelector(tk.Tk):
 
         # self. tk.StringVar(value=dir(tk))
         _list = list(self.labels.values())
-        self.classes_listbox_var = tk.StringVar(value=_list)
+        self.classes_listbox_var = tk.StringVar(self, _list, "classes_listbox_var")
         self.main_window.side_bar.classes_listbox.listbox.config(listvariable=self.classes_listbox_var)
 
-        self.results_listbox_var = tk.StringVar(value=_list)
+        self.results_listbox_var = tk.StringVar(self, _list, "results_listbox_var")
         self.main_window.side_bar.results_listbox.listbox.config(listvariable=self.results_listbox_var)
 
-        # init state
-        self.reload_main_window()
-
-    @property
-    def current_index(self):
-        return self._current_index
-
-    @current_index.setter
-    def current_index(self, value) -> None:
-        self.total_changed_index += 1
-        self._current_index = value
-
-    @property
-    def current_label_id(self) -> int:
-        return self._current_label_id
-
-    @current_label_id.setter
-    def current_label_id(self, value: int) -> None:
-        self._current_label_id = value
-        self.current_label_text = self.labels[self._current_label_id]
-
     def get_current_process_data(self) -> ProcessData:
-        return self.process_data[self.current_index]
-
-    def reload_main_window(self):
-        self.reload_image()
-        self.reload_image_name()
-        self.reload_counter()
-        self.reload_label()
-        self.reload_results_listbox()
-
-    def reload_image(self):
-        current_process_data = self.process_data[self.current_index]
-        current_image = current_process_data.image_path
-        label_rectangle = current_process_data.label_rectangles
-
-        self.main_window.load_image(current_image, label_rectangle)
-
-    def reload_image_name(self):
-        name = self.process_data[self.current_index].image_path.name
-        self.main_window.top_bar.set_label(TopBarLabels.IMAGE, name)
-
-    def reload_counter(self):
-        self.main_window.top_bar.set_counter(self.current_index, self.max_index)
-
-    def reload_label(self):
-        self.main_window.top_bar.set_label(TopBarLabels.ClASS, self.current_label_text)
-
-    def reload_results_listbox(self):
-        _list = [f"{label_rectangle.label_text}({i})" for i, label_rectangle
-                 in enumerate(self.process_data[self._current_index].label_rectangles)]
-        self.results_listbox_var.set(_list)
-
-    def bind_canvas(self, key_string: str, callback: Callable[[tk.Event], None]) -> None:
-        self.main_window.image_canvas.bind(key_string, callback)
+        return self.process_data[self.current_index_var.get()]
 
     def get_current_mode(self) -> str:
-        true_modes = [i for i in self.modes if self.modes[i].status]
+        true_modes = [i for i in self._modes if self._modes[i].status]
         return true_modes[0]
 
     def register_to_mode(self, mode_name: str, target: Any, key: str, callback: Callable) -> None:
-        self.modes[mode_name].register(target, key, callback)
+        self._modes[mode_name].register(target, key, callback)
 
     def add_mode(self, mode_name: str) -> None:
-        self.modes[mode_name] = Mode()
+        self._modes[mode_name] = Mode()
 
     def activate_mode(self, mode_name: str):
-        for mode in self.modes.values():
+        for mode in self._modes.values():
             mode.deactivate()
 
-        self.modes[mode_name].activate()
+        self._modes[mode_name].activate()
+
+    def add_listener(self, listener_name: str, callback: Callable) -> None:
+        self._listeners[listener_name] = callback
+
+    def notify_listener(self, listener_name: str):
+        if listener_name in self._listeners:
+            self._listeners[listener_name]()
 
     def register_command_in_history(self, command_type: type, *args, **kwargs) -> Callable[[tk.Event], None]:
 
@@ -137,10 +93,10 @@ class LabelSelector(tk.Tk):
             command = command_type(*args, **kwargs)
 
             if command.execute(event):
-                self.command_history.append(command)
+                self._command_history.append(command)
 
-            if len(self.command_history) > self.MAX_HISTORY_LENGTH:
-                self.command_history.pop(0)
+            if len(self._command_history) > self.MAX_HISTORY_LENGTH:
+                self._command_history.pop(0)
 
         return wrapper
 
@@ -153,8 +109,8 @@ class LabelSelector(tk.Tk):
         return wrapper
 
     def undo(self) -> None:
-        if len(self.command_history) > 0:
-            self.command_history.pop().undo()
+        if len(self._command_history) > 0:
+            self._command_history.pop().undo()
 
     def export_dataset_parts(self) -> list[YoloDatasetPart]:
         filtered = filter(lambda x: len(x.label_rectangles) > 0, self.process_data)
@@ -185,7 +141,7 @@ class LabelSelector(tk.Tk):
         return yolo_formats
 
     def save_checkpoint(self, checkpoint_name: str):
-        checkpoint_data = (self.to_export, self.current_index, self.process_data)
+        checkpoint_data = (self.to_export, self.current_index_var.get(), self.process_data)
         checkpoint = self.save_manager.get_checkpoint(checkpoint_name)
         checkpoint.save(checkpoint_data)
 
@@ -196,7 +152,10 @@ class LabelSelector(tk.Tk):
             data = checkpoint.load()
 
             self.to_export = data[0]
-            self.current_index = data[1]
             self.process_data = data[2]
 
-            self.reload_main_window()
+            self.current_index_var.set(data[1])
+
+            # self.reload_main_window()
+            self.notify_listener("reload_main_window")
+

@@ -10,6 +10,7 @@ from PIL import Image
 from find_frames_with_tags_scripts.output_utils import init_datasets_from_output_json
 from io_utils.utils import make_directories
 from io_utils.yaml import Options, init_options
+from label_selector.init_listeners import init_default_listeners
 from label_selector.saving.Checkpoint import Checkpoint, init_checkpoint
 from label_selector.LabelSelector import LabelSelector
 from label_selector.gui.LabelRectangle import LabelRectangle
@@ -70,6 +71,7 @@ def main(input_dir, output_dir, config, quick_export, last_image):
 
         app = SelectFramesWithTags(dataset, labels, save_manager, max_image_number)
         init_default_commands(app)
+        init_default_listeners(app)
 
         try:
             app.load_checkpoint()
@@ -89,6 +91,7 @@ def main(input_dir, output_dir, config, quick_export, last_image):
         dataset.yolo_dataset_parts = new_parts
         dataset.export()
 
+        del app
 
 class SelectFramesWithTags(LabelSelector):
     def __init__(self, dataset: YoloDataset, labels: dict[int, str], save_manager:SaveManager, max_images: int = -1, *args, **kwargs):
@@ -97,7 +100,7 @@ class SelectFramesWithTags(LabelSelector):
         super().__init__(images, labels, save_manager, max_images, dataset.dataset_name, *args, **kwargs)
         self._load_yolo_dataset_parts(dataset, labels)
 
-        self.reload_main_window()
+        self.notify_listener("reload_main_window")
         self.deiconify()
 
     @open_loading_screen
@@ -121,19 +124,6 @@ class SelectFramesWithTags(LabelSelector):
                 label_rectangles.append(label_rectangle)
 
             process_data.label_rectangles = label_rectangles
-
-    # def save_checkpoint(self):
-    #     pass
-    #
-    # def load_checkpoint(self) -> None:
-    #     last_checkpoint = self._select_latest_checkpoint()
-    #     checkpoint = self._load_from_pickle(last_checkpoint)
-    #
-    #     self.current_index = checkpoint.current_index
-    #     self.process_data = checkpoint.process_data
-    #
-    #     self.reload_main_window()
-    #     self.max_index = len(self.process_data)
 
 
 if __name__ == '__main__':

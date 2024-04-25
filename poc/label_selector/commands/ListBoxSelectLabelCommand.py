@@ -9,10 +9,11 @@ class ListBoxSelectLabelCommand(Command):
     listbox: tkinter.Listbox
 
     def execute(self, event: tkinter.Event = None) -> bool:
-        selected_index = self.listbox.curselection()
-        self.app.current_label_id = selected_index[0]
+        selected_indexes = self.listbox.curselection()
 
-        self.app.reload_label()
+        if len(selected_indexes) > 0:
+            self.app.current_label_id_var.set(selected_indexes[0])
+
         return True
 
     def undo(self) -> None:

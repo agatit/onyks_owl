@@ -4,6 +4,8 @@ from label_selector.gui.components.ScrollableListbox import ScrollableListbox
 
 
 class SideBar(tk.Frame):
+
+
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
@@ -21,6 +23,7 @@ class SideBar(tk.Frame):
         self.classes_listbox.pack(side=tk.TOP, expand=True, anchor=tk.N, fill=tk.BOTH)
 
         self.results_listbox = ScrollableListbox(self, "Results")
+        # self.results_listbox.config(exportselection=False)
         self.results_listbox.listbox.config(selectmode='extended')
         self.results_listbox.pack(side=tk.TOP, expand=True, anchor=tk.S, fill=tk.BOTH)
 

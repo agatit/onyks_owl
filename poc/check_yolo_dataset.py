@@ -50,7 +50,7 @@ def main(images_dir, labels_dir, config):
     try:
         app.load_checkpoint()
     except FileNotFoundError as e:
-        print(f"Not found: {app.checkpoint_name}")
+        print(f"Not found: {app.save_manager.get_latest_checkpoint()}")
 
     app.mainloop()
 
@@ -92,27 +92,7 @@ class CheckYoloDataset(LabelSelector):
             process_data = [i for i in self.process_data if i.image_path == image_path][0]
             process_data.label_rectangles = label_rectangles
 
-        self.reload_main_window()
-
-    def save_checkpoint(self, path: Path) -> None:
-        index = self.current_index
-        status = self.to_export
-        data = (status, index, self.process_data)
-
-        self._dump_checkpoint(path, data)
-
-    def load_checkpoint(self) -> None:
-        last_checkpoint = self._select_latest_checkpoint()
-        data = self._load_from_pickle(last_checkpoint)
-
-        self.to_export, self.current_index, self.process_data = data
-
-        self.process_data = [i for i in self.process_data if i.image_path.exists()]
-        if self.current_index >= len(self.process_data):
-            self.current_index = len(self.process_data) - 1
-
-        self.reload_main_window()
-        self.max_index = len(self.process_data)
+        self.notify_listener("reload_main_window")
 
     @open_loading_screen
     def export(self):

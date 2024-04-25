@@ -24,7 +24,7 @@ class MainWindow(tk.Frame):
         top_bar.pack(side=tk.TOP, fill=tk.X)
         self.top_bar = top_bar
 
-        image_canvas = tk.Canvas(self, bg="blue")
+        image_canvas = tk.Canvas(self, bg="grey")
         image_canvas.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
         self.image_canvas = image_canvas
 
@@ -47,16 +47,17 @@ class MainWindow(tk.Frame):
 
     def refresh_image(self) -> None:
         image_canvas = self.image_canvas
-
         image_canvas.update()
-        canvas_size = image_canvas.winfo_width(), image_canvas.winfo_height()
-        transformed_image = self.original_image.resize(canvas_size)
-        transformed_image = self.adjust_brightness(transformed_image, self.side_bar.gamma_value.get() / 100)
 
-        self.tk_image = ImageTk.PhotoImage(transformed_image)
-        image_canvas.create_image(0, 0, anchor=tk.NW, image=self.tk_image)
+        if self.original_image is not None:
+            canvas_size = image_canvas.winfo_width(), image_canvas.winfo_height()
+            transformed_image = self.original_image.resize(canvas_size)
+            transformed_image = self.adjust_brightness(transformed_image, self.side_bar.gamma_value.get() / 100)
 
-        self._draw_on_canvas()
+            self.tk_image = ImageTk.PhotoImage(transformed_image)
+            image_canvas.create_image(0, 0, anchor=tk.NW, image=self.tk_image)
+
+            self._draw_on_canvas()
 
     def _draw_on_canvas(self):
         for label_rectangle in self.label_rectangles:

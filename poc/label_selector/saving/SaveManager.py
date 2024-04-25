@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass, field
 
 from label_selector.saving.Checkpoint import Checkpoint
@@ -9,6 +10,7 @@ class SaveManager:
     _checkpoints: dict[str, Checkpoint] = field(init=False, default_factory=dict)
 
     def add_checkpoint(self, checkpoint: Checkpoint):
+        checkpoint = copy.deepcopy(checkpoint)
         full_name = f"{self.dataset_name}_{checkpoint.name}"
 
         checkpoint.change_name(full_name)

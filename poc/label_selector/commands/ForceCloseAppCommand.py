@@ -8,9 +8,7 @@ class ForceCloseAppCommand(Command):
     MESSAGE = 'Are you sure that you want to quit?'
 
     def execute(self, event=None) -> bool:
-
-        # todo : zmiana na flagę w zapisie
-        current_index = self.app.current_index
+        current_index = self.app.current_index_var.get()
         next_index = current_index + 1
 
         if next_index != self.app.max_index:

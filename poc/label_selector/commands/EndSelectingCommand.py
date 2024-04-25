@@ -13,7 +13,7 @@ class EndSelectingCommand(Command):
     def execute(self, event=None) -> bool:
         app = self.app
         main_window = self.main_window
-        current_index = app.current_index
+        current_index = app.current_index_var.get()
 
         start_point_image = app.start_point
         start_point_canvas = main_window.resize_point_to_canvas(
@@ -36,7 +36,7 @@ class EndSelectingCommand(Command):
 
         # draw rectangle
         label_text = app.current_label_text
-        label_id = app.current_label_id
+        label_id = app.current_label_id_var.get()
         label = app.current_label_text
         main_window.draw_label_rectangle(canvas_x1y1, canvas_x2y2, label)
 
@@ -50,14 +50,14 @@ class EndSelectingCommand(Command):
     def undo(self) -> None:
         app = self.app
         main_window = self.main_window
-        current_index = app.current_index
+        current_index = app.current_index_var.get()
 
         image_x, image_y = self.image_x1y1_backup
         canvas_x, canvas_y = self.canvas_x1y1_backup
 
         # remove last rectangle
         app.process_data[current_index].label_rectangles.pop()
-        self.app.reload_image()
+        self.app.notify_listener("reload_image")
 
         # draw star point
         app.start_point = (image_x, image_y)
