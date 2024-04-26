@@ -13,7 +13,7 @@ class RemoveSelectedCommand(Command):
     def execute(self, event: tkinter.Event = None) -> bool:
         app = self.app
         main_window = self.main_window
-        current_index = app.current_index
+        current_index = app.current_index_var.get()
 
         canvas_x, canvas_y = event.x, event.y
         image_x, image_y = main_window.resize_point_to_original(canvas_x, canvas_y)
@@ -33,7 +33,9 @@ class RemoveSelectedCommand(Command):
             items_to_remove.sort(key=lambda x: self._bounding_box_area(x.bounding_box))
             process_data.label_rectangles.remove(items_to_remove[0])
 
-            app.reload_image()
+            self.app.notify_listener("reload_image")
+            self.app.notify_listener("reload_results_listbox")
+
             return True
 
         else:
@@ -44,7 +46,8 @@ class RemoveSelectedCommand(Command):
         for i in self.removed_items:
             label_rectangles.append(i)
 
-        self.app.reload_image()
+        self.app.notify_listener("reload_image")
+        self.app.notify_listener("reload_results_listbox")
 
     @staticmethod
     def _point_in_bounds(point: tuple[int, int], bounding_box: BoundingBox) -> bool:

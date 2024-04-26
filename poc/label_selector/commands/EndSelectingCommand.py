@@ -13,7 +13,7 @@ class EndSelectingCommand(Command):
     def execute(self, event=None) -> bool:
         app = self.app
         main_window = self.main_window
-        current_index = app.current_index
+        current_index = app.current_index_var.get()
 
         start_point_image = app.start_point
         start_point_canvas = main_window.resize_point_to_canvas(
@@ -34,30 +34,29 @@ class EndSelectingCommand(Command):
         start_point_ref = app.process_data[current_index].start_point_ref
         main_window.image_canvas.delete(start_point_ref)
 
-        # draw rectangle
-        label_text = app.current_label_text
-        label_id = app.current_label_id
-        label = f"{label_id}_{label_text}"
-        main_window.draw_label_rectangle(canvas_x1y1, canvas_x2y2, label)
-
         # save label_rectangle
+        label_text = app.current_label_text
+        label_id = app.current_label_id_var.get()
         bounding_box = BoundingBox.from_x1y1_x2y2(image_x1y1, image_x2y2)
         label_rectangle = LabelRectangle(label_id, label_text, bounding_box)
         app.process_data[current_index].label_rectangles.append(label_rectangle)
+
+        app.notify_listener("reload_image")
+        app.notify_listener("reload_results_listbox")
 
         return True
 
     def undo(self) -> None:
         app = self.app
         main_window = self.main_window
-        current_index = app.current_index
+        current_index = app.current_index_var.get()
 
         image_x, image_y = self.image_x1y1_backup
         canvas_x, canvas_y = self.canvas_x1y1_backup
 
         # remove last rectangle
         app.process_data[current_index].label_rectangles.pop()
-        self.app.reload_image()
+        self.app.notify_listener("reload_image")
 
         # draw star point
         app.start_point = (image_x, image_y)

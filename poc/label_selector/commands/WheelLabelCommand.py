@@ -8,7 +8,7 @@ class WheelLabelCommand(Command):
         app = self.app
 
         labels_number = len(app.labels)
-        current_id = app.current_label_id
+        current_id = app.current_label_id_var.get()
 
         if event.delta > 0:
             next_id = current_id + 1
@@ -20,10 +20,7 @@ class WheelLabelCommand(Command):
         elif next_id >= labels_number:
             next_id = 0
 
-        app.current_label_id = next_id
-        app.current_label_text = app.labels[next_id]
-
-        app.reload_label()
+        app.current_label_id_var.set(next_id)
         return True
 
     def undo(self) -> None:

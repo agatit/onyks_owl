@@ -11,7 +11,7 @@ class CloseAppCommand(Command):
     INFO_MESSAGE = "To end program you need to go to the last image"
 
     def execute(self, event=None) -> bool:
-        index = self.app.current_index
+        index = self.app.current_index_var.get()
         max_index = self.app.max_index
 
         if index == max_index - 1:
