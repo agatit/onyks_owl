@@ -3,12 +3,11 @@ from dataclasses import dataclass, field
 from typing import ClassVar
 
 from label_selector.commands.Command import Command
+from label_selector.commands.listbox.ListBoxCommand import ListBoxCommand
 
 
 @dataclass
-class ListBoxGlowSelectedLabelCommand(Command):
-    listbox: tkinter.Listbox
-
+class GlowSelectedLabelCommand(ListBoxCommand):
     def execute(self, event: tkinter.Event = None) -> bool:
         selected_indexes = self.listbox.curselection()
         current_process_data = self.app.get_current_process_data()

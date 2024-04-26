@@ -34,6 +34,7 @@ class RemoveSelectedCommand(Command):
             process_data.label_rectangles.remove(items_to_remove[0])
 
             self.app.notify_listener("reload_image")
+            self.app.notify_listener("reload_results_listbox")
 
             return True
 
@@ -45,9 +46,8 @@ class RemoveSelectedCommand(Command):
         for i in self.removed_items:
             label_rectangles.append(i)
 
-        # self.app.reload_image()
         self.app.notify_listener("reload_image")
-
+        self.app.notify_listener("reload_results_listbox")
 
     @staticmethod
     def _point_in_bounds(point: tuple[int, int], bounding_box: BoundingBox) -> bool:

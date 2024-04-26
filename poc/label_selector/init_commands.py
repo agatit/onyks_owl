@@ -6,21 +6,21 @@ from label_selector.commands.ChainCommand import ChainCommand
 from label_selector.commands.ChangeLabelCommand import ChangeLabelCommand
 from label_selector.commands.ChangeModeCommand import ChangeModeCommand
 from label_selector.commands.CloseAppCommand import CloseAppCommand
+from label_selector.commands.DrawCrossCommand import DrawCrossCommand
 from label_selector.commands.EndSelectingCommand import EndSelectingCommand
 from label_selector.commands.ForceCloseAppCommand import ForceCloseAppCommand
 from label_selector.commands.ForceSaveCommand import ForceSaveCommand
 from label_selector.commands.GoToImageCommand import GoToImageCommand
-from label_selector.commands.ListBoxGlowSelectedLabelCommand import ListBoxGlowSelectedLabelCommand
-from label_selector.commands.ListBoxRemoveLabelCommand import ListBoxRemoveLabelCommand
-from label_selector.commands.ListBoxSelectLabelCommand import ListBoxSelectLabelCommand
+from label_selector.commands.listbox.ChangeLabelToSelectedCommand import ChangeLabelToSelectedCommand
+from label_selector.commands.listbox.GlowSelectedLabelCommand import GlowSelectedLabelCommand
+from label_selector.commands.listbox.RemoveLabelCommand import RemoveLabelCommand
+from label_selector.commands.listbox.SelectLabelCommand import SelectLabelCommand
 from label_selector.commands.NextImageCommand import NextImageCommand
 from label_selector.commands.NextLabelCommand import NextLabelCommand
 from label_selector.commands.PrevImageCommand import PrevImageCommand
 from label_selector.commands.PrevLabelCommand import PrevLabelCommand
 from label_selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
-from label_selector.commands.SaveCheckpointCommand import SaveCheckpointCommand
 from label_selector.commands.StartSelectingCommand import StartSelectingCommand
-from label_selector.commands.UnselectLabelRectanglesCommand import UnselectLabelRectanglesCommand
 from label_selector.commands.WheelLabelCommand import WheelLabelCommand
 
 
@@ -48,37 +48,21 @@ def init_default_commands(app: LabelSelector) -> None:
         history_flag=True,
     )
 
-    checkpoints_commands = []
-    checkpoint_names = app.save_manager.get_names()
-    for checkpoint_name in checkpoint_names:
-        args = defaults_args + (checkpoint_name,)
-
-        checkpoint_command = [SaveCheckpointCommand, args]
-        checkpoints_commands.append(checkpoint_command)
-
     # todo: do jakieś struktury
     go_to_next_image = [
         [NextImageCommand, defaults_args],
-        [UnselectLabelRectanglesCommand, defaults_args],
-        *checkpoints_commands
     ]
 
     go_to_last_image = [
         [GoToImageCommand, defaults_args + (app.max_index - 1,)],
-        [UnselectLabelRectanglesCommand, defaults_args],
-        *checkpoints_commands
     ]
 
     go_to_previous_image = [
         [PrevImageCommand, defaults_args],
-        [UnselectLabelRectanglesCommand, defaults_args],
-        *checkpoints_commands
     ]
 
     go_to_first_image = [
         [GoToImageCommand, defaults_args + (0,)],
-        [UnselectLabelRectanglesCommand, defaults_args],
-        *checkpoints_commands
     ]
 
     # Arrows
@@ -154,25 +138,46 @@ def init_default_commands(app: LabelSelector) -> None:
     command = WheelLabelCommand
     register_partial(key=key, command=command, history_flag=False)
 
+    # key = "<Motion>"
+    # command = DrawCrossCommand
+    # register_partial(key=key, command=command, history_flag=False,
+    #                  target=app.main_window.image_canvas)
+    #
+    # key = "<Motion>"
+    # command = DrawCrossCommand
+    # register_partial(key=key, command=command, mode_name="selecting", history_flag=False,
+    #                  target=app.main_window.image_canvas)
+
     # list boxes
     key = "<<ListboxSelect>>"
-    command = ListBoxSelectLabelCommand
+    command = SelectLabelCommand
     args = defaults_args + (main_window.side_bar.classes_listbox.listbox,)
     register_partial(key=key, command=command, args=args, history_flag=False,
                      target=main_window.side_bar.classes_listbox.listbox)
 
     key = "<<ListboxSelect>>"
-    command = ListBoxGlowSelectedLabelCommand
+    command = GlowSelectedLabelCommand
     args = defaults_args + (main_window.side_bar.results_listbox.listbox,)
     register_partial(key=key, command=command, args=args, history_flag=False,
                      target=main_window.side_bar.results_listbox.listbox)
 
-    # key = "<BackSpace>"
-    key = "<KeyRelease-KP_Delete>"
-    command = ListBoxRemoveLabelCommand
+    key = "<KeyRelease-Delete>"
+    command = RemoveLabelCommand
     args = defaults_args + (main_window.side_bar.results_listbox.listbox,)
     register_partial(key=key, command=command, args=args, history_flag=True,
                      target=main_window.side_bar.results_listbox.listbox)
+
+    key = "<Button-1>"
+    command = RemoveLabelCommand
+    args = defaults_args + (main_window.side_bar.results_listbox.listbox,)
+    register_partial(key=key, command=command, args=args, history_flag=True,
+                     target=main_window.side_bar.remove_button)
+
+    key = "<Button-1>"
+    command = ChangeLabelToSelectedCommand
+    args = defaults_args + (main_window.side_bar.results_listbox.listbox,)
+    register_partial(key=key, command=command, args=args, history_flag=True,
+                     target=main_window.side_bar.change_results_button)
 
     # global
     key = "<KeyRelease-Escape>"

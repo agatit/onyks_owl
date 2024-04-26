@@ -5,7 +5,6 @@ from label_selector.gui.components.ScrollableListbox import ScrollableListbox
 
 class SideBar(tk.Frame):
 
-
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
@@ -23,14 +22,11 @@ class SideBar(tk.Frame):
         self.classes_listbox.pack(side=tk.TOP, expand=True, anchor=tk.N, fill=tk.BOTH)
 
         self.results_listbox = ScrollableListbox(self, "Results")
-        # self.results_listbox.config(exportselection=False)
         self.results_listbox.listbox.config(selectmode='extended')
         self.results_listbox.pack(side=tk.TOP, expand=True, anchor=tk.S, fill=tk.BOTH)
 
         self.remove_button = tk.Button(self.results_listbox, text="Remove")
-        self.remove_button.pack(fill=tk.X)
+        self.remove_button.pack(side=tk.LEFT, expand=True, fill=tk.X)
 
-        # for i in range(100):
-        #     self.classes_listbox.listbox.insert("end", i)
-        #     self.results_listbox.listbox.insert("end", i)
-
+        self.change_results_button = tk.Button(self.results_listbox, text="Change")
+        self.change_results_button.pack(side=tk.RIGHT, expand=True, fill=tk.X)

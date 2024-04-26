@@ -34,3 +34,6 @@ class SaveManager:
 
     def get_names(self) -> list[str]:
         return self._checkpoints.keys()
+
+    def get_checkpoints(self) -> list[Checkpoint]:
+        return list(self._checkpoints.values())

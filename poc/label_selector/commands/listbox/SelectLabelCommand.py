@@ -2,11 +2,11 @@ import tkinter
 from dataclasses import dataclass
 
 from label_selector.commands.Command import Command
+from label_selector.commands.listbox.ListBoxCommand import ListBoxCommand
 
 
 @dataclass
-class ListBoxSelectLabelCommand(Command):
-    listbox: tkinter.Listbox
+class SelectLabelCommand(ListBoxCommand):
 
     def execute(self, event: tkinter.Event = None) -> bool:
         selected_indexes = self.listbox.curselection()

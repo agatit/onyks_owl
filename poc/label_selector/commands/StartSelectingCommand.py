@@ -31,3 +31,4 @@ class StartSelectingCommand(Command):
             main_window.image_canvas.delete(start_point_ref)
             app.process_data[current_index].start_point_ref = None
 
+        app.notify_listener("reload_results_listbox")

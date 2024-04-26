@@ -1,10 +1,13 @@
 import tkinter as tk
+from functools import partial
 from pathlib import Path
+from typing import Callable
 
 import cv2
 import numpy as np
 from PIL import Image, ImageTk, ImageEnhance
 
+from label_selector.gui.DrawCallback import DrawCallback
 from label_selector.gui.LabelRectangle import LabelRectangle
 from label_selector.gui.components.SideBar import SideBar
 from label_selector.gui.components.TopBar import TopBar, TopBarLabels
@@ -19,6 +22,9 @@ class MainWindow(tk.Frame):
         self.tk_image = None
 
         self.label_rectangles = []
+        self.draw_callbacks: dict[str, DrawCallback] = {
+            "label_rectangles": self._draw_label_rectangles,
+        }
 
         top_bar = TopBar(self)
         top_bar.pack(side=tk.TOP, fill=tk.X)
@@ -57,17 +63,18 @@ class MainWindow(tk.Frame):
             self.tk_image = ImageTk.PhotoImage(transformed_image)
             image_canvas.create_image(0, 0, anchor=tk.NW, image=self.tk_image)
 
-            self._draw_on_canvas()
+            [callback(image_canvas) for callback in self.draw_callbacks.values()]
 
-    def _draw_on_canvas(self):
+    # todo: przenieść na zewnątrz
+    def _draw_label_rectangles(self, canvas: tk.Canvas) -> None:
         for label_rectangle in self.label_rectangles:
             color = label_rectangle.color
-
             bounding_box = label_rectangle.bounding_box
+
             x1y1 = self.resize_point_to_canvas(bounding_box.x1, bounding_box.y1)
             x2y2 = self.resize_point_to_canvas(bounding_box.x2, bounding_box.y2)
 
-            self.draw_label_rectangle(x1y1, x2y2, label_rectangle.full_label, color)
+            self.draw_label_rectangle(canvas, x1y1, x2y2, label_rectangle.full_label, color)
 
     def resize_point_to_original(self, x: int, y: int) -> tuple[int, int]:
         image_canvas = self.image_canvas
@@ -96,11 +103,13 @@ class MainWindow(tk.Frame):
 
         return self.image_canvas.create_rectangle(x1y1, x2y2, fill="red")
 
-    def draw_label_rectangle(self, x1y1: tuple[int, int], x2y2: tuple[int, int], text: str, color:str = "red") -> None:
-        self.image_canvas.create_rectangle(x1y1, x2y2, outline=color)
+    @staticmethod
+    def draw_label_rectangle(image_canvas: tk.Canvas, x1y1: tuple[int, int], x2y2: tuple[int, int], text: str,
+                             color: str = "red") -> None:
+        image_canvas.create_rectangle(x1y1, x2y2, outline=color)
 
-        label_x1y1 = (x1y1[0] + 6, x1y1[1] - 6)
-        self.image_canvas.create_text(label_x1y1, fill=color, text=text)
+        label_x1y1 = (x1y1[0], x1y1[1] - 6)
+        image_canvas.create_text(label_x1y1, fill=color, text=text)
 
     @staticmethod
     def adjust_brightness(image: Image, gamma: float = 1.0):

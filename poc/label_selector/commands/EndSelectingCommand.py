@@ -34,16 +34,15 @@ class EndSelectingCommand(Command):
         start_point_ref = app.process_data[current_index].start_point_ref
         main_window.image_canvas.delete(start_point_ref)
 
-        # draw rectangle
+        # save label_rectangle
         label_text = app.current_label_text
         label_id = app.current_label_id_var.get()
-        label = app.current_label_text
-        main_window.draw_label_rectangle(canvas_x1y1, canvas_x2y2, label)
-
-        # save label_rectangle
         bounding_box = BoundingBox.from_x1y1_x2y2(image_x1y1, image_x2y2)
         label_rectangle = LabelRectangle(label_id, label_text, bounding_box)
         app.process_data[current_index].label_rectangles.append(label_rectangle)
+
+        app.notify_listener("reload_image")
+        app.notify_listener("reload_results_listbox")
 
         return True
 

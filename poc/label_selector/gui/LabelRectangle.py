@@ -18,6 +18,9 @@ class LabelRectangle:
     _selected: bool = field(init=False, repr=False, default=False)
 
     def __post_init__(self):
+        self.reload_full_label()
+
+    def reload_full_label(self):
         self.full_label = f"{self.label_id}:{self.label_text}"
 
     @property
