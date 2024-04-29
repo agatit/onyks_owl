@@ -179,6 +179,12 @@ def init_default_commands(app: LabelSelector) -> None:
     register_partial(key=key, command=command, args=args, history_flag=True,
                      target=main_window.side_bar.change_results_button)
 
+    key = "<KeyRelease-Return>"
+    command = ChangeLabelToSelectedCommand
+    args = defaults_args + (main_window.side_bar.results_listbox.listbox,)
+    register_partial(key=key, command=command, args=args, history_flag=True,
+                     target=main_window.side_bar.results_listbox.listbox)
+
     # global
     key = "<KeyRelease-Escape>"
     commands = [[ForceSaveCommand, defaults_args],

@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import messagebox
 from tkinter.messagebox import showinfo
 
@@ -13,6 +14,10 @@ class CloseAppCommand(Command):
     def execute(self, event=None) -> bool:
         index = self.app.current_index_var.get()
         max_index = self.app.max_index
+
+        # todo: zmienić na coś innego
+        if isinstance(event.widget, tkinter.Listbox):
+            return True
 
         if index == max_index - 1:
             answer = messagebox.askyesno(self.EXIT_TITLE, self.EXIT_MESSAGE, )
