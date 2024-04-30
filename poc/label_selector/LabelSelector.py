@@ -1,3 +1,4 @@
+import abc
 import tkinter as tk
 from abc import ABC
 from pathlib import Path
@@ -7,15 +8,13 @@ from PIL import Image
 
 from label_selector.Mode import Mode
 from label_selector.ProcessData import ProcessData
-from label_selector.gui.MainWindow import MainWindow
-from label_selector.gui.components.TopBar import TopBarLabels
 
 from label_selector.saving.SaveManager import SaveManager
 from yolo.YoloDatasetPart import YoloDatasetPart
 from yolo.YoloFormat import YoloFormat
 
 
-class LabelSelector(tk.Tk):
+class LabelSelector(tk.Tk, ABC):
     MAX_HISTORY_LENGTH = 50
 
     def __init__(self, images: list[Path], labels: dict[int, str], save_manager: SaveManager,
@@ -48,18 +47,12 @@ class LabelSelector(tk.Tk):
         self._modes = {}
         self._listeners = {}
 
-        self.geometry('800x600')
-        self.main_window = MainWindow(self)
-        self.main_window.pack(anchor="center", fill="both", expand=True)
-        # self.init_side_bar()
+        self.main_window = None
+        self._init_main_window()
 
-        # self. tk.StringVar(value=dir(tk))
-        _list = list(self.labels.values())
-        self.classes_listbox_var = tk.StringVar(self, _list, "classes_listbox_var")
-        self.main_window.side_bar.classes_listbox.listbox.config(listvariable=self.classes_listbox_var)
-
-        self.results_listbox_var = tk.StringVar(self, _list, "results_listbox_var")
-        self.main_window.side_bar.results_listbox.listbox.config(listvariable=self.results_listbox_var)
+    @abc.abstractmethod
+    def _init_main_window(self):
+        pass
 
     def get_current_process_data(self) -> ProcessData:
         return self.process_data[self.current_index_var.get()]
@@ -158,4 +151,3 @@ class LabelSelector(tk.Tk):
 
             # self.reload_main_window()
             self.notify_listener("reload_main_window")
-

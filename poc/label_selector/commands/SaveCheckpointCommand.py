@@ -15,8 +15,8 @@ class SaveCheckpointCommand(Command):
             self.app.save_checkpoint(self.checkpoint_name)
 
             if not checkpoint.silent:
-                self.main_window.set_info_with_timer("Auto saved", 2000)
-
+                top_bar = self.app.nametowidget("!mainwindow.!topbar")
+                top_bar.set_info_with_timer("Auto saved", 2000)
 
         return True
 

@@ -48,3 +48,7 @@ class TopBar(tk.Frame):
     def set_counter(self, current: int, max_number: int) -> None:
         text = f"{current + 1}/{max_number}"
         self.setvar(TopBarLabels.COUNTER, text)
+
+    def set_info_with_timer(self, text: str, delay_ms: int) -> None:
+        self.set_label(TopBarLabels.INFO, text)
+        self.after(delay_ms, lambda: self.set_label(TopBarLabels.INFO, ''))

@@ -5,7 +5,7 @@ from typing import Callable
 
 def open_loading_screen(fun: Callable):
     @functools.wraps(fun)
-    def wrapper(*args, **kwargs):
+    def wrapper(parent: tk.Tk | tk.Frame, *args, **kwargs):
         top_level = tk.Toplevel()
         top_level.title("loading")
 
@@ -13,8 +13,10 @@ def open_loading_screen(fun: Callable):
         top_level.label.pack()
 
         top_level.update()
-        result = fun(*args, **kwargs)
+        result = fun(parent, *args, **kwargs)
         top_level.destroy()
+
+        parent.deiconify()
 
         return result
 

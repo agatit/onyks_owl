@@ -10,7 +10,7 @@ class ScrollableListbox(tk.Frame):
         title_label.pack(side=tk.TOP, expand=False, anchor=tk.N, fill=tk.X)
         self.title_label = title_label
 
-        listbox_container = tk.Frame(self)
+        listbox_container = tk.Frame(self, name="listbox_container")
         listbox_container.pack(side=tk.TOP, expand=True, anchor=tk.N, fill=tk.BOTH)
         self.listbox_container = listbox_container
 
@@ -18,8 +18,10 @@ class ScrollableListbox(tk.Frame):
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.scrollbar = scrollbar
 
-        listbox = tk.Listbox(listbox_container, yscrollcommand=scrollbar.set, width=30)
+        self.listbox_var = tk.StringVar(self, None)
+        listbox = tk.Listbox(listbox_container, listvariable=self.listbox_var, yscrollcommand=scrollbar.set, width=30)
         listbox.pack(side=tk.TOP, expand=True, anchor=tk.N, fill=tk.BOTH)
         self.listbox = listbox
 
         scrollbar.config(command=listbox.yview)
+
