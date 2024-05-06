@@ -8,20 +8,22 @@ import click
 import yaml
 from PIL import Image
 
+from find_frames_with_tags_scripts.output_json import load_output_json
 from find_frames_with_tags_scripts.output_utils import init_datasets_from_output_json
 from io_utils.utils import make_directories
 from io_utils.yaml import Options, init_options
-from label_selector.gui.MainWindow import MainWindow
-from label_selector.gui.components.ScaleWithLabel import ScaleWithLabel
-from label_selector.gui.components.ScrollableListbox import ScrollableListbox
-from label_selector.gui.components.TopBar import TopBar
-from label_selector.init_listeners import init_default_listeners
-from label_selector.saving.Checkpoint import Checkpoint, init_checkpoint
-from label_selector.LabelSelector import LabelSelector
-from label_selector.gui.LabelRectangle import LabelRectangle
-from label_selector.gui.utils import open_loading_screen
-from label_selector.init_commands import init_default_commands
-from label_selector.saving.SaveManager import SaveManager
+from selector.gui.MainWindow import MainWindow
+from selector.gui.components.ScaleWithLabel import ScaleWithLabel
+from selector.gui.components.ScrollableListbox import ScrollableListbox
+from selector.gui.components.TopBar import TopBar
+from selector.init_listeners import init_default_listeners
+from selector.init_main_window import init_default_main_window
+from selector.saving.Checkpoint import Checkpoint, init_checkpoint
+from selector.Selector import Selector
+from selector.gui.LabelRectangle import LabelRectangle
+from selector.gui.utils import open_loading_screen
+from selector.init_commands import init_default_commands
+from selector.saving.SaveManager import SaveManager
 from yolo.YoloDataset import YoloDataset
 
 
@@ -52,8 +54,7 @@ def main(input_dir, output_dir, config, quick_export, last_image):
     with open(config, encoding="utf8") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
-    with open(input_dir / "output.json", "r") as file:
-        output_json = json.load(file)
+    output_json = load_output_json(input_dir)
 
     checkpoints: Options = {
         "auto1": init_checkpoint,
@@ -97,7 +98,7 @@ def main(input_dir, output_dir, config, quick_export, last_image):
         del app
 
 
-class SelectFramesWithTags(LabelSelector):
+class SelectFramesWithTags(Selector):
     def __init__(self, dataset: YoloDataset, labels: dict[int, str], save_manager: SaveManager, max_images: int = -1,
                  *args, **kwargs):
         images = [i.original_image_path for i in dataset.yolo_dataset_parts]
@@ -106,42 +107,14 @@ class SelectFramesWithTags(LabelSelector):
         self._load_yolo_dataset_parts(dataset, labels)
         # self.notify_listener("reload_main_window")
 
-        init_default_commands(self)
-        init_default_listeners(self)
-
     def _init_main_window(self):
-        self.geometry('800x600')
-        self.main_window = MainWindow(self)
-        self.main_window.pack(anchor="center", fill="both", expand=True)
+        init_default_main_window(self)
 
-        top_bar = TopBar(self.main_window)
-        top_bar.pack(side=tk.TOP, fill=tk.X)
+    def _init_commands(self):
+        init_default_commands(self)
 
-        image_canvas = tk.Canvas(self.main_window, bg="grey")
-        image_canvas.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
-        self.main_window.set_image_canvas(image_canvas)
-
-        # sidebar
-        side_bar = tk.Frame(self.main_window, name="sidebar")
-        side_bar.pack(side=tk.RIGHT, fill=tk.Y, padx=5, pady=5)
-
-        scale_with_label = ScaleWithLabel(side_bar, "Brightness")
-        scale_with_label.pack(side=tk.TOP, expand=False, anchor=tk.N)
-
-        classes_listbox = ScrollableListbox(side_bar, "Classes", name="class_listbox")
-        classes_listbox.listbox.config(selectmode='browse')
-        classes_listbox.pack(side=tk.TOP, expand=True, anchor=tk.N, fill=tk.BOTH)
-        classes_listbox.listbox_var.set(list(self.labels.values()))
-
-        results_listbox = ScrollableListbox(side_bar, "Results", name="results_listbox")
-        results_listbox.listbox.config(selectmode='extended')
-        results_listbox.pack(side=tk.TOP, expand=True, anchor=tk.S, fill=tk.BOTH)
-
-        remove_button = tk.Button(results_listbox, text="Remove", name="remove_button")
-        remove_button.pack(side=tk.LEFT, expand=True, fill=tk.X)
-
-        change_results_button = tk.Button(results_listbox, text="Change", name="change_button")
-        change_results_button.pack(side=tk.RIGHT, expand=True, fill=tk.X)
+    def _init_listeners(self):
+        init_default_listeners(self)
 
     @open_loading_screen
     def _load_yolo_dataset_parts(self, dataset, labels):

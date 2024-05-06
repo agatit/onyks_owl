@@ -1,0 +1,6 @@
+from selector.Selector import Selector
+
+
+def update_label_text(app: Selector, target: str, *trace_args) -> None:
+    label_id = app.current_label_id_var.get()
+    app.current_label_text = app.labels[label_id]

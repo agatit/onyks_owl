@@ -1,0 +1,13 @@
+from dataclasses import dataclass, field
+from pathlib import Path
+
+from PIL import Image
+
+from selector.gui.LabelRectangle import LabelRectangle
+
+
+@dataclass
+class ProcessData:
+    image_path: Path
+    label_rectangles: list[LabelRectangle] = field(default_factory=list)
+    start_point_ref: int = field(init=False, default=-1)

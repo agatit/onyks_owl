@@ -1,0 +1,16 @@
+import tkinter
+from dataclasses import dataclass
+
+from selector.commands.Command import Command
+
+
+@dataclass
+class ChangeLabelCommand(Command):
+    class_id: int
+
+    def execute(self, event: tkinter.Event = None) -> bool:
+        self.app.current_label_id_var.set(self.class_id)
+        return True
+
+    def undo(self) -> None:
+        pass

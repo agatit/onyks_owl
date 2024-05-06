@@ -7,10 +7,10 @@ import yaml
 from PIL import Image
 
 from io_utils.utils import load_paths_with_extension
-from label_selector.LabelSelector import LabelSelector
-from label_selector.gui.LabelRectangle import LabelRectangle
-from label_selector.gui.utils import open_loading_screen
-from label_selector.init_commands import init_default_commands
+from selector.Selector import Selector
+from selector.gui.LabelRectangle import LabelRectangle
+from selector.gui.utils import open_loading_screen
+from selector.init_commands import init_default_commands
 from yolo.YoloFormat import YoloFormat
 
 
@@ -58,7 +58,7 @@ def main(images_dir, labels_dir, config):
         app.export()
 
 
-class CheckYoloDataset(LabelSelector):
+class CheckYoloDataset(Selector):
 
     def __init__(self, images_labels: list[tuple[Path, Path]], labels: dict[int, str]):
         self.images_labels = dict(images_labels)

@@ -5,7 +5,7 @@ import click
 import yaml
 
 from io_utils.utils import make_directories
-from label_selector.LabelSelector import LabelSelector
+from selector.Selector import Selector
 from select_frames_with_tags import _init_commands
 from yolo.YoloDataset import YoloDataset
 
@@ -38,7 +38,7 @@ def main(input_dir, output_dir, label_selector_config, extension):
     images = glob.glob(str(input_dir / glob_mask))
     images = [Path(i) for i in images]
 
-    app = LabelSelector(images, label_selector_config["names"])
+    app = Selector(images, label_selector_config["names"])
     _init_commands(app)
     app.load_checkpoint()
     app.mainloop()
