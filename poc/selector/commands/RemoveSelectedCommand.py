@@ -12,13 +12,14 @@ class RemoveSelectedCommand(Command):
 
     def execute(self, event: tkinter.Event = None) -> bool:
         app = self.app
-        main_window = self.main_window
+        main_window = self.app.main_window
+        model = self.model
         current_index = app.current_index_var.get()
 
         canvas_x, canvas_y = event.x, event.y
         image_x, image_y = main_window.resize_point_to_original(canvas_x, canvas_y)
 
-        process_data = app.process_data[current_index]
+        process_data = model.get_data(app.current_index_var.get())
         label_rectangles = process_data.label_rectangles
 
         image_xy = image_x, image_y
@@ -42,7 +43,8 @@ class RemoveSelectedCommand(Command):
             return False
 
     def undo(self) -> None:
-        label_rectangles = self.app.process_data[self.removed_data_index].label_rectangles
+        removed_data = self.model.get_data(self.removed_data_index)
+        label_rectangles = removed_data.label_rectangles
         for i in self.removed_items:
             label_rectangles.append(i)
 

@@ -12,7 +12,7 @@ class DrawCrossCommand(Command):
 
     def execute(self, event: tkinter.Event = None) -> bool:
         self._mouse_event = event
-        self.main_window.draw_callbacks[self.draw_callback_name] = self._draw
+        self.app.main_window.draw_callbacks[self.draw_callback_name] = self._draw
 
         self.app.notify_listener("reload_image")
 

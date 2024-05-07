@@ -13,6 +13,7 @@ class GoToImageCommand(Command):
         self.last_index = self.app.current_index_var.get()
         self.app.current_index_var.set(self.go_to_index)
 
+        return True
 
     def undo(self) -> None:
         self.app.current_index_var.set(self.last_index)

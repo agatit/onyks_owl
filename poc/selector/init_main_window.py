@@ -1,13 +1,14 @@
 import tkinter as tk
 
 from selector.Selector import Selector
+from selector.SelectorModel import SelectorModel
 from selector.gui.MainWindow import MainWindow
 from selector.gui.components.ScaleWithLabel import ScaleWithLabel
 from selector.gui.components.ScrollableListbox import ScrollableListbox
 from selector.gui.components.TopBar import TopBar
 
 
-def init_default_main_window(app: Selector):
+def init_default_main_window(app: Selector, model: SelectorModel):
     app.geometry('800x600')
     app.main_window = MainWindow(app)
     app.main_window.pack(anchor="center", fill="both", expand=True)
@@ -29,7 +30,7 @@ def init_default_main_window(app: Selector):
     classes_listbox = ScrollableListbox(side_bar, "Classes", name="class_listbox")
     classes_listbox.listbox.config(selectmode='browse')
     classes_listbox.pack(side=tk.TOP, expand=True, anchor=tk.N, fill=tk.BOTH)
-    classes_listbox.listbox_var.set(list(app.labels.values()))
+    classes_listbox.listbox_var.set(list(model.labels.values()))
 
     results_listbox = ScrollableListbox(side_bar, "Results", name="results_listbox")
     results_listbox.listbox.config(selectmode='extended')

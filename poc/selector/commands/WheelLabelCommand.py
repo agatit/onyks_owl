@@ -7,7 +7,7 @@ class WheelLabelCommand(Command):
     def execute(self, event: tkinter.Event = None) -> bool:
         app = self.app
 
-        labels_number = len(app.labels)
+        labels_number = len(self.model.labels)
         current_id = app.current_label_id_var.get()
 
         if event.delta > 0:

@@ -1,8 +1,7 @@
-import json
 import os
-import sys
-import tkinter as tk
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import click
 import yaml
@@ -12,19 +11,19 @@ from find_frames_with_tags_scripts.output_json import load_output_json
 from find_frames_with_tags_scripts.output_utils import init_datasets_from_output_json
 from io_utils.utils import make_directories
 from io_utils.yaml import Options, init_options
-from selector.gui.MainWindow import MainWindow
-from selector.gui.components.ScaleWithLabel import ScaleWithLabel
-from selector.gui.components.ScrollableListbox import ScrollableListbox
-from selector.gui.components.TopBar import TopBar
-from selector.init_listeners import init_default_listeners
-from selector.init_main_window import init_default_main_window
-from selector.saving.Checkpoint import Checkpoint, init_checkpoint
+from selector.ProcessData import ProcessData
 from selector.Selector import Selector
+from selector.SelectorModel import SelectorModel
 from selector.gui.LabelRectangle import LabelRectangle
 from selector.gui.utils import open_loading_screen
 from selector.init_commands import init_default_commands
+from selector.init_listeners import init_default_listeners
+from selector.init_main_window import init_default_main_window
+from selector.saving.Checkpoint import init_checkpoint, Checkpoint
 from selector.saving.SaveManager import SaveManager
 from yolo.YoloDataset import YoloDataset
+from yolo.YoloDatasetPart import YoloDatasetPart
+from yolo.YoloFormat import YoloFormat
 
 
 @click.command()
@@ -75,52 +74,70 @@ def main(input_dir, output_dir, config, quick_export, last_image):
         save_manager = SaveManager(dataset.dataset_name)
         [save_manager.add_checkpoint(checkpoint) for checkpoint in checkpoints]
 
-        app = SelectFramesWithTags(dataset, labels, save_manager, max_image_number)
+        model = SelectFramesWithTagsModel(save_manager, labels, dataset, max_images=max_image_number)
+        app = SelectFramesWithTags(model)
 
         try:
-            app.load_checkpoint()
+            app.notify_listener("load_checkpoint")
         except FileNotFoundError:
-            print(f"Not found: {app.save_manager.get_latest_checkpoint()}")
+            print(f"Not found: {model.save_manager.get_latest_checkpoint()}")
 
-        if app.to_export:
+        if model.to_export:
             app.destroy()
             continue
 
         app.mainloop()
 
-        if not app.to_export:
+        if not model.to_export:
             break
 
-        new_parts = app.export_dataset_parts()
+        new_parts = model.export_dataset_parts()
         dataset.yolo_dataset_parts = new_parts
         dataset.export()
 
         del app
 
 
-class SelectFramesWithTags(Selector):
-    def __init__(self, dataset: YoloDataset, labels: dict[int, str], save_manager: SaveManager, max_images: int = -1,
-                 *args, **kwargs):
-        images = [i.original_image_path for i in dataset.yolo_dataset_parts]
-        super().__init__(images, labels, save_manager, max_images, dataset.dataset_name, *args, **kwargs)
+@dataclass
+class SelectFramesWithTagsModel(SelectorModel):
+    dataset: YoloDataset
 
-        self._load_yolo_dataset_parts(dataset, labels)
-        # self.notify_listener("reload_main_window")
+    max_images: int = -1
+    to_export: bool = False
 
-    def _init_main_window(self):
-        init_default_main_window(self)
+    _process_data: list[ProcessData] = field(init=False, default_factory=list)
 
-    def _init_commands(self):
-        init_default_commands(self)
+    def __post_init__(self):
+        images = [i.original_image_path for i in self.dataset.yolo_dataset_parts]
 
-    def _init_listeners(self):
-        init_default_listeners(self)
+        if self.max_images < 0:
+            images_to_load = len(images)
+        else:
+            images_to_load = self.max_images
 
-    @open_loading_screen
-    def _load_yolo_dataset_parts(self, dataset, labels):
-        max_images = self.max_index
+        self._process_data = [ProcessData(image) for image in images[:images_to_load]]
+        self._load_yolo_dataset_parts()
 
-        for process_data, dataset_part, in zip(self.process_data[:max_images], dataset.yolo_dataset_parts[:max_images]):
+    def get_all_data(self) -> Any:
+        return self._process_data
+
+    def get_data(self, index: int) -> Any:
+        return self._process_data[index]
+
+    def get_data_len(self) -> int:
+        return len(self._process_data)
+
+    def save_checkpoint(self, checkpoint_name: str, current_index: int):
+        checkpoint_data = (self.to_export, current_index, self._process_data)
+        checkpoint = self.save_manager.get_checkpoint(checkpoint_name)
+        checkpoint.save(checkpoint_data)
+
+    # @open_loading_screen
+    def _load_yolo_dataset_parts(self):
+        max_images = self.get_data_len()
+        labels = self.labels
+
+        for process_data, dataset_part, in zip(self._process_data[:max_images], self.dataset.yolo_dataset_parts[:max_images]):
             formats = dataset_part.yolo_formats
 
             label_rectangles = []
@@ -137,6 +154,50 @@ class SelectFramesWithTags(Selector):
                 label_rectangles.append(label_rectangle)
 
             process_data.label_rectangles = label_rectangles
+
+    def export_dataset_parts(self) -> list[YoloDatasetPart]:
+        filtered = filter(lambda x: len(x.label_rectangles) > 0, self._process_data)
+
+        dataset_parts = []
+        for process_data in filtered:
+            image_path = process_data.image_path
+            yolo_formats = self._process_data_to_yolo_formats(process_data)
+
+            dataset_part = YoloDatasetPart(image_path, yolo_formats)
+            dataset_parts.append(dataset_part)
+
+        return dataset_parts
+
+    @staticmethod
+    def _process_data_to_yolo_formats(process_data):
+        image_path = process_data.image_path
+
+        yolo_formats = []
+        for label_rectangle in process_data.label_rectangles:
+            class_id = label_rectangle.label_id
+            bounding_box = label_rectangle.bounding_box
+            width, height = Image.open(image_path).size
+
+            yolo_format = YoloFormat.from_bounding_box(class_id, width, height, bounding_box)
+            yolo_formats.append(yolo_format)
+
+        return yolo_formats
+
+class SelectFramesWithTags(Selector):
+    def __init__(self, model: SelectFramesWithTagsModel, *args, **kwargs):
+        self.model = model
+        super().__init__(*args, **kwargs)
+
+        # self.notify_listener("reload_main_window")
+
+    def _init_main_window(self):
+        init_default_main_window(self, self.model)
+
+    def _init_commands(self):
+        init_default_commands(self, self.model)
+
+    def _init_listeners(self):
+        init_default_listeners(self, self.model)
 
 
 if __name__ == '__main__':

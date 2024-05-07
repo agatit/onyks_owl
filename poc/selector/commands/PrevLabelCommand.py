@@ -9,7 +9,7 @@ class PrevLabelCommand(Command):
 
         next_id = app.current_label_id_var.get() - 1
         if next_id < 0:
-            next_id = len(app.labels) - 1
+            next_id = len(self.model.labels) - 1
 
         app.current_label_id_var.set(next_id)
         return True

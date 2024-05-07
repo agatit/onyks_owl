@@ -13,7 +13,7 @@ class CloseAppCommand(Command):
 
     def execute(self, event=None) -> bool:
         index = self.app.current_index_var.get()
-        max_index = self.app.max_index
+        max_index = self.model.get_data_len()
 
         # todo: zmienić na coś innego
         if isinstance(event.widget, tkinter.Listbox):
@@ -23,7 +23,7 @@ class CloseAppCommand(Command):
             answer = messagebox.askyesno(self.EXIT_TITLE, self.EXIT_MESSAGE, )
 
             if answer:
-                self.app.to_export = True
+                self.model.to_export = True
                 self.app.destroy()
         else:
             showinfo(self.INFO_TITLE, self.INFO_MESSAGE)

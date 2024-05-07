@@ -38,17 +38,17 @@ def main(input_dir, output_dir, label_selector_config, extension):
     images = glob.glob(str(input_dir / glob_mask))
     images = [Path(i) for i in images]
 
-    app = Selector(images, label_selector_config["names"])
-    _init_commands(app)
-    app.load_checkpoint()
-    app.mainloop()
+    # app = Selector(images, label_selector_config["names"])
+    # _init_commands(app)
+    # app.load_checkpoint()
+    # app.mainloop()
 
-    if app.to_export:
-        dataset_parts = app.export_dataset_parts()
-        yolo_dataset = YoloDataset(input_dir, output_dir,
-                                   yolo_dataset_parts=dataset_parts,
-                                   image_extension=extension)
-        yolo_dataset.export()
+    # if app.to_export:
+    #     dataset_parts = app.export_dataset_parts()
+    #     yolo_dataset = YoloDataset(input_dir, output_dir,
+    #                                yolo_dataset_parts=dataset_parts,
+    #                                image_extension=extension)
+    #     yolo_dataset.export()
 
 
 if __name__ == '__main__':

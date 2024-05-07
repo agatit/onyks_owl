@@ -10,7 +10,7 @@ from selector.commands.listbox.ListBoxCommand import ListBoxCommand
 class GlowSelectedLabelCommand(ListBoxCommand):
     def execute(self, event: tkinter.Event = None) -> bool:
         selected_indexes = self.listbox.curselection()
-        current_process_data = self.app.get_current_process_data()
+        current_process_data = self.model.get_data(self.app.current_index_var.get())
 
         for index, label_rectangle in enumerate(current_process_data.label_rectangles):
             if index in selected_indexes:

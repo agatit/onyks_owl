@@ -1,7 +1,8 @@
 from functools import partial
-from typing import Any, Protocol
+from typing import Any
 
 from selector.Selector import Selector
+from selector.SelectorModel import SelectorModel
 from selector.commands.ChainCommand import ChainCommand
 from selector.commands.ChangeLabelCommand import ChangeLabelCommand
 from selector.commands.ChangeModeCommand import ChangeModeCommand
@@ -10,10 +11,6 @@ from selector.commands.EndSelectingCommand import EndSelectingCommand
 from selector.commands.ForceCloseAppCommand import ForceCloseAppCommand
 from selector.commands.ForceSaveCommand import ForceSaveCommand
 from selector.commands.GoToImageCommand import GoToImageCommand
-from selector.commands.listbox.ChangeLabelToSelectedCommand import ChangeLabelToSelectedCommand
-from selector.commands.listbox.GlowSelectedLabelCommand import GlowSelectedLabelCommand
-from selector.commands.listbox.RemoveLabelCommand import RemoveLabelCommand
-from selector.commands.listbox.SelectLabelCommand import SelectLabelCommand
 from selector.commands.NextImageCommand import NextImageCommand
 from selector.commands.NextLabelCommand import NextLabelCommand
 from selector.commands.PrevImageCommand import PrevImageCommand
@@ -21,11 +18,14 @@ from selector.commands.PrevLabelCommand import PrevLabelCommand
 from selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
 from selector.commands.StartSelectingCommand import StartSelectingCommand
 from selector.commands.WheelLabelCommand import WheelLabelCommand
+from selector.commands.listbox.ChangeLabelToSelectedCommand import ChangeLabelToSelectedCommand
+from selector.commands.listbox.GlowSelectedLabelCommand import GlowSelectedLabelCommand
+from selector.commands.listbox.RemoveLabelCommand import RemoveLabelCommand
+from selector.commands.listbox.SelectLabelCommand import SelectLabelCommand
 
 
-def init_default_commands(app: Selector) -> None:
-    main_window = app.main_window
-    defaults_args = app, main_window
+def init_default_commands(app: Selector, model:SelectorModel) -> None:
+    defaults_args = app, model
 
     image_canvas = app.nametowidget("!mainwindow.!canvas")
     classes_listbox = app.nametowidget("!mainwindow.sidebar.class_listbox.listbox_container.!listbox")
@@ -53,39 +53,24 @@ def init_default_commands(app: Selector) -> None:
         history_flag=True,
     )
 
-    # todo: do jakieś struktury
-    go_to_next_image = [
-        [NextImageCommand, defaults_args],
-    ]
-
-    go_to_last_image = [
-        [GoToImageCommand, defaults_args + (app.max_index - 1,)],
-    ]
-
-    go_to_previous_image = [
-        [PrevImageCommand, defaults_args],
-    ]
-
-    go_to_first_image = [
-        [GoToImageCommand, defaults_args + (0,)],
-    ]
-
     # Arrows
     key = "<KeyRelease-Right>"
-    commands = go_to_next_image
-    register_chain_partial(key=key, commands=commands)
+    command = NextImageCommand
+    register_partial(key=key, command=command)
 
     key = "<Control-KeyRelease-Right>"
-    commands = go_to_last_image
-    register_chain_partial(key=key, commands=commands)
+    command = GoToImageCommand
+    args = defaults_args + (model.get_data_len() - 1,)
+    register_partial(key=key, command=command, args=args)
 
     key = "<KeyRelease-Left>"
-    commands = go_to_previous_image
-    register_chain_partial(key=key, commands=commands)
+    command = PrevImageCommand
+    register_partial(key=key, command=command)
 
     key = "<Control-KeyRelease-Left>"
-    commands = go_to_first_image
-    register_chain_partial(key=key, commands=commands)
+    command = GoToImageCommand
+    args = defaults_args + (0,)
+    register_partial(key=key, command=command, args=args)
 
     # WSAD - aka tryb gamingowy
     key = "<KeyRelease-w>"
@@ -97,15 +82,15 @@ def init_default_commands(app: Selector) -> None:
     register_partial(key=key, command=command, history_flag=False)
 
     key = "<KeyRelease-a>"
-    commands = go_to_previous_image
+    commands = PrevImageCommand
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-d>"
-    commands = go_to_next_image
+    commands = NextImageCommand
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-space>"
-    commands = go_to_next_image
+    commands = NextImageCommand
     register_chain_partial(key=key, commands=commands)
 
     key = "<KeyRelease-Return>"
@@ -115,7 +100,7 @@ def init_default_commands(app: Selector) -> None:
 
     # labels
     class_offset = 1
-    for class_id in app.labels:
+    for class_id in model.labels:
         key = str(class_id + class_offset)
         command = ChangeLabelCommand
         args = defaults_args + (class_id,)

@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, Any
 
 import click
 import yaml
@@ -9,6 +9,7 @@ from find_frames_with_tags_scripts.output_json import load_output_json
 from io_utils.utils import make_directories
 from ocr.datasets.FullDatasetPart import FullDatasetPart
 from selector.Selector import Selector
+from selector.SelectorModel import SelectorModel
 from selector.init_commands import init_default_commands
 from selector.init_listeners import init_default_listeners
 from selector.init_main_window import init_default_main_window
@@ -40,6 +41,7 @@ def main(input_dir, output_dir, config):
     output_json = filter_output_json(output_json, config, input_dir)
 
 
+
 def filter_output_json(output_json: dict, config: dict, input_dir: Path):
     dirs = os.listdir(input_dir)
     output_json = {k: v for k, v in output_json.items() if k in dirs}
@@ -69,18 +71,28 @@ class SelectNumbersData(FullDatasetPart):
     proposed_text: str
 
 
-def select_numbers_data_gen(output_json: dict) -> Iterator[SelectNumbersData]:
-    pass
+class SelectNumbersModel(SelectorModel):
+
+    def get_data(self, index: int) -> Any:
+        pass
+
+    def get_all_data(self) -> Any:
+        pass
+
+    def get_data_len(self) -> int:
+        pass
+
+    def save_checkpoint(self, checkpoint_name: str, current_index: int):
+        pass
 
 
 class SelectNumbers(Selector):
-    def __init__(self, data: SelectNumbersData, *args, **kwargs):
-        # images = [i.original_image_path for i in dataset.yolo_dataset_parts]
-        # super().__init__(images, labels, save_manager, max_images, dataset.dataset_name, *args, **kwargs)
-        pass
+    def __init__(self, model: SelectNumbersData, *args, **kwargs):
+        self.model = model
+        super().__init__(*args, **kwargs)
 
     def _init_main_window(self):
-        init_default_main_window(self)
+        init_default_main_window(self, self.model)
 
     def _init_commands(self):
         init_default_commands(self)

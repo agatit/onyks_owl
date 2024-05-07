@@ -1,6 +1,7 @@
 import sys
 from itertools import product
 from pathlib import Path
+from typing import Any
 
 import click
 import yaml
@@ -8,6 +9,7 @@ from PIL import Image
 
 from io_utils.utils import load_paths_with_extension
 from selector.Selector import Selector
+from selector.SelectorModel import SelectorModel
 from selector.gui.LabelRectangle import LabelRectangle
 from selector.gui.utils import open_loading_screen
 from selector.init_commands import init_default_commands
@@ -41,21 +43,35 @@ def main(images_dir, labels_dir, config):
 
     images_labels = [(i, l) for i, l in product(images, labels) if i.stem == l.stem]
 
-    app = CheckYoloDataset(images_labels, labels_config)
-    init_default_commands(app)
-
+    # app = CheckYoloDataset(images_labels, labels_config)
+    # init_default_commands(app)
+    #
+    # # app.mainloop()
+    # # app.export()
+    #
+    # try:
+    #     app.load_checkpoint()
+    # except FileNotFoundError as e:
+    #     print(f"Not found: {app.save_manager.get_latest_checkpoint()}")
+    #
     # app.mainloop()
-    # app.export()
+    #
+    # if app.to_export:
+    #     app.export()
 
-    try:
-        app.load_checkpoint()
-    except FileNotFoundError as e:
-        print(f"Not found: {app.save_manager.get_latest_checkpoint()}")
+class CheckYoloDatasetModel(SelectorModel):
 
-    app.mainloop()
+    def get_data(self, index: int) -> Any:
+        pass
 
-    if app.to_export:
-        app.export()
+    def get_all_data(self) -> Any:
+        pass
+
+    def get_data_len(self) -> int:
+        pass
+
+    def save_checkpoint(self, checkpoint_name: str, current_index: int):
+        pass
 
 
 class CheckYoloDataset(Selector):

@@ -8,7 +8,7 @@ class NextLabelCommand(Command):
         app = self.app
 
         next_id = app.current_label_id_var.get() + 1
-        if next_id >= len(app.labels):
+        if next_id >= len(self.model.labels):
             next_id = 0
 
         app.current_label_id_var.set(next_id)
