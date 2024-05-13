@@ -6,7 +6,7 @@ import click
 from stitch.rectify.FrameRectifier import FrameRectifier
 from stream.commands.CommandInvoker import CommandInvoker
 from stream.Stream import Stream
-from stream.commands.detection.DetectImageCommand import DetectImageCommand
+from stream.commands.detection import DetectImageCommand
 from stream.commands.display.DestroyWindowsCommand import DestroyWindowsCommand
 from stream.commands.display.DisplayStreamCommand import DisplayStreamCommand
 from stream.commands.display.InterruptStreamCommand import InterruptStreamCommand

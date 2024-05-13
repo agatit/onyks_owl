@@ -4,7 +4,7 @@ from yolo.DetectionResult import DetectionResult
 
 
 @dataclass
-class OutputData:
+class FindFramesWithTagsData:
     frame_number: int
     file_name: str
     detection_result: DetectionResult = field(default=None)

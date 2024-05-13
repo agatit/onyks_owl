@@ -2,6 +2,11 @@ from dataclasses import dataclass
 
 
 @dataclass
+class Instance:
+    text: str
+
+
+@dataclass
 class TextRecogDatasetPart:
-    instances: list[str]
+    instances: list[Instance]
     img_path: str

@@ -1,21 +1,17 @@
-# from functools import partial
-#
-# from selector.LabelSelector import LabelSelector
-#
-#
 from functools import partial
 from tkinter import Image
 
 from PIL import ImageEnhance
 
 from selector.Selector import Selector
+from selector.SelectorModel import SelectorModel
 
 
-def change_image_brightness(app: Selector, target: str, *trace_args):
+def change_image_brightness(app: Selector, model: SelectorModel, target: str, *trace_args):
     transformation_name = "brightness"
 
-    scale_var = app.nametowidget(target).scale_var
-    callback = partial(_adjust_brightness, brightness=scale_var.get())
+    brightness = app.var_register.get_var_value("brightness_var")
+    callback = partial(_adjust_brightness, brightness=brightness)
 
     app.main_window.image_transformations[transformation_name] = callback
     app.notify_listener("reload_image")

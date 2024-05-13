@@ -10,6 +10,13 @@ class Bbox:
     width: int
     height: int
 
+    @classmethod
+    def from_xyxy(cls, x1: int, y1: int, x2: int, y2: int) -> "Bbox":
+        width = x2 - x1
+        height = y2 - y1
+
+        return cls(x1, y1, width, height)
+
     def normalize(self, original_width: int, original_height: int) -> BboxN:
         x1, y1, width, height = self.x1, self.y1, self.width, self.height
 

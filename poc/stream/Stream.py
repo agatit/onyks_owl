@@ -5,21 +5,17 @@ import numpy as np
 
 from stitch.rectify.FrameRectifier import FrameRectifier
 from stream.loaders.Loader import Loader
-from yolo.DetectionResult import DetectionResult
-from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Stream:
     loader: Loader = None
     frame_rectifier: FrameRectifier = None
-    yolo_detector: YoloDetectorV5 = None
 
     name = "stream"
 
     current_frame: np.ndarray = field(init=False)
     active_image_gen: Generator[np.ndarray, None, np.ndarray] = field(init=False)
-    detections: list[list[DetectionResult]] = field(init=False, default_factory=list)
     read_frames_counter: int = 0
 
     def __post_init__(self):

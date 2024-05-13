@@ -10,3 +10,4 @@ class DisplayImageCommand(Command):
     def execute(self) -> None:
         cv2.imshow(self.stream.name, self.stream.current_frame)
         cv2.waitKey(0)
+

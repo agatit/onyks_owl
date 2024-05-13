@@ -61,13 +61,13 @@ def main(images_dir, labels_dir, config):
 
 class CheckYoloDatasetModel(SelectorModel):
 
-    def get_data(self, index: int) -> Any:
+    def get_selector_data(self, index: int) -> Any:
         pass
 
-    def get_all_data(self) -> Any:
+    def get_all_selector_data(self) -> Any:
         pass
 
-    def get_data_len(self) -> int:
+    def get_selector_data_len(self) -> int:
         pass
 
     def save_checkpoint(self, checkpoint_name: str, current_index: int):

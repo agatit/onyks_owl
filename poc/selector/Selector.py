@@ -1,18 +1,10 @@
 import abc
 import tkinter as tk
 from abc import ABC
-from pathlib import Path
-from typing import Callable, Any, Protocol
-
-from PIL import Image
+from typing import Callable, Any
 
 from selector.Mode import Mode
-from selector.ProcessData import ProcessData
-from selector.SelectorModel import SelectorModel
-
-from selector.saving.SaveManager import SaveManager
-from yolo.YoloDatasetPart import YoloDatasetPart
-from yolo.YoloFormat import YoloFormat
+from selector.tracing.TraceRegister import VarRegister
 
 
 class Selector(tk.Tk, ABC):
@@ -27,10 +19,12 @@ class Selector(tk.Tk, ABC):
         self.current_index_var = tk.IntVar(self, 0, "current_index_var")
         self.current_label_id_var = tk.IntVar(self, 0, "current_label_id_var")
 
-        # self.current_label_text = labels[self.current_label_id_var.get()]
-        self.current_label_text = None
-        # self.max_index = len(self.process_data)
+        # todo: przenieść odwołania do VarRegister
+        self.var_register = VarRegister()
+        self.var_register.add_var("current_index_var", self.current_index_var)
+        self.var_register.add_var("current_label_id_var", self.current_label_id_var)
 
+        self.current_label_text = None
         self.total_changed_index = 0
 
         self._command_history = []
@@ -53,9 +47,6 @@ class Selector(tk.Tk, ABC):
     @abc.abstractmethod
     def _init_listeners(self):
         pass
-
-    # def get_current_process_data(self) -> ProcessData:
-    #     return self.process_data[self.current_index_var.get()]
 
     def get_current_mode(self) -> str:
         true_modes = [i for i in self._modes if self._modes[i].status]
@@ -105,25 +96,3 @@ class Selector(tk.Tk, ABC):
         # print(self._command_history)
         if len(self._command_history) > 0:
             self._command_history.pop().undo()
-
-
-
-
-
-    # def save_checkpoint(self, checkpoint_name: str):
-    #     checkpoint_data = (self.to_export, self.current_index_var.get(), self.process_data)
-    #     checkpoint = self.save_manager.get_checkpoint(checkpoint_name)
-    #     checkpoint.save(checkpoint_data)
-
-    # def load_checkpoint(self) -> None:
-    #     checkpoint = self.save_manager.get_latest_checkpoint()
-    #
-    #     if checkpoint is not None:
-    #         data = checkpoint.load()
-    #
-    #         self.to_export = data[0]
-    #         self.process_data = data[2]
-    #
-    #         self.current_index_var.set(data[1])
-    #         # self.reload_main_window()
-    #         self.notify_listener("reload_main_window")

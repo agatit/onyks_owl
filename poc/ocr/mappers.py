@@ -1,7 +1,11 @@
-from typing import Any
+from enum import Enum
+from typing import Any, Protocol
 
-Mapper = dict[str, Any]
 
+class Mapper(Protocol):
+    def __call__(self, *args, **kwargs) -> dict:
+        ...
 
 def map_to(mapper: Mapper, out_class: type) -> Any:
-    return out_class(**mapper)
+    return out_class(**mapper())
+

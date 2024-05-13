@@ -32,8 +32,8 @@ class EndSelectingCommand(Command):
         self.image_x1y1_backup = image_x1y1
 
         # delete start point
-        current_data = model.get_data(app.current_index_var.get())
-        start_point_ref = current_data.start_point_ref
+        current_data = model.get_selector_data(app.current_index_var.get())
+        start_point_ref = current_data.start_drawing_point_ref
         main_window.image_canvas.delete(start_point_ref)
 
         # save label_rectangle
@@ -57,14 +57,14 @@ class EndSelectingCommand(Command):
         canvas_x, canvas_y = self.canvas_x1y1_backup
 
         # remove last rectangle
-        current_data = self.model.get_data(self.app.current_index_var.get())
+        current_data = self.model.get_selector_data(self.app.current_index_var.get())
         current_data.label_rectangles.pop()
         self.app.notify_listener("reload_image")
 
         # draw star point
         app.start_drawing_point = (image_x, image_y)
         start_point_ref = main_window.draw_start_point(canvas_x, canvas_y)
-        current_data.start_point_ref = start_point_ref
+        current_data.start_drawing_point_ref = start_point_ref
 
     @staticmethod
     def calculate_x1y1_x2y2(start_x, start_y, end_x, end_y) -> tuple:

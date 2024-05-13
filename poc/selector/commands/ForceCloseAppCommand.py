@@ -11,7 +11,7 @@ class ForceCloseAppCommand(Command):
         current_index = self.app.current_index_var.get()
         next_index = current_index + 1
 
-        if next_index != self.model.get_data_len():
+        if next_index != self.model.get_selector_data_len():
             result = askyesno(title=self.MSG_TITLE,
                               message=self.MESSAGE)
             if result:

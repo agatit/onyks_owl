@@ -13,7 +13,7 @@ class CloseAppCommand(Command):
 
     def execute(self, event=None) -> bool:
         index = self.app.current_index_var.get()
-        max_index = self.model.get_data_len()
+        max_index = self.model.get_selector_data_len()
 
         # todo: zmienić na coś innego
         if isinstance(event.widget, tkinter.Listbox):

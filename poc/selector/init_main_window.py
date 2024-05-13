@@ -27,17 +27,3 @@ def init_default_main_window(app: Selector, model: SelectorModel):
     scale_with_label = ScaleWithLabel(side_bar, "Brightness")
     scale_with_label.pack(side=tk.TOP, expand=False, anchor=tk.N)
 
-    classes_listbox = ScrollableListbox(side_bar, "Classes", name="class_listbox")
-    classes_listbox.listbox.config(selectmode='browse')
-    classes_listbox.pack(side=tk.TOP, expand=True, anchor=tk.N, fill=tk.BOTH)
-    classes_listbox.listbox_var.set(list(model.labels.values()))
-
-    results_listbox = ScrollableListbox(side_bar, "Results", name="results_listbox")
-    results_listbox.listbox.config(selectmode='extended')
-    results_listbox.pack(side=tk.TOP, expand=True, anchor=tk.S, fill=tk.BOTH)
-
-    remove_button = tk.Button(results_listbox, text="Remove", name="remove_button")
-    remove_button.pack(side=tk.LEFT, expand=True, fill=tk.X)
-
-    change_results_button = tk.Button(results_listbox, text="Change", name="change_button")
-    change_results_button.pack(side=tk.RIGHT, expand=True, fill=tk.X)

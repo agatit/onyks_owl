@@ -28,10 +28,6 @@ def init_default_commands(app: Selector, model:SelectorModel) -> None:
     defaults_args = app, model
 
     image_canvas = app.nametowidget("!mainwindow.!canvas")
-    classes_listbox = app.nametowidget("!mainwindow.sidebar.class_listbox.listbox_container.!listbox")
-    results_listbox = app.nametowidget("!mainwindow.sidebar.results_listbox.listbox_container.!listbox")
-    remove_button = app.nametowidget("!mainwindow.sidebar.results_listbox.remove_button")
-    change_button = app.nametowidget("!mainwindow.sidebar.results_listbox.change_button")
 
     app.add_mode("default")
     app.add_mode("selecting")
@@ -60,7 +56,7 @@ def init_default_commands(app: Selector, model:SelectorModel) -> None:
 
     key = "<Control-KeyRelease-Right>"
     command = GoToImageCommand
-    args = defaults_args + (model.get_data_len() - 1,)
+    args = defaults_args + (model.get_selector_data_len() - 1,)
     register_partial(key=key, command=command, args=args)
 
     key = "<KeyRelease-Left>"
@@ -82,16 +78,16 @@ def init_default_commands(app: Selector, model:SelectorModel) -> None:
     register_partial(key=key, command=command, history_flag=False)
 
     key = "<KeyRelease-a>"
-    commands = PrevImageCommand
-    register_chain_partial(key=key, commands=commands)
+    command = PrevImageCommand
+    register_partial(key=key, command=command)
 
     key = "<KeyRelease-d>"
-    commands = NextImageCommand
-    register_chain_partial(key=key, commands=commands)
+    command = NextImageCommand
+    register_partial(key=key, command=command)
 
     key = "<KeyRelease-space>"
-    commands = NextImageCommand
-    register_chain_partial(key=key, commands=commands)
+    command = NextImageCommand
+    register_partial(key=key, command=command)
 
     key = "<KeyRelease-Return>"
     commands = [[CloseAppCommand, defaults_args],
@@ -127,53 +123,6 @@ def init_default_commands(app: Selector, model:SelectorModel) -> None:
     key = "<MouseWheel>"
     command = WheelLabelCommand
     register_partial(key=key, command=command, history_flag=False)
-
-    # key = "<Motion>"
-    # command = DrawCrossCommand
-    # register_partial(key=key, command=command, history_flag=False,
-    #                  target=image_canvas)
-    #
-    # key = "<Motion>"
-    # command = DrawCrossCommand
-    # register_partial(key=key, command=command, mode_name="selecting", history_flag=False,
-    #                  target=image_canvas)
-
-    # list boxes
-    key = "<<ListboxSelect>>"
-    command = SelectLabelCommand
-    args = defaults_args + (classes_listbox,)
-    register_partial(key=key, command=command, args=args, history_flag=False,
-                     target=classes_listbox)
-
-    key = "<<ListboxSelect>>"
-    command = GlowSelectedLabelCommand
-    args = defaults_args + (results_listbox,)
-    register_partial(key=key, command=command, args=args, history_flag=False,
-                     target=results_listbox)
-
-    key = "<KeyRelease-Delete>"
-    command = RemoveLabelCommand
-    args = defaults_args + (results_listbox,)
-    register_partial(key=key, command=command, args=args, history_flag=True,
-                     target=results_listbox)
-
-    key = "<Button-1>"
-    command = RemoveLabelCommand
-    args = defaults_args + (results_listbox,)
-    register_partial(key=key, command=command, args=args, history_flag=True,
-                     target=remove_button)
-
-    key = "<Button-1>"
-    command = ChangeLabelToSelectedCommand
-    args = defaults_args + (results_listbox,)
-    register_partial(key=key, command=command, args=args, history_flag=True,
-                     target=change_button)
-
-    key = "<KeyRelease-Return>"
-    command = ChangeLabelToSelectedCommand
-    args = defaults_args + (results_listbox,)
-    register_partial(key=key, command=command, args=args, history_flag=True,
-                     target=results_listbox)
 
     # global
     key = "<KeyRelease-Escape>"

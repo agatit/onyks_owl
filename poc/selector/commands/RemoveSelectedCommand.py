@@ -19,7 +19,7 @@ class RemoveSelectedCommand(Command):
         canvas_x, canvas_y = event.x, event.y
         image_x, image_y = main_window.resize_point_to_original(canvas_x, canvas_y)
 
-        process_data = model.get_data(app.current_index_var.get())
+        process_data = model.get_selector_data(app.current_index_var.get())
         label_rectangles = process_data.label_rectangles
 
         image_xy = image_x, image_y
@@ -43,7 +43,7 @@ class RemoveSelectedCommand(Command):
             return False
 
     def undo(self) -> None:
-        removed_data = self.model.get_data(self.removed_data_index)
+        removed_data = self.model.get_selector_data(self.removed_data_index)
         label_rectangles = removed_data.label_rectangles
         for i in self.removed_items:
             label_rectangles.append(i)

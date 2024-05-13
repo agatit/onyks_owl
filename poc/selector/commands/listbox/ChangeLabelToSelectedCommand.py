@@ -11,7 +11,7 @@ class ChangeLabelToSelectedCommand(ListBoxCommand):
 
     def execute(self, event: tkinter.Event = None) -> bool:
         selected_indexes = self.listbox.curselection()
-        current_process_data = self.model.get_data(self.app.current_index_var.get())
+        current_process_data = self.model.get_selector_data(self.app.current_index_var.get())
 
         if len(selected_indexes) < 1:
             return False
@@ -33,7 +33,7 @@ class ChangeLabelToSelectedCommand(ListBoxCommand):
         return True
 
     def undo(self) -> None:
-        current_process_data = self.model.get_data(self.app.current_index_var.get())
+        current_process_data = self.model.get_selector_data(self.app.current_index_var.get())
 
         for index, id_label in self._changed.items():
             _id, label = id_label

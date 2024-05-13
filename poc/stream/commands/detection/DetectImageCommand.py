@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from stream.commands.Command import Command
+from stream.commands.YoloCommand import YoloCommand
 
 
 @dataclass
-class DetectImageCommand(Command):
+class DetectImageCommand(YoloCommand):
     labels_to_detect: list[str] = field(default_factory=list)
 
     def execute(self) -> None:

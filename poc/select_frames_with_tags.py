@@ -1,8 +1,10 @@
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from functools import partial
 from pathlib import Path
 from typing import Any
 
+import tkinter as tk
 import click
 import yaml
 from PIL import Image
@@ -11,16 +13,27 @@ from find_frames_with_tags_scripts.output_json import load_output_json
 from find_frames_with_tags_scripts.output_utils import init_datasets_from_output_json
 from io_utils.utils import make_directories
 from io_utils.yaml import Options, init_options
-from selector.ProcessData import ProcessData
+from selector.SelectorData import SelectorData
 from selector.Selector import Selector
 from selector.SelectorModel import SelectorModel
+from selector.commands.listbox.ChangeLabelToSelectedCommand import ChangeLabelToSelectedCommand
+from selector.commands.listbox.GlowSelectedLabelCommand import GlowSelectedLabelCommand
+from selector.commands.listbox.RemoveLabelCommand import RemoveLabelCommand
+from selector.commands.listbox.SelectLabelCommand import SelectLabelCommand
 from selector.gui.LabelRectangle import LabelRectangle
-from selector.gui.utils import open_loading_screen
-from selector.init_commands import init_default_commands
-from selector.init_listeners import init_default_listeners
+from selector.gui.components.ScrollableListbox import ScrollableListbox
+from selector.init_commands import init_default_commands, register_command
+from selector.init_listeners import init_default_listeners, reload_main_window
 from selector.init_main_window import init_default_main_window
-from selector.saving.Checkpoint import init_checkpoint, Checkpoint
+from selector.listeners.ReloadCounter import reload_counter
+from selector.listeners.ReloadImage import reload_image
+from selector.listeners.ReloadImageName import reload_image_name
+from selector.listeners.ReloadLabel import reload_label
+from selector.listeners.ReloadResultsListbox import reload_results_listbox
+from selector.listeners.UpdateLabelText import update_label_text
+from selector.saving.Checkpoint import init_checkpoint
 from selector.saving.SaveManager import SaveManager
+from selector.tracing.TraceRegister import trace_add
 from yolo.YoloDataset import YoloDataset
 from yolo.YoloDatasetPart import YoloDatasetPart
 from yolo.YoloFormat import YoloFormat
@@ -55,6 +68,7 @@ def main(input_dir, output_dir, config, quick_export, last_image):
 
     output_json = load_output_json(input_dir)
 
+    # todo: wczytywanie z pliku konfiguracyjnego
     checkpoints: Options = {
         "auto1": init_checkpoint,
         "auto2": init_checkpoint
@@ -74,7 +88,12 @@ def main(input_dir, output_dir, config, quick_export, last_image):
         save_manager = SaveManager(dataset.dataset_name)
         [save_manager.add_checkpoint(checkpoint) for checkpoint in checkpoints]
 
-        model = SelectFramesWithTagsModel(save_manager, labels, dataset, max_images=max_image_number)
+        model = SelectFramesWithTagsModel(
+            dataset=dataset,
+            save_manager=save_manager,
+            labels=labels,
+            max_images=max_image_number
+        )
         app = SelectFramesWithTags(model)
 
         try:
@@ -98,16 +117,15 @@ def main(input_dir, output_dir, config, quick_export, last_image):
         del app
 
 
-@dataclass
+@dataclass(kw_only=True)
 class SelectFramesWithTagsModel(SelectorModel):
     dataset: YoloDataset
 
-    max_images: int = -1
-    to_export: bool = False
-
-    _process_data: list[ProcessData] = field(init=False, default_factory=list)
-
     def __post_init__(self):
+        super().__post_init__()
+        self._load_yolo_dataset_parts()
+
+    def _init_selector_data(self) -> None:
         images = [i.original_image_path for i in self.dataset.yolo_dataset_parts]
 
         if self.max_images < 0:
@@ -115,29 +133,20 @@ class SelectFramesWithTagsModel(SelectorModel):
         else:
             images_to_load = self.max_images
 
-        self._process_data = [ProcessData(image) for image in images[:images_to_load]]
-        self._load_yolo_dataset_parts()
-
-    def get_all_data(self) -> Any:
-        return self._process_data
-
-    def get_data(self, index: int) -> Any:
-        return self._process_data[index]
-
-    def get_data_len(self) -> int:
-        return len(self._process_data)
+        self._selector_data = [SelectorData(image_path=image) for image in images[:images_to_load]]
 
     def save_checkpoint(self, checkpoint_name: str, current_index: int):
-        checkpoint_data = (self.to_export, current_index, self._process_data)
+        checkpoint_data = (self.to_export, current_index, self._selector_data)
         checkpoint = self.save_manager.get_checkpoint(checkpoint_name)
         checkpoint.save(checkpoint_data)
 
     # @open_loading_screen
     def _load_yolo_dataset_parts(self):
-        max_images = self.get_data_len()
+        max_images = self.get_selector_data_len()
         labels = self.labels
 
-        for process_data, dataset_part, in zip(self._process_data[:max_images], self.dataset.yolo_dataset_parts[:max_images]):
+        for process_data, dataset_part, in zip(self._selector_data[:max_images],
+                                               self.dataset.yolo_dataset_parts[:max_images]):
             formats = dataset_part.yolo_formats
 
             label_rectangles = []
@@ -156,7 +165,7 @@ class SelectFramesWithTagsModel(SelectorModel):
             process_data.label_rectangles = label_rectangles
 
     def export_dataset_parts(self) -> list[YoloDatasetPart]:
-        filtered = filter(lambda x: len(x.label_rectangles) > 0, self._process_data)
+        filtered = filter(lambda x: len(x.label_rectangles) > 0, self._selector_data)
 
         dataset_parts = []
         for process_data in filtered:
@@ -183,21 +192,122 @@ class SelectFramesWithTagsModel(SelectorModel):
 
         return yolo_formats
 
+
 class SelectFramesWithTags(Selector):
     def __init__(self, model: SelectFramesWithTagsModel, *args, **kwargs):
         self.model = model
         super().__init__(*args, **kwargs)
 
-        # self.notify_listener("reload_main_window")
+        self.notify_listener("reload_main_window")
 
     def _init_main_window(self):
-        init_default_main_window(self, self.model)
+        model = self.model
+
+        init_default_main_window(self, model)
+
+        scale_str = "!mainwindow.sidebar"
+        side_bar = self.nametowidget(scale_str)
+
+        classes_listbox = ScrollableListbox(side_bar, "Classes", name="class_listbox")
+        classes_listbox.listbox.config(selectmode='browse')
+        classes_listbox.pack(side=tk.TOP, expand=True, anchor=tk.N, fill=tk.BOTH)
+        classes_listbox.listbox_var.set(list(model.labels.values()))
+
+        results_listbox = ScrollableListbox(side_bar, "Results", name="results_listbox")
+        results_listbox.listbox.config(selectmode='extended')
+        results_listbox.pack(side=tk.TOP, expand=True, anchor=tk.S, fill=tk.BOTH)
+
+        remove_button = tk.Button(results_listbox, text="Remove", name="remove_button")
+        remove_button.pack(side=tk.LEFT, expand=True, fill=tk.X)
+
+        change_results_button = tk.Button(results_listbox, text="Change", name="change_button")
+        change_results_button.pack(side=tk.RIGHT, expand=True, fill=tk.X)
 
     def _init_commands(self):
         init_default_commands(self, self.model)
 
+        defaults_args = self, self.model
+
+        classes_listbox = self.nametowidget("!mainwindow.sidebar.class_listbox.listbox_container.!listbox")
+        results_listbox = self.nametowidget("!mainwindow.sidebar.results_listbox.listbox_container.!listbox")
+        remove_button = self.nametowidget("!mainwindow.sidebar.results_listbox.remove_button")
+        change_button = self.nametowidget("!mainwindow.sidebar.results_listbox.change_button")
+
+        register_partial = partial(
+            register_command,
+            app=self,
+            target=self,
+            mode_name="default",
+            args=defaults_args,
+            history_flag=True,
+        )
+
+        # list boxes
+        key = "<<ListboxSelect>>"
+        command = SelectLabelCommand
+        args = defaults_args + (classes_listbox,)
+        register_partial(key=key, command=command, args=args, history_flag=False,
+                         target=classes_listbox)
+
+        key = "<<ListboxSelect>>"
+        command = GlowSelectedLabelCommand
+        args = defaults_args + (results_listbox,)
+        register_partial(key=key, command=command, args=args, history_flag=False,
+                         target=results_listbox)
+
+        key = "<KeyRelease-Delete>"
+        command = RemoveLabelCommand
+        args = defaults_args + (results_listbox,)
+        register_partial(key=key, command=command, args=args, history_flag=True,
+                         target=results_listbox)
+
+        key = "<Button-1>"
+        command = RemoveLabelCommand
+        args = defaults_args + (results_listbox,)
+        register_partial(key=key, command=command, args=args, history_flag=True,
+                         target=remove_button)
+
+        key = "<Button-1>"
+        command = ChangeLabelToSelectedCommand
+        args = defaults_args + (results_listbox,)
+        register_partial(key=key, command=command, args=args, history_flag=True,
+                         target=change_button)
+
+        key = "<KeyRelease-Return>"
+        command = ChangeLabelToSelectedCommand
+        args = defaults_args + (results_listbox,)
+        register_partial(key=key, command=command, args=args, history_flag=True,
+                         target=results_listbox)
+
     def _init_listeners(self):
-        init_default_listeners(self, self.model)
+        model = self.model
+        init_default_listeners(self, model)
+
+        mainwindow_str = "!mainwindow"
+        topbar_str = "!mainwindow.!topbar"
+        results_listbox_str = "!mainwindow.sidebar.results_listbox"
+
+        index_var = "current_index_var"
+
+        trace_add(
+            register=self.var_register,
+            var_name=index_var,
+            mode="write",
+            trace_name="reload_results_listbox",
+            callback=partial(reload_results_listbox, self, model, results_listbox_str)
+        )
+
+        reload_main_window_callbacks: list = [
+            partial(reload_image, self, model, mainwindow_str),
+            partial(reload_image_name, self, model, topbar_str),
+            partial(reload_counter, self, model, topbar_str),
+            partial(reload_label, self, model, topbar_str),
+            partial(update_label_text, self, model, None),
+            partial(reload_results_listbox, self, model, results_listbox_str)
+        ]
+
+        self.add_listener("reload_main_window", partial(reload_main_window, *reload_main_window_callbacks))
+        self.add_listener("reload_results_listbox", partial(reload_results_listbox, self, model, results_listbox_str))
 
 
 if __name__ == '__main__':

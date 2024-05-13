@@ -4,3 +4,20 @@ names:
   5: "Numer wagonu - 2 linijki"
   7: "Numer wagonu - 4 linijki"
   8: "Numer wagonu - 1 linijka"
+
+max_images: -1
+image_extension: .jpg
+
+checkpoints:
+  auto1:
+    active: True
+    name: auto1
+    save_dir: .
+    period: 1
+    silent: True
+  auto2:
+    active: True
+    name: auto2
+    save_dir: .
+    period: 10
+    silent: False

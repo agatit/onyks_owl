@@ -17,8 +17,8 @@ class StartSelectingCommand(Command):
         # draw start point
         app.start_drawing_point = (image_x, image_y)
         start_point_ref = main_window.draw_start_point(canvas_x, canvas_y)
-        current_data = model.get_data(app.current_index_var.get())
-        current_data.start_point_ref = start_point_ref
+        current_data = model.get_selector_data(app.current_index_var.get())
+        current_data.start_drawing_point_ref = start_point_ref
 
         return True
 
@@ -29,10 +29,10 @@ class StartSelectingCommand(Command):
         current_index = app.current_index_var.get()
 
         # remove start point
-        current_data = model.get_data(app.current_index_var.get())
-        start_point_ref = current_data.start_point_ref
+        current_data = model.get_selector_data(app.current_index_var.get())
+        start_point_ref = current_data.start_drawing_point_ref
         if start_point_ref:
             main_window.image_canvas.delete(start_point_ref)
-            current_data.start_point_ref = None
+            current_data.start_drawing_point_ref = None
 
         app.notify_listener("reload_results_listbox")

@@ -6,6 +6,6 @@ def reload_counter(app: Selector, model: SelectorModel, target: str, *trace_args
     top_bar = app.nametowidget(target)
 
     current_index = app.current_index_var.get()
-    max_index = model.get_data_len()
+    max_index = model.get_selector_data_len()
 
     top_bar.set_counter(current_index, max_index)

@@ -4,7 +4,7 @@ from typing import Iterable, Callable
 
 import numpy as np
 
-from find_frames_with_tags_scripts.OutputData import OutputData
+from find_frames_with_tags_scripts.FindFramesWithTagsData import FindFramesWithTagsData
 from find_frames_with_tags_scripts.filtering.batch_filtering import BatchFilterCallback
 from find_frames_with_tags_scripts.filtering.detecions_filtering import DetectionsFilterCallback
 from stitch.rectify.FrameRectifier import FrameRectifier
@@ -36,7 +36,7 @@ class ProcessFrameData:
     export_frame_callbacks: list[ExportFrameCallback] = field(init=False, default_factory=list)
     export_frame_with_detections_callbacks: list[ExportFrameWithDetectionsCallback] = field(init=False,
                                                                                             default_factory=list)
-    output_data: list[OutputData] = field(init=False, default_factory=list)
+    output_data: list[FindFramesWithTagsData] = field(init=False, default_factory=list)
     export_frame_counter: int = field(init=False, default=0)
 
     BOUNDING_BOX_FILE_SUFFIX = "_b"
@@ -48,14 +48,14 @@ class ProcessFrameData:
         if len(detection_results) < 1:
             file_name = str(counter) + extension
 
-            output_data = OutputData(counter, file_name)
+            output_data = FindFramesWithTagsData(counter, file_name)
             self.output_data.append(output_data)
 
         for index, detection_result in enumerate(detection_results):
             name = detection_result.class_name
             file_name = f"{counter}_{name}_{index}" + extension
 
-            output_data = OutputData(counter, file_name, detection_result)
+            output_data = FindFramesWithTagsData(counter, file_name, detection_result)
             self.output_data.append(output_data)
 
     def update_export_frame_counter(self):

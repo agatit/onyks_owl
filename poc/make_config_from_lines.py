@@ -29,7 +29,7 @@ from stream.loaders.VideoLoader import VideoLoader
 @click.option("-out", "--output", "output_path", type=click.Path(),
               required=True, help="json rectify config")
 @click.option("-cf", "--config", "config_path", type=click.Path(exists=True, file_okay=True),
-              required=True, default="resources/make_config_from_lines.yaml", help="yaml config")
+              required=True, default="make_config_from_lines.yaml", help="yaml config")
 @click.option("-img", "--image", "image_path", type=click.Path(exists=True, file_okay=True),
               help="display image to rectify")
 @click.option("-mv", "--movie", "movie_path", type=click.Path(exists=True, file_okay=True),
