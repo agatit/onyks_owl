@@ -1,23 +1,29 @@
+import dataclasses
 import tkinter
 from dataclasses import field
 from functools import partial
 
 from selector.commands.Command import Command
+from selector.gui.components.ImageCanvas import ImageCanvas
 from yolo.YoloFormat import BoundingBox
 
 
+@dataclasses.dataclass
 class RemoveSelectedCommand(Command):
+    image_canvas: ImageCanvas
+
     removed_items: list = field(init=False, repr=False, default_factory=list)
     removed_data_index: int = field(init=False, repr=False)
 
     def execute(self, event: tkinter.Event = None) -> bool:
         app = self.app
-        main_window = self.app.main_window
         model = self.model
+        image_canvas = self.image_canvas
+
         current_index = app.current_index_var.get()
 
         canvas_x, canvas_y = event.x, event.y
-        image_x, image_y = main_window.resize_point_to_original(canvas_x, canvas_y)
+        image_x, image_y = image_canvas.resize_point_to_original(canvas_x, canvas_y)
 
         process_data = model.get_selector_data(app.current_index_var.get())
         label_rectangles = process_data.label_rectangles

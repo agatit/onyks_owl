@@ -16,25 +16,23 @@ class Selector(tk.Tk, ABC):
         self.title(self.__class__.__name__)
         self.start_drawing_point = tuple()
 
-        self.current_index_var = tk.IntVar(self, 0, "current_index_var")
-        self.current_label_id_var = tk.IntVar(self, 0, "current_label_id_var")
-
-        # todo: przenieść odwołania do VarRegister
-        self.var_register = VarRegister()
-        self.var_register.add_var("current_index_var", self.current_index_var)
-        self.var_register.add_var("current_label_id_var", self.current_label_id_var)
-
+        self.main_window = None
         self.current_label_text = None
         self.total_changed_index = 0
 
+        self.var_register = VarRegister()
         self._command_history = []
         self._modes = {}
         self._listeners = {}
 
-        self.main_window = None
         self._init_main_window()
+        self._init_variables()
+
         self._init_commands()
         self._init_listeners()
+        self._init_canvas_callbacks()
+
+        self.focus_force()
 
     @abc.abstractmethod
     def _init_main_window(self):
@@ -47,6 +45,18 @@ class Selector(tk.Tk, ABC):
     @abc.abstractmethod
     def _init_listeners(self):
         pass
+
+    @abc.abstractmethod
+    def _init_canvas_callbacks(self):
+        pass
+
+    # todo: komunikacja ze zmiennymi za pomocą VarRegister
+    def _init_variables(self):
+        self.current_index_var = tk.IntVar(self, 0)
+        self.var_register.add_var("current_index_var", self.current_index_var)
+
+        self.current_label_id_var = tk.IntVar(self, 0)
+        self.var_register.add_var("current_label_id_var", self.current_label_id_var)
 
     def get_current_mode(self) -> str:
         true_modes = [i for i in self._modes if self._modes[i].status]

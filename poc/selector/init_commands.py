@@ -18,16 +18,14 @@ from selector.commands.PrevLabelCommand import PrevLabelCommand
 from selector.commands.RemoveSelectedCommand import RemoveSelectedCommand
 from selector.commands.StartSelectingCommand import StartSelectingCommand
 from selector.commands.WheelLabelCommand import WheelLabelCommand
-from selector.commands.listbox.ChangeLabelToSelectedCommand import ChangeLabelToSelectedCommand
-from selector.commands.listbox.GlowSelectedLabelCommand import GlowSelectedLabelCommand
-from selector.commands.listbox.RemoveLabelCommand import RemoveLabelCommand
-from selector.commands.listbox.SelectLabelCommand import SelectLabelCommand
+from selector.gui.components.ImageCanvas import ImageCanvas
 
 
-def init_default_commands(app: Selector, model:SelectorModel) -> None:
+def init_default_commands(app: Selector, model: SelectorModel) -> None:
     defaults_args = app, model
 
-    image_canvas = app.nametowidget("!mainwindow.!canvas")
+    # canvas = app.nametowidget("!mainwindow.image_canvas_container.!canvas")
+    image_canvas: ImageCanvas = app.nametowidget("!mainwindow.!imagecanvas")
 
     app.add_mode("default")
     app.add_mode("selecting")
@@ -48,6 +46,10 @@ def init_default_commands(app: Selector, model:SelectorModel) -> None:
         mode_name="default",
         history_flag=True,
     )
+
+    # canvas
+    # self.bind("<Configure>", lambda e: self.refresh_image())
+    # self.bind("<Configure>", lambda e: self.refresh_image())
 
     # Arrows
     key = "<KeyRelease-Right>"
@@ -105,20 +107,21 @@ def init_default_commands(app: Selector, model:SelectorModel) -> None:
 
     # mouse
     key = "<Button-1>"  # left click
-    commands = [[StartSelectingCommand, defaults_args],
+    commands = [[StartSelectingCommand, defaults_args + (image_canvas,)],
                 [ChangeModeCommand, defaults_args + ("selecting",)]]
-    register_chain_partial(key=key, commands=commands, target=image_canvas)
+    register_chain_partial(key=key, commands=commands, target=image_canvas.canvas)
 
     key = "<Button-1>"
     mode = "selecting"
     commands = [[ChangeModeCommand, defaults_args + ("default",)],
-                [EndSelectingCommand, defaults_args]]
+                [EndSelectingCommand, defaults_args + (image_canvas,)]]
     register_chain_partial(key=key, commands=commands,
-                           mode_name=mode, target=image_canvas)
+                           mode_name=mode, target=image_canvas.canvas)
 
     key = "<Button-3>"  # right click
     command = RemoveSelectedCommand
-    register_partial(key=key, command=command, target=image_canvas)
+    args = defaults_args + (image_canvas,)
+    register_partial(key=key, command=command, target=image_canvas.canvas, args=args)
 
     key = "<MouseWheel>"
     command = WheelLabelCommand

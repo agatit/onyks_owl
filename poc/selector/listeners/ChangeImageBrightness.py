@@ -10,10 +10,12 @@ from selector.SelectorModel import SelectorModel
 def change_image_brightness(app: Selector, model: SelectorModel, target: str, *trace_args):
     transformation_name = "brightness"
 
-    brightness = app.var_register.get_var_value("brightness_var")
+    brightness = app.var_register.get_var("brightness_var").get()
     callback = partial(_adjust_brightness, brightness=brightness)
 
-    app.main_window.image_transformations[transformation_name] = callback
+    image_canvas = app.nametowidget(target)
+    image_canvas.image_transformations[transformation_name] = callback
+
     app.notify_listener("reload_image")
 
 

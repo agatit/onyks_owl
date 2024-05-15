@@ -16,11 +16,14 @@ from io_utils.yaml import Options, init_options
 from selector.SelectorData import SelectorData
 from selector.Selector import Selector
 from selector.SelectorModel import SelectorModel
+from selector.canvas_callbacks.draw.DrawLabelRectangles import draw_label_rectangles
+from selector.canvas_callbacks.transform.Resize import resize
 from selector.commands.listbox.ChangeLabelToSelectedCommand import ChangeLabelToSelectedCommand
 from selector.commands.listbox.GlowSelectedLabelCommand import GlowSelectedLabelCommand
 from selector.commands.listbox.RemoveLabelCommand import RemoveLabelCommand
 from selector.commands.listbox.SelectLabelCommand import SelectLabelCommand
 from selector.gui.LabelRectangle import LabelRectangle
+from selector.gui.components.ImageCanvas import ImageCanvas
 from selector.gui.components.ScrollableListbox import ScrollableListbox
 from selector.init_commands import init_default_commands, register_command
 from selector.init_listeners import init_default_listeners, reload_main_window
@@ -200,13 +203,19 @@ class SelectFramesWithTags(Selector):
 
         self.notify_listener("reload_main_window")
 
+    def _init_variables(self):
+        super()._init_variables()
+
+        scale_str = "!mainwindow.sidebar.!scalewithlabel"
+        scale = self.nametowidget(scale_str)
+        self.var_register.add_var("brightness_var", scale.scale_var)
+
     def _init_main_window(self):
         model = self.model
 
         init_default_main_window(self, model)
 
-        scale_str = "!mainwindow.sidebar"
-        side_bar = self.nametowidget(scale_str)
+        side_bar = self.nametowidget("!mainwindow.sidebar")
 
         classes_listbox = ScrollableListbox(side_bar, "Classes", name="class_listbox")
         classes_listbox.listbox.config(selectmode='browse')
@@ -286,6 +295,7 @@ class SelectFramesWithTags(Selector):
         mainwindow_str = "!mainwindow"
         topbar_str = "!mainwindow.!topbar"
         results_listbox_str = "!mainwindow.sidebar.results_listbox"
+        image_canvas_str = "!mainwindow.!imagecanvas"
 
         index_var = "current_index_var"
 
@@ -298,7 +308,7 @@ class SelectFramesWithTags(Selector):
         )
 
         reload_main_window_callbacks: list = [
-            partial(reload_image, self, model, mainwindow_str),
+            partial(reload_image, self, model, image_canvas_str),
             partial(reload_image_name, self, model, topbar_str),
             partial(reload_counter, self, model, topbar_str),
             partial(reload_label, self, model, topbar_str),
@@ -308,6 +318,14 @@ class SelectFramesWithTags(Selector):
 
         self.add_listener("reload_main_window", partial(reload_main_window, *reload_main_window_callbacks))
         self.add_listener("reload_results_listbox", partial(reload_results_listbox, self, model, results_listbox_str))
+
+    def _init_canvas_callbacks(self):
+        model = self.model
+        image_canvas: ImageCanvas = self.nametowidget("!mainwindow.!imagecanvas")
+
+        image_canvas.image_transformations["resize"] = partial(resize, self, model, image_canvas)
+
+        image_canvas.draw_callbacks["label_rectangles"] = partial(draw_label_rectangles, self, model, image_canvas)
 
 
 if __name__ == '__main__':

@@ -10,4 +10,3 @@ from selector.gui.LabelRectangle import LabelRectangle
 class SelectorData:
     image_path: Path
     label_rectangles: list[LabelRectangle] = field(default_factory=list)
-    start_drawing_point_ref: int = field(init=False, default=-1)

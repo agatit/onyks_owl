@@ -8,5 +8,6 @@ def reload_image(app: Selector, model: SelectorModel, target: str, *trace_args) 
     current_image = current_process_data.image_path
     label_rectangles = current_process_data.label_rectangles
 
-    main_window = app.nametowidget(target)
-    main_window.load_image(current_image, label_rectangles)
+    image_canvas = app.nametowidget(target)
+    # image_canvas.load_image(current_image, label_rectangles)
+    image_canvas.load_image(current_image)

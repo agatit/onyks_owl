@@ -3,6 +3,8 @@ from dataclasses import field, dataclass
 from pathlib import Path
 from typing import Iterable, Iterator, Any
 
+import tkinter as tk
+
 import click
 import yaml
 from PIL import Image
@@ -16,7 +18,8 @@ from ocr.datasets.FullDatasetPart import FullDatasetPart
 from selector.SelectorData import SelectorData
 from selector.Selector import Selector
 from selector.SelectorModel import SelectorModel
-from selector.init_commands import init_default_commands
+from selector.gui.components.EntryWithLabel import EntryWithLabel
+from selector.init_commands import init_default_commands, unbind_event
 from selector.init_listeners import init_default_listeners
 from selector.init_main_window import init_default_main_window
 from selector.saving.Checkpoint import init_checkpoint
@@ -194,14 +197,42 @@ class SelectNumbers(Selector):
         self.model = model
         super().__init__(*args, **kwargs)
 
+    def _init_variables(self):
+        super()._init_variables()
+
+        scale_str = "!mainwindow.sidebar.!scalewithlabel"
+        self.var_register.add_var("brightness_var", self.nametowidget(scale_str).scale_var)
+
+        entry_str = "!mainwindow.image_canvas_container.entry_number"
+        self.var_register.add_var("number_var", self.nametowidget(entry_str).entry_var)
+
     def _init_main_window(self):
-        init_default_main_window(self, self.model)
+        model = self.model
+        main_window = self.main_window
+
+        init_default_main_window(self, model)
+
+        image_canvas_container_str = "!mainwindow.image_canvas_container"
+        image_canvas_container = self.nametowidget(image_canvas_container_str)
+
+        entry_with_label = EntryWithLabel(image_canvas_container, name="entry_number", label_text="Number:")
+        entry_with_label.entry.config(font="Calibri 18")
+        entry_with_label.pack(fill=tk.BOTH, pady=5)
 
     def _init_commands(self):
         init_default_commands(self, self.model)
 
+        unbind_event(self, "<KeyRelease-w>")
+        unbind_event(self, "<KeyRelease-s>")
+        unbind_event(self, "<KeyRelease-a>")
+        unbind_event(self, "<KeyRelease-d>")
+
+
     def _init_listeners(self):
         init_default_listeners(self, self.model)
+
+    def _init_canvas_callbacks(self):
+        pass
 
 
 if __name__ == '__main__':

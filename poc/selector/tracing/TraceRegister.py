@@ -25,12 +25,12 @@ class VarRegister:
             self._vars[var_name] = var
             self._traces[var_name] = {}
 
-    def get_var_value(self, var_name: str) -> Any:
+    def get_var(self, var_name: str) -> Any:
         # todo: zmiana na dekorator
         if var_name not in self._vars:
             raise ValueError(f"Variable {var_name} does not exist")
 
-        return self._vars[var_name].get()
+        return self._vars[var_name]
 
     def trace_add(self, var_name: str, trace_name: str, mode: TraceMode, callback: TraceCallable):
         if var_name not in self._vars:

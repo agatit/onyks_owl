@@ -2,27 +2,28 @@ import tkinter
 from dataclasses import dataclass, field
 
 from selector.commands.Command import Command
+from selector.gui.components.ImageCanvas import ImageCanvas
 
 
 @dataclass
 class DrawCrossCommand(Command):
-    draw_callback_name: str = "cross"
+    image_canvas: ImageCanvas
+    draw_callback_name: str
 
-    _mouse_event: tkinter.Event = field(init=False, repr=False)
+    _event: tkinter.Event = field(init=False, repr=False)
 
     def execute(self, event: tkinter.Event = None) -> bool:
-        self._mouse_event = event
-        self.app.main_window.draw_callbacks[self.draw_callback_name] = self._draw
-
-        self.app.notify_listener("reload_image")
+        self._event = event
+        self.image_canvas.draw_callbacks[self.draw_callback_name] = self._draw
+        # self.app.notify_listener("reload_image")
 
         return True
 
     def undo(self) -> None:
         pass
 
-    def _draw(self, canvas: tkinter.Canvas):
-        x, y = self._mouse_event.x, self._mouse_event.y
+    def _draw(self, canvas: tkinter.Canvas) -> None:
+        x, y = self._event.x, self._event.y
         width, height = canvas.winfo_width(), canvas.winfo_height()
 
         horizontal_line = (0, y, width, y)
