@@ -16,16 +16,6 @@ class YoloDetectorV8(YoloDetector):
         super().__init__(model_path, confidence_threshold, batch_size, verbose, classes)
         self.tracking = tracking
 
-    @classmethod
-    def _initialize_model(cls, model_path: str) -> tuple:
-        model = YOLO(model_path)
-
-        classes = model.names
-        device = 'cuda' if cls.check_if_cuda_is_available() else 'cpu'
-        model.to(device)
-
-        return model, classes, device
-
     @singledispatchmethod
     def __call__(self) -> list[list[DetectionResult]]:
         pass

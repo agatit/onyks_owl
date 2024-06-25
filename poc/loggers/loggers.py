@@ -14,6 +14,7 @@ class InfoLogger:
         logger.addHandler(file_handler)
 
         return logger
+
     @staticmethod
     def get():
         return logging.getLogger(InfoLogger.__name__)

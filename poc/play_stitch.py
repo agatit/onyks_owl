@@ -39,7 +39,7 @@ def main(video_path, rectify_config, export_velocity_path):
     frame_rectifier = FrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
-    roi_size = (0, 640, 0, 1200)
+    roi_size = (0, 400, 0, 1200)
     # roi_size = (0, 640, 0, 640)
     motion_roi = RegionOfInterest.from_margin_px(frame_size, *roi_size)
     stitch_roi = RegionOfInterest.from_margin_px(frame_size, *roi_size)

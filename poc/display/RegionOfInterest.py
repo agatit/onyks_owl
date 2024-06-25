@@ -24,7 +24,7 @@ class RegionOfInterest:
         }
 
     @classmethod
-    def from_margin_percent(cls, source_region_size: np.ndarray, top: int, right: int, bottom: int, left: int) -> None:
+    def from_margin_percent(cls, source_region_size: np.ndarray, top: int, right: int, bottom: int, left: int):
         width, height = source_region_size
 
         params = {
@@ -37,7 +37,7 @@ class RegionOfInterest:
         return cls(source_region_size, *params.values())
 
     @classmethod
-    def from_margin_px(cls, source_region_size: np.ndarray, top: int, right: int, bottom: int, left: int) -> None:
+    def from_margin_px(cls, source_region_size: np.ndarray, top: int, right: int, bottom: int, left: int) -> "None":
         width, height = source_region_size
 
         params = {

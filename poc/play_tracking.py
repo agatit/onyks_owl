@@ -14,7 +14,7 @@ from yolo.yolo_detectors.YoloDetectorV8 import YoloDetectorV8
               required=True, type=click.Path(exists=True),
               help="movie to track")
 @click.option("-c", "--config", "config_path", type=click.Path(exists=True, file_okay=True),
-              required=True, default="resources/find_frames_with_tags.yaml", help="yaml config path")
+              required=True, default="resources/play_tracking.yaml", help="yaml config path")
 @click.option("-rc", "--rectify_config", "rectify_config_path", type=click.Path(exists=True, file_okay=True),
               help="rectify config path")
 @click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),

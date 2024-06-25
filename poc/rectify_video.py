@@ -18,7 +18,15 @@ frame_size = (1920, 1080)
 @click.option("-rc", "--rectify_config", "rectify_config",
               required=True, type=click.Path(exists=True),
               help="select rectify json file")
-@click.option("-d", "--display", "display", is_flag=True)
+@click.option("-s", "--start", "start_frame",
+              type=int, default=0,
+              help="number of start frame")
+@click.option("-e", "--end", "end_frame",
+              type=int, default=-1,
+              help="number of stop frame")
+@click.option("-v", "--verbose", "verbose",
+              is_flag=True,
+              help="verbose mode")
 def main(input_movie, output_movie, rectify_config, display):
     with open(rectify_config) as f:
         config = json.load(f)
@@ -62,24 +70,6 @@ def main(input_movie, output_movie, rectify_config, display):
 
     input_cam.release()
     video_writer.release()
-
-
-def scale_image(image, scale):
-    width = int(image.shape[1] * scale / 100)
-    height = int(image.shape[0] * scale / 100)
-    dim = (width, height)
-
-    return cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
-
-
-def display_frame(frame):
-    frame = scale_image(frame, 50)
-    cv2.imshow('Frame', frame)
-    cv2.waitKey(1)
-
-
-def resize_image(image, new_dim):
-    return cv2.resize(image, new_dim, interpolation=cv2.INTER_AREA)
 
 
 if __name__ == '__main__':

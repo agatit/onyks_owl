@@ -16,7 +16,8 @@ from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
 @click.option("-out", "--output", "output_movie",
               required=True, type=click.Path(),
               help="select output directory")
-@click.option("-mp", "--model_path", "model_path", type=click.Path(exists=True, file_okay=True),
+@click.option("-mp", "--model_path", "model_path",
+              type=click.Path(exists=True, file_okay=True),
               required=True, default="resources/models/x_owl_4.pt", help="yolov5 model path")
 @click.option("-c", "--codec", "codec_code", type=click.Choice(['MJPG', 'mp4v'], case_sensitive=False),
               required=True, default="resources/models/x_owl_4.pt", help="select movie codec")
