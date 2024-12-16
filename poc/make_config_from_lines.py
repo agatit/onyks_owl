@@ -4,6 +4,7 @@ from functools import reduce
 from pathlib import Path
 
 import click
+import cv2
 import yaml
 from scipy.optimize import minimize
 
@@ -16,11 +17,7 @@ from rectify_optimalization.objective_functions.methods.line_part_selectors.YPoi
 from rectify_optimalization.objective_functions.methods.line_types.Horizontal import Horizontal
 from rectify_optimalization.objective_functions.methods.line_types.Vertical import Vertical
 from stitch.rectify.FrameRectifier import FrameRectifier
-from stream.Stream import Stream
-from stream.directors.DisplayImageDirector import DisplayImageDirector
-from stream.directors.DisplayStreamDirector import DisplayStreamDirector
-from stream.loaders.SingleImageLoader import SingleImageLoader
-from stream.loaders.VideoLoader import VideoLoader
+
 
 
 @click.command()
@@ -29,7 +26,7 @@ from stream.loaders.VideoLoader import VideoLoader
 @click.option("-out", "--output", "output_path", type=click.Path(),
               required=True, help="json rectify config")
 @click.option("-cf", "--config", "config_path", type=click.Path(exists=True, file_okay=True),
-              required=True, default="resources/make_config_from_lines.yaml", help="yaml config")
+              required=True, default="make_config_from_lines.yaml", help="yaml config")
 @click.option("-img", "--image", "image_path", type=click.Path(exists=True, file_okay=True),
               help="display image to rectify")
 @click.option("-mv", "--movie", "movie_path", type=click.Path(exists=True, file_okay=True),
@@ -73,22 +70,28 @@ def main(lines_paths, output_path, config_path, image_path, movie_path, display_
 
         print(rectify_config)
 
-        frame_rectifier = None
-        if movie_path or image_path:
-            frame_rectifier = FrameRectifier(rectify_config, *region_size)
-            frame_rectifier.calc_maps()
+        if not movie_path and not image_path:
+            return
+
+        frame_rectifier = FrameRectifier(rectify_config, *region_size)
+        frame_rectifier.calc_maps()
 
         if image_path:
-            loader = SingleImageLoader(Path(image_path))
-            stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
+            image = cv2.imread(image_path)
+            rectified_image = frame_rectifier.rectify(image)
+            cv2.imshow('original', rectified_image)
+            key = cv2.waitKey(0)
 
-            DisplayImageDirector(stream).run()
+            # loader = SingleImageLoader(Path(image_path))
+            # stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
+            #
+            # DisplayImageDirector(stream).run()
 
-        if movie_path:
-            loader = VideoLoader(Path(movie_path))
-            stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
-
-            DisplayStreamDirector(stream).run()
+        # if movie_path:
+        #     loader = VideoLoader(Path(movie_path))
+        #     stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
+        #
+        #     DisplayStreamDirector(stream).run()
 
 
 def concat_lines(lines: list[dict]) -> list[dict]:

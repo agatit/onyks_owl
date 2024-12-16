@@ -22,7 +22,7 @@ from rectify_lines.LineType import LineType
 @click.option("-o", "--output", "output_file", type=click.Path(), default="lines.json",
               help="output json file")
 @click.option("-dn", "--dots_number", "max_dots_number", default=-1, help="number of output line dots")
-@click.option("-sc", "--scale", "scale", default=75, help="scale image to display")
+@click.option("-sc", "--scale", "scale", default=30, help="scale image to display")
 @click.option("-roi", "--region", "roi_str", help="format: [x1,y1,x2,y2]")
 def main(input_file, output_file, max_dots_number, scale, roi_str):
     image = cv2.imread(input_file)
