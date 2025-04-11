@@ -3,7 +3,7 @@ import click
 import cv2
 import json
 
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 
 frame_size = (1920, 1080)
 
@@ -32,7 +32,7 @@ def main(input_movie, output_movie, rectify_config, display):
         config = json.load(f)
 
     frame_size = (1920, 1080)
-    frame_rectifier = FrameRectifier(config, *frame_size)
+    frame_rectifier = ConfigFrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
     resolution_scale = config['scale']

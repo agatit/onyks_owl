@@ -3,7 +3,7 @@ from pathlib import Path
 
 import click
 
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from stream.commands.CommandInvoker import CommandInvoker
 from stream.Stream import Stream
 from stream.commands.detection.DetectImageCommand import DetectImageCommand
@@ -46,7 +46,7 @@ def main(input_movie, model_path, rectify_config, yolo_version, scale_percent, c
             config = json.load(f)
 
         frame_size = (1920, 1080)
-        frame_rectifier = FrameRectifier(config, *frame_size)
+        frame_rectifier = ConfigFrameRectifier(config, *frame_size)
         frame_rectifier.calc_maps()
 
     detector_class = yolo_versions[yolo_version]

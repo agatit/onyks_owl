@@ -1,6 +1,6 @@
 import numpy as np
 
-from rectify_optimalization.objective_functions.methods.line_part_selectors.LinePartSelector import LinePartSelector
+from rectify_optimalization.methods.line_part_selectors.LinePartSelector import LinePartSelector
 
 
 class XPoints(LinePartSelector):

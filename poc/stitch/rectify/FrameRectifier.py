@@ -1,12 +1,28 @@
+import abc
+import math
+
 import cv2
 import numpy as np
-import math
-import json
-
 from sympy import Symbol, solve, atan
 
 
-class FrameRectifier:
+class FrameRectifier(abc.ABC):
+
+    @abc.abstractmethod
+    def rectify(self, frame: np.ndarray) -> np.ndarray:
+        ...
+
+class RawFrameRectifier(FrameRectifier):
+
+    def __init__(self, map_x: np.ndarray, map_y: np.ndarray):
+        self.map_x = map_x
+        self.map_y = map_y
+
+    def rectify(self, frame: np.ndarray) -> np.ndarray:
+        return cv2.remap(frame, self.map_x, self.map_y, interpolation=cv2.INTER_LINEAR)
+
+
+class ConfigFrameRectifier(FrameRectifier):
     def __init__(self, config: dict, width: int = 1920, height: int = 1080) -> None:
         self.config = config
         self.width = width
@@ -15,8 +31,8 @@ class FrameRectifier:
         self.map_x = 0
         self.map_y = 0
 
-    def rectify(self, img: np.ndarray) -> np.ndarray:
-        return cv2.remap(img, self.map_x, self.map_y, interpolation=cv2.INTER_LINEAR)
+    def rectify(self, frame: np.ndarray) -> np.ndarray:
+        return cv2.remap(frame, self.map_x, self.map_y, interpolation=cv2.INTER_LINEAR)
 
     def calc_maps(self) -> None:
         config = self.config
@@ -75,7 +91,11 @@ class FrameRectifier:
         focus = config['focus']
         # k1, k2, p1, p2 = config['dist']
 
-        Rx = np.array([[1, 0, 0], [0, math.cos(alpha), -math.sin(alpha)], [0, math.sin(alpha), math.cos(alpha)]])
+        Rx = np.array([
+            [1, 0, 0],
+            [0, math.cos(alpha), -math.sin(alpha)],
+            [0, math.sin(alpha), math.cos(alpha)]
+        ])
         Ry = np.array([[math.cos(beta), 0, -math.sin(beta)], [0, 1, 0], [math.sin(beta), 0, math.cos(beta)]])
         Rz = np.array([[math.cos(gamma), -math.sin(gamma), 0], [math.sin(gamma), math.cos(gamma), 0], [0, 0, 1]])
         R = np.matmul(Rx, np.matmul(Ry, Rz))

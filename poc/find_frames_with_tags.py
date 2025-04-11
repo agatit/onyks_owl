@@ -16,7 +16,7 @@ from find_frames_with_tags_scripts.loaders import load_efficientnet, load_any_be
 from find_frames_with_tags_scripts.process import process
 from io_utils.utils import make_clean_dir
 from io_utils.yaml import init_options, Options
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from yolo.yolo_detectors.YoloDetectorV8 import YoloDetectorV8
 
 
@@ -104,7 +104,7 @@ def configure_process_data(config, input_dir, model_path, output_dir, rectify_co
         frame_rectifier = None
 
         if len(rectify_config) > 0:
-            frame_rectifier = FrameRectifier(rectify_config, *frame_size)
+            frame_rectifier = ConfigFrameRectifier(rectify_config, *frame_size)
             frame_rectifier.calc_maps()
 
         _output_dir = output_dir / movie_path.stem

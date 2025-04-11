@@ -7,7 +7,7 @@ import numpy as np
 from find_frames_with_tags_scripts.OutputData import OutputData
 from find_frames_with_tags_scripts.filtering.batch_filtering import BatchFilterCallback
 from find_frames_with_tags_scripts.filtering.detecions_filtering import DetectionsFilterCallback
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from yolo.DetectionResult import DetectionResult
 from yolo.yolo_detectors.YoloDetector import YoloDetector
 
@@ -27,7 +27,7 @@ class ProcessFrameData:
     output_dir: Path
     output_extension: str
 
-    rectifier: FrameRectifier
+    rectifier: ConfigFrameRectifier
     model: YoloDetector
     empty_image_step: int
 

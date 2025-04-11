@@ -1,6 +1,6 @@
 import numpy as np
 
-from rectify_optimalization.objective_functions.methods.line_types.LineType import LineType
+from rectify_optimalization.methods.line_types.LineType import LineType
 
 
 class Horizontal(LineType):

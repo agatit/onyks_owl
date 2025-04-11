@@ -1,10 +1,12 @@
 import math
+from copy import copy
+from functools import reduce
 
 import cv2
 import numpy as np
 
 from rectify_optimalization.distance import calc_distance
-from rectify_optimalization.objective_functions.methods import Method
+from rectify_optimalization.methods import Method
 
 
 def rectify_points(config, consts, points):
@@ -78,3 +80,17 @@ def objective_function(x, consts, horizontal, vertical, distances):
     distance = weights["distance"] * horizontal_distance.mean()
 
     return stds + distance
+
+
+def concat_lines(lines: list[dict]) -> list[dict]:
+    return reduce(merge, lines)
+
+
+def merge(x, y):
+    results = []
+    for list_x, list_y in zip(x, y):
+        result = copy(list_x)
+        result["lines"] += list_y["lines"]
+        results.append(result)
+
+    return results

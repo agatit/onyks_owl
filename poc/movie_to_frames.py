@@ -8,7 +8,7 @@ import cv2
 
 from io_utils.utils import make_clean_dir
 from opencv_tools.camera import frame_capture_gen
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 
 
 @click.command()
@@ -37,7 +37,7 @@ def main(input_movie, output_dir, rectify_config, image_extension, verbose):
     if rectify_config:
         with open(rectify_config) as f:
             rectify_config = json.load(f)
-        frame_rectifier = FrameRectifier(rectify_config)
+        frame_rectifier = ConfigFrameRectifier(rectify_config)
         frame_rectifier.calc_maps()
 
     logging.info(f"Started: {input_movie}")

@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Union
 
 import numpy as np
 
 from display.RegionOfInterest import RegionOfInterest
-from rectify_optimalization.objective_functions.methods.line_part_selectors.LinePartSelector import LinePartSelector
-from rectify_optimalization.objective_functions.methods.line_types.LineType import LineType
+from rectify_optimalization.methods.line_part_selectors.LinePartSelector import LinePartSelector
+from rectify_optimalization.methods.line_types.LineType import LineType
 
 
 @dataclass

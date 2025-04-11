@@ -3,7 +3,7 @@ from typing import Generator
 
 import numpy as np
 
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from stream.loaders.Loader import Loader
 from yolo.DetectionResult import DetectionResult
 from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
@@ -12,7 +12,7 @@ from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
 @dataclass
 class Stream:
     loader: Loader = None
-    frame_rectifier: FrameRectifier = None
+    frame_rectifier: ConfigFrameRectifier = None
     yolo_detector: YoloDetectorV5 = None
 
     name = "stream"

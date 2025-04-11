@@ -7,7 +7,7 @@ import json
 import numpy as np
 
 from display.RegionOfInterest import RegionOfInterest
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from stitch.CarStitcherRoi import CarStitcherRoi
 from stitch.speed.VelocityEstimator import VelocityEstimator
 from io_utils.csv import CsvData, to_csv
@@ -36,7 +36,7 @@ def main(video_path, rectify_config, export_velocity_path):
         config = json.load(f)
 
     frame_size = (1920, 1080)
-    frame_rectifier = FrameRectifier(config, *frame_size)
+    frame_rectifier = ConfigFrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
     roi_size = (0, 400, 0, 1200)

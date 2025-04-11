@@ -1,6 +1,5 @@
 import json
-from dataclasses import dataclass, field
-from itertools import product
+from dataclasses import dataclass
 from typing import Union, Iterator
 
 import cv2
@@ -8,13 +7,13 @@ import numpy as np
 
 from display.RegionOfInterest import RegionOfInterest
 from io_utils.yaml import literal_to_tuple
-from rectify_optimalization.objective_functions.methods.DistanceMethod import DistanceMethod
-from rectify_optimalization.objective_functions.methods.Method import Method
-from rectify_optimalization.objective_functions.methods.StdMethod import StdMethod
-from rectify_optimalization.objective_functions.methods.line_part_selectors.XPoints import XPoints
-from rectify_optimalization.objective_functions.methods.line_part_selectors.YPoints import YPoints
-from rectify_optimalization.objective_functions.methods.line_types.Horizontal import Horizontal
-from rectify_optimalization.objective_functions.methods.line_types.Vertical import Vertical
+from rectify_optimalization.methods.DistanceMethod import DistanceMethod
+from rectify_optimalization.methods.Method import Method
+from rectify_optimalization.methods.StdMethod import StdMethod
+from rectify_optimalization.methods.line_part_selectors.XPoints import XPoints
+from rectify_optimalization.methods import YPoints
+from rectify_optimalization.methods.line_types.Horizontal import Horizontal
+from rectify_optimalization.methods.line_types.Vertical import Vertical
 
 
 @dataclass

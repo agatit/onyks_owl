@@ -1,0 +1,91 @@
+camera:
+  width: 2160
+  height: 3840
+  fx: 1380.94
+  fy: 1389.82
+  cx: 1080
+  cy: 1920
+
+
+generate_mapx_mapy: true
+#generate_mapx_mapy: false
+
+rotate:
+  enable: true
+  minimize_kwargs:
+#    method: Nelder-Mead
+    method: L-BFGS-B
+  init:
+    alpha: 0.0
+    beta: 0.0
+    gamma: 0.0
+  bounds:
+    alpha: [ -0.1, 0.1 ]
+#    alpha: null
+#    alpha: [ -0.15, 0.0 ]
+    beta: [ -0.1, 0.1 ]
+#    beta: [ -0.02, -0.01 ]
+#    gamma: [ -0.05, -0.04 ]
+    gamma: [ -0.1, 0.1 ]
+
+
+rectify:
+  enable: true
+  #  enable: false
+  #  skip_frames: 100
+  skip_frames: 1
+
+gather_points:
+#  enable: true
+  enable: false
+#  save_cache: true
+  save_cache: false
+  #  chessboard_size -> [ cols, rows ]
+  chessboard_size: [ 9, 6 ]
+  #  chessboard_size: [ 6, 9 ]
+  #  chessboard_size: [ 5, 8 ]
+  #  chessboard_size: [ 4, 7 ]
+  #  chessboard_size: [ 10 , 14 ]
+  #  chessboard_size: [ 14 , 10 ]
+  skip_frames: 1
+  #  workers: 15
+  #  workers: 3
+  workers: 15
+  findChessboardCorners_flags:
+    - CALIB_CB_ADAPTIVE_THRESH
+    - CALIB_CB_NORMALIZE_IMAGE
+    - CALIB_CB_FILTER_QUADS
+
+  #    - CALIB_CB_EXHAUSTIVE
+  #    - CALIB_CB_LARGER
+  #    - CALIB_CB_NORMALIZE_IMAGE
+  #    - CALIB_CB_ACCURACY
+  cornerSubPix_criteria:
+    flags:
+      - TERM_CRITERIA_EPS
+      - TERM_CRITERIA_MAX_ITER
+    iterations: 1000
+    epsilon: 0.001
+
+calibrateCamera:
+  criteria:
+    flags:
+      - TERM_CRITERIA_EPS
+      - TERM_CRITERIA_MAX_ITER
+    iterations: 10000
+    epsilon: 0.0001
+  #  distCoeffs: [ 0, 0, 0, 0 ]
+  distCoeffs: [ 0, 0, 0, 0, 0 ]
+  #  distCoeffs: [ 0, 0, 0, 0, 0, 0, 0, 0 ]
+  flags:
+    - CALIB_USE_INTRINSIC_GUESS
+    - CALIB_FIX_FOCAL_LENGTH
+    - CALIB_FIX_PRINCIPAL_POINT
+    - CALIB_FIX_S1_S2_S3_S4
+#    - CALIB_ZERO_TANGENT_DIST
+
+getOptimalNewCameraMatrix:
+#  alpha: 0
+#  alpha: 0.1
+  alpha: 0.3
+#  alpha: 1

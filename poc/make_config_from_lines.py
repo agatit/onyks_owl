@@ -1,7 +1,4 @@
 import json
-from copy import copy
-from functools import reduce
-from pathlib import Path
 
 import click
 import cv2
@@ -9,15 +6,16 @@ import yaml
 from scipy.optimize import minimize
 
 from display.RegionOfInterest import RegionOfInterest
+from display.utils import scale_image_by_percent
 from io_utils.yaml import literal_to_tuple
-from rectify_optimalization.objective_functions.MeanObjectiveFunction import MeanObjectiveFunction
-from rectify_optimalization.objective_functions.methods.StdMethod import StdMethod
-from rectify_optimalization.objective_functions.methods.line_part_selectors.XPoints import XPoints
-from rectify_optimalization.objective_functions.methods.line_part_selectors.YPoints import YPoints
-from rectify_optimalization.objective_functions.methods.line_types.Horizontal import Horizontal
-from rectify_optimalization.objective_functions.methods.line_types.Vertical import Vertical
-from stitch.rectify.FrameRectifier import FrameRectifier
-
+from rectify_optimalization.full_config_objective_functions.MeanObjectiveFunction import MeanFullConfigObjectiveFunction
+from rectify_optimalization.methods.StdMethod import StdMethod
+from rectify_optimalization.methods.line_part_selectors.XPoints import XPoints
+from rectify_optimalization.methods import YPoints
+from rectify_optimalization.methods.line_types.Horizontal import Horizontal
+from rectify_optimalization.methods.line_types.Vertical import Vertical
+from rectify_optimalization.utils import concat_lines
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 
 
 @click.command()
@@ -31,7 +29,7 @@ from stitch.rectify.FrameRectifier import FrameRectifier
               help="display image to rectify")
 @click.option("-mv", "--movie", "movie_path", type=click.Path(exists=True, file_okay=True),
               help="display movie to rectify")
-@click.option("-d", "--display_ratio", "display_ratio", type=int, default=60,
+@click.option("-d", "--display_ratio", "display_ratio", type=int, default=50,
               help="display images in x% ratio")
 def main(lines_paths, output_path, config_path, image_path, movie_path, display_ratio):
     lines = []
@@ -51,7 +49,7 @@ def main(lines_paths, output_path, config_path, image_path, movie_path, display_
     horizontal_method = StdMethod(lines, 1, Horizontal(), YPoints(), roi)
     vertical_method = StdMethod(lines, 1, Vertical(), XPoints(), roi)
 
-    objective_function = MeanObjectiveFunction(consts, horizontal_method, vertical_method)
+    objective_function = MeanFullConfigObjectiveFunction(consts, horizontal_method, vertical_method)
     function_to_minimize = objective_function.get_function_to_optimize()
 
     x0 = list(config["init_values"].values())
@@ -73,15 +71,17 @@ def main(lines_paths, output_path, config_path, image_path, movie_path, display_
         if not movie_path and not image_path:
             return
 
-        frame_rectifier = FrameRectifier(rectify_config, *region_size)
+        frame_rectifier = ConfigFrameRectifier(rectify_config, *region_size)
         frame_rectifier.calc_maps()
 
         if image_path:
             image = cv2.imread(image_path)
             rectified_image = frame_rectifier.rectify(image)
+            rectified_image = scale_image_by_percent(rectified_image, display_ratio)
             cv2.imshow('original', rectified_image)
             key = cv2.waitKey(0)
 
+            cv2.destroyAllWindows()
             # loader = SingleImageLoader(Path(image_path))
             # stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
             #
@@ -92,20 +92,6 @@ def main(lines_paths, output_path, config_path, image_path, movie_path, display_
         #     stream = Stream(loader=loader, frame_rectifier=frame_rectifier)
         #
         #     DisplayStreamDirector(stream).run()
-
-
-def concat_lines(lines: list[dict]) -> list[dict]:
-    return reduce(merge, lines)
-
-
-def merge(x, y):
-    results = []
-    for list_x, list_y in zip(x, y):
-        result = copy(list_x)
-        result["lines"] += list_y["lines"]
-        results.append(result)
-
-    return results
 
 
 def init_minimize_params(config: dict) -> dict:

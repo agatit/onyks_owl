@@ -2,7 +2,6 @@ from functools import singledispatchmethod
 from typing import Any
 
 import numpy as np
-from ultralytics import YOLO
 
 from yolo.DetectionResult import DetectionResult
 from yolo.YoloFormat import BoundingBox, YoloFormat

@@ -8,7 +8,7 @@ import numpy as np
 
 from io_utils.csv import CsvData, to_csv
 from io_utils.utils import timestamp_output_file, get_current_time
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from display.RegionOfInterest import RegionOfInterest
 from stitch.speed.VelocityFromFrames import VelocityFromFrames
 
@@ -58,7 +58,7 @@ def main(input_movie, rectify_config, output_directory, display):
         config = json.load(f)
 
     frame_size = (1920, 1080)
-    frame_rectifier = FrameRectifier(config, *frame_size)
+    frame_rectifier = ConfigFrameRectifier(config, *frame_size)
     frame_rectifier.calc_maps()
 
     meter = VelocityFromFrames()

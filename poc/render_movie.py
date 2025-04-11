@@ -5,9 +5,16 @@ import json
 
 from tqdm import tqdm
 
-from stitch.rectify.FrameRectifier import FrameRectifier
-from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
+from frame_processing.FrameProcessor import FrameProcessor
+from loggers.loggers import init_rich_info_logger
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
+from yolo.yolo_detectors.YoloDetectorV8 import YoloDetectorV8
 
+logger = init_rich_info_logger(__name__)
+
+rectify_config_formats = {
+
+}
 
 @click.command()
 @click.option("-in", "--input", "input_movie",
@@ -18,20 +25,28 @@ from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
               help="select output directory")
 @click.option("-mp", "--model_path", "model_path",
               type=click.Path(exists=True, file_okay=True),
-              required=True, default="resources/models/x_owl_4.pt", help="yolov5 model path")
-@click.option("-c", "--codec", "codec_code", type=click.Choice(['MJPG', 'mp4v'], case_sensitive=False),
-              required=True, default="resources/models/x_owl_4.pt", help="select movie codec")
+              help="yolov5 model path - .pt")
 @click.option("-rc", "--rectify_config", "rectify_config", type=click.Path(exists=True, file_okay=True),
-              help="rectify config path")
-def main(input_movie, output_movie, model_path, codec_code, rectify_config):
+              help=f"rectify config path, supported formats:{rectify_config_formats.keys()}")
+@click.option("-fps", "--fps", "fps", type=int,
+              default=25, help="movie fps")
+@click.option("-re", "--resolution", "resolution", type=(int, int),
+              default=(2160, 3840), help="movie pixel resolution e.g. 1920 1080")
+@click.option("-c", "--codec", "codec_code", type=str,
+              default='mp4v', help="select movie codec")
+def main(input_movie, output_movie, model_path, rectify_config, fps, resolution, codec_code):
+    """
+    Render movie with rectification or object detection.
+    """
+
     input_cam = cv2.VideoCapture(input_movie)
     if not input_cam.isOpened():
-        print("Error opening video stream or file")
-        exit(1)
+        logger.error("Error opening video stream or file")
+        return
 
-    codec = cv2.VideoWriter_fourcc(*codec_code)
-    fps = 25
-    resolution = (1920, 1080)
+    frame_processors: list[FrameProcessor] = []
+
+    codec = cv2.VideoWriter.fourcc(*codec_code)
     video_writer = cv2.VideoWriter(output_movie, codec, fps, resolution)
 
     frame_rectifier = None
@@ -39,12 +54,13 @@ def main(input_movie, output_movie, model_path, codec_code, rectify_config):
         with open(rectify_config) as f:
             config = json.load(f)
 
-        frame_rectifier = FrameRectifier(config)
+        frame_rectifier = ConfigFrameRectifier(config)
         frame_rectifier.calc_maps()
 
-    detector = YoloDetectorV5(model_path, batch_size=100)
+    detector = YoloDetectorV8(model_path, batch_size=100)
     # classes = [0, 1]
     # detector.select_classes(classes)
+
 
     batch = []
     frame_count = int(input_cam.get(cv2.CAP_PROP_FRAME_COUNT))

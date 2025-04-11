@@ -8,7 +8,7 @@ import cv2
 from tqdm import tqdm
 
 from loggers.loggers import InfoLogger
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from yolo.yolo_detectors.YoloDetectorV5 import YoloDetectorV5
 
 from opencv_tools.image_transformations import show_image_with_rectangles, draw_image_with_rectangles
@@ -30,7 +30,7 @@ def main(image_directory, output_directory, rectify_config, model_path, image_ex
         rectify_config = json.load(f)
 
     frame_size = (1920, 1080)
-    frame_rectifier = FrameRectifier(rectify_config, *frame_size)
+    frame_rectifier = ConfigFrameRectifier(rectify_config, *frame_size)
     frame_rectifier.calc_maps()
 
     image_directory_mask = pathlib.Path(image_directory).joinpath(f"*.{image_extension}")

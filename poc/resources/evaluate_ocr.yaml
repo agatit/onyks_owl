@@ -1,0 +1,23 @@
+application:
+  input_image_extension: .jpg
+
+context_metrics:
+  - name: a
+    kwargs:
+      a: 1
+      b: 2
+
+str_metrics:
+  - name: b
+
+basic_params:
+  model:
+    use_gpu: False
+  inference:
+    cls: True
+
+measurements_params:
+  model:
+    use_gpu:
+      - a
+      - b

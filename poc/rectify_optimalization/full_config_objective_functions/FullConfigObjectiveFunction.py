@@ -6,10 +6,10 @@ import cv2
 import numpy as np
 from scipy.optimize import OptimizeResult
 
-from rectify_optimalization.objective_functions.methods.Method import Method
+from rectify_optimalization.methods.Method import Method
 
 
-class ObjectiveFunction(ABC):
+class FullConfigObjectiveFunction(ABC):
 
     def __init__(self, consts: dict, *methods: Method):
         self.consts = consts

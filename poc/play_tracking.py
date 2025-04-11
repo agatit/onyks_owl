@@ -5,7 +5,7 @@ import cv2
 import yaml
 
 from display.utils import scale_image_by_percent
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from yolo.yolo_detectors.YoloDetectorV8 import YoloDetectorV8
 
 
@@ -32,7 +32,7 @@ def main(input_movie, config_path, rectify_config_path, model_path, scale):
         with open(rectify_config_path) as f:
             rectify_config = json.load(f)
         frame_size = config["image_size"]["width"], config["image_size"]["height"]
-        frame_rectifier = FrameRectifier(rectify_config, *frame_size)
+        frame_rectifier = ConfigFrameRectifier(rectify_config, *frame_size)
         frame_rectifier.calc_maps()
 
     model = YoloDetectorV8(model_path, verbose=False)

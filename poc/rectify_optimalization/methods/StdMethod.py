@@ -1,6 +1,6 @@
 import numpy as np
 
-from rectify_optimalization.objective_functions.methods.Method import Method
+from rectify_optimalization.methods.Method import Method
 
 
 class StdMethod(Method):

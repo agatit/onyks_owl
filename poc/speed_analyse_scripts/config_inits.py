@@ -8,7 +8,7 @@ from io_utils.utils import get_latest_file_from_directory
 from speed_analyse_scripts.Measurement import RawVelocity, MeasurementROI
 from speed_analyse_scripts.Timer import Timer
 from display.RegionOfInterest import RegionOfInterest
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 from stitch.speed.VelocityEstimator import VelocityEstimator
 from stitch.speed.VelocityFromFrames import VelocityFromFrames
 
@@ -24,13 +24,13 @@ def init_movie_paths(config: dict) -> dict[str, str]:
     return files
 
 
-def init_rectifier(config: dict) -> FrameRectifier:
+def init_rectifier(config: dict) -> ConfigFrameRectifier:
     rectify_config_path = config["rectify_config"]
     with open(rectify_config_path, "r") as file:
         rectify_config = json.load(file)
 
     frame_size = literal_eval(config["frame_size"])
-    frame_rectifier = FrameRectifier(rectify_config, *frame_size)
+    frame_rectifier = ConfigFrameRectifier(rectify_config, *frame_size)
     frame_rectifier.calc_maps()
 
     return frame_rectifier

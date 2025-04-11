@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="select_frames_with_tags_Kamera_2" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="pynvml_ocr_tests_owl" type="PythonConfigurationType" factoryName="Python">
     <module name="onyks_owl" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -8,13 +8,14 @@
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
     <option name="SDK_HOME" value="" />
-    <option name="WORKING_DIRECTORY" value="" />
-    <option name="IS_MODULE_SDK" value="true" />
+    <option name="SDK_NAME" value="owl paddleOCR" />
+    <option name="WORKING_DIRECTORY" value="C:\Users\wrzezniczak\Desktop\wagon_project\testy\evaluate_ocr" />
+    <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/poc/select_frames_with_tags.py" />
-    <option name="PARAMETERS" value="-c C:\Users\wrzezniczak\Desktop\onyks_owl\poc\resources\select_frames_with_tags.yaml" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/pynvml_tests.py" />
+    <option name="PARAMETERS" value="" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

@@ -4,7 +4,7 @@ import math
 import argparse
 import json
 
-from stitch.rectify.FrameRectifier import FrameRectifier
+from stitch.rectify.FrameRectifier import ConfigFrameRectifier
 
 global args
 
@@ -118,7 +118,7 @@ def main():
 
     init_tracker_bars()
 
-    frame_rectifier = FrameRectifier(None, W, H)
+    frame_rectifier = ConfigFrameRectifier(None, W, H)
 
     while True:
 
