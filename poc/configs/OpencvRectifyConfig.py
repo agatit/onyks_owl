@@ -56,7 +56,7 @@ class RotateConfig(BaseModel):
     bounds: dict
 
 
-class Config(BaseModel):
+class OpencvRectifyConfig(BaseModel):
     camera: CameraConfig
     generate_mapx_mapy: bool
     rotate: RotateConfig

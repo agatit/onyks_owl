@@ -1,5 +1,7 @@
 import abc
+import json
 import math
+import pickle
 
 import cv2
 import numpy as np
@@ -12,6 +14,12 @@ class FrameRectifier(abc.ABC):
     def rectify(self, frame: np.ndarray) -> np.ndarray:
         ...
 
+    @staticmethod
+    @abc.abstractmethod
+    def load_from_file(file_path: str) -> "FrameRectifier":
+        ...
+
+
 class RawFrameRectifier(FrameRectifier):
 
     def __init__(self, map_x: np.ndarray, map_y: np.ndarray):
@@ -20,6 +28,13 @@ class RawFrameRectifier(FrameRectifier):
 
     def rectify(self, frame: np.ndarray) -> np.ndarray:
         return cv2.remap(frame, self.map_x, self.map_y, interpolation=cv2.INTER_LINEAR)
+
+    @staticmethod
+    def load_from_file(file_path: str) -> "FrameRectifier":
+        with open(file_path, "rb") as file:
+            loaded_data = pickle.load(file)
+
+        return RawFrameRectifier(loaded_data["mapx"], loaded_data["mapy"])
 
 
 class ConfigFrameRectifier(FrameRectifier):
@@ -33,6 +48,14 @@ class ConfigFrameRectifier(FrameRectifier):
 
     def rectify(self, frame: np.ndarray) -> np.ndarray:
         return cv2.remap(frame, self.map_x, self.map_y, interpolation=cv2.INTER_LINEAR)
+
+    @staticmethod
+    def load_from_file(file_path: str) -> "FrameRectifier":
+        with open(file_path) as f:
+            config = json.load(f)
+
+        frame_rectifier = ConfigFrameRectifier(config)
+        frame_rectifier.calc_maps()
 
     def calc_maps(self) -> None:
         config = self.config

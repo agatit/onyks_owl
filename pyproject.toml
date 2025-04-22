@@ -17,8 +17,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-yolo = [
+yolo-ultralytics = [
     "torch>=2.4.1",
+    "ultralytics>=8.3.107",
 ]
 
 [tool.uv.workspace]

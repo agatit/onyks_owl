@@ -13,12 +13,12 @@ from scipy.optimize import minimize
 
 from display.RegionOfInterest import RegionOfInterest
 from io_utils.utils import make_clean_dir
-from loggers.loggers import init_default_info_logger, init_rich_info_logger
+from loggers.loggers import init_rich_info_logger
 from rectify_optimalization.methods.line_part_selectors.YPoints import YPoints
 from rectify_optimalization.objective_functions import rotation_function
 from rectify_optimalization.utils import concat_lines
-from opencv_rectify_tools.Config import Cache, Config, load_cv2_bitmask
-from opencv_rectify_tools.image_generators import ImageGenerator, video_gen, image_dir_gen
+from configs.OpencvRectifyConfig import Cache, OpencvRectifyConfig, load_cv2_bitmask
+from opencv_tools.image_generators import ImageGenerator, video_gen, image_dir_gen
 from rectify_optimalization.methods.StdMethod import StdMethod
 from rectify_optimalization.methods.line_part_selectors.XPoints import XPoints
 from rectify_optimalization.methods.line_types.Horizontal import Horizontal
@@ -67,7 +67,7 @@ source_types: dict[str, ImageGenerator] = {
               required=True, type=click.Path(), help="rectify config path")
 @click.option("-c", '--config', "config_path",
               required=True, type=click.Path(exists=True), default="resources/opencv_rectify.yaml",
-              help=f"config file of {Config}")
+              help=f"config file of {OpencvRectifyConfig}")
 @click.option("-st", '--source_type', "source_type",
               required=True, type=click.Choice(list(source_types.keys())), help="Input file type flag")
 @click.option("-cp", '--cache_path', "cache_paths",
@@ -82,7 +82,7 @@ def main(input_source, output_dir, config_path, source_type, cache_paths, rotati
 
     with open(config_path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-        config = Config(**config)
+        config = OpencvRectifyConfig(**config)
 
     output_dir = Path(output_dir)
     make_clean_dir(output_dir)

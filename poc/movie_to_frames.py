@@ -7,8 +7,17 @@ import click
 import cv2
 
 from io_utils.utils import make_clean_dir
-from opencv_tools.camera import frame_capture_gen
 from stitch.rectify.FrameRectifier import ConfigFrameRectifier
+
+def frame_capture_gen(film_path):
+    vid_obj = cv2.VideoCapture(film_path)
+
+    success = 1
+    while success:
+        success, image = vid_obj.read()
+        if success:
+            yield image
+
 
 
 @click.command()
